@@ -21,8 +21,6 @@ class AlertCancelOk extends StatelessWidget {
               side: const BorderSide(
                 width: 1,
               ),
-              backgroundColor:
-              const Color.fromRGBO(174, 174, 174, 0.5),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16.0),
               ),

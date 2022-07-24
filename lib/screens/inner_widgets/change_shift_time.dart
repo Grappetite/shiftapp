@@ -27,7 +27,13 @@ class _ChangeShiftTimeState extends State<ChangeShiftTime> {
       content: Container(
         width: MediaQuery.of(context).size.width / 1.15,
         height: MediaQuery.of(context).size.height / 2.25,
-        color: Colors.white,
+
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.grey, width: 3),
+        ),
+
         child: Column(
           children: [
             Padding(

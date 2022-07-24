@@ -30,16 +30,12 @@ class _HomeViewState extends State<HomeView> {
       screens: _buildScreens(),
       items: _navBarsItems(),
       confineInSafeArea: true,
-      backgroundColor: Colors.white,
-      // Default is Colors.white.
+      backgroundColor: kPrimaryColor,
+
       handleAndroidBackButtonPress: true,
-      // Default is true.
       resizeToAvoidBottomInset: true,
-      // This needs to be true if you want to move up the screen when keyboard appears. Default is true.
       stateManagement: true,
-      // Default is true.
       hideNavigationBarWhenKeyboardShows: true,
-      // Recommended to set 'resizeToAvoidBottomInset' as true while using this argument. Default is true.
       decoration: NavBarDecoration(
         borderRadius: BorderRadius.circular(10.0),
         colorBehindNavBar: Colors.white,
@@ -47,7 +43,6 @@ class _HomeViewState extends State<HomeView> {
       popAllScreensOnTapOfSelectedTab: true,
       popActionScreens: PopActionScreensType.all,
       itemAnimationProperties: const ItemAnimationProperties(
-        // Navigation Bar's items animation properties.
         duration: Duration(milliseconds: 200),
         curve: Curves.ease,
       ),
@@ -76,14 +71,14 @@ class _HomeViewState extends State<HomeView> {
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.clock),
         title: ("SHIFTS"),
-        activeColorPrimary: CupertinoColors.activeBlue,
-        inactiveColorPrimary: CupertinoColors.systemGrey,
+        activeColorPrimary: Colors.white,
+        inactiveColorPrimary: Colors.grey.shade500,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(CupertinoIcons.settings),
         title: ("SOP"),
-        activeColorPrimary: CupertinoColors.activeBlue,
-        inactiveColorPrimary: CupertinoColors.systemGrey,
+        activeColorPrimary: Colors.white,
+        inactiveColorPrimary: Colors.grey.shade500,
       ),
     ];
   }
@@ -102,7 +97,6 @@ class _HomeMainViewState extends State<HomeMainView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     appMenu02 = AppPopupMenu<int>(

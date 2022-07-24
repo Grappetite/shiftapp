@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shiftapp/config/constants.dart';
 
 import '../../widgets/elevated_button.dart';
+import '../end_shift.dart';
 import '../select_exister_workers.dart';
 import 'index_indicator.dart';
 
@@ -105,29 +106,58 @@ class WorkItemView extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
-                makeMemberTitleHeader('TEAM LEADER',context),
+                makeMemberTitleHeader('TEAM LEADER', context),
                 const SizedBox(
                   height: 8,
                 ),
-                const UserItem(personId: 'Franco Dave', personName: '4778',),
-                const SizedBox(height: 16,),
-                const UserItem(personId: 'Franco Dave', personName: '4778', colorToShow: Color.fromRGBO(150, 150, 150, 0.12),),
-                SizedBox(height: 24,),
-                makeMemberTitleHeader('DATA CAPTURER',context),
-                const UserItem(personId: 'Franco Dave', personName: '4778',),
-                SizedBox(height: 16,),
-                const UserItem(personId: 'Franco Dave', personName: '4778', colorToShow: Color.fromRGBO(150, 150, 150, 0.12),),
-                SizedBox(height: 24,),
+                const UserItem(
+                  personId: 'Franco Dave',
+                  personName: '4778',
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                const UserItem(
+                  personId: 'Franco Dave',
+                  personName: '4778',
+                  colorToShow: Color.fromRGBO(150, 150, 150, 0.12),
+                ),
+                SizedBox(
+                  height: 24,
+                ),
+                makeMemberTitleHeader('DATA CAPTURER', context),
+                const UserItem(
+                  personId: 'Franco Dave',
+                  personName: '4778',
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                const UserItem(
+                  personId: 'Franco Dave',
+                  personName: '4778',
+                  colorToShow: Color.fromRGBO(150, 150, 150, 0.12),
+                ),
+                SizedBox(
+                  height: 24,
+                ),
                 PElevatedButton(
-                  onPressed: () {
-
-                  },
+                  onPressed: () {},
                   text: 'CANCEL SHIFT START',
                 ),
-                const SizedBox(height: 8,),
+                const SizedBox(
+                  height: 8,
+                ),
                 PElevatedButton(
                   onPressed: () {
 
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const EndShiftView(),
+                      ),
+                    )
+
+                    ;
                   },
                   text: 'NEXT',
                 ),
@@ -139,7 +169,7 @@ class WorkItemView extends StatelessWidget {
     );
   }
 
-  Row makeMemberTitleHeader(String title,context) {
+  Row makeMemberTitleHeader(String title, context) {
     return Row(
       children: [
         Text(
@@ -155,10 +185,9 @@ class WorkItemView extends StatelessWidget {
         ),
         IconButton(
           onPressed: () {
-
             //
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => SelectExistingWorkers(),
+              builder: (context) => const SelectExistingWorkers(),
             ));
           },
           icon: const Icon(
@@ -176,20 +205,27 @@ class UserItem extends StatelessWidget {
   final String personId;
 
   final Color? colorToShow;
-  
-   const UserItem({
-    Key? key, required this.personName, required this.personId, this.colorToShow,
+
+  const UserItem({
+    Key? key,
+    required this.personName,
+    required this.personId,
+    this.colorToShow,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: colorToShow == null ? const Color.fromRGBO(212, 237, 218, 1) : colorToShow!,
+        color: colorToShow == null
+            ? const Color.fromRGBO(212, 237, 218, 1)
+            : colorToShow!,
         borderRadius: BorderRadius.circular(16),
-        boxShadow:  [
+        boxShadow: [
           BoxShadow(
-              color: colorToShow == null ? const Color.fromRGBO(212, 237, 218, 1) : colorToShow!, //edited
+              color: colorToShow == null
+                  ? const Color.fromRGBO(212, 237, 218, 1)
+                  : colorToShow!, //edited
               spreadRadius: 4,
               blurRadius: 1),
         ],
@@ -216,7 +252,7 @@ class UserItem extends StatelessWidget {
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children:  [
+              children: [
                 Text(
                   personName,
                   style: const TextStyle(
@@ -239,7 +275,6 @@ class UserItem extends StatelessWidget {
             ),
             Expanded(child: Container()),
             Switch(value: true, onChanged: (newValue) {}),
-
           ],
         ),
       ),

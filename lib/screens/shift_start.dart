@@ -125,15 +125,6 @@ class _ShiftStartState extends State<ShiftStart> {
                           if (selected != null) {
                             return;
                           }
-
-                          showModalBottomSheet(
-                            context: context,
-                            elevation: 0,
-                            backgroundColor: Colors.transparent,
-                            builder: (BuildContext context) {
-                              return const ChangeShiftTime();
-                            },
-                          );
                         },
                         child: const Text(
                           'CHANGE SHIFT TIMES',
