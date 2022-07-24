@@ -12,17 +12,47 @@ class WorkersListing extends StatefulWidget {
 }
 
 class _WorkersListingState extends State<WorkersListing> {
-  final PageController controller = PageController(viewportFraction: 0.8);
+  final PageController controller = PageController(viewportFraction: 0.94);
 
   @override
   Widget build(BuildContext context) {
-    return  PageView(
-      controller: controller,
-      children: const [
-        WorkItemView(currentIntex: 0,totalItems: 3,),
-        WorkItemView(currentIntex: 1,totalItems: 3,),
-        WorkItemView(currentIntex: 2,totalItems: 3,),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Column(
+          children: const [
+            Text(
+              'Main Warehouse',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700),
+            ),
+            SizedBox(
+              height: 4,
+            ),
+            Text(
+              'Receiving',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600),
+            ),
+            SizedBox(
+              height: 2,
+            ),
+          ],
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 8,bottom: 16),
+        child: PageView(
+          controller: controller,
+          children: const [
+            WorkItemView(currentIntex: 0,totalItems: 3,),
+
+          ],
+        ),
+      ),
     );
   }
 }

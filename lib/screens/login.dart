@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           selectedString = newString;
                         });
                       },
-                      placeHolderText: 'Please Select',
+                      placeHolderText: 'Process',
                       preSelected: selectedString,
                     ),
                   ],
@@ -81,10 +81,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: PElevatedButton(
                   onPressed: () {
                     Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                const HomeView()));
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => const HomeView(),
+                      ),
+                    );
                   },
                   text: 'SIGN IN',
                 ),

@@ -13,15 +13,12 @@ class ShiftStart extends StatefulWidget {
 }
 
 class _ShiftStartState extends State<ShiftStart> {
-  WorkersListing? _workersListing;
-
   bool showingWorkersListing = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
 
   @override
@@ -71,11 +68,12 @@ class _ShiftStartState extends State<ShiftStart> {
         const SizedBox(
           height: 16,
         ),
-        if(showingWorkersListing) ... [
-
-          Expanded(child: WorkersListing() , flex: 96,),
-
-        ] else ... [
+        if (showingWorkersListing) ...[
+          Expanded(
+            child: WorkersListing(),
+            flex: 96,
+          ),
+        ] else ...[
           Expanded(
             flex: 34,
             child: Padding(
@@ -117,33 +115,22 @@ class _ShiftStartState extends State<ShiftStart> {
                           ),
                         ),
                         onPressed: () async {
-
-                          bool ? selected = await showDialog(context: context,
+                          bool? selected = await showDialog(
+                              context: context,
                               barrierDismissible: false,
                               builder: (BuildContext context) {
                                 return const ChangeShiftTime();
                               });
 
-                          if(selected != null) {
-
-                            print('Showing');
-
-                            _workersListing ??= WorkersListing();
-
-                            setState(() {
-                              showingWorkersListing = true;
-                            });
-
+                          if (selected != null) {
                             return;
-
                           }
-
 
                           showModalBottomSheet(
                             context: context,
                             elevation: 0,
                             backgroundColor: Colors.transparent,
-                            builder:  (BuildContext context) {
+                            builder: (BuildContext context) {
                               return const ChangeShiftTime();
                             },
                           );
@@ -162,7 +149,14 @@ class _ShiftStartState extends State<ShiftStart> {
           Expanded(
             flex: 40,
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => WorkersListing(),
+                  ),
+                );
+                //
+              },
               child: Image.asset('assets/images/start_button.png'),
             ),
           ),
