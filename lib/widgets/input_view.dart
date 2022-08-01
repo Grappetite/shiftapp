@@ -47,7 +47,7 @@ class InputView extends StatelessWidget {
   final bool isSecure;
 
   InputView(
-      {required this.text,
+      {Key? key, required this.text,
       required this.controller,
       this.isDisabled = false,
       this.keyboardType = TextInputType.text,
@@ -69,17 +69,17 @@ class InputView extends StatelessWidget {
       this.isCardDate = false,
       this.isSecure = false,
       this.suffixIcon,
-      this.suffixIconTapped});
+      this.suffixIconTapped}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding:
-          this.padding ? EdgeInsets.symmetric(horizontal: 8) : EdgeInsets.zero,
+          padding ? EdgeInsets.symmetric(horizontal: 8) : EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (this.preText != null) ...[
+          if (preText != null) ...[
             Row(
               children: [
                 Text(
@@ -118,38 +118,36 @@ class InputView extends StatelessWidget {
               ],
             ),
           ] else ...[
-            Container(
-              child: TextFormField(
-                  enabled: !isDisabled,
-                  controller: controller,
-                  obscureText: isSecure,
-                  minLines: 1,
-                  maxLines: maxLine,
-                  maxLength: textLimit,
-                  keyboardType: keyboardType,
-                  textCapitalization: firstLetterCapital
-                      ? TextCapitalization.words
-                      : TextCapitalization.none,
-                  focusNode: (keyboardType == TextInputType.number ||
-                          keyboardType == TextInputType.phone)
-                      ? doneButtonFocusNode!
-                      : null,
-                  inputFormatters: inputFormatters(),
-                  decoration: InputDecoration(
-                    counterText: '',
-                    labelText: hintText,
-                    labelStyle: const TextStyle(color: Colors.grey , ),
-                    suffixIcon: makeSuffixIcon(),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    focusColor: Colors.grey,
+            TextFormField(
+                enabled: !isDisabled,
+                controller: controller,
+                obscureText: isSecure,
+                minLines: 1,
+                maxLines: maxLine,
+                maxLength: textLimit,
+                keyboardType: keyboardType,
+                textCapitalization: firstLetterCapital
+                    ? TextCapitalization.words
+                    : TextCapitalization.none,
+                focusNode: (keyboardType == TextInputType.number ||
+                        keyboardType == TextInputType.phone)
+                    ? doneButtonFocusNode!
+                    : null,
+                inputFormatters: inputFormatters(),
+                decoration: InputDecoration(
+                  counterText: '',
+                  labelText: hintText,
+                  labelStyle: const TextStyle(color: Colors.grey , ),
+                  suffixIcon: makeSuffixIcon(),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
-                  onChanged: onChange),
-            ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  focusColor: Colors.grey,
+                ),
+                onChanged: onChange),
           ],
         ],
       ),

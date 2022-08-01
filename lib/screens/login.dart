@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shiftapp/screens/home.dart';
+import 'package:shiftapp/services/login_service.dart';
 
 import '../config/constants.dart';
+import '../model/login_model.dart';
 import '../widgets/drop_down.dart';
 import '../widgets/elevated_button.dart';
 import '../widgets/input_view.dart';
@@ -14,9 +17,29 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool showLogin = true;
+
   TextEditingController controller = TextEditingController();
 
+  TextEditingController passwordController = TextEditingController();
+
   String selectedString = "";
+
+  bool showInitText = true;
+
+  List<Process> process = [];
+
+  int processIndexSelected = 0;
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller.text = 'sidra+supervisor@grappetite.com';
+    passwordController.text = 'sidragrap';
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -38,38 +61,67 @@ class _LoginScreenState extends State<LoginScreen> {
                 width: MediaQuery.of(context).size.width / 1.21,
                 child: Column(
                   children: [
-                    InputView(
-                      showError: false,
-                      hintText: 'Code',
-                      onChange: (newValue) {},
-                      controller: controller,
-                      text: '',
+                    Visibility(
+                      visible: showLogin,
+                      child: InputView(
+                        showError: false,
+                        hintText: 'Username',
+                        onChange: (newValue) {},
+                        controller: controller,
+                        text: '',
+                      ),
+                    ),
+                    Visibility(
+                      visible: showLogin,
+                      child: const SizedBox(
+                        height: 24,
+                      ),
+                    ),
+                    Visibility(
+                      visible: showLogin,
+                      child: InputView(
+                        showError: false,
+                        hintText: 'Password',
+                        onChange: (newValue) {},
+                        controller: passwordController,
+                        text: '',
+                        isSecure: true,
+                      ),
+                    ),
+                    Visibility(
+                      visible: !showLogin,
+                      child: const Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Please select Process',
+                          style: TextStyle(
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
                     ),
                     const SizedBox(
                       height: 24,
                     ),
-                    InputView(
-                      showError: false,
-                      hintText: 'Password',
-                      onChange: (newValue) {},
-                      controller: controller,
-                      text: '',
-                      isSecure: true,
-                    ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    DropDown(
-                      labelText: 'Title',
-                      currentList: const ['One', 'Two'],
-                      showError: false,
-                      onChange: (newString) {
-                        setState(() {
-                          selectedString = newString;
-                        });
-                      },
-                      placeHolderText: 'Process',
-                      preSelected: selectedString,
+                    Visibility(
+                      visible: !showLogin,
+                      child: DropDown(
+                        labelText: 'Title',
+                        currentList: process.map((e) => e.name!.trim()).toList(),
+                        showError: false,
+                        onChange: (newString) {
+                          setState(() {
+                            selectedString = newString;
+                          });
+
+
+                          processIndexSelected =  process.map((e) => e.name!.trim()).toList().indexOf(newString);
+
+                          //final List<String> cityNames = cities.map((city) => city.name).toList();
+                        },
+                        placeHolderText: 'Process',
+                        preSelected: selectedString,
+                      ),
                     ),
                   ],
                 ),
@@ -79,15 +131,60 @@ class _LoginScreenState extends State<LoginScreen> {
               flex: 7,
               child: Center(
                 child: PElevatedButton(
-                  onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => const HomeView(),
-                      ),
+                  onPressed: () async {
+                    await EasyLoading.show(
+                      status: 'loading...',
+                      maskType: EasyLoadingMaskType.black,
                     );
+
+                    if(!showLogin){
+
+                     var processSelected =  process[processIndexSelected];
+
+                     var shifts = await LoginService.getShifts(processSelected.id!);
+
+                     await EasyLoading.dismiss();
+
+
+                     if(shifts == null) {
+                       EasyLoading.showError('Could not load shifts');
+                     }
+                     else {
+
+                     }
+                     print("object");
+
+                     //getShifts
+                      return;
+
+                    }
+                    LoginResponse? response = await LoginService.login(
+                        controller.text, passwordController.text);
+
+                    if (response == null) {
+                      await EasyLoading.dismiss();
+                      EasyLoading.showError('Could not login successfully');
+                    } else {
+                      await EasyLoading.dismiss();
+
+                      process = response.data!.process!;
+
+                      setState(() {
+                        showLogin = false;
+                      });
+
+                      return;
+
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => const HomeView(),
+                        ),
+                      );
+                    }
+                    return;
                   },
-                  text: 'SIGN IN',
+                  text: showLogin ? 'SIGN IN' : 'NEXT',
                 ),
               ),
             ),
