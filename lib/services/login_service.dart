@@ -61,7 +61,6 @@ class LoginService {
 
 
       //handle 404
-      print(response.data);
 
 
       var responseObject = ShiftsResponse.fromJson(response.data);

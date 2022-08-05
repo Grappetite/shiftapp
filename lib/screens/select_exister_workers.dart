@@ -149,15 +149,15 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                 const SizedBox(
                   height: 12,
                 ),
-                const UserItem(personName: 'personName', personId: 'personId'),
+                 UserItem(personName: 'personName', personId: 'personId', initialSelected: false, changedStatus: (bool ) {  },),
                 const SizedBox(
                   height: 12,
                 ),
-                const UserItem(personName: 'personName', personId: 'personId'),
+                 UserItem(personName: 'personName', personId: 'personId', initialSelected: false, changedStatus: (bool ) {  },),
                 const SizedBox(
                   height: 12,
                 ),
-                const UserItem(personName: 'personName', personId: 'personId'),
+                 UserItem(personName: 'personName', personId: 'personId', initialSelected: false, changedStatus: (bool ) {  },),
                 const SizedBox(
                   height: 20,
                 ),

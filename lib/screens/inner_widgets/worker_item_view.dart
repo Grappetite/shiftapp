@@ -1,19 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:shiftapp/config/constants.dart';
 
+import '../../model/workers_model.dart';
+import '../../services/workers_service.dart';
 import '../../widgets/elevated_button.dart';
 import '../end_shift.dart';
 import '../select_exister_workers.dart';
 import 'index_indicator.dart';
 
-class WorkItemView extends StatelessWidget {
+class WorkItemView extends StatefulWidget {
   final int currentIntex;
 
-  final int totalItems;
+  final int shiftId;
 
-  const WorkItemView(
-      {Key? key, required this.currentIntex, required this.totalItems})
+  final int totalItems;
+  List<String> listNames;
+  List<List<ShiftWorker>> listLists;
+
+  WorkItemView(
+      {Key? key,
+      required this.currentIntex,
+      required this.totalItems,
+      required this.listNames,
+      required this.listLists, required this.shiftId})
       : super(key: key);
+
+  @override
+  State<WorkItemView> createState() => _WorkItemViewState();
+}
+
+class _WorkItemViewState extends State<WorkItemView> {
+  int workersSelected = 0;
+
+  String get workerSelected {
+    for (var currenList in widget.listLists) {
+      for (var currentObject in currenList) {
+        if (currentObject.isSelected) {
+          workersSelected = workersSelected + 1;
+        }
+      }
+    }
+
+    return workersSelected.toString();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +62,6 @@ class WorkItemView extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: Colors.grey, width: 3),
-          /*
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.grey,
-              spreadRadius: 4,
-              blurRadius: 10, //edited
-            )
-          ],*/
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -62,8 +89,8 @@ class WorkItemView extends StatelessWidget {
                       child: Container(),
                     ),
                     IndexIndicator(
-                      total: totalItems,
-                      currentIndex: currentIntex,
+                      total: widget.totalItems,
+                      currentIndex: widget.currentIntex,
                     ),
                   ],
                 ),
@@ -75,15 +102,15 @@ class WorkItemView extends StatelessWidget {
                   child: RichText(
                     text: TextSpan(
                       style: DefaultTextStyle.of(context).style,
-                      children: const <TextSpan>[
+                      children: <TextSpan>[
                         TextSpan(
-                          text: '8',
-                          style: TextStyle(
+                          text: workerSelected,
+                          style: const TextStyle(
                               color: kPrimaryColor,
                               fontSize: 18,
                               fontWeight: FontWeight.w700),
                         ),
-                        TextSpan(
+                        const TextSpan(
                           text: ' Workers Selected',
                           style: TextStyle(
                             color: kPrimaryColor,
@@ -106,41 +133,30 @@ class WorkItemView extends StatelessWidget {
                 const SizedBox(
                   height: 8,
                 ),
-                makeMemberTitleHeader('TEAM LEADER', context),
-                const SizedBox(
-                  height: 8,
-                ),
-                const UserItem(
-                  personId: 'Franco Dave',
-                  personName: '4778',
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                const UserItem(
-                  personId: 'Franco Dave',
-                  personName: '4778',
-                  colorToShow: Color.fromRGBO(150, 150, 150, 0.12),
-                ),
-                SizedBox(
-                  height: 24,
-                ),
-                makeMemberTitleHeader('DATA CAPTURER', context),
-                const UserItem(
-                  personId: 'Franco Dave',
-                  personName: '4778',
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                const UserItem(
-                  personId: 'Franco Dave',
-                  personName: '4778',
-                  colorToShow: Color.fromRGBO(150, 150, 150, 0.12),
-                ),
-                SizedBox(
-                  height: 24,
-                ),
+                for (int i = 0; i < widget.listNames.length; i++) ...[
+                  makeMemberTitleHeader(widget.listNames[i], context),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  for (var currentItem in widget.listLists[i]) ...[
+                    UserItem(
+                      personId:
+                          currentItem.firstName! + ' ' + currentItem.lastName!,
+                      personName: currentItem.id!.toString(),
+                      colorToShow: !currentItem.isSelected
+                          ? const Color.fromRGBO(150, 150, 150, 0.12)
+                          : null,
+                      initialSelected: currentItem.isSelected,
+                      changedStatus: (bool newStatus) {
+                        currentItem.isSelected = newStatus;
+
+                      },
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                  ],
+                ],
                 PElevatedButton(
                   onPressed: () {},
                   text: 'CANCEL SHIFT START',
@@ -151,13 +167,35 @@ class WorkItemView extends StatelessWidget {
                 PElevatedButton(
                   onPressed: () {
 
+                    List<String> workerIds = [];
+                    List<String> startTime = [];
+
+                    List<String> executeShiftId = [];
+                    List<String> efficiencyCalculation = [];
+
+                    for(var curentItem in widget.listLists) {
+                      for(var currentObject in curentItem){
+                        if(currentObject.isSelected) {
+
+                          workerIds.add(currentObject.id!.toString());
+                          startTime.add('2022-06-05 06:09:04');
+
+                          efficiencyCalculation.add(currentObject.efficiencyCalculation!.toString());
+
+
+                          //
+                        }
+                      }
+                    }
+                    WorkersService.addWorkers(widget.shiftId, workerIds, startTime, [], efficiencyCalculation);
+
+                    return;
+
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => const EndShiftView(),
                       ),
-                    )
-
-                    ;
+                    );
                   },
                   text: 'NEXT',
                 ),
@@ -200,32 +238,53 @@ class WorkItemView extends StatelessWidget {
   }
 }
 
-class UserItem extends StatelessWidget {
+class UserItem extends StatefulWidget {
   final String personName;
   final String personId;
 
+  Function(bool) changedStatus;
+
+  final bool initialSelected;
+
   final Color? colorToShow;
 
-  const UserItem({
+  UserItem({
     Key? key,
     required this.personName,
     required this.personId,
     this.colorToShow,
+    required this.initialSelected,
+    required this.changedStatus,
   }) : super(key: key);
+
+  @override
+  State<UserItem> createState() => _UserItemState();
+}
+
+class _UserItemState extends State<UserItem> {
+  bool checkStatus = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    checkStatus = widget.initialSelected;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: colorToShow == null
+        color: checkStatus
             ? const Color.fromRGBO(212, 237, 218, 1)
-            : colorToShow!,
+            : const Color.fromRGBO(150, 150, 150, 0.12),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-              color: colorToShow == null
+              color: checkStatus
                   ? const Color.fromRGBO(212, 237, 218, 1)
-                  : colorToShow!, //edited
+                  : const Color.fromRGBO(150, 150, 150, 0.12), //edited
               spreadRadius: 4,
               blurRadius: 1),
         ],
@@ -254,7 +313,7 @@ class UserItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  personName,
+                  widget.personName,
                   style: const TextStyle(
                     color: Colors.black54,
                     fontWeight: FontWeight.w600,
@@ -265,7 +324,7 @@ class UserItem extends StatelessWidget {
                   height: 4,
                 ),
                 Text(
-                  personId,
+                  widget.personId,
                   style: const TextStyle(
                     color: Colors.black54,
                     fontSize: 16,
@@ -273,8 +332,18 @@ class UserItem extends StatelessWidget {
                 ),
               ],
             ),
-            Expanded(child: Container()),
-            Switch(value: true, onChanged: (newValue) {}),
+            Expanded(
+              child: Container(),
+            ),
+            Switch(
+                value: checkStatus,
+                onChanged: (newValue) {
+                  setState(() {
+                    checkStatus = newValue;
+                  });
+
+                  widget.changedStatus(newValue);
+                }),
           ],
         ),
       ),

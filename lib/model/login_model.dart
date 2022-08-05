@@ -1,13 +1,14 @@
 class LoginResponse {
-  int? status;
+  //int? status;
   String? token;
   Data? data;
   String? message;
 
-  LoginResponse({this.status, this.token, this.data, this.message});
+  //this.status
+  LoginResponse({ this.token, this.data, this.message});
 
   LoginResponse.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
+   // status = json['status'];
     token = json['token'];
     data = json['data'] != null ? Data.fromJson(json['data']) : null;
     message = json['message'];
@@ -15,7 +16,7 @@ class LoginResponse {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['status'] = status;
+    //data['status'] = status;
     data['token'] = token;
     if (this.data != null) {
       data['data'] = this.data!.toJson();

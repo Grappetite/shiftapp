@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shiftapp/screens/home.dart';
+import 'package:shiftapp/screens/shifts_listing.dart';
 import 'package:shiftapp/services/login_service.dart';
 
 import '../config/constants.dart';
@@ -31,7 +32,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   int processIndexSelected = 0;
 
-
   @override
   void initState() {
     super.initState();
@@ -39,7 +39,6 @@ class _LoginScreenState extends State<LoginScreen> {
     controller.text = 'sidra+supervisor@grappetite.com';
     passwordController.text = 'sidragrap';
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -107,15 +106,18 @@ class _LoginScreenState extends State<LoginScreen> {
                       visible: !showLogin,
                       child: DropDown(
                         labelText: 'Title',
-                        currentList: process.map((e) => e.name!.trim()).toList(),
+                        currentList:
+                            process.map((e) => e.name!.trim()).toList(),
                         showError: false,
                         onChange: (newString) {
                           setState(() {
                             selectedString = newString;
                           });
 
-
-                          processIndexSelected =  process.map((e) => e.name!.trim()).toList().indexOf(newString);
+                          processIndexSelected = process
+                              .map((e) => e.name!.trim())
+                              .toList()
+                              .indexOf(newString);
 
                           //final List<String> cityNames = cities.map((city) => city.name).toList();
                         },
@@ -137,26 +139,32 @@ class _LoginScreenState extends State<LoginScreen> {
                       maskType: EasyLoadingMaskType.black,
                     );
 
-                    if(!showLogin){
+                    if (!showLogin) {
+                      var processSelected = process[processIndexSelected];
 
-                     var processSelected =  process[processIndexSelected];
+                      var shifts =
+                          await LoginService.getShifts(processSelected.id!);
 
-                     var shifts = await LoginService.getShifts(processSelected.id!);
+                      await EasyLoading.dismiss();
 
-                     await EasyLoading.dismiss();
+                      if (shifts == null) {
+                        EasyLoading.showError('Could not load shifts');
+                      } else {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => ShiftsListing(
+                              shiftResponse: shifts,
+                              processSelected: processSelected,
+                            ),
+                          ),
+                        );
+                        ;
+                      }
+                      print("object");
 
-
-                     if(shifts == null) {
-                       EasyLoading.showError('Could not load shifts');
-                     }
-                     else {
-
-                     }
-                     print("object");
-
-                     //getShifts
+                      //getShifts
                       return;
-
                     }
                     LoginResponse? response = await LoginService.login(
                         controller.text, passwordController.text);
@@ -175,12 +183,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       return;
 
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => const HomeView(),
-                        ),
-                      );
                     }
                     return;
                   },

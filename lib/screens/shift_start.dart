@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shiftapp/screens/workers_listing.dart';
 
 import '../config/constants.dart';
+import '../model/shifts_model.dart';
+import '../model/login_model.dart';
+import '../services/shift_service.dart';
 import '../widgets/elevated_button.dart';
 import 'inner_widgets/change_shift_time.dart';
 
 class ShiftStart extends StatefulWidget {
-  const ShiftStart({Key? key}) : super(key: key);
+  final Process processSelected;
+
+  final ShiftItem selectedShift;
+
+  const ShiftStart(
+      {Key? key, required this.processSelected, required this.selectedShift})
+      : super(key: key);
 
   @override
   State<ShiftStart> createState() => _ShiftStartState();
@@ -70,7 +80,7 @@ class _ShiftStartState extends State<ShiftStart> {
         ),
         if (showingWorkersListing) ...[
           Expanded(
-            child: WorkersListing(),
+            child: WorkersListing(shiftId: 1,),
             flex: 96,
           ),
         ] else ...[
@@ -97,9 +107,12 @@ class _ShiftStartState extends State<ShiftStart> {
                             fontSize: 20,
                             fontWeight: FontWeight.w600),
                       ),
-                      const Text(
-                        '06:00 to 16:00',
-                        style: TextStyle(
+                      //06:00
+                      Text(
+                        widget.selectedShift.startTime! +
+                            ' to ' +
+                            widget.selectedShift.endTime!,
+                        style: const TextStyle(
                             color: kPrimaryColor,
                             fontSize: 22,
                             fontWeight: FontWeight.w700),
@@ -140,12 +153,31 @@ class _ShiftStartState extends State<ShiftStart> {
           Expanded(
             flex: 40,
             child: TextButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => WorkersListing(),
-                  ),
-                );
+              onPressed: () async {
+                DateTime now = DateTime.now();
+                String formattedDate =
+                    DateFormat('yyyy-MM-dd hh-mm-ss').format(now);
+
+                DateTime tempDate =
+                    DateFormat("hh:mm a'").parse(widget.selectedShift.endTime!);
+                String formattedDate2 =
+                    DateFormat('yyyy-MM-dd hh-mm-ss').format(tempDate);
+
+                ShiftStartModel? response = await ShiftService.startShift(
+                    widget.selectedShift.id!,
+                    widget.processSelected.id!,
+                    formattedDate,
+                    formattedDate2);
+
+
+                if (response != null) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => WorkersListing(shiftId: response.data!.shiftId!,),
+                    ),
+                  );
+                }
+
                 //
               },
               child: Image.asset('assets/images/start_button.png'),

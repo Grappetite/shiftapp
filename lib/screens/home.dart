@@ -3,11 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 import 'package:app_popup_menu/app_popup_menu.dart';
+import 'package:shiftapp/model/shifts_model.dart';
+import 'package:shiftapp/model/login_model.dart';
 
 import '../config/constants.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({Key? key}) : super(key: key);
+  final Process processSelected;
+
+  final ShiftItem selectedShift;
+
+  const HomeView(
+      {Key? key, required this.processSelected, required this.selectedShift})
+      : super(key: key);
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -59,7 +67,10 @@ class _HomeViewState extends State<HomeView> {
 
   List<Widget> _buildScreens() {
     return [
-      const HomeMainView(),
+      HomeMainView(
+        selectedShift: widget.selectedShift,
+        processSelected: widget.processSelected,
+      ),
       Container(
         color: Colors.green,
       )
@@ -85,14 +96,19 @@ class _HomeViewState extends State<HomeView> {
 }
 
 class HomeMainView extends StatefulWidget {
-  const HomeMainView({Key? key}) : super(key: key);
+  final Process processSelected;
+
+  final ShiftItem selectedShift;
+
+  const HomeMainView(
+      {Key? key, required this.processSelected, required this.selectedShift})
+      : super(key: key);
 
   @override
   State<HomeMainView> createState() => _HomeMainViewState();
 }
 
 class _HomeMainViewState extends State<HomeMainView> {
-
   late AppPopupMenu<int> appMenu02;
 
   @override
@@ -110,7 +126,6 @@ class _HomeMainViewState extends State<HomeMainView> {
             ),
           ),
         ),
-
       ],
       initialValue: 2,
       onSelected: (int value) {},
@@ -130,32 +145,35 @@ class _HomeMainViewState extends State<HomeMainView> {
     return Scaffold(
       appBar: AppBar(
         title: Column(
-          children: const [
-            Text(
+          children: [
+            const Text(
               'Main Warehouse',
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.w700),
             ),
-            SizedBox(
+            const SizedBox(
               height: 4,
             ),
             Text(
-              'Receiving',
-              style: TextStyle(
+              widget.processSelected.name!,
+              style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.w600),
             ),
-            SizedBox(
+            const SizedBox(
               height: 2,
             ),
           ],
         ),
         actions: [appMenu02],
       ),
-      body: const ShiftStart(),
+      body: ShiftStart(
+        selectedShift: widget.selectedShift,
+        processSelected: widget.processSelected,
+      ),
     );
   }
 }
