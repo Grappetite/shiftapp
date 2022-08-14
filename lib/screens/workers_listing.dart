@@ -6,7 +6,7 @@ import '../services/workers_service.dart';
 import 'inner_widgets/worker_item_view.dart';
 
 class WorkersListing extends StatefulWidget {
-  final int shiftId;
+  final int? shiftId;
 
   WorkersListing({Key? key, required this.shiftId}) : super(key: key);
 
@@ -21,6 +21,8 @@ class _WorkersListingState extends State<WorkersListing> {
   List<List<ShiftWorker>> listLists = [];
 
   int workersSelected = 0;
+
+  bool isLoader = true;
 
   void loadData() async {
     await EasyLoading.show(
@@ -55,6 +57,13 @@ class _WorkersListingState extends State<WorkersListing> {
         listLists.add(response);
       });
     }
+
+    setState(() {
+      isLoader = false;
+    });
+
+
+
 
     print('');
   }

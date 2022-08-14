@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class ShiftsResponse {
   //int? status;
   String? message;
@@ -8,12 +10,12 @@ class ShiftsResponse {
 
   ShiftsResponse.fromJson(Map<String, dynamic> json) {
    // status = json['status'];
+    print(json);
+
     message = json['message'];
     if (json['data'] != null) {
       data = <ShiftItem>[];
-      json['data'].forEach((v) {
-        data!.add(ShiftItem.fromJson(v));
-      });
+      data!.add(ShiftItem.fromJson(json['data']));
     }
   }
 
@@ -33,7 +35,24 @@ class ShiftItem {
   String? name;
   String? startTime;
   String? endTime;
+  int? displayScreen;
 
+  String get showStartTime {
+    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(startTime!);
+    String date = DateFormat("hh:mm a").format(tempDate);
+    return date;
+  }
+
+  String get showEndTime {
+    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(endTime!);
+    String date = DateFormat("hh:mm a").format(tempDate);
+    return date;
+  }
+
+  /*
+  {id: 1, name: Shift 1, start_time: 2022-01-01 06:00:00, end_time: 2022-01-01 14:00:00, display_screen: 2}}
+
+  * */
   ShiftItem({this.id, this.name, this.startTime, this.endTime});
 
   ShiftItem.fromJson(Map<String, dynamic> json) {
@@ -41,6 +60,8 @@ class ShiftItem {
     name = json['name'];
     startTime = json['start_time'];
     endTime = json['end_time'];
+
+    displayScreen = int.parse(json['display_screen']);;
   }
 
   Map<String, dynamic> toJson() {

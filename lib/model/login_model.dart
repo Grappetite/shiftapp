@@ -8,7 +8,7 @@ class LoginResponse {
   LoginResponse({ this.token, this.data, this.message});
 
   LoginResponse.fromJson(Map<String, dynamic> json) {
-   // status = json['status'];
+
     token = json['token'];
     data = json['data'] != null ? Data.fromJson(json['data']) : null;
     message = json['message'];
@@ -16,11 +16,13 @@ class LoginResponse {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    //data['status'] = status;
+
     data['token'] = token;
+
     if (this.data != null) {
       data['data'] = this.data!.toJson();
     }
+
     data['message'] = message;
     return data;
   }
@@ -66,7 +68,9 @@ class User {
     id = json['id'];
     name = json['name'];
     lastName = json['last_name'];
-    key = json['key'];
+    //key = json['key'];
+    key = "";
+
   }
 
   Map<String, dynamic> toJson() {
@@ -82,12 +86,17 @@ class User {
 class Process {
   int? id;
   String? name;
+  String? unit;
+  String? baseline;
 
   Process({this.id, this.name});
 
   Process.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    name = json['name'];
+    name = json['processName'];
+    unit = json['unit'];
+    baseline = json['baseline'];
+
   }
 
   Map<String, dynamic> toJson() {

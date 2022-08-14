@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 import 'package:shiftapp/screens/workers_listing.dart';
 
@@ -109,9 +110,9 @@ class _ShiftStartState extends State<ShiftStart> {
                       ),
                       //06:00
                       Text(
-                        widget.selectedShift.startTime! +
+                        widget.selectedShift.showStartTime +
                             ' to ' +
-                            widget.selectedShift.endTime!,
+                            widget.selectedShift.showEndTime,
                         style: const TextStyle(
                             color: kPrimaryColor,
                             fontSize: 22,
@@ -154,29 +155,14 @@ class _ShiftStartState extends State<ShiftStart> {
             flex: 40,
             child: TextButton(
               onPressed: () async {
-                DateTime now = DateTime.now();
-                String formattedDate =
-                    DateFormat('yyyy-MM-dd hh-mm-ss').format(now);
-
-                DateTime tempDate =
-                    DateFormat("hh:mm a'").parse(widget.selectedShift.endTime!);
-                String formattedDate2 =
-                    DateFormat('yyyy-MM-dd hh-mm-ss').format(tempDate);
-
-                ShiftStartModel? response = await ShiftService.startShift(
-                    widget.selectedShift.id!,
-                    widget.processSelected.id!,
-                    formattedDate,
-                    formattedDate2);
 
 
-                if (response != null) {
-                  Navigator.of(context).push(
+                Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => WorkersListing(shiftId: response.data!.shiftId!,),
+                      builder: (context) => WorkersListing(shiftId: null,),
                     ),
                   );
-                }
+
 
                 //
               },

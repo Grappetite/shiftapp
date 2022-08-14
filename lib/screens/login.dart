@@ -150,16 +150,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (shifts == null) {
                         EasyLoading.showError('Could not load shifts');
                       } else {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (BuildContext context) => ShiftsListing(
-                              shiftResponse: shifts,
-                              processSelected: processSelected,
+
+                        if(shifts.data!.isNotEmpty) {
+
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => HomeView(
+                                selectedShift: shifts.data!.first,
+                                processSelected: processSelected,
+                              ),
                             ),
-                          ),
-                        );
-                        ;
+                          );
+
+                        }
+
                       }
                       print("object");
 

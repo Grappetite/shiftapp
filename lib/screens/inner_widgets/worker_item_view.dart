@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shiftapp/config/constants.dart';
 
 import '../../model/workers_model.dart';
@@ -11,7 +12,7 @@ import 'index_indicator.dart';
 class WorkItemView extends StatefulWidget {
   final int currentIntex;
 
-  final int shiftId;
+  final int? shiftId;
 
   final int totalItems;
   List<String> listNames;
@@ -32,7 +33,12 @@ class WorkItemView extends StatefulWidget {
 class _WorkItemViewState extends State<WorkItemView> {
   int workersSelected = 0;
 
+  String workersLabel = 'WORKERS';
+
   String get workerSelected {
+
+    workersSelected = 0;
+
     for (var currenList in widget.listLists) {
       for (var currentObject in currenList) {
         if (currentObject.isSelected) {
@@ -46,7 +52,6 @@ class _WorkItemViewState extends State<WorkItemView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -77,9 +82,9 @@ class _WorkItemViewState extends State<WorkItemView> {
                     const SizedBox(
                       width: 16,
                     ),
-                    const Text(
-                      'WORKERS',
-                      style: TextStyle(
+                    Text(
+                      workersLabel,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
                         color: kPrimaryColor,
@@ -134,7 +139,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                   height: 8,
                 ),
                 for (int i = 0; i < widget.listNames.length; i++) ...[
-                  makeMemberTitleHeader(widget.listNames[i], context),
+                  makeMemberTitleHeader(widget.listNames[i], context,widget.listLists[i],i),
                   const SizedBox(
                     height: 8,
                   ),
@@ -143,9 +148,6 @@ class _WorkItemViewState extends State<WorkItemView> {
                       personId:
                           currentItem.firstName! + ' ' + currentItem.lastName!,
                       personName: currentItem.id!.toString(),
-                      colorToShow: !currentItem.isSelected
-                          ? const Color.fromRGBO(150, 150, 150, 0.12)
-                          : null,
                       initialSelected: currentItem.isSelected,
                       changedStatus: (bool newStatus) {
                         currentItem.isSelected = newStatus;
@@ -165,7 +167,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                   height: 8,
                 ),
                 PElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
 
                     List<String> workerIds = [];
                     List<String> startTime = [];
@@ -187,9 +189,16 @@ class _WorkItemViewState extends State<WorkItemView> {
                         }
                       }
                     }
-                    WorkersService.addWorkers(widget.shiftId, workerIds, startTime, [], efficiencyCalculation);
+                    await EasyLoading.show(
+                      status: 'loading...',
+                      maskType: EasyLoadingMaskType.black,
+                    );
 
-                    return;
+                    WorkersService.addWorkers(0, workerIds, startTime, [], efficiencyCalculation);
+
+
+                    await EasyLoading.dismiss();
+
 
                     Navigator.of(context).push(
                       MaterialPageRoute(
@@ -207,7 +216,7 @@ class _WorkItemViewState extends State<WorkItemView> {
     );
   }
 
-  Row makeMemberTitleHeader(String title, context) {
+  Row makeMemberTitleHeader(String title, context , List<ShiftWorker>  workers, int index) {
     return Row(
       children: [
         Text(
@@ -222,11 +231,21 @@ class _WorkItemViewState extends State<WorkItemView> {
           child: Container(),
         ),
         IconButton(
-          onPressed: () {
-            //
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => const SelectExistingWorkers(),
-            ));
+          onPressed: () async {
+
+            await Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => SelectExistingWorkers(workers: workers,),
+            ),);
+
+            setState(() {
+              widget.listLists[index] = workers;
+            });
+
+            setState(() {
+              workersLabel = 'WORKERS';
+            });
+
+
           },
           icon: const Icon(
             Icons.search,
@@ -244,9 +263,10 @@ class UserItem extends StatefulWidget {
 
   Function(bool) changedStatus;
 
-  final bool initialSelected;
+  bool initialSelected;
 
   final Color? colorToShow;
+
 
   UserItem({
     Key? key,
@@ -262,51 +282,52 @@ class UserItem extends StatefulWidget {
 }
 
 class _UserItemState extends State<UserItem> {
-  bool checkStatus = false;
 
   @override
   void initState() {
+   // checkStatus = widget.initialSelected;
+
+
     // TODO: implement initState
     super.initState();
 
-    checkStatus = widget.initialSelected;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: checkStatus
-            ? const Color.fromRGBO(212, 237, 218, 1)
-            : const Color.fromRGBO(150, 150, 150, 0.12),
+        color: widget.initialSelected
+            ?  Color.fromRGBO(212, 237, 218, 1)
+            :  Color.fromRGBO(150, 150, 150, 0.12),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-              color: checkStatus
-                  ? const Color.fromRGBO(212, 237, 218, 1)
-                  : const Color.fromRGBO(150, 150, 150, 0.12), //edited
+              color: widget.initialSelected
+                  ?  Color.fromRGBO(212, 237, 218, 1)
+                  :  Color.fromRGBO(150, 150, 150, 0.12), //edited
               spreadRadius: 4,
               blurRadius: 1),
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(4.0),
+        padding:  EdgeInsets.all(4.0),
         child: Row(
           children: [
             Container(
-              padding: const EdgeInsets.all(4), // Border width
-              decoration: const BoxDecoration(
+              padding:  EdgeInsets.all(4), // Border width
+              decoration:  BoxDecoration(
                   color: Colors.white, shape: BoxShape.circle),
               child: ClipOval(
                 child: SizedBox.fromSize(
-                  size: const Size.fromRadius(24), // Image radius
+                  size:  Size.fromRadius(24), // Image radius
                   child: Image.network(
                       'https://images.unsplash.com/photo-1537511446984-935f663eb1f4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8b2ZmaWNlJTIwd29ya2VyfGVufDB8fDB8fA%3D%3D&w=1000&q=80',
                       fit: BoxFit.cover),
                 ),
               ),
             ),
-            const SizedBox(
+             SizedBox(
               width: 12,
             ),
             Column(
@@ -320,7 +341,7 @@ class _UserItemState extends State<UserItem> {
                     fontSize: 16,
                   ),
                 ),
-                const SizedBox(
+                 SizedBox(
                   height: 4,
                 ),
                 Text(
@@ -336,10 +357,10 @@ class _UserItemState extends State<UserItem> {
               child: Container(),
             ),
             Switch(
-                value: checkStatus,
+                value: widget.initialSelected,
                 onChanged: (newValue) {
                   setState(() {
-                    checkStatus = newValue;
+                    widget.initialSelected = newValue;
                   });
 
                   widget.changedStatus(newValue);
