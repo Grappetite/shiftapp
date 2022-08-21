@@ -52,8 +52,6 @@ class WorkersData {
       worker = <ShiftWorker>[];
       var workersListTemp = json['worker'];
 
-      var mp = workersListTemp[0];
-
       json['worker'].forEach((v) {
         worker!.add( ShiftWorker.fromJson(v));
       });
@@ -94,6 +92,9 @@ class ShiftWorker {
   int? efficiencyCalculation;
 
   bool isSelected = false;
+
+  bool newAdded = false;
+  bool newRemove = false;
 
 
   ShiftWorker(
@@ -179,6 +180,31 @@ class WorkerTempObj {
     data['firstName'] = firstName;
     data['lastName'] = lastName;
     data['key'] = this.key;
+    return data;
+  }
+}
+
+
+class AddWorkersResponse {
+  int? code;
+  String? status;
+  String? message;
+
+  AddWorkersResponse({this.code, this.status, this.message});
+
+  AddWorkersResponse.fromJson(Map<String, dynamic> json) {
+    code = json['code'];
+    status = json['status'];
+    message = json['message'];
+
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['code'] = code;
+    data['status'] = status;
+    data['message'] = message;
+
     return data;
   }
 }

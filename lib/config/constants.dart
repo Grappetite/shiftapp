@@ -19,6 +19,12 @@ const whiteBackGroundColor = Color.fromRGBO(255, 255, 255, 1.0);
 
 const lightBlueColor = Color.fromRGBO(94, 193, 220, 0.25);
 
+const lightGreenColor = Color.fromRGBO(212, 237, 218, 1);
+
+const lightRedColor = Color.fromRGBO(237, 212, 215, 1);
+
+//, ,
+
 //rgba(94, 193, 220, 0.25)
 
 Map<int, Color> primaryMap = {

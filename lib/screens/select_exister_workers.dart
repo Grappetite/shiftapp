@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
@@ -11,7 +13,9 @@ import 'inner_widgets/worker_item_view.dart';
 class SelectExistingWorkers extends StatefulWidget {
   List<ShiftWorker>  workers;
 
-  SelectExistingWorkers({Key? key,required this.workers}) : super(key: key);
+  final bool isEditing;
+
+  SelectExistingWorkers({Key? key,required this.workers,this.isEditing = false}) : super(key: key);
 
   @override
   State<SelectExistingWorkers> createState() => _SelectExistingWorkersState();
@@ -20,10 +24,33 @@ class SelectExistingWorkers extends StatefulWidget {
 class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
   TextEditingController searchController = TextEditingController();
 
+  String timeElasped = '00:00';
+  late Timer _timer;
+
+
   bool isSearching = false;
   List<ShiftWorker>  workers = [];
 
   List<ShiftWorker>  filteredWorkers = [];
+
+  /*
+  void startTimer() {
+
+    const oneSec = Duration(seconds: 1);
+
+    _timer = Timer.periodic(
+      oneSec,
+          (Timer timer) {
+
+        setState(() {
+          timeElasped = widget.selectedShift.timeElasped;
+        });
+
+        print('');
+      },
+    );
+  }
+*/
 
   void callSearchService() async {
 
@@ -234,19 +261,38 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                          currentItem.firstName! + ' ' + currentItem.lastName!,
                          personName: currentItem.id!.toString(),
                          initialSelected: currentItem.isSelected,
+                         disableRatio: widget.isEditing ? (currentItem.isSelected && !currentItem.newAdded ) : false,
                          changedStatus: (bool newStatus) {
 
                            var find = widget.workers.where((e) => e.userId == currentItem.userId).toList();
                            currentItem.isSelected = newStatus;
-
                            if(find.isNotEmpty) {
                              find.first.isSelected = newStatus;
                            }
                            else {
-
                              widget.workers.add(currentItem);
-
                            }
+
+
+                           if(widget.isEditing) {
+                             if(newStatus) {
+                               if(currentItem.newRemove){
+
+                               }
+                               else {
+                                 currentItem.newAdded = true;
+                               }
+
+                             }
+                             else {
+                               if(currentItem.newAdded) {
+                               }
+                               else {
+                                 currentItem.newRemove = true;
+                               }
+                             }
+                           }
+
 
                          },
                        ),
@@ -264,6 +310,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                          currentItem.firstName! + ' ' + currentItem.lastName!,
                          personName: currentItem.id!.toString(),
                          initialSelected: currentItem.isSelected,
+                         disableRatio: widget.isEditing ? (currentItem.isSelected && !currentItem.newAdded ) : false,
                          changedStatus: (bool newStatus) {
 
                            var find = widget.workers.where((e) => e.userId == currentItem.userId).toList();
@@ -279,6 +326,30 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                            }
 
 
+
+                           if(widget.isEditing) {
+                             if(newStatus) {
+                               if(currentItem.newRemove){
+
+                               }
+                               else {
+                                 currentItem.newAdded = true;
+                               }
+
+                             }
+                             else {
+                               if(currentItem.newAdded) {
+                               }
+                               else {
+                                 currentItem.newRemove = true;
+
+                                 print('');
+                               }
+                             }
+                           }
+                           else {
+
+                           }
 
 
 

@@ -7,14 +7,21 @@ import 'package:shiftapp/model/shifts_model.dart';
 import 'package:shiftapp/model/login_model.dart';
 
 import '../config/constants.dart';
+import 'end_shift.dart';
 
 class HomeView extends StatefulWidget {
   final Process processSelected;
 
+
+  final String? comment;
+
+
   final ShiftItem selectedShift;
 
+  final bool sessionStarted;
+
   const HomeView(
-      {Key? key, required this.processSelected, required this.selectedShift})
+      {Key? key, required this.processSelected, required this.selectedShift, this.sessionStarted = false, this.comment})
       : super(key: key);
 
   @override
@@ -39,7 +46,6 @@ class _HomeViewState extends State<HomeView> {
       items: _navBarsItems(),
       confineInSafeArea: true,
       backgroundColor: kPrimaryColor,
-
       handleAndroidBackButtonPress: true,
       resizeToAvoidBottomInset: true,
       stateManagement: true,
@@ -69,7 +75,8 @@ class _HomeViewState extends State<HomeView> {
     return [
       HomeMainView(
         selectedShift: widget.selectedShift,
-        processSelected: widget.processSelected,
+        processSelected: widget.processSelected, sessionStarted: widget.sessionStarted,
+        comment: widget.comment,
       ),
       Container(
         color: Colors.green,
@@ -99,9 +106,11 @@ class HomeMainView extends StatefulWidget {
   final Process processSelected;
 
   final ShiftItem selectedShift;
+  final bool sessionStarted;
+  final String? comment;
 
   const HomeMainView(
-      {Key? key, required this.processSelected, required this.selectedShift})
+      {Key? key, required this.processSelected, required this.selectedShift, required this.sessionStarted, this.comment})
       : super(key: key);
 
   @override
@@ -111,6 +120,26 @@ class HomeMainView extends StatefulWidget {
 class _HomeMainViewState extends State<HomeMainView> {
   late AppPopupMenu<int> appMenu02;
 
+  void moveToEndSession() async {
+
+    await Future.delayed(const Duration(seconds: 1));
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => EndShiftView(
+          userId: const [],
+          efficiencyCalculation:
+          const [],
+          shiftId: widget.selectedShift.id!,
+          processId: widget.processSelected.id!,
+          selectedShift: widget.selectedShift,
+          comment: widget.comment!,
+          startedBefore: true,
+        ),
+      ),
+    );
+  }
   @override
   void initState() {
     super.initState();
@@ -138,6 +167,14 @@ class _HomeMainViewState extends State<HomeMainView> {
       ),
       color: kPrimaryColor,
     );
+
+    if(widget.sessionStarted) {
+
+
+      moveToEndSession();
+
+
+    }
   }
 
   @override

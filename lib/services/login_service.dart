@@ -48,8 +48,6 @@ class LoginService {
       final prefs = await SharedPreferences.getInstance();
 
 
-      var token = prefs.getString(tokenKey)!;
-
 
       Response response = await dio.get(baseUrl + 'shifts/' + processId.toString(),
           options: Options(

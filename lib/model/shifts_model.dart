@@ -9,7 +9,7 @@ class ShiftsResponse {
   ShiftsResponse({this.message, this.data});
 
   ShiftsResponse.fromJson(Map<String, dynamic> json) {
-   // status = json['status'];
+    // status = json['status'];
     print(json);
 
     message = json['message'];
@@ -20,7 +20,7 @@ class ShiftsResponse {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     //data['status'] = status;
     data['message'] = message;
     if (this.data != null) {
@@ -37,10 +37,142 @@ class ShiftItem {
   String? endTime;
   int? displayScreen;
 
+  String _printDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+  }
+
+  String get timeElasped {
+    var check1 = DateTime.now().difference(startDateObject);
+
+    if (check1.inSeconds > 0) {
+      // event already passed
+      var differance = DateTime.now().difference(endDateObject);
+
+      int sec = differance.inSeconds;
+
+      int hoursdone = check1.inHours;
+      int minutes = check1.inMinutes - (hoursdone * 60);
+
+      int remainingSeconds = check1.inHours * 60 * 60;
+      return _printDuration(check1);
+    } else {}
+
+    return '';
+  }
+
+  String get timeRemaining {
+    var check1 = endDateObject.difference(DateTime.now());
+
+    if (check1.inSeconds > 0) {
+      // event already passed
+      var differance = DateTime.now().difference(endDateObject);
+
+      int sec = differance.inSeconds;
+
+      int hoursdone = check1.inHours;
+      int minutes = check1.inMinutes - (hoursdone * 60);
+
+      int remainingSeconds = check1.inHours * 60 * 60;
+      return _printDuration(check1);
+    } else {
+
+      var differance = endDateObject.difference(DateTime.now());
+
+
+      check1 = DateTime.now().difference(endDateObject);
+
+
+
+      return 'Over ' + _printDuration(check1);
+
+
+
+    }
+
+    return '';
+  }
+
+  DateTime get startDateObject {
+    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(startTime!);
+    return tempDate;
+  }
+
+  DateTime get endDateObject {
+    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(endTime!);
+    return tempDate;
+  }
+
   String get showStartTime {
     DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(startTime!);
     String date = DateFormat("hh:mm a").format(tempDate);
     return date;
+  }
+
+  String get showDate {
+    //2022/12/01
+    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(startTime!);
+    String date = DateFormat("yyyy/MM/dd").format(tempDate);
+    return date;
+  }
+
+  String get showStartDateOnly {
+    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(startTime!);
+    String date = DateFormat("yyyy-MM-dd").format(tempDate);
+    return date;
+  }
+
+  int get showStartTimeHour {
+    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(startTime!);
+    String date = DateFormat("hh a")
+        .format(tempDate)
+        .replaceAll(' AM', '')
+        .replaceAll(' PM', '');
+    return int.parse(date);
+  }
+
+  int get showStartTimeMinute {
+    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(startTime!);
+    String date = DateFormat("mm a")
+        .format(tempDate)
+        .replaceAll(' AM', '')
+        .replaceAll(' PM', '');
+    return int.parse(date);
+  }
+
+  String makeTimeStringFromHourMinute(int hour, int minute) {
+    final f = DateFormat('yyyy-MM-dd ');
+
+    String hourString = hour.toString();
+    String minuteString = minute.toString();
+
+    if (hourString.length == 1) {
+      hourString = '0' + hourString;
+    }
+    if (minuteString.length == 1) {
+      minuteString = '0' + minuteString;
+    }
+    return f.format(DateTime.now()) + hourString + ':' + minuteString + ':00';
+  }
+
+  int get showEndTimeHour {
+    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(endTime!);
+    String date = DateFormat("hh a")
+        .format(tempDate)
+        .replaceAll(' AM', '')
+        .replaceAll(' PM', '');
+    return int.parse(date);
+  }
+
+  int get showEndTimeMinute {
+    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(endTime!);
+    String date = DateFormat("mm a")
+        .format(tempDate)
+        .replaceAll(' AM', '')
+        .replaceAll(' PM', '');
+    return int.parse(date);
   }
 
   String get showEndTime {
@@ -59,9 +191,21 @@ class ShiftItem {
     id = json['id'];
     name = json['name'];
     startTime = json['start_time'];
+    //2022-01-01 06:00:00, end_time: 2022-01-01 14:00:00
+
+    String date = DateFormat("yyyy-MM-dd").format(DateTime.now());
+
+    var result = startTime!.replaceRange(0, 10, date);
+
+    startTime = result;
+
     endTime = json['end_time'];
 
-    displayScreen = int.parse(json['display_screen']);;
+    result = endTime!.replaceRange(0, 10, date);
+    endTime = result;
+
+    displayScreen = int.parse(json['display_screen']);
+    ;
   }
 
   Map<String, dynamic> toJson() {
@@ -86,11 +230,11 @@ class ShiftStartModel {
     code = json['code'];
     status = json['status'];
     message = json['message'];
-    data = json['data'] != null ?  ShiftStartData.fromJson(json['data']) : null;
+    data = json['data'] != null ? ShiftStartData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['code'] = code;
     data['status'] = status;
     data['message'] = message;
@@ -111,11 +255,11 @@ class ShiftStartData {
 
   ShiftStartData(
       {this.id,
-        this.userId,
-        this.shiftId,
-        this.processId,
-        this.startTime,
-        this.endTime});
+      this.userId,
+      this.shiftId,
+      this.processId,
+      this.startTime,
+      this.endTime});
 
   ShiftStartData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -127,7 +271,7 @@ class ShiftStartData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['user_id'] = userId;
     data['shift_id'] = shiftId;

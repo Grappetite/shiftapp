@@ -68,7 +68,7 @@ class WorkersService {
 
   //{{shift_url})/addShiftWorker
 
-  static Future<ShiftStartModel?> addWorkers(
+  static Future<bool> addWorkers(
       int shiftId,
       List<String> workerUserId,
       List<String> startTime,
@@ -79,7 +79,7 @@ class WorkersService {
       final prefs = await SharedPreferences.getInstance();
 
       Response response = await dio.post(
-        baseUrl + 'shifts/workers',
+        baseUrl + 'shifts/addWorkers',
         data: {
           'execute_shift_id': shiftId.toString(),
           'worker_user_id': workerUserId,
@@ -95,26 +95,21 @@ class WorkersService {
 
       print(response.data);
 
-      var responseObject = ShiftStartModel.fromJson(response.data);
-
-      if (responseObject.data == null) {
-        return null;
+      if(response.data['code'] == 200){
+        return true;
       }
-      //     final prefs = await SharedPreferences.getInstance();
-      //   responseObject.data!.user!.lastName;
 
-      // prefs.setString(tokenKey, responseObject.token!);
+      return false;
 
-      return responseObject;
     } catch (e) {
-      return null;
+      return false;
     }
   }
 
-  static Future<ShiftStartModel?> addShiftWorker(
+  static Future<bool> removeWorkers(
       int shiftId,
       List<String> workerUserId,
-      List<String> startTime,
+      List<String> endTime,
       List<String> executeShiftId,
       List<String> efficiencyCalculation) async {
     try {
@@ -122,11 +117,11 @@ class WorkersService {
       final prefs = await SharedPreferences.getInstance();
 
       Response response = await dio.post(
-        baseUrl + 'shifts/workers',
+        baseUrl + 'shifts/removeWorkers',
         data: {
           'execute_shift_id': shiftId.toString(),
           'worker_user_id': workerUserId,
-          'starttime': startTime,
+          'endtime': endTime,
           'efficiency_calculation': efficiencyCalculation
         },
         options: Options(
@@ -138,9 +133,93 @@ class WorkersService {
 
       print(response.data);
 
-      var responseObject = ShiftStartModel.fromJson(response.data);
+      if(response.data['code'] == 200){
+        return true;
+      }
 
-      if (responseObject.data == null) {
+      return false;
+
+    } catch (e) {
+      return false;
+    }
+  }
+
+
+  static Future<bool> endShift(
+      int shiftId,
+      int processId,
+      String unitsProduced,
+      String comment,
+      String endTime) async {
+    try {
+      var dio = Dio();
+      final prefs = await SharedPreferences.getInstance();
+
+
+      Response response = await dio.post(
+        baseUrl + 'endShift',
+        data: {
+          'execute_shift_id': shiftId.toString(),
+          'process_id': processId.toString(),
+          'end_time': endTime,
+          'units_produced': unitsProduced,
+          'comments' : comment
+        },
+        options: Options(
+          headers: {
+            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+          },
+        ),
+      );
+
+      print(response.data);
+
+      if(response.data['code'] == 200){
+        return true;
+      }
+
+      return false;
+
+    } catch (e) {
+      return false;
+    }
+  }
+
+
+
+  static Future<AddWorkersResponse?> addShiftWorker(
+      int shiftId,
+      int processId ,
+      String startTime,
+      String endTime,
+      List<String> workerUserId,
+      List<String> efficiencyCalculation) async {
+    try {
+      var dio = Dio();
+      final prefs = await SharedPreferences.getInstance();
+
+      Response response = await dio.post(
+        baseUrl + 'addShiftWorker',
+        data: {
+          'shift_id': shiftId.toString(),
+          'process_id': processId.toString(),
+          'start_time': startTime,
+          'end_time' : endTime,
+          'worker_user_id' : workerUserId,
+          'efficiency_calculation': efficiencyCalculation
+        },
+        options: Options(
+          headers: {
+            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+          },
+        ),
+      );
+
+      print(response.data);
+
+      var responseObject = AddWorkersResponse.fromJson(response.data);
+
+      if (responseObject.code != 200) {
         return null;
       }
       //     final prefs = await SharedPreferences.getInstance();

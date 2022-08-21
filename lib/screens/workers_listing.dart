@@ -1,20 +1,54 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:shiftapp/screens/shift_start.dart';
 
+import '../model/shifts_model.dart';
 import '../model/workers_model.dart';
 import '../services/workers_service.dart';
 import 'inner_widgets/worker_item_view.dart';
 
 class WorkersListing extends StatefulWidget {
   final int? shiftId;
+  final ShiftItem selectedShift;
 
-  WorkersListing({Key? key, required this.shiftId}) : super(key: key);
+  final int processId;
+
+  const WorkersListing(
+      {Key? key,
+      required this.shiftId,
+      required this.processId,
+      required this.selectedShift})
+      : super(key: key);
 
   @override
   State<WorkersListing> createState() => _WorkersListingState();
 }
 
 class _WorkersListingState extends State<WorkersListing> {
+  String timeElasped = '00:00';
+  late Timer _timer;
+
+  void startTimer() {
+
+    const oneSec = Duration(seconds: 1);
+
+    _timer = Timer.periodic(
+      oneSec,
+          (Timer timer) {
+
+        setState(() {
+          timeElasped = widget.selectedShift.timeElasped;
+        });
+
+        print('');
+      },
+    );
+  }
+
+
+
   final PageController controller = PageController(viewportFraction: 0.94);
   List<String> listNames = [];
 
@@ -31,6 +65,10 @@ class _WorkersListingState extends State<WorkersListing> {
     );
     var responseShift = await WorkersService.getShiftWorkers(widget.shiftId);
 
+    if(responseShift!.data!.worker!.isEmpty) {
+      responseShift = await WorkersService.getShiftWorkers(widget.selectedShift.id);
+
+    }
     List<ShiftWorker> shiftWorkers = [];
 
     shiftWorkers.addAll(responseShift!.data!.worker!);
@@ -62,15 +100,14 @@ class _WorkersListingState extends State<WorkersListing> {
       isLoader = false;
     });
 
-
-
-
     print('');
   }
+
 
   @override
   void initState() {
     super.initState();
+    startTimer();
 
     loadData();
   }
@@ -105,17 +142,26 @@ class _WorkersListingState extends State<WorkersListing> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 8, bottom: 16),
-        child: PageView(
-          controller: controller,
+        padding: const EdgeInsets.only(bottom: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            WorkItemView(
-              currentIntex: 0,
-              totalItems: 3,
-              listNames: listNames,
-              listLists: listLists,
-              shiftId: widget.shiftId,
+            TimerTopWidget(selectedShift: widget.selectedShift, timeElasped: timeElasped,),
+            const SizedBox(height: 8,),
+
+            Expanded(
+              child: WorkItemView(
+                currentIntex: 0,
+                totalItems: 3,
+                listNames: listNames,
+                listLists: listLists,
+                shiftId: widget.shiftId,
+                processId: widget.processId,
+                selectedShift: widget.selectedShift,
+              ),
             ),
+            const SizedBox(height: 8,),
+
           ],
         ),
       ),
