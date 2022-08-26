@@ -88,6 +88,7 @@ class Process {
   String? name;
   String? unit;
   String? baseline;
+  String? headCount;
 
   Process({this.id, this.name});
 
@@ -96,6 +97,7 @@ class Process {
     name = json['processName'];
     unit = json['unit'];
     baseline = json['baseline'];
+    headCount =  json['head_count'];
 
   }
 

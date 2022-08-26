@@ -15,10 +15,15 @@ import 'inner_widgets/change_shift_time.dart';
 class ShiftStart extends StatefulWidget {
   final Process processSelected;
 
+  final VoidCallback popBack;
+
   final ShiftItem selectedShift;
 
   const ShiftStart(
-      {Key? key, required this.processSelected, required this.selectedShift})
+      {Key? key,
+      required this.processSelected,
+      required this.selectedShift,
+      required this.popBack})
       : super(key: key);
 
   @override
@@ -32,16 +37,12 @@ class _ShiftStartState extends State<ShiftStart> {
 
   late Timer _timer;
 
-
-
   void startTimer() {
-
     const oneSec = Duration(seconds: 1);
 
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
-
         setState(() {
           timeElasped = widget.selectedShift.timeElasped;
         });
@@ -57,7 +58,6 @@ class _ShiftStartState extends State<ShiftStart> {
   @override
   void initState() {
     super.initState();
-    startTimer();
   }
 
   @override
@@ -66,45 +66,64 @@ class _ShiftStartState extends State<ShiftStart> {
       children: [
         Expanded(
           flex: 6,
-          child: TimerTopWidget(selectedShift: widget.selectedShift ,  timeElasped: timeElasped),
+          child: TimerTopWidget(
+              selectedShift: widget.selectedShift, timeElasped: timeElasped),
         ),
-
         const SizedBox(
           height: 16,
         ),
-        if (showingWorkersListing) ...[
-          Expanded(
-            child: WorkersListing(
-              shiftId: 1,
-              processId: widget.processSelected.id!,
-              selectedShift: widget.selectedShift,
-            ),
-            flex: 96,
-          ),
-        ] else ...[
-          Expanded(
-            flex: 34,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-              child: Container(
-                width: MediaQuery.of(context).size.width / 1.14,
-                decoration: BoxDecoration(
-                    border: Border.all(
-                      color: kPrimaryColor,
+        Expanded(
+          flex: 30,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            child: Container(
+              width: MediaQuery.of(context).size.width / 1.14,
+              decoration: BoxDecoration(
+                  border: Border.all(
+                    color: kPrimaryColor,
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(16))),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const Text(
+                      'NEXT SHIFT:',
+                      style: TextStyle(
+                          color: kPrimaryColor,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600),
                     ),
-                    borderRadius: const BorderRadius.all(Radius.circular(16))),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
+                    if (widget.selectedShift.displayScreen! == 1 ||
+                        widget.selectedShift.displayScreen == 3) ...[
                       const Text(
-                        'NEXT SHIFT:',
+                        'NO AVAILABLE SHIFTS',
                         style: TextStyle(
-                            color: kPrimaryColor,
-                            fontSize: 20,
+                            color: Colors.grey,
+                            fontSize: 16,
                             fontWeight: FontWeight.w600),
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'Next Shift available at ',
+                            style: TextStyle(
+                                color: kPrimaryColor,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          Text(
+                            widget.selectedShift.showStartTime,
+                            style: const TextStyle(
+                                color: kPrimaryColor,
+                                fontSize: 21,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ],
+                      ),
+                    ] else ...[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -115,6 +134,9 @@ class _ShiftStartState extends State<ShiftStart> {
                               var currenMinute =
                                   widget.selectedShift.showStartTimeMinute;
 
+
+
+
                               final TimeOfDay? newTime = await showTimePicker(
                                 context: context,
                                 initialTime: TimeOfDay(
@@ -122,14 +144,34 @@ class _ShiftStartState extends State<ShiftStart> {
                                 initialEntryMode: TimePickerEntryMode.dial,
                               );
 
-                              customSelectedStartTime = widget.selectedShift
-                                  .makeTimeStringFromHourMinute(
-                                      newTime!.hour, newTime.minute);
+                              if (newTime != null) {
+                                customSelectedStartTime = widget.selectedShift
+                                    .makeTimeStringFromHourMinute(
+                                        newTime.hour, newTime.minute);
 
-                              setState(() {
-                                widget.selectedShift.startTime =
-                                    customSelectedStartTime;
-                              });
+                                setState(() {
+                                  widget.selectedShift.startTime =
+                                      customSelectedStartTime;
+                                });
+
+
+                                bool? selected = await showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (BuildContext context) {
+                                      return ChangeShiftTime(
+                                        hours: widget.selectedShift.endDateObject.difference(widget.selectedShift.startDateObject).inHours.toString() + ' ' + 'Hours',
+                                        date: widget.selectedShift.showStartDateOnly,
+                                        endTime: widget.selectedShift.showEndTime,
+                                        startTime:
+                                            widget.selectedShift.showStartTime,
+                                      );
+                                    });
+
+                                if (selected != null) {
+                                  return;
+                                }
+                              }
 
                               print('');
 
@@ -167,14 +209,36 @@ class _ShiftStartState extends State<ShiftStart> {
                                 initialEntryMode: TimePickerEntryMode.dial,
                               );
 
+                              if(newTime == null) {
+                                return;
+
+                              }
                               customSelectedEndTime = widget.selectedShift
                                   .makeTimeStringFromHourMinute(
-                                      newTime!.hour, newTime.minute);
+                                      newTime.hour, newTime.minute);
 
                               setState(() {
                                 widget.selectedShift.endTime =
                                     customSelectedEndTime;
                               });
+
+
+                              bool? selected = await showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (BuildContext context) {
+                                    return ChangeShiftTime(
+                                      hours: widget.selectedShift.endDateObject.difference(widget.selectedShift.startDateObject).inHours.toString() + ' ' + 'Hours',
+                                      date: widget.selectedShift.showStartDateOnly,
+                                      endTime: widget.selectedShift.showEndTime,
+                                      startTime:
+                                      widget.selectedShift.showStartTime,
+                                    );
+                                  });
+
+                              if (selected != null) {
+                                return;
+                              }
 
                               print('');
                             },
@@ -188,6 +252,8 @@ class _ShiftStartState extends State<ShiftStart> {
                           ),
                         ],
                       ),
+                    ],
+                    if (1 == 2) ...[
                       OutlinedButton(
                         style: OutlinedButton.styleFrom(
                           onSurface: kPrimaryColor,
@@ -203,7 +269,7 @@ class _ShiftStartState extends State<ShiftStart> {
                               context: context,
                               barrierDismissible: false,
                               builder: (BuildContext context) {
-                                return const ChangeShiftTime();
+                                return  Container();//ChangeShiftTime();
                               });
 
                           if (selected != null) {
@@ -216,40 +282,52 @@ class _ShiftStartState extends State<ShiftStart> {
                         ),
                       ),
                     ],
-                  ),
+                  ],
                 ),
               ),
             ),
           ),
-          Expanded(
-            flex: 40,
-            child: TextButton(
-              onPressed: () async {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => WorkersListing(
-                      shiftId: null,
-                      processId: widget.processSelected.id!,
-                      selectedShift: widget.selectedShift,
-                    ),
-                  ),
-                );
+        ),
+        Expanded(
+          flex: 44,
+          child: TextButton(
+            onPressed: () async {
+              if (widget.selectedShift.displayScreen! == 1 ||
+                  widget.selectedShift.displayScreen! == 3) {
+                return;
+              }
 
-                //
-              },
-              child: Image.asset('assets/images/start_button.png'),
+              var waitVal = await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => WorkersListing(
+                    shiftId: null,
+                    processId: widget.processSelected.id!,
+                    selectedShift: widget.selectedShift,
+                    process: widget.processSelected,
+                  ),
+                ),
+              );
+
+              if (waitVal != null) {
+                if (waitVal == true) {
+                  this.widget.popBack.call();
+                }
+              }
+              //
+            },
+            child: Image.asset(imageName()),
+          ),
+        ),
+        Expanded(
+          flex: 20,
+          child: Center(
+            child: PElevatedButton(
+              onPressed: () {},
+              text: 'VIEW PREVIOUS SHIFT',
+              backGroundColor: Colors.grey,
             ),
           ),
-          Expanded(
-            flex: 20,
-            child: Center(
-              child: PElevatedButton(
-                onPressed: () {},
-                text: 'VIEW PREVIOUS SHIFT',
-              ),
-            ),
-          ),
-        ],
+        ),
 
         const SizedBox(
           height: 16,
@@ -259,6 +337,14 @@ class _ShiftStartState extends State<ShiftStart> {
       ],
     );
   }
+
+  String imageName() {
+    if (widget.selectedShift.displayScreen! == 1 ||
+        widget.selectedShift.displayScreen! == 3) {
+      return 'assets/images/start_disable.png';
+    }
+    return 'assets/images/start_button.png';
+  }
 }
 
 class TimerTopWidget extends StatelessWidget {
@@ -267,7 +353,6 @@ class TimerTopWidget extends StatelessWidget {
     required this.selectedShift,
     required this.timeElasped,
   }) : super(key: key);
-
 
   final ShiftItem selectedShift;
   final String timeElasped;
@@ -301,9 +386,9 @@ class TimerTopWidget extends StatelessWidget {
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
             ),
           ),
-           Text(
-            'Elapsed :  $timeElasped',
-            style: const TextStyle(
+          Text(
+            'Elapsed :  ${timeElasped}',
+            style: TextStyle(
               color: Colors.black,
             ),
           ),

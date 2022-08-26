@@ -12,7 +12,9 @@ import 'alert_cancel_ok_buttons.dart';
 import 'alert_title_label.dart';
 
 class AddTempWorker extends StatefulWidget {
-  const AddTempWorker({Key? key}) : super(key: key);
+  final String shiftId;
+
+  const AddTempWorker({Key? key, required this.shiftId}) : super(key: key);
 
   @override
   State<AddTempWorker> createState() => _AddTempWorkerState();
@@ -124,9 +126,14 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                             workerType.map((e) => e.name!.trim()).toList(),
                         showError: false,
                         onChange: (newString) {
-                          selectedWorkerType = newString;
-                          selectedWorkerTypeID = workerType.firstWhere((e) => e.name == newString).id!.toString();
+                          setState(() {
+                            selectedWorkerType = newString;
+                          });
 
+                          selectedWorkerTypeID = workerType
+                              .firstWhere((e) => e.name == newString)
+                              .id!
+                              .toString();
 
                           /*
                         setState(() {
@@ -150,30 +157,18 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                           maskType: EasyLoadingMaskType.black,
                         );
 
-
-                        var response = await WorkersService.addTempWorkers(firstNameController.text,
-                            surnameController.text, personalNoController.text, selectedWorkerTypeID);
+                        var response = await WorkersService.addTempWorkers(
+                            firstNameController.text,
+                            surnameController.text,
+                            personalNoController.text,
+                            selectedWorkerTypeID,
+                            this.widget.shiftId,
+                            '2022-06-05 06:09:04');
                         await EasyLoading.dismiss();
 
-                        if(response != null) {
-
-      //                    this.id,
-    //this.userId,
-    //this.workerTypeId,
-    //this.workerType,
-    //this.firstName,
-    //this.lastName,
-    //this.key,
-    //this.efficiencyCalculation
-
-
-                          //ShiftWorker(id: response.data!.id);
-
-                          Navigator.pop(context,response);
-
-
+                        if (response != null) {
+                          Navigator.pop(context, response);
                         }
-
                       },
                       text: 'ADD AND ASSIGN',
                     ),

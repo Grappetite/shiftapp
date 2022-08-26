@@ -5,6 +5,7 @@ import '../model/shifts_model.dart';
 import '../model/workers_model.dart';
 import '../services/workers_service.dart';
 import 'inner_widgets/worker_item_view.dart';
+import '../../model/login_model.dart';
 
 class EditWorkers extends StatefulWidget {
   final int shiftId;
@@ -15,6 +16,7 @@ class EditWorkers extends StatefulWidget {
   final String endTime;
   final List<String> efficiencyCalculation;
   final ShiftItem selectedShift;
+  final Process process;
 
   const EditWorkers(
       {Key? key,
@@ -25,7 +27,7 @@ class EditWorkers extends StatefulWidget {
       required this.startTime,
       required this.endTime,
       required this.efficiencyCalculation,
-      required this.selectedShift})
+      required this.selectedShift, required this.process})
       : super(key: key);
 
   @override
@@ -96,32 +98,27 @@ class _EditWorkersState extends State<EditWorkers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Column(
-          children: const [
-            Text(
-              'Main Warehouse',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700),
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Text(
-              'Receiving',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600),
-            ),
-            SizedBox(
-              height: 2,
-            ),
-          ],
-        ),
+      appBar:  AppBar(
+      centerTitle: true,
+      title: Column(
+        children:  [
+          Image.asset('assets/images/toplogo.png',height: 20,),
+          SizedBox(
+            height: 4,
+          ),
+          Text(
+            widget.process.name!,
+            style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w600),
+          ),
+          SizedBox(
+            height: 2,
+          ),
+        ],
       ),
+    ),
       body: SizedBox(
         width: double.infinity,
         height: double.infinity,
@@ -135,7 +132,11 @@ class _EditWorkersState extends State<EditWorkers> {
             selectedShift: widget.selectedShift,
             shiftId: widget.shiftId,
             totalItems: widget.totalUsersCount,
-            isEditing: true,
+            isEditing: true, process: this.widget.process, reloadData: () {
+
+              loadWorkers();
+
+          },
           ),
         ),
       ),

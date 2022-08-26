@@ -37,10 +37,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: MaterialColor(0xFF0E577F, primaryMap),
       ),
-      home: const LoginScreen(),
+      initialRoute: '/splash',
+      routes: {
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/': (context) => const LoginScreen(),
+        '/splash' : (context) => const SplashScreen(),
+        },
       builder: EasyLoading.init(),
       // home: const SplashScreen(),
     );

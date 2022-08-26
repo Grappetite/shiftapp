@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shiftapp/config/constants.dart';
 
 class PElevatedButton extends StatelessWidget {
   final String text;
@@ -23,6 +24,7 @@ class PElevatedButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: isApiInProgress ? () {} : onPressed,
         style: ButtonStyle(
+          backgroundColor: backGroundColor != null ? MaterialStateProperty.all(backGroundColor!) : MaterialStateProperty.all(kPrimaryColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16.0),

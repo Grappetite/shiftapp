@@ -91,6 +91,8 @@ class ShiftWorker {
   String? key;
   int? efficiencyCalculation;
 
+  String picture = '';
+
   bool isSelected = false;
 
   bool newAdded = false;
@@ -116,6 +118,7 @@ class ShiftWorker {
     lastName = json['lastName'];
     key = json['key'];
     efficiencyCalculation = json['efficiencyCalculation'];
+    picture = json['picture'];
   }
 
   Map<String, dynamic> toJson() {
@@ -160,28 +163,62 @@ class AddTempResponse {
 }
 
 class WorkerTempObj {
+
   int? id;
+  int? userId;
+  int? workerTypeId;
+  String? workerType;
   String? firstName;
   String? lastName;
-  int? key;
+  String? key;
+  String? role;
+  String? picture;
+  int? efficiencyCalculation;
+  int? workerAdd;
 
-  WorkerTempObj({this.id, this.firstName, this.lastName, this.key});
+  WorkerTempObj(
+      {this.id,
+        this.userId,
+        this.workerTypeId,
+        this.workerType,
+        this.firstName,
+        this.lastName,
+        this.key,
+        this.role,
+        this.picture,
+        this.efficiencyCalculation,
+        this.workerAdd});
 
   WorkerTempObj.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    userId = json['userId'];
+    workerTypeId = json['workerTypeId'];
+    workerType = json['workerType'];
     firstName = json['firstName'];
     lastName = json['lastName'];
     key = json['key'];
+    role = json['role'];
+    picture = json['picture'];
+    efficiencyCalculation = json['efficiencyCalculation'];
+   // workerAdd = json['worker_add'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['firstName'] = firstName;
-    data['lastName'] = lastName;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['userId'] = this.userId;
+    data['workerTypeId'] = this.workerTypeId;
+    data['workerType'] = this.workerType;
+    data['firstName'] = this.firstName;
+    data['lastName'] = this.lastName;
     data['key'] = this.key;
+    data['role'] = this.role;
+    data['picture'] = this.picture;
+    data['efficiencyCalculation'] = this.efficiencyCalculation;
+    data['worker_add'] = this.workerAdd;
     return data;
   }
+
 }
 
 

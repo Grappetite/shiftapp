@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config/constants.dart';
@@ -84,7 +85,7 @@ class WorkersService {
           'execute_shift_id': shiftId.toString(),
           'worker_user_id': workerUserId,
           'starttime': startTime,
-          'efficiency_calculation': efficiencyCalculation
+          'efficiency_calculation': efficiencyCalculation,
         },
         options: Options(
           headers: {
@@ -115,6 +116,8 @@ class WorkersService {
     try {
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
+
+      var token = prefs.getString(tokenKey)!;
 
       Response response = await dio.post(
         baseUrl + 'shifts/removeWorkers',
@@ -152,9 +155,21 @@ class WorkersService {
       String comment,
       String endTime) async {
     try {
+
+      var logger = Logger();
+
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
 
+      var ccc = prefs.getString(tokenKey)!;
+
+      logger.e('Bearer ' + prefs.getString(tokenKey)!);
+
+      logger.e(shiftId.toString());
+
+      logger.e(endTime);
+      logger.e(unitsProduced);
+      logger.e(comment);
 
       Response response = await dio.post(
         baseUrl + 'endShift',
@@ -163,7 +178,7 @@ class WorkersService {
           'process_id': processId.toString(),
           'end_time': endTime,
           'units_produced': unitsProduced,
-          'comments' : comment
+          'comments' : 'comment'
         },
         options: Options(
           headers: {
@@ -172,7 +187,6 @@ class WorkersService {
         ),
       );
 
-      print(response.data);
 
       if(response.data['code'] == 200){
         return true;
@@ -258,18 +272,21 @@ class WorkersService {
   }
 
   static Future<AddTempResponse?> addTempWorkers(
-      String firstName, String lastName, String key, String workerType) async {
+      String firstName, String lastName, String key, String workerType,String shiftId , String startTime) async {
     try {
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
 
+      // ,
       Response response = await dio.post(
         baseUrl + 'workers',
         data: {
           'first_name': firstName,
           'last_name': lastName,
           'key': key,
-          'worker_type': workerType
+          'worker_type': workerType,
+          'execute_shift_id' : shiftId ,
+          'start_time' : startTime
         },
         options: Options(
           headers: {

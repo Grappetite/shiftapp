@@ -8,18 +8,21 @@ import '../model/shifts_model.dart';
 import '../model/workers_model.dart';
 import '../services/workers_service.dart';
 import 'inner_widgets/worker_item_view.dart';
+import '../model/login_model.dart';
 
 class WorkersListing extends StatefulWidget {
   final int? shiftId;
   final ShiftItem selectedShift;
 
   final int processId;
+  final Process process;
 
   const WorkersListing(
       {Key? key,
       required this.shiftId,
       required this.processId,
-      required this.selectedShift})
+      required this.selectedShift,
+      required this.process})
       : super(key: key);
 
   @override
@@ -31,13 +34,11 @@ class _WorkersListingState extends State<WorkersListing> {
   late Timer _timer;
 
   void startTimer() {
-
     const oneSec = Duration(seconds: 1);
 
     _timer = Timer.periodic(
       oneSec,
-          (Timer timer) {
-
+      (Timer timer) {
         setState(() {
           timeElasped = widget.selectedShift.timeElasped;
         });
@@ -46,8 +47,6 @@ class _WorkersListingState extends State<WorkersListing> {
       },
     );
   }
-
-
 
   final PageController controller = PageController(viewportFraction: 0.94);
   List<String> listNames = [];
@@ -65,9 +64,9 @@ class _WorkersListingState extends State<WorkersListing> {
     );
     var responseShift = await WorkersService.getShiftWorkers(widget.shiftId);
 
-    if(responseShift!.data!.worker!.isEmpty) {
-      responseShift = await WorkersService.getShiftWorkers(widget.selectedShift.id);
-
+    if (responseShift!.data!.worker!.isEmpty) {
+      responseShift =
+          await WorkersService.getShiftWorkers(widget.selectedShift.id);
     }
     List<ShiftWorker> shiftWorkers = [];
 
@@ -103,7 +102,6 @@ class _WorkersListingState extends State<WorkersListing> {
     print('');
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -116,27 +114,29 @@ class _WorkersListingState extends State<WorkersListing> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Column(
-          children: const [
-            Text(
-              'Main Warehouse',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700),
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Text(
-              'Receiving',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600),
-            ),
-            SizedBox(
-              height: 2,
+          children: [
+            Column(
+              children: [
+                Image.asset(
+                  'assets/images/toplogo.png',
+                  height: 20,
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  widget.process.name!,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(
+                  height: 2,
+                ),
+              ],
             ),
           ],
         ),
@@ -146,9 +146,13 @@ class _WorkersListingState extends State<WorkersListing> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TimerTopWidget(selectedShift: widget.selectedShift, timeElasped: timeElasped,),
-            const SizedBox(height: 8,),
-
+            TimerTopWidget(
+              selectedShift: widget.selectedShift,
+              timeElasped: timeElasped,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
             Expanded(
               child: WorkItemView(
                 currentIntex: 0,
@@ -158,10 +162,15 @@ class _WorkersListingState extends State<WorkersListing> {
                 shiftId: widget.shiftId,
                 processId: widget.processId,
                 selectedShift: widget.selectedShift,
+                process: this.widget.process,
+                reloadData: () {
+                  loadData();
+                },
               ),
             ),
-            const SizedBox(height: 8,),
-
+            const SizedBox(
+              height: 8,
+            ),
           ],
         ),
       ),

@@ -8,6 +8,7 @@ import '../model/shifts_model.dart';
 import '../services/workers_service.dart';
 import 'edit_workers.dart';
 import 'end_shift_final_screen.dart';
+import '../model/login_model.dart';
 
 class EndShiftView extends StatefulWidget {
   final bool startedBefore;
@@ -17,7 +18,9 @@ class EndShiftView extends StatefulWidget {
   final List<String> efficiencyCalculation;
   final ShiftItem selectedShift;
   final String comment;
+  final Process process;
 
+  final bool autoOpen;
 
   const EndShiftView(
       {Key? key,
@@ -25,7 +28,11 @@ class EndShiftView extends StatefulWidget {
       required this.processId,
       required this.userId,
       required this.efficiencyCalculation,
-      required this.selectedShift, this.comment = '', this.startedBefore = false})
+      required this.selectedShift,
+      this.comment = '',
+      this.startedBefore = false,
+      required this.process,
+      this.autoOpen = false})
       : super(key: key);
 
   @override
@@ -42,21 +49,17 @@ class _EndShiftViewState extends State<EndShiftView> {
 
   var isTimeOver = false;
 
-
   void startTimer() {
     const oneSec = Duration(seconds: 1);
 
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
-        if(widget.selectedShift.timeRemaining.contains('Over')) {
-
-          timeRemaining = widget.selectedShift.timeRemaining.replaceAll('Over ', '');
+        if (widget.selectedShift.timeRemaining.contains('Over')) {
+          timeRemaining =
+              widget.selectedShift.timeRemaining.replaceAll('Over ', '');
           isTimeOver = true;
-
-
-        }
-        else {
+        } else {
           timeRemaining = widget.selectedShift.timeRemaining;
         }
 
@@ -75,47 +78,40 @@ class _EndShiftViewState extends State<EndShiftView> {
 
     startTimer();
 
-
-      loadUsers();
-
-
+    loadUsers();
   }
 
   void loadUsers() async {
-
-    var  responseShift = await WorkersService.getShiftWorkers(widget.selectedShift.id);
+    var responseShift =
+        await WorkersService.getShiftWorkers(widget.selectedShift.id);
 
     numberSelected = responseShift!.data!.shiftWorker!.length;
 
     setState(() {
-      totalUsersCount = responseShift.data!.shiftWorker!.length + responseShift.data!.worker!.length;
+      totalUsersCount = responseShift.data!.shiftWorker!.length +
+          responseShift.data!.worker!.length;
     });
 
     print('');
-
-
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Column(
-          children: const [
-            Text(
-              'Main Warehouse',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700),
+          children: [
+            Image.asset(
+              'assets/images/toplogo.png',
+              height: 20,
             ),
             SizedBox(
               height: 4,
             ),
             Text(
-              'Receiving',
-              style: TextStyle(
+              widget.process.name!,
+              style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.w600),
@@ -125,7 +121,6 @@ class _EndShiftViewState extends State<EndShiftView> {
             ),
           ],
         ),
-        leading: Container(),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -147,12 +142,15 @@ class _EndShiftViewState extends State<EndShiftView> {
                   ),
                 ),
                 width: double.infinity,
-                child:  Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                   child: Align(
                     alignment: Alignment.center,
                     child: Text(
-                      isTimeOver ? ('TIME OVER : $timeRemaining') : ('TIME REMAINING: $timeRemaining'),
+                      isTimeOver
+                          ? ('TIME OVER : $timeRemaining')
+                          : ('TIME REMAINING: $timeRemaining'),
                       style: const TextStyle(
                           color: kPrimaryColor,
                           fontSize: 20,
@@ -178,42 +176,47 @@ class _EndShiftViewState extends State<EndShiftView> {
             const SizedBox(
               height: 16,
             ),
-            ExplainerWidget(
-              iconName: 'filled-walk',
-              title: 'MANAGE WORKERS',
-              text1:
-                  '$numberSelected /$totalUsersCount Workers',
-              text2: 'Tap to train now or swipe to ignore',
-              showWarning: true,
-              onTap: () {
-
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => EditWorkers(
-                      startTime: widget.selectedShift.startTime!,
-                      processId: widget.processId,
-                      endTime: widget.selectedShift.endTime!,
-                      userId: [],
-                      efficiencyCalculation: [],
-                      shiftId: widget.shiftId,
-                      totalUsersCount: widget.userId.length,
-                      selectedShift: widget.selectedShift,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: ExplainerWidget(
+                iconName: 'filled-walk',
+                title: 'MANAGE WORKERS',
+                text1:  widget.process.headCount != null ? '$numberSelected /${widget.process.headCount} Workers' : '$numberSelected /$totalUsersCount Workers',
+                text2: 'Tap to train now or swipe to ignore',
+                showWarning: true,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => EditWorkers(
+                        startTime: widget.selectedShift.startTime!,
+                        processId: widget.processId,
+                        endTime: widget.selectedShift.endTime!,
+                        userId: [],
+                        efficiencyCalculation: [],
+                        shiftId: widget.shiftId,
+                        totalUsersCount: widget.userId.length,
+                        selectedShift: widget.selectedShift,
+                        process: widget.process,
+                      ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
             const SizedBox(
               height: 16,
             ),
-            ExplainerWidget(
-              iconName: 'exclamation',
-              title: 'INCIDENTS',
-              text1: '5',
-              text2: 'Tap to train now or swipe to ignore',
-              showWarning: false,
-              text1_2: '01:50:00',
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: ExplainerWidget(
+                iconName: 'exclamation',
+                title: 'INCIDENTS',
+                text1: '5',
+                text2: 'Tap to train now or swipe to ignore',
+                showWarning: false,
+                text1_2: '01:50:00',
+              ),
             ),
             const SizedBox(
               height: 16,
@@ -231,12 +234,14 @@ class _EndShiftViewState extends State<EndShiftView> {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => EndShiftFinalScreen(
+                            autoOpen: widget.autoOpen,
                             startTime: widget.selectedShift.startTime!,
                             selectedShift: widget.selectedShift,
                             shiftId: widget.shiftId,
                             processId: widget.processId,
                             endTime: widget.selectedShift.endTime!,
                             comments: '',
+                            process: widget.process,
                           ),
                         ),
                       );
@@ -317,7 +322,8 @@ class ExplainerWidget extends StatelessWidget {
           ),
           width: double.infinity,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            padding: EdgeInsets.symmetric(
+                vertical: text1_2.isNotEmpty ? 9 : 16, horizontal: 16),
             child: Align(
               alignment: Alignment.center,
               child: Row(
@@ -350,9 +356,15 @@ class ExplainerWidget extends StatelessWidget {
                             fontSize: 18,
                           ),
                         ),
-                        const SizedBox(
-                          height: 4,
-                        ),
+                        if (text1_2.isNotEmpty) ...[
+                          const SizedBox(
+                            height: 2,
+                          ),
+                        ] else ...[
+                          const SizedBox(
+                            height: 4,
+                          ),
+                        ],
                         if (text1_2.isNotEmpty) ...[
                           Row(
                             children: [
@@ -373,9 +385,15 @@ class ExplainerWidget extends StatelessWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(
-                            height: 4,
-                          ),
+                          if (text1_2.isNotEmpty) ...[
+                            const SizedBox(
+                              height: 2,
+                            ),
+                          ] else ...[
+                            const SizedBox(
+                              height: 4,
+                            ),
+                          ],
                           Row(
                             children: [
                               const Text(
@@ -404,9 +422,15 @@ class ExplainerWidget extends StatelessWidget {
                           ),
                         ],
                         if (text2.isNotEmpty) ...[
-                          const SizedBox(
-                            height: 4,
-                          ),
+                          if (text1_2.isNotEmpty) ...[
+                            const SizedBox(
+                              height: 2,
+                            ),
+                          ] else ...[
+                            const SizedBox(
+                              height: 4,
+                            ),
+                          ],
                           Text(
                             text2,
                             style: const TextStyle(

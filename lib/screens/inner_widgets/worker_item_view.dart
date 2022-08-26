@@ -9,9 +9,12 @@ import '../../widgets/elevated_button.dart';
 import '../select_exister_workers.dart';
 import '../start_shift_page.dart';
 import 'index_indicator.dart';
+import '../../model/login_model.dart';
 
 class WorkItemView extends StatefulWidget {
   final bool isEditing;
+
+  final VoidCallback reloadData;
 
   final int currentIntex;
 
@@ -19,6 +22,7 @@ class WorkItemView extends StatefulWidget {
   final ShiftItem selectedShift;
 
   final int? shiftId;
+  final Process process;
 
   final int totalItems;
   List<String> listNames;
@@ -33,7 +37,8 @@ class WorkItemView extends StatefulWidget {
       required this.shiftId,
       required this.processId,
       required this.selectedShift,
-      this.isEditing = false})
+      this.isEditing = false,
+      required this.process, required this.reloadData})
       : super(key: key);
 
   @override
@@ -64,6 +69,8 @@ class _WorkItemViewState extends State<WorkItemView> {
     super.initState();
     if (widget.isEditing) {}
   }
+
+  List<String> workerIds = [];
 
   @override
   Widget build(BuildContext context) {
@@ -162,6 +169,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                           currentItem.firstName! + ' ' + currentItem.lastName!,
                       personName: currentItem.id!.toString(),
                       initialSelected: currentItem.isSelected,
+                      picUrl: currentItem.picture,
                       changedStatus: (bool newStatus) async {
                         currentItem.isSelected = newStatus;
 
@@ -198,13 +206,10 @@ class _WorkItemViewState extends State<WorkItemView> {
                               [currentItem.efficiencyCalculation.toString()]);
                           await EasyLoading.dismiss();
 
-
                           if (response) {
                           } else {
                             EasyLoading.showError('Error');
                           }
-
-
                         }
                       },
                     ),
@@ -215,25 +220,38 @@ class _WorkItemViewState extends State<WorkItemView> {
                 ],
                 PElevatedButton(
                   onPressed: () async {
-                    List<String> workerIds = [];
+                    if (this.widget.isEditing) {
+                      Navigator.pop(context);
+
+                      return;
+                    }
+                    workerIds = [];
+
                     List<String> startTime = [];
 
                     List<String> efficiencyCalculation = [];
 
-                    for (var curentItem in widget.listLists) {
-                      for (var currentObject in curentItem) {
-                        if (currentObject.isSelected) {
-                          workerIds.add(currentObject.id!.toString());
-                          startTime.add('2022-06-05 06:09:04');
-                          efficiencyCalculation.add(
-                              currentObject.efficiencyCalculation!.toString());
+                    setState(() {
+                      for (var curentItem in widget.listLists) {
+                        for (var currentObject in curentItem) {
+                          if (currentObject.isSelected) {
+                            workerIds.add(currentObject.id!.toString());
+                            startTime.add('2022-06-05 06:09:04');
+                            efficiencyCalculation.add(currentObject
+                                .efficiencyCalculation!
+                                .toString());
+                          }
                         }
                       }
-                    }
+                    });
 
                     int totalCountTemp = 0;
                     for (var currentItem in widget.listLists) {
                       totalCountTemp = totalCountTemp + currentItem.length;
+                    }
+
+                    if (workerIds.isEmpty) {
+                      return;
                     }
 
                     Navigator.of(context).push(
@@ -247,11 +265,12 @@ class _WorkItemViewState extends State<WorkItemView> {
                           userId: workerIds,
                           totalUsersCount: totalCountTemp,
                           selectedShift: widget.selectedShift,
+                          process: this.widget.process,
                         ),
                       ),
                     );
                   },
-                  text: 'NEXT',
+                  text: this.widget.isEditing ? 'RETURN TO SHIFT' : 'NEXT',
                 ),
               ],
             ),
@@ -278,14 +297,22 @@ class _WorkItemViewState extends State<WorkItemView> {
         ),
         IconButton(
           onPressed: () async {
-            await Navigator.of(context).push(
+            var response = await Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) => SelectExistingWorkers(
                   workers: workers,
-                  isEditing: widget.isEditing,
+                  isEditing: widget.isEditing, shiftId: this.widget.shiftId!, tempWorkerAdded: (AddTempResponse tmp) {
+
+                    this.widget.reloadData();
+
+
+                    print('object');
+
+                },
                 ),
               ),
             );
+
 
             if (widget.isEditing) {
               var newlyAdded =
@@ -318,6 +345,15 @@ class _WorkItemViewState extends State<WorkItemView> {
                 maskType: EasyLoadingMaskType.black,
               );
 
+              if(workerIds.isEmpty) {
+
+
+                await EasyLoading.dismiss();
+
+
+                return;
+
+              }
               var response = await WorkersService.addWorkers(widget.shiftId!,
                   workerIds, startTime, [], efficiencyCalculation);
 
@@ -327,7 +363,6 @@ class _WorkItemViewState extends State<WorkItemView> {
               } else {
                 EasyLoading.showError('Error');
               }
-
               print('');
             } else {
               setState(() {
@@ -360,6 +395,7 @@ class UserItem extends StatefulWidget {
   bool initialSelected;
 
   final Color? colorToShow;
+  final String picUrl;
 
   UserItem({
     Key? key,
@@ -369,6 +405,7 @@ class UserItem extends StatefulWidget {
     required this.initialSelected,
     required this.changedStatus,
     this.disableRatio = false,
+    required this.picUrl,
   }) : super(key: key);
 
   @override
@@ -408,10 +445,8 @@ class _UserItemState extends State<UserItem> {
                   BoxDecoration(color: Colors.white, shape: BoxShape.circle),
               child: ClipOval(
                 child: SizedBox.fromSize(
-                  size: Size.fromRadius(24), // Image radius
-                  child: Image.network(
-                      'https://images.unsplash.com/photo-1537511446984-935f663eb1f4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8b2ZmaWNlJTIwd29ya2VyfGVufDB8fDB8fA%3D%3D&w=1000&q=80',
-                      fit: BoxFit.cover),
+                  size: const Size.fromRadius(24), // Image radius
+                  child: Image.network(widget.picUrl, fit: BoxFit.cover),
                 ),
               ),
             ),

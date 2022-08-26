@@ -23,6 +23,8 @@ class LoginService {
 
       var responseObject = LoginResponse.fromJson(response.data);
 
+      print(response.data['data']);
+
       if(responseObject.data == null) {
         return null;
       }

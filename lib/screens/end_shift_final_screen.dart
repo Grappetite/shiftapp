@@ -4,12 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
 import '../config/constants.dart';
 import 'dart:io' show Platform;
 
 import '../model/shifts_model.dart';
+import '../model/login_model.dart';
 import '../services/workers_service.dart';
 import '../widgets/elevated_button.dart';
 import 'login.dart';
@@ -17,12 +19,16 @@ import 'login.dart';
 class EndShiftFinalScreen extends StatefulWidget {
   final int shiftId;
   final int processId;
+  final Process process;
+
   final String startTime;
   final String endTime;
 
   final ShiftItem selectedShift;
 
   final String comments;
+  final bool autoOpen;
+
 
   const EndShiftFinalScreen(
       {Key? key,
@@ -31,7 +37,8 @@ class EndShiftFinalScreen extends StatefulWidget {
       required this.startTime,
       required this.endTime,
       required this.selectedShift,
-      required this.comments})
+      required this.comments,
+      required this.process, this.autoOpen = false})
       : super(key: key);
 
   @override
@@ -44,7 +51,6 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
   final textController = TextEditingController();
   var isTimeOver = false;
 
-
   String timeElasped = '00:00';
   late Timer _timer;
 
@@ -55,18 +61,14 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
 
     _timer = Timer.periodic(
       oneSec,
-          (Timer timer) {
-
-            if(widget.selectedShift.timeRemaining.contains('Over')) {
-
-              timeRemaining = widget.selectedShift.timeRemaining.replaceAll('Over ', '');
-              isTimeOver = true;
-
-
-            }
-            else {
-              timeRemaining = widget.selectedShift.timeRemaining;
-            }
+      (Timer timer) {
+        if (widget.selectedShift.timeRemaining.contains('Over')) {
+          timeRemaining =
+              widget.selectedShift.timeRemaining.replaceAll('Over ', '');
+          isTimeOver = true;
+        } else {
+          timeRemaining = widget.selectedShift.timeRemaining;
+        }
         setState(() {
           timeElasped = widget.selectedShift.timeElasped;
         });
@@ -75,7 +77,6 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
       },
     );
   }
-
 
   @override
   void dispose() {
@@ -135,14 +136,34 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
     super.initState();
     setupFocusNode(doneButton);
     startTimer();
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select Shift'),
+        centerTitle: true,
+        title: Column(
+          children: [
+            Image.asset(
+              'assets/images/toplogo.png',
+              height: 20,
+            ),
+            SizedBox(
+              height: 4,
+            ),
+            Text(
+              widget.process.name!,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600),
+            ),
+            SizedBox(
+              height: 2,
+            ),
+          ],
+        ),
       ),
       body: Column(
         children: [
@@ -150,7 +171,8 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
               selectedShift: widget.selectedShift, timeElasped: timeElasped),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(left: 8,right: 8 , top: 8 , bottom: 16),
+              padding:
+                  const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 16),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 decoration: BoxDecoration(
@@ -199,13 +221,15 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                             ),
                           ),
                           width: double.infinity,
-                          child:  Padding(
-                            padding:
-                                const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 16),
                             child: Align(
                               alignment: Alignment.center,
                               child: Text(
-                                isTimeOver ? ('TIME OVER : $timeRemaining') : ('TIME REMAINING: $timeRemaining'),
+                                isTimeOver
+                                    ? ('TIME OVER : $timeRemaining')
+                                    : ('TIME REMAINING: $timeRemaining'),
                                 style: const TextStyle(
                                     color: Colors.red,
                                     fontSize: 18,
@@ -234,8 +258,8 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                           ),
                           width: double.infinity,
                           child: Padding(
-                            padding:
-                                EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 16),
                             child: Column(
                               children: [
                                 Row(
@@ -282,14 +306,14 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                   height: 8,
                                 ),
                                 Text(
-                                  'Pallet Processed',
-                                  style:
-                                      TextStyle(color: kPrimaryColor, fontSize: 16),
+                                  '${widget.process.unit} Processed',
+                                  style: const TextStyle(
+                                      color: kPrimaryColor, fontSize: 16),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 6,
                                 ),
-                                Text(
+                                const Text(
                                   'Enter the volume above',
                                   style: TextStyle(
                                     color: kPrimaryColor,
@@ -305,15 +329,13 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                       ),
                       PElevatedButton(
                         onPressed: () async {
-                          await EasyLoading.show(
-                            status: 'Adding...',
-                            maskType: EasyLoadingMaskType.black,
-                          );
-
                           if (textController.text.isEmpty) {
                             return;
                           } else {
-                            await EasyLoading.dismiss();
+                            await EasyLoading.show(
+                              status: 'Adding...',
+                              maskType: EasyLoadingMaskType.black,
+                            );
 
                             var check = await WorkersService.endShift(
                                 widget.shiftId,
@@ -330,13 +352,31 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                 duration: const Duration(seconds: 2),
                               );
 
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      const LoginScreen(),
-                                ),
-                              );
+                              final prefs =
+                                  await SharedPreferences.getInstance();
+
+                              prefs.remove('shiftId');
+
+                              prefs.remove('selectedShiftName');
+                              prefs.remove('selectedShiftEndTime');
+                              prefs.remove('selectedShiftStartTime');
+                              prefs.remove('username');
+                              prefs.remove('password');
+
+                              if(widget.autoOpen) {
+
+                                Navigator.pop(context);
+                                Navigator.pop(context,true);
+
+                              }
+                              else {
+
+                                Navigator.pop(context);
+                                Navigator.pop(context,true);
+                                Navigator.pop(context,true);
+                              }
+
+
                             } else {
                               EasyLoading.showError('Error');
                             }

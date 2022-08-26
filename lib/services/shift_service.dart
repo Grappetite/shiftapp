@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../config/constants.dart';
 import '../model/login_model.dart';
 import '../model/shifts_model.dart';
+import 'package:logger/logger.dart';
+
 
 class ShiftService {
   static Future<ShiftStartModel?> startShift(

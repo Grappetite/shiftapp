@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 import 'package:app_popup_menu/app_popup_menu.dart';
 import 'package:shiftapp/model/shifts_model.dart';
@@ -8,20 +10,23 @@ import 'package:shiftapp/model/login_model.dart';
 
 import '../config/constants.dart';
 import 'end_shift.dart';
+import 'login.dart';
 
 class HomeView extends StatefulWidget {
   final Process processSelected;
 
-
   final String? comment;
-
 
   final ShiftItem selectedShift;
 
   final bool sessionStarted;
 
   const HomeView(
-      {Key? key, required this.processSelected, required this.selectedShift, this.sessionStarted = false, this.comment})
+      {Key? key,
+      required this.processSelected,
+      required this.selectedShift,
+      this.sessionStarted = false,
+      this.comment})
       : super(key: key);
 
   @override
@@ -35,6 +40,10 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     _controller = PersistentTabController(initialIndex: 0);
+  }
+
+  void goBack() {
+    Navigator.pop(context);
   }
 
   @override
@@ -75,11 +84,28 @@ class _HomeViewState extends State<HomeView> {
     return [
       HomeMainView(
         selectedShift: widget.selectedShift,
-        processSelected: widget.processSelected, sessionStarted: widget.sessionStarted,
+        processSelected: widget.processSelected,
+        sessionStarted: widget.sessionStarted,
         comment: widget.comment,
+        onLogout: () async {
+          var dyanc = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginScreen()),
+          );
+
+          if(dyanc != null) {
+            if(dyanc == true){
+
+
+            }
+          }
+        },
       ),
       Container(
-        color: Colors.green,
+        child: const Center(
+          child: Text('SOPs are not available right now'),
+        ),
+        color: Colors.white,
       )
     ];
   }
@@ -108,9 +134,15 @@ class HomeMainView extends StatefulWidget {
   final ShiftItem selectedShift;
   final bool sessionStarted;
   final String? comment;
+  final VoidCallback onLogout;
 
   const HomeMainView(
-      {Key? key, required this.processSelected, required this.selectedShift, required this.sessionStarted, this.comment})
+      {Key? key,
+      required this.processSelected,
+      required this.selectedShift,
+      required this.sessionStarted,
+      this.comment,
+      required this.onLogout})
       : super(key: key);
 
   @override
@@ -121,34 +153,70 @@ class _HomeMainViewState extends State<HomeMainView> {
   late AppPopupMenu<int> appMenu02;
 
   void moveToEndSession() async {
+    await EasyLoading.show(
+      status: 'loading...',
+      maskType: EasyLoadingMaskType.black,
+    );
 
     await Future.delayed(const Duration(seconds: 1));
+    await EasyLoading.dismiss();
 
-    Navigator.pushReplacement(
+    var response = await Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (BuildContext context) => EndShiftView(
+          autoOpen: true,
           userId: const [],
-          efficiencyCalculation:
-          const [],
+          efficiencyCalculation: const [],
           shiftId: widget.selectedShift.id!,
           processId: widget.processSelected.id!,
           selectedShift: widget.selectedShift,
           comment: widget.comment!,
           startedBefore: true,
+          process: widget.processSelected,
         ),
       ),
     );
+
+    if(response != null) {
+      if(response == true){
+        widget.onLogout();
+
+      }
+    }
+    print('=');
+
   }
+
   @override
   void initState() {
     super.initState();
 
     appMenu02 = AppPopupMenu<int>(
-      menuItems: const [
+      menuItems: [
         PopupMenuItem(
           value: 1,
-          child: Text(
+          onTap: () async {
+            final prefs = await SharedPreferences.getInstance();
+
+            prefs.remove('shiftId');
+
+            prefs.remove('selectedShiftName');
+            prefs.remove('selectedShiftEndTime');
+            prefs.remove('selectedShiftStartTime');
+            prefs.remove('username');
+            prefs.remove('password');
+
+            widget.onLogout();
+
+            print('');
+
+            //Navigator.pushAndRemoveUntil(context, _homeRoute, (Route<dynamic> r) => false);
+
+            //ModalRoute.withName("/")
+            // Navigator.popUntil(context, (route) => false)
+          },
+          child: const Text(
             'Logout',
             style: TextStyle(
               color: Colors.white,
@@ -168,12 +236,8 @@ class _HomeMainViewState extends State<HomeMainView> {
       color: kPrimaryColor,
     );
 
-    if(widget.sessionStarted) {
-
-
+    if (widget.sessionStarted) {
       moveToEndSession();
-
-
     }
   }
 
@@ -181,15 +245,13 @@ class _HomeMainViewState extends State<HomeMainView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+
         title: Column(
           children: [
-            const Text(
-              'Main Warehouse',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700),
-            ),
+
+
+            Image.asset('assets/images/toplogo.png',height: 20,),
             const SizedBox(
               height: 4,
             ),
@@ -197,9 +259,10 @@ class _HomeMainViewState extends State<HomeMainView> {
               widget.processSelected.name!,
               style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 17,
                   fontWeight: FontWeight.w600),
             ),
+
             const SizedBox(
               height: 2,
             ),
@@ -210,6 +273,10 @@ class _HomeMainViewState extends State<HomeMainView> {
       body: ShiftStart(
         selectedShift: widget.selectedShift,
         processSelected: widget.processSelected,
+        popBack: (){
+          widget.onLogout.call();
+
+        },
       ),
     );
   }

@@ -39,7 +39,12 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
 
     controller.text = 'sidra+supervisor@grappetite.com';
+    //controller.text = 'asfa+sup3@grappetite.com';
+
+    //
     passwordController.text = 'sidragrap';
+    //passwordController.text = 'rzbsun';
+
 
     loadDefaul();
   }
@@ -50,11 +55,17 @@ class _LoginScreenState extends State<LoginScreen> {
     int? shiftId = prefs.getInt('shiftId');
 
     if (shiftId != null) {
+      await EasyLoading.show(
+        status: 'loading...',
+        maskType: EasyLoadingMaskType.black,
+      );
+
+
       String loginUserName = prefs.getString('username')!;
       String passString = prefs.getString('password')!;
 
       LoginResponse? response =
-          await LoginService.login(controller.text, passwordController.text);
+          await LoginService.login(loginUserName, passString);
 
       if (response == null) {
       } else {
@@ -72,7 +83,14 @@ class _LoginScreenState extends State<LoginScreen> {
           name: shiftName,
           startTime: shiftStartTime,
           endTime: shiftEndTime,
+
         );
+
+
+        shiftObject.displayScreen = 1;
+
+        await EasyLoading.dismiss();
+
 
 
 
@@ -91,7 +109,6 @@ class _LoginScreenState extends State<LoginScreen> {
       }
 
 
-      print("");
     }
 
     /*
@@ -214,7 +231,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       var shifts =
                           await LoginService.getShifts(processSelected.id!);
 
+
                       await EasyLoading.dismiss();
+
+                      //shifts!.data!.first.displayScreen = 3;
 
                       if (shifts == null) {
                         EasyLoading.showError('Could not load shifts');

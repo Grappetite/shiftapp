@@ -13,9 +13,13 @@ import 'inner_widgets/worker_item_view.dart';
 class SelectExistingWorkers extends StatefulWidget {
   List<ShiftWorker>  workers;
 
+  final Function(AddTempResponse) tempWorkerAdded;
+
+  final int shiftId;
+
   final bool isEditing;
 
-  SelectExistingWorkers({Key? key,required this.workers,this.isEditing = false}) : super(key: key);
+  SelectExistingWorkers({Key? key,required this.workers,this.isEditing = false, required this.shiftId, required this.tempWorkerAdded}) : super(key: key);
 
   @override
   State<SelectExistingWorkers> createState() => _SelectExistingWorkersState();
@@ -246,7 +250,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                     height: 12,
                   ),
                   PElevatedButton(
-                    text: 'ADD SELECTED WORKERS (2)',
+                    text: 'ADD SELECTED WORKERS (${workers.where((e) => e.isSelected).toList().length})',
                     onPressed: () {},
                   ),
                   const SizedBox(
@@ -257,6 +261,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                      for(var currentItem in filteredWorkers) ... [
 
                        UserItem(
+                         picUrl: currentItem.picture,
                          personId:
                          currentItem.firstName! + ' ' + currentItem.lastName!,
                          personName: currentItem.id!.toString(),
@@ -265,13 +270,24 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                          changedStatus: (bool newStatus) {
 
                            var find = widget.workers.where((e) => e.userId == currentItem.userId).toList();
-                           currentItem.isSelected = newStatus;
-                           if(find.isNotEmpty) {
-                             find.first.isSelected = newStatus;
-                           }
-                           else {
-                             widget.workers.add(currentItem);
-                           }
+                           setState(() {
+                             currentItem.isSelected = newStatus;
+
+                             if(find.isNotEmpty) {
+                               setState(() {
+                                 find.first.isSelected = newStatus;
+
+                               });
+                             }
+                             else {
+                               setState(() {
+                                 widget.workers.add(currentItem);
+
+                               });
+                             }
+                           });
+
+
 
 
                            if(widget.isEditing) {
@@ -306,6 +322,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                      for(var currentItem in workers) ... [
 
                        UserItem(
+                         picUrl: currentItem.picture,
                          personId:
                          currentItem.firstName! + ' ' + currentItem.lastName!,
                          personName: currentItem.id!.toString(),
@@ -317,11 +334,16 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                            currentItem.isSelected = newStatus;
 
                            if(find.isNotEmpty) {
-                             find.first.isSelected = newStatus;
+                             setState(() {
+                               find.first.isSelected = newStatus;
+                             });
                            }
                            else {
 
-                             widget.workers.add(currentItem);
+                             setState(() {
+                               widget.workers.add(currentItem);
+
+                             });
 
                            }
 
@@ -386,12 +408,41 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                       ),
                     ),
                     onPressed: () async {
-                      bool? selected = await showDialog(
+                      AddTempResponse? selected = await showDialog(
                           context: context,
                           barrierDismissible: false,
                           builder: (BuildContext context) {
-                            return const AddTempWorker();
+                            return  AddTempWorker(shiftId: this.widget.shiftId.toString(),);
                           });
+                      if(selected != null) {
+
+                        print('');
+
+
+                        var res = await WorkersService.addWorkers(widget.shiftId, [selected.data!.id.toString()], ['2022-06-05 06:09:04'], [], [selected.data!.efficiencyCalculation.toString()]);
+
+                        this.widget.tempWorkerAdded(selected);
+
+                        print('');
+
+                        /*
+                          var response2 = await WorkersService.addWorkers(
+                              widget.shiftId!,
+                              [tmp.data!.id.toString()],
+                              ['2022-06-05 06:09:04'],
+                              [tmp.data!.efficiencyCalculation.toString()],
+                              [tmp.data!.efficiencyCalculation.toString()]);
+
+
+                        }
+
+                         */
+                        //Navigator.pop(context,selected);
+
+
+
+                      }
+
                     },
                     child: Row(
                       children: [

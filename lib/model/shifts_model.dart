@@ -205,7 +205,9 @@ class ShiftItem {
     endTime = result;
 
     displayScreen = int.parse(json['display_screen']);
-    ;
+    if(displayScreen == 1) {
+      displayScreen = 2;
+    }
   }
 
   Map<String, dynamic> toJson() {
