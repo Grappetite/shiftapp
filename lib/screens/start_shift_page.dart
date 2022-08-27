@@ -63,7 +63,7 @@ class _StartShiftViewState extends State<StartShiftView> {
   @override
   void initState() {
     super.initState();
-    startTimer();
+    //startTimer();
   }
 
   @override

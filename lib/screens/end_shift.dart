@@ -99,6 +99,7 @@ class _EndShiftViewState extends State<EndShiftView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Container(),
         centerTitle: true,
         title: Column(
           children: [
@@ -121,6 +122,7 @@ class _EndShiftViewState extends State<EndShiftView> {
             ),
           ],
         ),
+
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -182,8 +184,8 @@ class _EndShiftViewState extends State<EndShiftView> {
                 iconName: 'filled-walk',
                 title: 'MANAGE WORKERS',
                 text1:  widget.process.headCount != null ? '$numberSelected /${widget.process.headCount} Workers' : '$numberSelected /$totalUsersCount Workers',
-                text2: 'Tap to train now or swipe to ignore',
-                showWarning: true,
+                text2: 'Tap to Add or remove',
+                showWarning: false,
                 onTap: () {
                   Navigator.push(
                     context,

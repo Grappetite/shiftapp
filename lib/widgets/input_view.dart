@@ -44,6 +44,8 @@ class InputView extends StatelessWidget {
 
   final bool isCvv;
 
+  final int customHeight;
+
   final bool isSecure;
 
   InputView(
@@ -69,7 +71,7 @@ class InputView extends StatelessWidget {
       this.isCardDate = false,
       this.isSecure = false,
       this.suffixIcon,
-      this.suffixIconTapped}) : super(key: key);
+      this.suffixIconTapped, this.customHeight = 0}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -117,8 +119,10 @@ class InputView extends StatelessWidget {
                 ),
               ],
             ),
-          ] else ...[
+          ]
+          else if(customHeight == 0 ) ... [
             TextFormField(
+
                 enabled: !isDisabled,
                 controller: controller,
                 obscureText: isSecure,
@@ -130,7 +134,7 @@ class InputView extends StatelessWidget {
                     ? TextCapitalization.words
                     : TextCapitalization.none,
                 focusNode: (keyboardType == TextInputType.number ||
-                        keyboardType == TextInputType.phone)
+                    keyboardType == TextInputType.phone)
                     ? doneButtonFocusNode!
                     : null,
                 inputFormatters: inputFormatters(),
@@ -148,6 +152,43 @@ class InputView extends StatelessWidget {
                   focusColor: Colors.grey,
                 ),
                 onChanged: onChange),
+          ]
+          else ...[
+            SizedBox(
+              height: 50,
+              child: TextFormField(
+
+                  enabled: !isDisabled,
+                  controller: controller,
+                  obscureText: isSecure,
+                  minLines: 1,
+                  maxLines: maxLine,
+                  maxLength: textLimit,
+                  keyboardType: keyboardType,
+                  textCapitalization: firstLetterCapital
+                      ? TextCapitalization.words
+                      : TextCapitalization.none,
+                  focusNode: (keyboardType == TextInputType.number ||
+                          keyboardType == TextInputType.phone)
+                      ? doneButtonFocusNode!
+                      : null,
+                  inputFormatters: inputFormatters(),
+                  decoration: InputDecoration(
+                    counterText: '',
+                    labelText: hintText,
+                    labelStyle: const TextStyle(color: Colors.grey , ),
+                    suffixIcon: makeSuffixIcon(),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    focusColor: Colors.grey,
+                  ),
+                  onChanged: onChange),
+            ),
+
           ],
         ],
       ),

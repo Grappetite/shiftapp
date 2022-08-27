@@ -38,7 +38,8 @@ class WorkItemView extends StatefulWidget {
       required this.processId,
       required this.selectedShift,
       this.isEditing = false,
-      required this.process, required this.reloadData})
+      required this.process,
+      required this.reloadData})
       : super(key: key);
 
   @override
@@ -165,9 +166,8 @@ class _WorkItemViewState extends State<WorkItemView> {
                   ),
                   for (var currentItem in widget.listLists[i]) ...[
                     UserItem(
-                      personId:
-                          currentItem.firstName! + ' ' + currentItem.lastName!,
-                      personName: currentItem.id!.toString(),
+                      keyNo: currentItem.key != null ? currentItem.key! : '',
+                      personName: currentItem.firstName! + ' ' + currentItem.lastName!,
                       initialSelected: currentItem.isSelected,
                       picUrl: currentItem.picture,
                       changedStatus: (bool newStatus) async {
@@ -301,18 +301,16 @@ class _WorkItemViewState extends State<WorkItemView> {
               MaterialPageRoute(
                 builder: (context) => SelectExistingWorkers(
                   workers: workers,
-                  isEditing: widget.isEditing, shiftId: this.widget.shiftId!, tempWorkerAdded: (AddTempResponse tmp) {
-
+                  isEditing: widget.isEditing,
+                  shiftId: this.widget.shiftId!,
+                  tempWorkerAdded: (AddTempResponse tmp) {
                     this.widget.reloadData();
 
-
                     print('object');
-
-                },
+                  },
                 ),
               ),
             );
-
 
             if (widget.isEditing) {
               var newlyAdded =
@@ -345,14 +343,10 @@ class _WorkItemViewState extends State<WorkItemView> {
                 maskType: EasyLoadingMaskType.black,
               );
 
-              if(workerIds.isEmpty) {
-
-
+              if (workerIds.isEmpty) {
                 await EasyLoading.dismiss();
 
-
                 return;
-
               }
               var response = await WorkersService.addWorkers(widget.shiftId!,
                   workerIds, startTime, [], efficiencyCalculation);
@@ -386,7 +380,8 @@ class _WorkItemViewState extends State<WorkItemView> {
 
 class UserItem extends StatefulWidget {
   final String personName;
-  final String personId;
+
+  final String keyNo;
 
   final bool disableRatio;
 
@@ -400,7 +395,7 @@ class UserItem extends StatefulWidget {
   UserItem({
     Key? key,
     required this.personName,
-    required this.personId,
+    required this.keyNo,
     this.colorToShow,
     required this.initialSelected,
     required this.changedStatus,
@@ -468,7 +463,7 @@ class _UserItemState extends State<UserItem> {
                   height: 4,
                 ),
                 Text(
-                  widget.personId,
+                  'Key : ' + widget.keyNo,
                   style: const TextStyle(
                     color: Colors.black54,
                     fontSize: 16,

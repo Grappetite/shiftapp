@@ -105,7 +105,7 @@ class _WorkersListingState extends State<WorkersListing> {
   @override
   void initState() {
     super.initState();
-    startTimer();
+    //startTimer();
 
     loadData();
   }

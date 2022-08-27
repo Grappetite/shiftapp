@@ -15,7 +15,7 @@ class AlertTitleLabel extends StatelessWidget {
         style: const TextStyle(
           color: kPrimaryColor,
           fontWeight: FontWeight.w600,
-          fontSize: 20,
+          fontSize: 18,
 
         ),
       ),

@@ -262,9 +262,9 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
 
                        UserItem(
                          picUrl: currentItem.picture,
-                         personId:
+                         personName:
                          currentItem.firstName! + ' ' + currentItem.lastName!,
-                         personName: currentItem.id!.toString(),
+                         keyNo: currentItem.key ?? '',
                          initialSelected: currentItem.isSelected,
                          disableRatio: widget.isEditing ? (currentItem.isSelected && !currentItem.newAdded ) : false,
                          changedStatus: (bool newStatus) {
@@ -323,9 +323,9 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
 
                        UserItem(
                          picUrl: currentItem.picture,
-                         personId:
+                         personName:
                          currentItem.firstName! + ' ' + currentItem.lastName!,
-                         personName: currentItem.id!.toString(),
+                         keyNo: currentItem.key ?? '',
                          initialSelected: currentItem.isSelected,
                          disableRatio: widget.isEditing ? (currentItem.isSelected && !currentItem.newAdded ) : false,
                          changedStatus: (bool newStatus) {

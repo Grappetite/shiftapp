@@ -51,7 +51,7 @@ class _AddTempWorkerState extends State<AddTempWorker> {
       backgroundColor: Colors.transparent,
       content: Container(
         width: MediaQuery.of(context).size.width / 1.15,
-        height: MediaQuery.of(context).size.height / 1.4,
+        height: MediaQuery.of(context).size.height / 1.8,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -60,14 +60,14 @@ class _AddTempWorkerState extends State<AddTempWorker> {
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(right: 8),
+              padding: const EdgeInsets.only(right: 8, top: 4),
               child: Align(
                 alignment: Alignment.topRight,
-                child: IconButton(
-                  onPressed: () {
+                child: GestureDetector(
+                  onTap: () {
                     Navigator.pop(context);
                   },
-                  icon: const Icon(
+                  child: Icon(
                     Icons.close,
                     color: kPrimaryColor,
                   ),
@@ -93,6 +93,7 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                       onChange: (newValue) {},
                       controller: firstNameController,
                       text: '',
+                      customHeight: 50,
                     ),
                     Expanded(
                       child: Container(),
@@ -103,51 +104,73 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                       onChange: (newValue) {},
                       controller: surnameController,
                       text: '',
+                      customHeight: 50,
                     ),
                     Expanded(
                       child: Container(),
                     ),
-                    InputView(
-                      showError: false,
-                      hintText: 'Personal Key',
-                      onChange: (newValue) {},
-                      controller: personalNoController,
-                      text: '',
-                    ),
-                    Expanded(
-                      child: Container(),
-                    ),
-                    if (workerType.isEmpty) ...[
-                      const CircularProgressIndicator(),
-                    ] else ...[
-                      DropDown(
-                        labelText: 'Title',
-                        currentList:
-                            workerType.map((e) => e.name!.trim()).toList(),
-                        showError: false,
-                        onChange: (newString) {
+                    SizedBox(
+                      height: 50,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: InputView(
+                              showError: false,
+                              hintText: 'Personal Key',
+                              onChange: (newValue) {},
+                              controller: personalNoController,
+                              text: '',
+                              customHeight: 50,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 8,
+                          ),
+                          if (workerType.isEmpty) ...[
+                            Expanded(
+                              child: Center(
+                                child: SizedBox(
+                                  height: 10,
+                                  width: 10,
+                                  child: const CircularProgressIndicator(),
+                                ),
+                              ),
+                            ),
+                          ] else ...[
+                            Expanded(
+                              child: DropDown(
+                                labelText: 'Title',
+                                currentList: workerType
+                                    .map((e) => e.name!.trim())
+                                    .toList(),
+                                showError: false,
+                                onChange: (newString) {
+                                  setState(() {
+                                    selectedWorkerType = newString;
+                                  });
+
+                                  selectedWorkerTypeID = workerType
+                                      .firstWhere((e) => e.name == newString)
+                                      .id!
+                                      .toString();
+
+                                  /*
                           setState(() {
-                            selectedWorkerType = newString;
-                          });
+                              selectedString = newString;
+                          });*/
 
-                          selectedWorkerTypeID = workerType
-                              .firstWhere((e) => e.name == newString)
-                              .id!
-                              .toString();
-
-                          /*
-                        setState(() {
-                          selectedString = newString;
-                        });*/
-
-                          //final List<String> cityNames = cities.map((city) => city.name).toList();
-                        },
-                        placeHolderText: 'Worker Type',
-                        preSelected: selectedWorkerType,
+                                  //final List<String> cityNames = cities.map((city) => city.name).toList();
+                                },
+                                placeHolderText: 'Worker Type',
+                                preSelected: selectedWorkerType,
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
-                    ],
-                    const SizedBox(
-                      height: 16,
+                    ),
+                    Expanded(
+                      child: Container(),
                     ),
                     PElevatedButton(
                       onPressed: () async {

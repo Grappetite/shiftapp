@@ -294,7 +294,7 @@ class _ShiftStartState extends State<ShiftStart> {
             onPressed: () async {
               if (widget.selectedShift.displayScreen! == 1 ||
                   widget.selectedShift.displayScreen! == 3) {
-                return;
+               // return;
               }
 
               var waitVal = await Navigator.of(context).push(

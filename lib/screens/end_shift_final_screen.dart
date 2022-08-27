@@ -14,6 +14,8 @@ import '../model/shifts_model.dart';
 import '../model/login_model.dart';
 import '../services/workers_service.dart';
 import '../widgets/elevated_button.dart';
+import '../widgets/input_view.dart';
+import 'inner_widgets/alert_title_label.dart';
 import 'login.dart';
 
 class EndShiftFinalScreen extends StatefulWidget {
@@ -329,6 +331,18 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                       ),
                       PElevatedButton(
                         onPressed: () async {
+
+                          await showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return  ConfirmTimeEnd();
+                              });
+
+
+
+                          return;
+
                           if (textController.text.isEmpty) {
                             return;
                           } else {
@@ -415,6 +429,114 @@ class KeypadDoneButton extends StatelessWidget {
                 style:
                     TextStyle(color: Colors.blue, fontWeight: FontWeight.bold)),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+class ConfirmTimeEnd extends StatefulWidget {
+  const ConfirmTimeEnd({Key? key}) : super(key: key);
+
+  @override
+  State<ConfirmTimeEnd> createState() => _ConfirmTimeEndState();
+}
+
+class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      insetPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+      backgroundColor: Colors.transparent,
+      content: Container(
+        width: MediaQuery.of(context).size.width / 1.15,
+        height: MediaQuery.of(context).size.height / 2.0,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.grey, width: 3),
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 8, top: 4),
+              child: Align(
+                alignment: Alignment.topRight,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Icon(
+                    Icons.close,
+                    color: kPrimaryColor,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const AlertTitleLabel(
+                      title: 'ADD TEMPORARY WORKER',
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    InputView(
+                      showError: false,
+                      hintText: 'First Name',
+                      onChange: (newValue) {},
+                      controller: TextEditingController(),
+                      text: '',
+                      customHeight: 50,
+                    ),
+                    Expanded(
+                      child: Container(),
+                    ),
+
+                    Expanded(
+                      child: Container(),
+                    ),
+                    PElevatedButton(
+                      onPressed: () async {
+
+                        await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay(
+                              hour: 5, minute: 5),
+                          initialEntryMode: TimePickerEntryMode.dial,
+                        );
+
+                        //addTempWorkers
+
+                        /* await EasyLoading.show(
+                          status: 'loading...',
+                          maskType: EasyLoadingMaskType.black,
+                        );*/
+
+
+
+                        //await EasyLoading.dismiss();
+
+
+                      },
+                      text: 'ADD AND ASSIGN',
+                    ),
+                    Expanded(
+                      child: Container(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
