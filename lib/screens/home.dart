@@ -161,6 +161,11 @@ class _HomeMainViewState extends State<HomeMainView> {
     await Future.delayed(const Duration(seconds: 1));
     await EasyLoading.dismiss();
 
+    final prefs = await SharedPreferences.getInstance();
+
+    var executeShiftId = prefs.getInt('execute_shift_id');
+
+
     var response = await Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -173,7 +178,7 @@ class _HomeMainViewState extends State<HomeMainView> {
           selectedShift: widget.selectedShift,
           comment: widget.comment!,
           startedBefore: true,
-          process: widget.processSelected,
+          process: widget.processSelected, execShiftId: executeShiftId!,
         ),
       ),
     );
@@ -209,12 +214,7 @@ class _HomeMainViewState extends State<HomeMainView> {
 
             widget.onLogout();
 
-            print('');
 
-            //Navigator.pushAndRemoveUntil(context, _homeRoute, (Route<dynamic> r) => false);
-
-            //ModalRoute.withName("/")
-            // Navigator.popUntil(context, (route) => false)
           },
           child: const Text(
             'Logout',
@@ -249,8 +249,6 @@ class _HomeMainViewState extends State<HomeMainView> {
 
         title: Column(
           children: [
-
-
             Image.asset('assets/images/toplogo.png',height: 20,),
             const SizedBox(
               height: 4,

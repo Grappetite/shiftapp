@@ -9,6 +9,8 @@ import '../../model/login_model.dart';
 
 class EditWorkers extends StatefulWidget {
   final int shiftId;
+  final int execShiftId;
+
   final int processId;
   final List<String> userId;
   final int totalUsersCount;
@@ -27,7 +29,7 @@ class EditWorkers extends StatefulWidget {
       required this.startTime,
       required this.endTime,
       required this.efficiencyCalculation,
-      required this.selectedShift, required this.process})
+      required this.selectedShift, required this.process, required this.execShiftId})
       : super(key: key);
 
   @override
@@ -62,7 +64,7 @@ class _EditWorkersState extends State<EditWorkers> {
       maskType: EasyLoadingMaskType.black,
     );
 
-    var responseShift = await WorkersService.getShiftWorkers(widget.shiftId);
+    var responseShift = await WorkersService.getShiftWorkers(widget.execShiftId,widget.processId);
 
     List<ShiftWorker> shiftWorkers = [];
 

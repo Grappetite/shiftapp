@@ -14,6 +14,14 @@ extension StringExtension on String {
     return 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
   }
 
+  String get timeToShow {
+    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(this);
+    String date = DateFormat("hh:mm a").format(tempDate);
+
+    return date;
+
+  }
+
 
   static String makeYearMonthDateStringFromDigits(String newValue) {
     String tmpString = newValue;

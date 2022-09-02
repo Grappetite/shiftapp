@@ -7,14 +7,14 @@ class PElevatedButton extends StatelessWidget {
   final bool isApiInProgress;
 
   final Color? backGroundColor;
-  final Color? textColor;
+  final Color textColor;
 
   PElevatedButton({
     required this.text,
     required this.onPressed,
     this.isApiInProgress = false,
     this.backGroundColor,
-    this.textColor,
+    this.textColor = Colors.white,
   });
 
   @override
@@ -27,7 +27,8 @@ class PElevatedButton extends StatelessWidget {
           backgroundColor: backGroundColor != null ? MaterialStateProperty.all(backGroundColor!) : MaterialStateProperty.all(kPrimaryColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0),
+              borderRadius: BorderRadius.circular(16.0 , ),
+              side: BorderSide(color: kPrimaryColor , width: 1)
             ),
           ),
         ),
@@ -47,7 +48,7 @@ class PElevatedButton extends StatelessWidget {
                   ),
                 ],
               )
-            : Text(text),
+            : Text(text , style: TextStyle(color: textColor),),
       ),
     );
   }

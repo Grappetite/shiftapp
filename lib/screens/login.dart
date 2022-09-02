@@ -83,7 +83,6 @@ class _LoginScreenState extends State<LoginScreen> {
           name: shiftName,
           startTime: shiftStartTime,
           endTime: shiftEndTime,
-
         );
 
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:intl/intl.dart';
 import 'package:shiftapp/config/constants.dart';
 
 import '../../model/shifts_model.dart';
@@ -167,11 +168,15 @@ class _WorkItemViewState extends State<WorkItemView> {
                   for (var currentItem in widget.listLists[i]) ...[
                     UserItem(
                       keyNo: currentItem.key != null ? currentItem.key! : '',
-                      personName: currentItem.firstName! + ' ' + currentItem.lastName!,
+                      personName:
+                          currentItem.firstName! + ' ' + currentItem.lastName!,
                       initialSelected: currentItem.isSelected,
                       picUrl: currentItem.picture,
                       changedStatus: (bool newStatus) async {
                         currentItem.isSelected = newStatus;
+
+                        String dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
+                            .format(DateTime.now());
 
                         if (widget.isEditing && newStatus) {
                           await EasyLoading.show(
@@ -182,7 +187,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                           var response = await WorkersService.addWorkers(
                               widget.shiftId!,
                               [currentItem.id!.toString()],
-                              ['2022-06-05 06:09:04'],
+                              [dateString],
                               [],
                               [currentItem.efficiencyCalculation.toString()]);
 
@@ -201,7 +206,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                           var response = await WorkersService.removeWorkers(
                               widget.shiftId!,
                               [currentItem.id!.toString()],
-                              ['2022-06-05 06:09:04'],
+                              [dateString],
                               [],
                               [currentItem.efficiencyCalculation.toString()]);
                           await EasyLoading.dismiss();
@@ -230,13 +235,15 @@ class _WorkItemViewState extends State<WorkItemView> {
                     List<String> startTime = [];
 
                     List<String> efficiencyCalculation = [];
+                    String dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
+                        .format(DateTime.now());
 
                     setState(() {
                       for (var curentItem in widget.listLists) {
                         for (var currentObject in curentItem) {
                           if (currentObject.isSelected) {
                             workerIds.add(currentObject.id!.toString());
-                            startTime.add('2022-06-05 06:09:04');
+                            startTime.add(dateString);
                             efficiencyCalculation.add(currentObject
                                 .efficiencyCalculation!
                                 .toString());
@@ -302,15 +309,34 @@ class _WorkItemViewState extends State<WorkItemView> {
                 builder: (context) => SelectExistingWorkers(
                   workers: workers,
                   isEditing: widget.isEditing,
-                  shiftId: this.widget.shiftId!,
+                  shiftId: widget.selectedShift.id!,
                   tempWorkerAdded: (AddTempResponse tmp) {
                     this.widget.reloadData();
 
+                    var index =
+                        this.widget.listNames.indexOf(tmp.data!.workerType!);
+
+                    var resulf = this
+                        .widget
+                        .listNames
+                        .contains(tmp.data!.workerType!)
+                        .toString();
+
+                    setState(() {
+                      this.widget.listLists[index].add(tmp.data!);
+                    });
+
                     print('object');
-                  },
+                  }, processId: widget.processId.toString(),
                 ),
               ),
             );
+
+            if (response == null) {
+              return;
+            }
+
+            ///  this.widget.reloadData();
 
             if (widget.isEditing) {
               var newlyAdded =
@@ -321,10 +347,14 @@ class _WorkItemViewState extends State<WorkItemView> {
 
               List<String> efficiencyCalculation = [];
 
+              String dateString = DateFormat("yyyy-MM-dd hh:mm:ss").format(
+                DateTime.now(),
+              );
+
               for (var currentObject in newlyAdded) {
                 if (currentObject.isSelected) {
                   workerIds.add(currentObject.id!.toString());
-                  startTime.add('2022-06-05 06:09:04');
+                  startTime.add(dateString);
                   efficiencyCalculation
                       .add(currentObject.efficiencyCalculation!.toString());
                 }
@@ -448,31 +478,33 @@ class _UserItemState extends State<UserItem> {
             const SizedBox(
               width: 12,
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.personName,
-                  style: const TextStyle(
-                    color: Colors.black54,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                Text(
-                  'Key : ' + widget.keyNo,
-                  style: const TextStyle(
-                    color: Colors.black54,
-                    fontSize: 16,
-                  ),
-                ),
-              ],
-            ),
             Expanded(
-              child: Container(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.personName,
+                    style: const TextStyle(
+                      color: Colors.black54,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    'Key : ' + widget.keyNo,
+                    style: const TextStyle(
+                      color: Colors.black54,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(
+              width: 8,
             ),
             Switch(
                 value: widget.initialSelected,
@@ -483,9 +515,11 @@ class _UserItemState extends State<UserItem> {
                   setState(() {
                     widget.initialSelected = newValue;
                   });
-
                   widget.changedStatus(newValue);
                 }),
+            const SizedBox(
+              width: 9,
+            ),
           ],
         ),
       ),

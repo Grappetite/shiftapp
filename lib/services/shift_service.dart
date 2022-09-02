@@ -8,19 +8,20 @@ import 'package:logger/logger.dart';
 
 
 class ShiftService {
-  static Future<ShiftStartModel?> startShift(
-      int shiftId, int processId, String startTime, String endTime) async {
+
+
+  static Future<ShiftStartModel?> cancelShift(
+      int shiftId , String endTime, ) async {
     try {
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
 
+      var cc = prefs.getString(tokenKey);
 
       Response response = await dio.post(
-        baseUrl + 'shifts',
+        baseUrl + 'cancelShift',
         data: {
-          'shift_id': shiftId.toString(),
-          'process_id': processId.toString(),
-          'start_time': startTime,
+          'execute_shift_id': shiftId.toString(),
           'end_time': endTime
         },
         options: Options(
@@ -37,14 +38,11 @@ class ShiftService {
       if (responseObject.data == null) {
         return null;
       }
- //     final prefs = await SharedPreferences.getInstance();
-   //   responseObject.data!.user!.lastName;
-
-     // prefs.setString(tokenKey, responseObject.token!);
 
       return responseObject;
     } catch (e) {
       return null;
     }
   }
+
 }

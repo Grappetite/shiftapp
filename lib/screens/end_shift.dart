@@ -1,10 +1,14 @@
 import 'dart:async';
 
+import 'package:app_popup_menu/app_popup_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
 import '../model/shifts_model.dart';
+import '../services/shift_service.dart';
 import '../services/workers_service.dart';
 import 'edit_workers.dart';
 import 'end_shift_final_screen.dart';
@@ -22,6 +26,8 @@ class EndShiftView extends StatefulWidget {
 
   final bool autoOpen;
 
+  final int execShiftId;
+
   const EndShiftView(
       {Key? key,
       required this.shiftId,
@@ -32,7 +38,7 @@ class EndShiftView extends StatefulWidget {
       this.comment = '',
       this.startedBefore = false,
       required this.process,
-      this.autoOpen = false})
+      this.autoOpen = false , required this.execShiftId})
       : super(key: key);
 
   @override
@@ -40,6 +46,12 @@ class EndShiftView extends StatefulWidget {
 }
 
 class _EndShiftViewState extends State<EndShiftView> {
+
+  late AppPopupMenu<int> appMenu02;
+
+
+  int? executeShiftId;
+
   String timeElasped = '00:00';
   late Timer _timer;
   int totalUsersCount = 0;
@@ -72,18 +84,88 @@ class _EndShiftViewState extends State<EndShiftView> {
     );
   }
 
+  void loadShiftId() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    this.executeShiftId = prefs.getInt('execute_shift_id');
+
+    loadUsers();
+
+  }
   @override
   void initState() {
     super.initState();
 
+    loadShiftId();
+
+
+    appMenu02 = AppPopupMenu<int>(
+      menuItems: [
+        PopupMenuItem(
+          value: 1,
+          onTap: () async {
+            String endTime = DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now());
+
+
+            ShiftService.cancelShift(this.widget.shiftId, endTime);
+
+
+            final prefs = await SharedPreferences.getInstance();
+
+            prefs.remove('shiftId');
+
+            prefs.remove('selectedShiftName');
+            prefs.remove('selectedShiftEndTime');
+            prefs.remove('selectedShiftStartTime');
+            prefs.remove('username');
+            prefs.remove('password');
+
+
+
+            if (widget.autoOpen) {
+
+              Navigator.pop(context, true);
+            } else {
+
+
+              Navigator.pop(context, true);
+              Navigator.pop(context, true);
+            }
+
+
+            /// widget.onLogout();
+
+
+          },
+          child: const Text(
+            'Discard Shift',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+      initialValue: 2,
+      onSelected: (int value) {},
+      onCanceled: () {},
+      elevation: 4,
+      icon: const Icon(Icons.more_vert),
+      offset: const Offset(0, 65),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      color: kPrimaryColor,
+    );
+
+
     startTimer();
 
-    loadUsers();
+
   }
 
   void loadUsers() async {
     var responseShift =
-        await WorkersService.getShiftWorkers(widget.selectedShift.id);
+        await WorkersService.getShiftWorkers(executeShiftId!,widget.processId);
 
     numberSelected = responseShift!.data!.shiftWorker!.length;
 
@@ -122,6 +204,7 @@ class _EndShiftViewState extends State<EndShiftView> {
             ),
           ],
         ),
+        actions: [appMenu02],
 
       ),
       body: SingleChildScrollView(
@@ -167,12 +250,29 @@ class _EndShiftViewState extends State<EndShiftView> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: ExplainerWidget(
-                iconName: 'construct',
-                title: 'SOP REQUIRED',
-                text1: '4 Workers requir SOP Training',
-                text2: 'Tap to train now or swipe to ignore',
-                showWarning: true,
+              child: Stack(
+                children: [
+                  ExplainerWidget(
+                    comingSoon: true,
+                    iconName: 'construct',
+                    title: 'SOP REQUIRED',
+                    text1: '4 Workers require SOP Training',
+                    text2: 'Tap to train now or swipe to ignore',
+                    showWarning: true,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 30),
+                    child: Center(
+                      child: Text(
+                        'Coming Soon',
+                        style: TextStyle(
+                            color: kPrimaryColor,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 20),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(
@@ -183,7 +283,9 @@ class _EndShiftViewState extends State<EndShiftView> {
               child: ExplainerWidget(
                 iconName: 'filled-walk',
                 title: 'MANAGE WORKERS',
-                text1:  widget.process.headCount != null ? '$numberSelected /${widget.process.headCount} Workers' : '$numberSelected /$totalUsersCount Workers',
+                text1: widget.process.headCount != null
+                    ? '$numberSelected /${widget.process.headCount} Workers'
+                    : '$numberSelected /$totalUsersCount Workers',
                 text2: 'Tap to Add or remove',
                 showWarning: false,
                 onTap: () {
@@ -199,7 +301,7 @@ class _EndShiftViewState extends State<EndShiftView> {
                         shiftId: widget.shiftId,
                         totalUsersCount: widget.userId.length,
                         selectedShift: widget.selectedShift,
-                        process: widget.process,
+                        process: widget.process, execShiftId: this.widget.execShiftId,
                       ),
                     ),
                   );
@@ -211,13 +313,30 @@ class _EndShiftViewState extends State<EndShiftView> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: ExplainerWidget(
-                iconName: 'exclamation',
-                title: 'INCIDENTS',
-                text1: '5',
-                text2: 'Tap to train now or swipe to ignore',
-                showWarning: false,
-                text1_2: '01:50:00',
+              child: Stack(
+                children: [
+                  ExplainerWidget(
+                    comingSoon: true,
+                    iconName: 'exclamation',
+                    title: 'INCIDENTS',
+                    text1: '5',
+                    text2: 'Tap to train now or swipe to ignore',
+                    showWarning: false,
+                    text1_2: '01:50:00',
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 30),
+                    child: Center(
+                      child: Text(
+                        'Coming Soon',
+                        style: TextStyle(
+                            color: kPrimaryColor,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 20),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(
@@ -244,6 +363,7 @@ class _EndShiftViewState extends State<EndShiftView> {
                             endTime: widget.selectedShift.endTime!,
                             comments: '',
                             process: widget.process,
+                            executeShiftId: executeShiftId!,
                           ),
                         ),
                       );
@@ -286,6 +406,8 @@ class ExplainerWidget extends StatelessWidget {
 
   final Color? postIconColor;
 
+  bool comingSoon;
+
   ExplainerWidget({
     Key? key,
     required this.iconName,
@@ -299,6 +421,7 @@ class ExplainerWidget extends StatelessWidget {
     this.postIcon,
     this.postIconColor,
     this.onTap,
+    this.comingSoon = false,
   }) : super(key: key);
 
   @override
@@ -313,7 +436,7 @@ class ExplainerWidget extends StatelessWidget {
           decoration: BoxDecoration(
             color: backgroundColor,
             border: Border.all(
-              color: kPrimaryColor,
+              color: comingSoon ? Colors.grey : kPrimaryColor,
               width: 1,
             ),
             borderRadius: const BorderRadius.all(
@@ -334,12 +457,13 @@ class ExplainerWidget extends StatelessWidget {
                     Icon(
                       Icons.directions_walk,
                       size: MediaQuery.of(context).size.width / 12,
-                      color: kPrimaryColor,
+                      color: comingSoon ? Colors.grey : kPrimaryColor,
                     ),
                   ] else ...[
                     Image(
                       image: AssetImage('assets/images/$iconName.png'),
                       width: MediaQuery.of(context).size.width / 12,
+                      color: comingSoon ? Colors.grey : kPrimaryColor,
                     ),
                   ],
                   const SizedBox(
@@ -352,8 +476,8 @@ class ExplainerWidget extends StatelessWidget {
                       children: [
                         Text(
                           title,
-                          style: const TextStyle(
-                            color: kPrimaryColor,
+                          style: TextStyle(
+                            color: comingSoon ? Colors.grey : kPrimaryColor,
                             fontWeight: FontWeight.w700,
                             fontSize: 18,
                           ),
@@ -370,10 +494,12 @@ class ExplainerWidget extends StatelessWidget {
                         if (text1_2.isNotEmpty) ...[
                           Row(
                             children: [
-                              const Text(
+                              Text(
                                 'Incidents Recorded:',
                                 style: TextStyle(
-                                    color: kPrimaryColor,
+                                    color: comingSoon
+                                        ? Colors.grey
+                                        : kPrimaryColor,
                                     fontWeight: FontWeight.w700),
                               ),
                               const SizedBox(
@@ -381,8 +507,9 @@ class ExplainerWidget extends StatelessWidget {
                               ),
                               Text(
                                 text1,
-                                style: const TextStyle(
-                                  color: kPrimaryColor,
+                                style: TextStyle(
+                                  color:
+                                      comingSoon ? Colors.grey : kPrimaryColor,
                                 ),
                               ),
                             ],
@@ -398,10 +525,12 @@ class ExplainerWidget extends StatelessWidget {
                           ],
                           Row(
                             children: [
-                              const Text(
+                              Text(
                                 'Downtime Recorded:',
                                 style: TextStyle(
-                                    color: kPrimaryColor,
+                                    color: comingSoon
+                                        ? Colors.grey
+                                        : kPrimaryColor,
                                     fontWeight: FontWeight.w700),
                               ),
                               const SizedBox(
@@ -409,8 +538,9 @@ class ExplainerWidget extends StatelessWidget {
                               ),
                               Text(
                                 text1_2,
-                                style: const TextStyle(
-                                  color: kPrimaryColor,
+                                style: TextStyle(
+                                  color:
+                                      comingSoon ? Colors.grey : kPrimaryColor,
                                 ),
                               ),
                             ],
@@ -418,8 +548,8 @@ class ExplainerWidget extends StatelessWidget {
                         ] else ...[
                           Text(
                             text1,
-                            style: const TextStyle(
-                              color: kPrimaryColor,
+                            style: TextStyle(
+                              color: comingSoon ? Colors.grey : kPrimaryColor,
                             ),
                           ),
                         ],
@@ -435,8 +565,8 @@ class ExplainerWidget extends StatelessWidget {
                           ],
                           Text(
                             text2,
-                            style: const TextStyle(
-                              color: kPrimaryColor,
+                            style: TextStyle(
+                              color: comingSoon ? Colors.grey : kPrimaryColor,
                             ),
                           ),
                         ],
@@ -450,12 +580,15 @@ class ExplainerWidget extends StatelessWidget {
                     Icon(
                       postIcon,
                       size: MediaQuery.of(context).size.width / 12,
-                      color: postIconColor ?? Colors.cyan,
+                      color: comingSoon
+                          ? Colors.grey
+                          : (postIconColor ?? Colors.cyan),
                     ),
                   ] else if (showWarning) ...[
                     Image(
                       image: const AssetImage('assets/images/warning.png'),
                       width: MediaQuery.of(context).size.width / 12,
+                      color: comingSoon ? Colors.grey : null,
                     ),
                   ],
                 ],

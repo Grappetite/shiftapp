@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../config/constants.dart';
 import '../../model/worker_type_model.dart';
@@ -14,7 +16,10 @@ import 'alert_title_label.dart';
 class AddTempWorker extends StatefulWidget {
   final String shiftId;
 
-  const AddTempWorker({Key? key, required this.shiftId}) : super(key: key);
+
+  final String processId;
+
+  const AddTempWorker({Key? key, required this.shiftId, required this.processId}) : super(key: key);
 
   @override
   State<AddTempWorker> createState() => _AddTempWorkerState();
@@ -25,13 +30,22 @@ class _AddTempWorkerState extends State<AddTempWorker> {
   TextEditingController surnameController = TextEditingController();
   TextEditingController personalNoController = TextEditingController();
 
+  int? tempWorkerId;
+
   List<WorkerType> workerType = [];
 
   String selectedWorkerType = '';
   String selectedWorkerTypeID = '';
 
   void loadWorkerTypes() async {
-    var result = await WorkersService.getWorkTypes(1);
+
+    final prefs = await SharedPreferences.getInstance();
+
+    tempWorkerId = prefs.getInt('execute_shift_id');
+
+    //execute_shift_id
+
+    var result = await WorkersService.getWorkTypes(this.widget.shiftId,widget.processId);
     workerType = result!.data!;
     setState(() {
       workerType = result.data!;
@@ -154,12 +168,7 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                                       .id!
                                       .toString();
 
-                                  /*
-                          setState(() {
-                              selectedString = newString;
-                          });*/
 
-                                  //final List<String> cityNames = cities.map((city) => city.name).toList();
                                 },
                                 placeHolderText: 'Worker Type',
                                 preSelected: selectedWorkerType,
@@ -180,13 +189,18 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                           maskType: EasyLoadingMaskType.black,
                         );
 
+                        String dateString =
+                            DateFormat("yyyy-MM-dd hh:mm:ss").format(
+                          DateTime.now(),
+                        );
+
                         var response = await WorkersService.addTempWorkers(
                             firstNameController.text,
                             surnameController.text,
                             personalNoController.text,
                             selectedWorkerTypeID,
-                            this.widget.shiftId,
-                            '2022-06-05 06:09:04');
+                            widget.shiftId,
+                            dateString);
                         await EasyLoading.dismiss();
 
                         if (response != null) {

@@ -199,6 +199,11 @@ class _StartShiftViewState extends State<StartShiftView> {
                           prefs.setInt('selectedDisplayScreen',
                               widget.selectedShift.displayScreen!);
 
+                          prefs.setInt('execute_shift_id',
+                              result.data!.executeShiftId!);
+
+
+
 
                           Navigator.pushReplacement(
                             context,
@@ -212,6 +217,7 @@ class _StartShiftViewState extends State<StartShiftView> {
                                 selectedShift: widget.selectedShift,
                                 comment: _controller.text,
                                 process: widget.process,
+                                execShiftId : result.data!.executeShiftId!
                               ),
                             ),
                           );
