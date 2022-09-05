@@ -13,6 +13,7 @@ import 'dart:io' show Platform;
 
 import '../model/shifts_model.dart';
 import '../model/login_model.dart';
+import '../services/shift_service.dart';
 import '../services/workers_service.dart';
 import '../widgets/elevated_button.dart';
 import '../widgets/input_view.dart';
@@ -373,7 +374,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                               maskType: EasyLoadingMaskType.black,
                             );
 
-                            var check = await WorkersService.endShift(
+                            var check = await ShiftService.endShift(
                                 widget.executeShiftId,
                                 widget.processId,
                                 textController.text,

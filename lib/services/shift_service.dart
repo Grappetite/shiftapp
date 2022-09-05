@@ -45,4 +45,48 @@ class ShiftService {
     }
   }
 
+  static Future<bool> endShift(
+      int shiftId,
+      int processId,
+      String unitsProduced,
+      String comment,
+      String endTime) async {
+    try {
+
+      var logger = Logger();
+
+      var dio = Dio();
+      final prefs = await SharedPreferences.getInstance();
+
+      Response response = await dio.post(
+        baseUrl + 'endShift',
+        data: {
+          'execute_shift_id': shiftId.toString(),
+          'process_id': processId.toString(),
+          'end_time': endTime,
+          'units_produced': unitsProduced,
+          'comments' : comment
+        },
+        options: Options(
+          headers: {
+            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+          },
+        ),
+      );
+
+
+      print(response.data);
+
+      if(response.data['code'] == 200){
+        return true;
+      }
+
+      return false;
+
+    } catch (e) {
+      return false;
+    }
+  }
+
+
 }

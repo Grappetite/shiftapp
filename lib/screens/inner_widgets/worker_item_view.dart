@@ -53,17 +53,17 @@ class _WorkItemViewState extends State<WorkItemView> {
   String workersLabel = 'WORKERS';
 
   String get workerSelected {
-    workersSelected = 0;
+    var workersSelectedInt = 0;
 
     for (var currenList in widget.listLists) {
       for (var currentObject in currenList) {
         if (currentObject.isSelected) {
-          workersSelected = workersSelected + 1;
+          workersSelectedInt = workersSelectedInt + 1;
         }
       }
     }
 
-    return workersSelected.toString();
+    return workersSelectedInt.toString();
   }
 
   @override
@@ -173,7 +173,12 @@ class _WorkItemViewState extends State<WorkItemView> {
                       initialSelected: currentItem.isSelected,
                       picUrl: currentItem.picture,
                       changedStatus: (bool newStatus) async {
-                        currentItem.isSelected = newStatus;
+
+                        setState(() {
+                          currentItem.isSelected = newStatus;
+
+                        });
+
 
                         String dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
                             .format(DateTime.now());
