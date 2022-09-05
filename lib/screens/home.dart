@@ -163,6 +163,10 @@ class _HomeMainViewState extends State<HomeMainView> {
     await Future.delayed(const Duration(seconds: 1));
     await EasyLoading.dismiss();
 
+    final prefs = await SharedPreferences.getInstance();
+
+    var executeShiftId = prefs.getInt('execute_shift_id');
+
     var response = await Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -176,6 +180,7 @@ class _HomeMainViewState extends State<HomeMainView> {
           comment: widget.comment!,
           startedBefore: true,
           process: widget.processSelected,
+          execShiftId: executeShiftId!,
         ),
       ),
     );
@@ -208,13 +213,6 @@ class _HomeMainViewState extends State<HomeMainView> {
             Api().sp.remove('password');
 
             widget.onLogout();
-
-            print('');
-
-            //Navigator.pushAndRemoveUntil(context, _homeRoute, (Route<dynamic> r) => false);
-
-            //ModalRoute.withName("/")
-            // Navigator.popUntil(context, (route) => false)
           },
           child: const Text(
             'Logout',

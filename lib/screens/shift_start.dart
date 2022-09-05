@@ -1,9 +1,11 @@
 import 'dart:async';
 
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 import 'package:shiftapp/screens/workers_listing.dart';
+import 'package:shiftapp/util/string.dart';
 
 import '../config/constants.dart';
 import '../model/shifts_model.dart';
@@ -79,10 +81,13 @@ class _ShiftStartState extends State<ShiftStart> {
             child: Container(
               width: MediaQuery.of(context).size.width / 1.14,
               decoration: BoxDecoration(
-                  border: Border.all(
-                    color: kPrimaryColor,
-                  ),
-                  borderRadius: const BorderRadius.all(Radius.circular(16))),
+                border: Border.all(
+                  color: kPrimaryColor,
+                ),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(16),
+                ),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -115,7 +120,7 @@ class _ShiftStartState extends State<ShiftStart> {
                                 fontWeight: FontWeight.w600),
                           ),
                           Text(
-                            widget.selectedShift.showStartTime,
+                            buildShowStartTime(),
                             style: const TextStyle(
                                 color: kPrimaryColor,
                                 fontSize: 21,
@@ -123,6 +128,16 @@ class _ShiftStartState extends State<ShiftStart> {
                           ),
                         ],
                       ),
+                      if (widget.selectedShift.displayScreenMessage !=
+                          null) ...[
+                        Text(
+                          widget.selectedShift.displayScreenMessage!,
+                          style: const TextStyle(
+                              color: kPrimaryColor,
+                              fontSize: 21,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ],
                     ] else ...[
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -135,12 +150,10 @@ class _ShiftStartState extends State<ShiftStart> {
                                   widget.selectedShift.showStartTimeMinute;
 
 
-
-
                               final TimeOfDay? newTime = await showTimePicker(
                                 context: context,
                                 initialTime: TimeOfDay(
-                                    hour: currenHours, minute: currenMinute),
+                                    hour: DateTime.now().hour, minute: DateTime.now().minute),
                                 initialEntryMode: TimePickerEntryMode.dial,
                               );
 
@@ -149,27 +162,79 @@ class _ShiftStartState extends State<ShiftStart> {
                                     .makeTimeStringFromHourMinute(
                                         newTime.hour, newTime.minute);
 
-                                setState(() {
-                                  widget.selectedShift.startTime =
-                                      customSelectedStartTime;
-                                });
+                                DateTime tempStart =
+                                    DateFormat("yyyy-MM-dd hh:mm:ss")
+                                        .parse(customSelectedStartTime);
+                                DateTime tempEnd =
+                                    DateFormat("yyyy-MM-dd hh:mm:ss")
+                                        .parse(widget.selectedShift.endTime!);
+                                var differenceT =
+                                    tempEnd.difference(tempStart).inHours;
 
+                                if (differenceT < 0) {
+                                  showAlertDialog(
+                                    context: context,
+                                    title: 'Error',
+                                    message: 'Invalid time selected',
+                                    actions: [
+                                      AlertDialogAction(
+                                        label: MaterialLocalizations.of(context)
+                                            .okButtonLabel,
+                                        key: OkCancelResult.ok,
+                                      )
+                                    ],
+                                  );
+
+                                  return;
+                                }
+                                String endDate = '';
+
+                                if (differenceT < 8) {
+                                  int hoursToAdd = 8 - differenceT;
+                                  print(hoursToAdd);
+
+                                  String date =
+                                      DateFormat("yyyy-MM-dd HH:mm:ss").format(
+                                    widget.selectedShift.endDateObject.add(
+                                      (Duration(hours: hoursToAdd)),
+                                    ),
+                                  );
+                                  endDate = date;
+                                }
+                                print('object');
 
                                 bool? selected = await showDialog(
                                     context: context,
                                     barrierDismissible: false,
                                     builder: (BuildContext context) {
                                       return ChangeShiftTime(
-                                        hours: widget.selectedShift.endDateObject.difference(widget.selectedShift.startDateObject).inHours.toString() + ' ' + 'Hours',
-                                        date: widget.selectedShift.showStartDateOnly,
-                                        endTime: widget.selectedShift.showEndTime,
+                                        hours: widget
+                                                .selectedShift.endDateObject
+                                                .difference(widget.selectedShift
+                                                    .startDateObject)
+                                                .inHours
+                                                .toString() +
+                                            ' ' +
+                                            'Hours',
+                                        date: widget
+                                            .selectedShift.showStartDateOnly,
+                                        endTime: endDate.isNotEmpty
+                                            ? endDate.timeToShow
+                                            : widget.selectedShift.endTime!
+                                                .timeToShow,
                                         startTime:
-                                            widget.selectedShift.showStartTime,
+                                            customSelectedStartTime.timeToShow,
                                       );
                                     });
 
-                                if (selected != null) {
-                                  return;
+                                if (selected == true) {
+                                  if (endDate.isNotEmpty) {
+                                    widget.selectedShift.endTime = endDate;
+                                  }
+                                  setState(() {
+                                    widget.selectedShift.startTime =
+                                        customSelectedStartTime;
+                                  });
                                 }
                               }
 
@@ -181,7 +246,7 @@ class _ShiftStartState extends State<ShiftStart> {
                               //  newTime.minute;
                             },
                             child: Text(
-                              widget.selectedShift.showStartTime,
+                              buildShowStartTime(),
                               style: const TextStyle(
                                   color: kPrimaryColor,
                                   fontSize: 22,
@@ -202,41 +267,47 @@ class _ShiftStartState extends State<ShiftStart> {
                               var currenMinute =
                                   widget.selectedShift.showEndTimeMinute;
 
+
                               final TimeOfDay? newTime = await showTimePicker(
                                 context: context,
                                 initialTime: TimeOfDay(
-                                    hour: currenHours, minute: currenMinute),
+                                    hour: DateTime.now().add(Duration(hours: 8)).hour, minute: DateTime.now().minute),
                                 initialEntryMode: TimePickerEntryMode.dial,
                               );
 
-                              if(newTime == null) {
+                              if (newTime == null) {
                                 return;
-
                               }
                               customSelectedEndTime = widget.selectedShift
                                   .makeTimeStringFromHourMinute(
                                       newTime.hour, newTime.minute);
-
-                              setState(() {
-                                widget.selectedShift.endTime =
-                                    customSelectedEndTime;
-                              });
-
 
                               bool? selected = await showDialog(
                                   context: context,
                                   barrierDismissible: false,
                                   builder: (BuildContext context) {
                                     return ChangeShiftTime(
-                                      hours: widget.selectedShift.endDateObject.difference(widget.selectedShift.startDateObject).inHours.toString() + ' ' + 'Hours',
-                                      date: widget.selectedShift.showStartDateOnly,
+                                      hours: widget.selectedShift.endDateObject
+                                              .difference(widget.selectedShift
+                                                  .startDateObject)
+                                              .inHours
+                                              .toString() +
+                                          ' ' +
+                                          'Hours',
+                                      date: widget
+                                          .selectedShift.showStartDateOnly,
                                       endTime: widget.selectedShift.showEndTime,
-                                      startTime:
-                                      widget.selectedShift.showStartTime,
+                                      startTime: buildShowStartTime(),
                                     );
                                   });
 
                               if (selected != null) {
+                                if (selected == true) {
+                                  setState(() {
+                                    widget.selectedShift.endTime =
+                                        customSelectedEndTime;
+                                  });
+                                } else {}
                                 return;
                               }
 
@@ -269,7 +340,7 @@ class _ShiftStartState extends State<ShiftStart> {
                               context: context,
                               barrierDismissible: false,
                               builder: (BuildContext context) {
-                                return  Container();//ChangeShiftTime();
+                                return Container(); //ChangeShiftTime();
                               });
 
                           if (selected != null) {
@@ -294,7 +365,7 @@ class _ShiftStartState extends State<ShiftStart> {
             onPressed: () async {
               if (widget.selectedShift.displayScreen! == 1 ||
                   widget.selectedShift.displayScreen! == 3) {
-               // return;
+                // return;
               }
 
               var waitVal = await Navigator.of(context).push(
@@ -336,6 +407,10 @@ class _ShiftStartState extends State<ShiftStart> {
 //#5EC1DC40
       ],
     );
+  }
+
+  String buildShowStartTime() {
+    return widget.selectedShift.showStartTime;
   }
 
   String imageName() {

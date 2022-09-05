@@ -51,7 +51,7 @@ class _ChangeShiftTimeState extends State<ChangeShiftTime> {
                 alignment: Alignment.topRight,
                 child: IconButton(
                   onPressed: () {
-                    Get.back();
+                    Get.back(false);
                   },
                   icon: const Icon(
                     Icons.close,

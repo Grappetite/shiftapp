@@ -10,13 +10,17 @@ class LoginService {
     try {
       var dio = Dio();
 
-      Response response = await dio.post(baseUrl + 'login',
-          data: {'email': username, 'password': password},
-          options: Options(
-            headers: {
-              authorization: mainLoginToken,
-            },
-          ));
+      Response response = await dio.post(
+        baseUrl + 'login',
+        data: {'email': username, 'password': password},
+// <<<<<<< HEAD
+//           options: Options(
+//             headers: {
+//               authorization: mainLoginToken,
+//             },
+//           ));
+// =======
+      );
 
       var responseObject = LoginResponse.fromJson(response.data);
 

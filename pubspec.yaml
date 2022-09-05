@@ -48,9 +48,13 @@ dependencies:
   flutter_easyloading: ^3.0.5
   logger: ^1.1.0
   restart_app: ^1.1.0+1
+
   get: ^4.6.5
   get_storage: ^2.0.3
   bot_toast: ^4.0.3
+
+  adaptive_dialog: ^1.8.0
+
 
 
 dev_dependencies:

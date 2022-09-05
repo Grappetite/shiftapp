@@ -1,26 +1,32 @@
 import 'dart:async';
 import 'dart:io' show Platform;
 
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
 import '../config/constants.dart';
 import '../model/login_model.dart';
 import '../model/shifts_model.dart';
+import '../services/shift_service.dart';
 import '../services/workers_service.dart';
 import '../widgets/elevated_button.dart';
 import '../widgets/input_view.dart';
 import 'inner_widgets/alert_title_label.dart';
+import 'login.dart';
 
 class EndShiftFinalScreen extends StatefulWidget {
   final int shiftId;
   final int processId;
   final Process process;
+
+  final int executeShiftId;
 
   final String startTime;
   final String endTime;
@@ -39,7 +45,8 @@ class EndShiftFinalScreen extends StatefulWidget {
       required this.selectedShift,
       required this.comments,
       required this.process,
-      this.autoOpen = false})
+      this.autoOpen = false,
+      required this.executeShiftId})
       : super(key: key);
 
   @override
@@ -330,25 +337,52 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                       ),
                       PElevatedButton(
                         onPressed: () async {
-                          await showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) {
-                                return ConfirmTimeEnd();
-                              });
-
-                          return;
-
+// <<<<<<< HEAD
+//                           await showDialog(
+//                               context: context,
+//                               barrierDismissible: false,
+//                               builder: (BuildContext context) {
+//                                 return ConfirmTimeEnd();
+//                               });
+//
+//                           return;
+//
+// =======
+// >>>>>>> master
                           if (textController.text.isEmpty) {
+                            final result = await showAlertDialog(
+                              context: context,
+                              title: 'Error',
+                              message: 'Please write down the units products',
+                              actions: [
+                                AlertDialogAction(
+                                  label: MaterialLocalizations.of(context)
+                                      .okButtonLabel,
+                                  key: OkCancelResult.ok,
+                                )
+                              ],
+                            );
+
+                            print('');
+
                             return;
                           } else {
+                            var answer = await showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return ConfirmTimeEnd(
+                                    shiftItem: this.widget.selectedShift,
+                                  );
+                                });
+
                             await EasyLoading.show(
                               status: 'Adding...',
                               maskType: EasyLoadingMaskType.black,
                             );
 
-                            var check = await WorkersService.endShift(
-                                widget.shiftId,
+                            var check = await ShiftService.endShift(
+                                widget.executeShiftId,
                                 widget.processId,
                                 textController.text,
                                 widget.comments,
@@ -374,10 +408,17 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                               prefs.remove('password');
 
                               if (widget.autoOpen) {
-                                Get.back();
+// <<<<<<< HEAD
+//                                 Get.back();
+//                                 Navigator.pop(context, true);
+//                               } else {
+//                                 Get.back();
+// =======
+                                Navigator.pop(context);
                                 Navigator.pop(context, true);
                               } else {
-                                Get.back();
+                                Navigator.pop(context);
+// >>>>>>> master
                                 Navigator.pop(context, true);
                                 Navigator.pop(context, true);
                               }
@@ -426,13 +467,22 @@ class KeypadDoneButton extends StatelessWidget {
 }
 
 class ConfirmTimeEnd extends StatefulWidget {
-  const ConfirmTimeEnd({Key? key}) : super(key: key);
+  final ShiftItem shiftItem;
+
+  const ConfirmTimeEnd({Key? key, required this.shiftItem}) : super(key: key);
 
   @override
   State<ConfirmTimeEnd> createState() => _ConfirmTimeEndState();
 }
 
 class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
+  String timeToShow = '0';
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -470,44 +520,141 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const AlertTitleLabel(
-                      title: 'ADD TEMPORARY WORKER',
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.access_alarm,
+                          color: kPrimaryColor,
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        const AlertTitleLabel(
+                          title: 'CLOST SHIFT',
+                        ),
+                      ],
                     ),
                     const SizedBox(
-                      height: 16,
+                      height: 12,
                     ),
-                    InputView(
-                      showError: false,
-                      hintText: 'First Name',
-                      onChange: (newValue) {},
-                      controller: TextEditingController(),
-                      text: '',
-                      customHeight: 50,
+                    Text(
+                      'Adjust shift ent time if different to current:',
+                      style: TextStyle(color: kPrimaryColor, fontSize: 12),
                     ),
                     Expanded(
                       child: Container(),
                     ),
-                    Expanded(
-                      child: Container(),
-                    ),
-                    PElevatedButton(
-                      onPressed: () async {
-                        await showTimePicker(
+// <<<<<<< HEAD
+//                     Expanded(
+//                       child: Container(),
+//                     ),
+//                     PElevatedButton(
+//                       onPressed: () async {
+//                         await showTimePicker(
+//                           context: context,
+//                           initialTime: TimeOfDay(hour: 5, minute: 5),
+// =======
+                    GestureDetector(
+                      onTap: () async {
+                        final TimeOfDay? newTime = await showTimePicker(
                           context: context,
-                          initialTime: TimeOfDay(hour: 5, minute: 5),
+                          initialTime: TimeOfDay(
+                              hour: DateTime.now().hour,
+                              minute: DateTime.now().minute),
+// >>>>>>> master
                           initialEntryMode: TimePickerEntryMode.dial,
                         );
 
-                        //addTempWorkers
+                        if (newTime != null) {
+                          var customSelectedStartTime = widget.shiftItem
+                              .makeTimeStringFromHourMinute(
+                                  newTime.hour, newTime.minute);
 
-                        /* await EasyLoading.show(
-                          status: 'loading...',
-                          maskType: EasyLoadingMaskType.black,
-                        );*/
-
-                        //await EasyLoading.dismiss();
+                          setState(() {
+                            widget.shiftItem.endTime = customSelectedStartTime;
+                          });
+                        }
                       },
-                      text: 'ADD AND ASSIGN',
+                      child: InputView(
+                        isDisabled: true,
+                        showError: false,
+                        hintText: 'Shift End Time',
+                        onChange: (newValue) {},
+                        controller: TextEditingController(
+                            text: widget.shiftItem.showEndTime),
+                        text: widget.shiftItem.showEndTime,
+                        suffixIcon: Icons.expand_circle_down_outlined,
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(),
+                    ),
+
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        dataToDisplay(),
+                        style: TextStyle(
+                            color: kPrimaryColor, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        'Are you sure you want to close this shift?',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: kPrimaryColor),
+                      ),
+                    ),
+
+                    //
+                    Expanded(
+                      child: Container(),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: PElevatedButton(
+                            onPressed: () async {
+                              Navigator.pop(context, true);
+
+                              //addTempWorkers
+
+                              /* await EasyLoading.show(
+                                status: 'loading...',
+                                maskType: EasyLoadingMaskType.black,
+                              );*/
+
+                              //await EasyLoading.dismiss();
+                            },
+                            text: 'NO',
+                            backGroundColor: Colors.white,
+                            textColor: kPrimaryColor,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 12,
+                        ),
+                        Expanded(
+                          child: PElevatedButton(
+                            onPressed: () async {
+                              //addTempWorkers
+
+                              Navigator.pop(context);
+                              /* await EasyLoading.show(
+                                status: 'loading...',
+                                maskType: EasyLoadingMaskType.black,
+                              );*/
+
+                              //await EasyLoading.dismiss();
+                            },
+                            text: 'YES',
+                          ),
+                        ),
+                      ],
                     ),
                     Expanded(
                       child: Container(),
@@ -520,5 +667,9 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
         ),
       ),
     );
+  }
+
+  String dataToDisplay() {
+    return DateFormat("yyyy-MM-dd").format(DateTime.now());
   }
 }

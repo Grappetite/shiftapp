@@ -32,7 +32,7 @@ class AlertCancelOk extends StatelessWidget {
               ),
             ),
             onPressed: () {
-              Get.back();
+              Get.back(false);
             },
             child: Text(
               cancelTitle ?? 'CANCEL',

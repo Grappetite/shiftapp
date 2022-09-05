@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../config/constants.dart';
 import '../model/workers_model.dart';
@@ -12,7 +13,7 @@ import 'inner_widgets/add_temp_worker.dart';
 import 'inner_widgets/worker_item_view.dart';
 
 class SelectExistingWorkers extends StatefulWidget {
-  List<ShiftWorker> workers;
+  final List<ShiftWorker> workers;
 
   final Function(AddTempResponse) tempWorkerAdded;
 
@@ -20,12 +21,15 @@ class SelectExistingWorkers extends StatefulWidget {
 
   final bool isEditing;
 
+  final String processId;
+
   SelectExistingWorkers(
       {Key? key,
       required this.workers,
       this.isEditing = false,
       required this.shiftId,
-      required this.tempWorkerAdded})
+      required this.tempWorkerAdded,
+      required this.processId})
       : super(key: key);
 
   @override
@@ -37,6 +41,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
 
   String timeElasped = '00:00';
   late Timer _timer;
+  List<ShiftWorker> orignalState = [];
 
   bool isSearching = false;
   List<ShiftWorker> workers = [];
@@ -80,23 +85,32 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
     await EasyLoading.dismiss();
 
     for (var currentItem in widget.workers) {
-      var find = workers
-          .where((e) =>
-              e.userId == currentItem.userId && currentItem.isSelected == true)
-          .toList();
-
-      if (find.isNotEmpty) {
-        setState(() {
-          find.first.isSelected = true;
-        });
-      }
+// <<<<<<< HEAD
+//       var find = workers
+//           .where((e) =>
+//               e.userId == currentItem.userId && currentItem.isSelected == true)
+//           .toList();
+//
+//       if (find.isNotEmpty) {
+//         setState(() {
+//           find.first.isSelected = true;
+//         });
+//       }
+// =======
+      setState(() {
+        workers.removeWhere((e) => e.id == currentItem.id);
+      });
     }
   }
 
   @override
   void initState() {
     super.initState();
-    filteredWorkers = widget.workers;
+// <<<<<<< HEAD
+//     filteredWorkers = widget.workers;
+//     callSearchService();
+// =======
+    orignalState = [];
     callSearchService();
   }
 
@@ -244,7 +258,15 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                   PElevatedButton(
                     text:
                         'ADD SELECTED WORKERS (${workers.where((e) => e.isSelected).toList().length})',
-                    onPressed: () {},
+                    onPressed: () {
+                      for (var currentItem in orignalState) {
+                        if (currentItem.isSelected) {
+                          widget.workers.add(currentItem);
+                        }
+                      }
+
+                      Navigator.pop(context, true);
+                    },
                   ),
                   const SizedBox(
                     height: 12,
@@ -262,9 +284,10 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                             ? (currentItem.isSelected && !currentItem.newAdded)
                             : false,
                         changedStatus: (bool newStatus) {
-                          var find = widget.workers
+                          var find = orignalState
                               .where((e) => e.userId == currentItem.userId)
                               .toList();
+
                           setState(() {
                             currentItem.isSelected = newStatus;
 
@@ -274,7 +297,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                               });
                             } else {
                               setState(() {
-                                widget.workers.add(currentItem);
+                                orignalState.add(currentItem);
                               });
                             }
                           });
@@ -311,7 +334,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                             ? (currentItem.isSelected && !currentItem.newAdded)
                             : false,
                         changedStatus: (bool newStatus) {
-                          var find = widget.workers
+                          var find = orignalState
                               .where((e) => e.userId == currentItem.userId)
                               .toList();
                           currentItem.isSelected = newStatus;
@@ -322,7 +345,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                             });
                           } else {
                             setState(() {
-                              widget.workers.add(currentItem);
+                              orignalState.add(currentItem);
                             });
                           }
 
@@ -375,36 +398,25 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                           builder: (BuildContext context) {
                             return AddTempWorker(
                               shiftId: this.widget.shiftId.toString(),
+                              processId: this.widget.processId,
                             );
                           });
                       if (selected != null) {
-                        print('');
+                        String dateString =
+                            DateFormat("yyyy-MM-dd hh:mm:ss").format(
+                          DateTime.now(),
+                        );
 
                         var res = await WorkersService.addWorkers(
                             widget.shiftId,
                             [selected.data!.id.toString()],
-                            ['2022-06-05 06:09:04'],
+                            [dateString],
                             [],
                             [selected.data!.efficiencyCalculation.toString()]);
 
                         this.widget.tempWorkerAdded(selected);
 
                         print('');
-
-                        /*
-                          var response2 = await WorkersService.addWorkers(
-                              widget.shiftId!,
-                              [tmp.data!.id.toString()],
-                              ['2022-06-05 06:09:04'],
-                              [tmp.data!.efficiencyCalculation.toString()],
-                              [tmp.data!.efficiencyCalculation.toString()]);
-
-
-                        }
-
-                         */
-                        //Navigator.pop(context,selected);
-
                       }
                     },
                     child: Row(

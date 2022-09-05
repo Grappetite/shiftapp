@@ -5,11 +5,9 @@ class ShiftsResponse {
   String? message;
   List<ShiftItem>? data;
 
-  //this.status
   ShiftsResponse({this.message, this.data});
 
   ShiftsResponse.fromJson(Map<String, dynamic> json) {
-    // status = json['status'];
     print(json);
 
     message = json['message'];
@@ -21,7 +19,6 @@ class ShiftsResponse {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    //data['status'] = status;
     data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
@@ -36,6 +33,10 @@ class ShiftItem {
   String? startTime;
   String? endTime;
   int? displayScreen;
+  String? displayScreenMessage;
+
+  bool shiftStartTimeCustomized = false;
+  bool shiftEndTimeCustomized = false;
 
   String _printDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
@@ -104,6 +105,7 @@ class ShiftItem {
     DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(endTime!);
     return tempDate;
   }
+
 
   String get showStartTime {
     DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(startTime!);
@@ -181,17 +183,13 @@ class ShiftItem {
     return date;
   }
 
-  /*
-  {id: 1, name: Shift 1, start_time: 2022-01-01 06:00:00, end_time: 2022-01-01 14:00:00, display_screen: 2}}
-
-  * */
   ShiftItem({this.id, this.name, this.startTime, this.endTime});
 
   ShiftItem.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     startTime = json['start_time'];
-    //2022-01-01 06:00:00, end_time: 2022-01-01 14:00:00
+    displayScreenMessage = json['display_screen_message'];
 
     String date = DateFormat("yyyy-MM-dd").format(DateTime.now());
 
@@ -208,6 +206,9 @@ class ShiftItem {
     if(displayScreen == 1) {
       displayScreen = 2;
     }
+    //displayScreen = 3;
+    displayScreen = 2;
+
   }
 
   Map<String, dynamic> toJson() {

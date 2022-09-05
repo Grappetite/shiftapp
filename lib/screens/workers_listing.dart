@@ -62,11 +62,11 @@ class _WorkersListingState extends State<WorkersListing> {
       status: 'loading...',
       maskType: EasyLoadingMaskType.black,
     );
-    var responseShift = await WorkersService.getShiftWorkers(widget.shiftId);
+    var responseShift = await WorkersService.getShiftWorkers(widget.shiftId,widget.processId);
 
     if (responseShift!.data!.worker!.isEmpty) {
       responseShift =
-          await WorkersService.getShiftWorkers(widget.selectedShift.id);
+          await WorkersService.getShiftWorkers(widget.selectedShift.id,widget.processId);
     }
     List<ShiftWorker> shiftWorkers = [];
 
@@ -82,9 +82,15 @@ class _WorkersListingState extends State<WorkersListing> {
 
     var seen = <String>{};
 
-    shiftWorkers.where((student) => seen.add(student.workerType!)).toList();
+    if(shiftWorkers.isNotEmpty) {
+      shiftWorkers.where((student) => seen.add(student.workerType!)).toList();
 
-    listNames = seen.toList();
+      listNames = seen.toList();
+    }
+    else {
+      listNames = [];
+    }
+
     await EasyLoading.dismiss();
 
     for (var currentItem in listNames) {

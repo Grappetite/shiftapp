@@ -48,18 +48,28 @@ class WorkersData {
   WorkersData.fromJson(Map<String, dynamic> json) {
     print(json);
 
+    shiftWorker = <ShiftWorker>[];
+
+    worker = <ShiftWorker>[];
+
     if (json['worker'] != null) {
-      worker = <ShiftWorker>[];
       var workersListTemp = json['worker'];
 
       json['worker'].forEach((v) {
-        worker!.add( ShiftWorker.fromJson(v));
+        var toAddAdd =  ShiftWorker.fromJson(v);
+
+        if(toAddAdd.workerTypeId != null)  {
+          worker!.add( ShiftWorker.fromJson(v));
+        }
+
       });
     }
     if (json['shift_worker'] != null) {
-      shiftWorker = <ShiftWorker>[];
       json['shift_worker'].forEach((v) {
-        shiftWorker!.add(ShiftWorker.fromJson(v));
+        var toAddAdd =  ShiftWorker.fromJson(v);
+        if(toAddAdd.workerTypeId != null)  {
+          shiftWorker!.add(ShiftWorker.fromJson(v));
+        }
       });
     }
     else {
@@ -110,6 +120,8 @@ class ShiftWorker {
         this.efficiencyCalculation});
 
   ShiftWorker.fromJson(Map<String, dynamic> json) {
+
+
     id = json['id'];
     userId = json['userId'];
     workerTypeId = json['workerTypeId'];
@@ -139,7 +151,7 @@ class AddTempResponse {
   int? code;
   String? status;
   String? message;
-  WorkerTempObj? data;
+  ShiftWorker? data;
 
   AddTempResponse({this.code, this.status, this.message, this.data});
 
@@ -147,7 +159,7 @@ class AddTempResponse {
     code = json['code'];
     status = json['status'];
     message = json['message'];
-    data = json['data'] != null ? WorkerTempObj.fromJson(json['data']) : null;
+    data = json['data'] != null ? ShiftWorker.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -162,70 +174,12 @@ class AddTempResponse {
   }
 }
 
-class WorkerTempObj {
-
-  int? id;
-  int? userId;
-  int? workerTypeId;
-  String? workerType;
-  String? firstName;
-  String? lastName;
-  String? key;
-  String? role;
-  String? picture;
-  int? efficiencyCalculation;
-  int? workerAdd;
-
-  WorkerTempObj(
-      {this.id,
-        this.userId,
-        this.workerTypeId,
-        this.workerType,
-        this.firstName,
-        this.lastName,
-        this.key,
-        this.role,
-        this.picture,
-        this.efficiencyCalculation,
-        this.workerAdd});
-
-  WorkerTempObj.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    userId = json['userId'];
-    workerTypeId = json['workerTypeId'];
-    workerType = json['workerType'];
-    firstName = json['firstName'];
-    lastName = json['lastName'];
-    key = json['key'];
-    role = json['role'];
-    picture = json['picture'];
-    efficiencyCalculation = json['efficiencyCalculation'];
-   // workerAdd = json['worker_add'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['userId'] = this.userId;
-    data['workerTypeId'] = this.workerTypeId;
-    data['workerType'] = this.workerType;
-    data['firstName'] = this.firstName;
-    data['lastName'] = this.lastName;
-    data['key'] = this.key;
-    data['role'] = this.role;
-    data['picture'] = this.picture;
-    data['efficiencyCalculation'] = this.efficiencyCalculation;
-    data['worker_add'] = this.workerAdd;
-    return data;
-  }
-
-}
-
 
 class AddWorkersResponse {
   int? code;
   String? status;
   String? message;
+  AddWorkerData? data;
 
   AddWorkersResponse({this.code, this.status, this.message});
 
@@ -233,6 +187,7 @@ class AddWorkersResponse {
     code = json['code'];
     status = json['status'];
     message = json['message'];
+    data = json['data'] != null ? new AddWorkerData.fromJson(json['data']) : null;
 
   }
 
@@ -244,4 +199,28 @@ class AddWorkersResponse {
 
     return data;
   }
+}
+
+
+class AddWorkerData {
+  int? executeShiftId;
+  int? shiftId;
+  int? processId;
+
+  AddWorkerData({this.executeShiftId, this.shiftId, this.processId});
+
+  AddWorkerData.fromJson(Map<String, dynamic> json) {
+    executeShiftId = json['execute_shift_id'];
+    shiftId = json['shift_id'];
+    processId = json['process_id'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['execute_shift_id'] = this.executeShiftId;
+    data['shift_id'] = this.shiftId;
+    data['process_id'] = this.processId;
+    return data;
+  }
+
 }

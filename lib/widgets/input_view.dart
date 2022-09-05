@@ -201,7 +201,7 @@ class InputView extends StatelessWidget {
         onTap: suffixIconTapped,
         child: Icon(
           suffixIcon,
-          color: kSecondaryColor,
+          color: kPrimaryColor,
         ),
       );
     }
