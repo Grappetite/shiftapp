@@ -177,24 +177,24 @@ class _StartShiftViewState extends State<StartShiftView> {
 
                   if (result != null) {
                     if (result.code! == 200) {
-                      final prefs = await SharedPreferences.getInstance();
-                      prefs.setInt('shiftId', widget.selectedShift.id!);
-                      prefs.setInt('processId', widget.processId);
-                      prefs.setString('comment', _controller.text);
+                      // final prefs = await SharedPreferences.getInstance();
+                      Api().sp.write('shiftId', widget.selectedShift.id!);
+                      Api().sp.write('processId', widget.processId);
+                      Api().sp.write('comment', _controller.text);
 
-                      prefs.setString(
+                      Api().sp.write(
                           'selectedShiftName', widget.selectedShift.name!);
 
-                      prefs.setString('selectedShiftStartTime',
+                      Api().sp.write('selectedShiftStartTime',
                           widget.selectedShift.startTime!);
 
-                      prefs.setString('selectedShiftEndTime',
+                      Api().sp.write('selectedShiftEndTime',
                           widget.selectedShift.endTime!);
 
-                      prefs.setInt('selectedDisplayScreen',
+                      Api().sp.write('selectedDisplayScreen',
                           widget.selectedShift.displayScreen!);
 
-                      prefs.setInt(
+                      Api().sp.write(
                           'execute_shift_id', result.data!.executeShiftId!);
 
                       Navigator.pushReplacement(

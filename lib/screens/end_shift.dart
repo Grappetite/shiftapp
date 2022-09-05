@@ -2,17 +2,18 @@ import 'dart:async';
 
 import 'package:app_popup_menu/app_popup_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiftapp/Network/API.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
+import '../model/login_model.dart';
 import '../model/shifts_model.dart';
 import '../services/shift_service.dart';
 import '../services/workers_service.dart';
 import 'edit_workers.dart';
 import 'end_shift_final_screen.dart';
-import '../model/login_model.dart';
 
 class EndShiftView extends StatefulWidget {
   final bool startedBefore;
@@ -38,7 +39,8 @@ class EndShiftView extends StatefulWidget {
       this.comment = '',
       this.startedBefore = false,
       required this.process,
-      this.autoOpen = false , required this.execShiftId})
+      this.autoOpen = false,
+      required this.execShiftId})
       : super(key: key);
 
   @override
@@ -46,9 +48,7 @@ class EndShiftView extends StatefulWidget {
 }
 
 class _EndShiftViewState extends State<EndShiftView> {
-
   late AppPopupMenu<int> appMenu02;
-
 
   int? executeShiftId;
 
@@ -85,57 +85,47 @@ class _EndShiftViewState extends State<EndShiftView> {
   }
 
   void loadShiftId() async {
-    final prefs = await SharedPreferences.getInstance();
+    // final prefs = await SharedPreferences.getInstance();
 
-    this.executeShiftId = prefs.getInt('execute_shift_id');
+    this.executeShiftId = Api().sp.read('execute_shift_id');
 
     loadUsers();
-
   }
+
   @override
   void initState() {
     super.initState();
 
     loadShiftId();
 
-
     appMenu02 = AppPopupMenu<int>(
       menuItems: [
         PopupMenuItem(
           value: 1,
           onTap: () async {
-            String endTime = DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now());
-
+            String endTime =
+                DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now());
 
             ShiftService.cancelShift(this.widget.shiftId, endTime);
 
+            // final prefs = await SharedPreferences.getInstance();
 
-            final prefs = await SharedPreferences.getInstance();
+            Api().sp.remove('shiftId');
 
-            prefs.remove('shiftId');
-
-            prefs.remove('selectedShiftName');
-            prefs.remove('selectedShiftEndTime');
-            prefs.remove('selectedShiftStartTime');
-            prefs.remove('username');
-            prefs.remove('password');
-
-
+            Api().sp.remove('selectedShiftName');
+            Api().sp.remove('selectedShiftEndTime');
+            Api().sp.remove('selectedShiftStartTime');
+            Api().sp.remove('username');
+            Api().sp.remove('password');
 
             if (widget.autoOpen) {
-
-              Navigator.pop(context, true);
+              Get.back(result: true);
             } else {
-
-
-              Navigator.pop(context, true);
-              Navigator.pop(context, true);
+              Get.back(result: true);
+              Get.back(result: true);
             }
 
-
             /// widget.onLogout();
-
-
           },
           child: const Text(
             'Discard Shift',
@@ -157,15 +147,12 @@ class _EndShiftViewState extends State<EndShiftView> {
       color: kPrimaryColor,
     );
 
-
     startTimer();
-
-
   }
 
   void loadUsers() async {
     var responseShift =
-        await WorkersService.getShiftWorkers(executeShiftId!,widget.processId);
+        await WorkersService.getShiftWorkers(executeShiftId!, widget.processId);
 
     numberSelected = responseShift!.data!.shiftWorker!.length;
 
@@ -205,7 +192,6 @@ class _EndShiftViewState extends State<EndShiftView> {
           ],
         ),
         actions: [appMenu02],
-
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -301,7 +287,8 @@ class _EndShiftViewState extends State<EndShiftView> {
                         shiftId: widget.shiftId,
                         totalUsersCount: widget.userId.length,
                         selectedShift: widget.selectedShift,
-                        process: widget.process, execShiftId: this.widget.execShiftId,
+                        process: widget.process,
+                        execShiftId: this.widget.execShiftId,
                       ),
                     ),
                   );

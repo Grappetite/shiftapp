@@ -8,18 +8,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiftapp/Network/API.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
 import '../config/constants.dart';
 import '../model/login_model.dart';
 import '../model/shifts_model.dart';
 import '../services/shift_service.dart';
-import '../services/workers_service.dart';
 import '../widgets/elevated_button.dart';
 import '../widgets/input_view.dart';
 import 'inner_widgets/alert_title_label.dart';
-import 'login.dart';
 
 class EndShiftFinalScreen extends StatefulWidget {
   final int shiftId;
@@ -396,16 +394,16 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                 duration: const Duration(seconds: 2),
                               );
 
-                              final prefs =
-                                  await SharedPreferences.getInstance();
+                              // final prefs =
+                              //     await SharedPreferences.getInstance();
 
-                              prefs.remove('shiftId');
+                              Api().sp.remove('shiftId');
 
-                              prefs.remove('selectedShiftName');
-                              prefs.remove('selectedShiftEndTime');
-                              prefs.remove('selectedShiftStartTime');
-                              prefs.remove('username');
-                              prefs.remove('password');
+                              Api().sp.remove('selectedShiftName');
+                              Api().sp.remove('selectedShiftEndTime');
+                              Api().sp.remove('selectedShiftStartTime');
+                              Api().sp.remove('username');
+                              Api().sp.remove('password');
 
                               if (widget.autoOpen) {
 // <<<<<<< HEAD

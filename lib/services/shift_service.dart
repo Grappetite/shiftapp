@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:logger/logger.dart';
 
 import '../Network/API.dart';
 import '../config/constants.dart';
@@ -12,7 +13,7 @@ class ShiftService {
     try {
       var dio = Dio();
 
-      var cc = prefs.getString(tokenKey);
+      var cc = Api().sp.read(tokenKey);
 
       Response response = await dio.post(
         baseUrl + 'cancelShift',
@@ -44,7 +45,7 @@ class ShiftService {
       var logger = Logger();
 
       var dio = Dio();
-      final prefs = await SharedPreferences.getInstance();
+      // final prefs = await SharedPreferences.getInstance();
 
       Response response = await dio.post(
         baseUrl + 'endShift',
@@ -57,7 +58,7 @@ class ShiftService {
         },
         options: Options(
           headers: {
-            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+            authorization: 'Bearer ' + Api().sp.read(tokenKey)!,
           },
         ),
       );

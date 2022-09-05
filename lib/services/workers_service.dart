@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Network/API.dart';
 import '../config/constants.dart';
@@ -19,7 +18,7 @@ class WorkersService {
         url = baseUrl + 'manageWorkerLisiting/' + shiftId.toString();
       }
 
-      var token = prefs.getString(tokenKey);
+      var token = Api().sp.read(tokenKey);
       print('');
 
       Response response = await dio.get(url,

@@ -20,7 +20,7 @@ class HomeView extends StatefulWidget {
 
   ShiftItem? selectedShift;
 
-  bool sessionStarted;
+  bool? sessionStarted;
 
   HomeView(
       {Key? key,
@@ -90,7 +90,7 @@ class _HomeViewState extends State<HomeView> {
       HomeMainView(
         selectedShift: widget.selectedShift!,
         processSelected: widget.processSelected!,
-        sessionStarted: widget.sessionStarted,
+        sessionStarted: widget.sessionStarted ?? false,
         comment: widget.comment,
         onLogout: () async {
           var dyanc = await Navigator.push(
@@ -163,9 +163,7 @@ class _HomeMainViewState extends State<HomeMainView> {
     await Future.delayed(const Duration(seconds: 1));
     await EasyLoading.dismiss();
 
-    final prefs = await SharedPreferences.getInstance();
-
-    var executeShiftId = prefs.getInt('execute_shift_id');
+    var executeShiftId = Api().sp.read('execute_shift_id');
 
     var response = await Navigator.pushReplacement(
       context,

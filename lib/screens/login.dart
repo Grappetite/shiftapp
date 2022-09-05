@@ -7,7 +7,6 @@ import 'package:shiftapp/services/login_service.dart';
 import '../Routes/app_pages.dart';
 import '../config/constants.dart';
 import '../model/login_model.dart';
-import '../model/shifts_model.dart';
 import '../widgets/drop_down.dart';
 import '../widgets/elevated_button.dart';
 import '../widgets/input_view.dart';
@@ -53,58 +52,58 @@ class _LoginScreenState extends State<LoginScreen> {
 
     int? shiftId = Api().sp.read('shiftId');
 
-    if (shiftId != null) {
-      await EasyLoading.show(
-        status: 'loading...',
-        maskType: EasyLoadingMaskType.black,
-      );
-
-      String loginUserName = Api().sp.read('username')!;
-      String passString = Api().sp.read('password')!;
-
-      LoginResponse? response =
-          await LoginService.login(loginUserName, passString);
-
-      if (response == null) {
-      } else {
-        process = response.data!.process!;
-        int processId = Api().sp.read('processId')!;
-
-        var selectedProcess = process.firstWhere((e) => e.id == processId);
-
-        String shiftName = Api().sp.read('selectedShiftName')!;
-        String shiftStartTime = Api().sp.read('selectedShiftStartTime')!;
-        String shiftEndTime = Api().sp.read('selectedShiftEndTime')!;
-
-        var shiftObject = ShiftItem(
-          id: shiftId,
-          name: shiftName,
-          startTime: shiftStartTime,
-          endTime: shiftEndTime,
-        );
-
-        shiftObject.displayScreen = 1;
-
-        await EasyLoading.dismiss();
-        Get.offAllNamed(Routes.home, arguments: {
-          "selectedShift": shiftObject,
-          "processSelected": selectedProcess,
-          "sessionStarted": true,
-          "comment": Api().sp.read('comment'),
-        });
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (BuildContext context) => HomeView(
-        //       selectedShift: shiftObject,
-        //       processSelected: selectedProcess,
-        //       sessionStarted: true,
-        //       comment: Api().sp.read('comment'),
-        //     ),
-        //   ),
-        // );
-      }
-    }
+    // if (shiftId != null) {
+    //   await EasyLoading.show(
+    //     status: 'loading...',
+    //     maskType: EasyLoadingMaskType.black,
+    //   );
+    //
+    //   String loginUserName = Api().sp.read('username')!;
+    //   String passString = Api().sp.read('password')!;
+    //
+    //   LoginResponse? response =
+    //       await LoginService.login(loginUserName, passString);
+    //
+    //   if (response == null) {
+    //   } else {
+    //     process = response.data!.process!;
+    //     int processId = Api().sp.read('processId')!;
+    //
+    //     var selectedProcess = process.firstWhere((e) => e.id == processId);
+    //
+    //     String shiftName = Api().sp.read('selectedShiftName')!;
+    //     String shiftStartTime = Api().sp.read('selectedShiftStartTime')!;
+    //     String shiftEndTime = Api().sp.read('selectedShiftEndTime')!;
+    //
+    //     var shiftObject = ShiftItem(
+    //       id: shiftId,
+    //       name: shiftName,
+    //       startTime: shiftStartTime,
+    //       endTime: shiftEndTime,
+    //     );
+    //
+    //     shiftObject.displayScreen = 1;
+    //
+    //     await EasyLoading.dismiss();
+    //     Get.offAllNamed(Routes.home, arguments: {
+    //       "selectedShift": shiftObject,
+    //       "processSelected": selectedProcess,
+    //       "sessionStarted": true,
+    //       "comment": Api().sp.read('comment'),
+    //     });
+    //     // Navigator.pushReplacement(
+    //     //   context,
+    //     //   MaterialPageRoute(
+    //     //     builder: (BuildContext context) => HomeView(
+    //     //       selectedShift: shiftObject,
+    //     //       processSelected: selectedProcess,
+    //     //       sessionStarted: true,
+    //     //       comment: Api().sp.read('comment'),
+    //     //     ),
+    //     //   ),
+    //     // );
+    //   }
+    // }
 
     /*
 
