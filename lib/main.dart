@@ -1,13 +1,23 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
-import 'package:shiftapp/screens/login.dart';
-import 'package:shiftapp/screens/splash.dart';
-
-import 'config/constants.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
+import 'Network/environment.dart';
+import 'Routes/app_pages.dart';
+import 'config/constants.dart';
 
-void main() {
+Future<void> main() async {
   runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
+  const String? environment = String.fromEnvironment(
+    'ENVIRONMENT',
+    defaultValue: Environment.dev,
+  );
+  Environment().initConfig(environment);
+
   configLoading();
 }
 
@@ -25,9 +35,8 @@ void configLoading() {
     ..maskColor = Colors.blue.withOpacity(0.5)
     ..userInteractions = true
     ..dismissOnTap = false;
-    //..customAnimation = CustomAnimation();
+  //..customAnimation = CustomAnimation();
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -35,21 +44,55 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
+      builder: (context, child) {
+        child = ScrollConfiguration(
+          behavior: MyBehavior(),
+          child: BotToastInit()(context, child),
+        );
+        child = ScrollConfiguration(
+          behavior: MyBehavior(),
+          child: EasyLoading.init()(context, child),
+        );
+
+        return child;
+      },
+      // initialBinding: SplashBinding(),
+      navigatorObservers: [BotToastNavigatorObserver()],
       theme: ThemeData(
         primarySwatch: MaterialColor(0xFF0E577F, primaryMap),
       ),
-      initialRoute: '/splash',
-      routes: {
-        // When navigating to the "/" route, build the FirstScreen widget.
-        '/': (context) => const LoginScreen(),
-        '/splash' : (context) => const SplashScreen(),
-        },
-      builder: EasyLoading.init(),
-      // home: const SplashScreen(),
+      initialRoute: AppPages.initial,
+      getPages: AppPages.routes,
+      // home: SplashScreen()
+      // home: CardAddedSuccessfully(),
     );
   }
-}//
+}
+//     return MaterialApp(
+//       title: 'Flutter Demo',
+//       debugShowCheckedModeBanner: false,
+//       theme: ThemeData(
+//         primarySwatch: MaterialColor(0xFF0E577F, primaryMap),
+//       ),
+//       initialRoute: '/splash',
+//       routes: {
+//         // When navigating to the "/" route, build the FirstScreen widget.
+//         '/': (context) => const LoginScreen(),
+//         '/splash' : (context) => const SplashScreen(),
+//         },
+//       builder: EasyLoading.init(),
+//       // home: const SplashScreen(),
+//     );
+//   }
+// }//
 
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildOverscrollIndicator(
+      BuildContext context, Widget child, ScrollableDetails details) {
+    return child;
+  }
+}

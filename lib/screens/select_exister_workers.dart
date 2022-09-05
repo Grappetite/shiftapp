@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 
 import '../config/constants.dart';
 import '../model/workers_model.dart';
@@ -11,7 +12,7 @@ import 'inner_widgets/add_temp_worker.dart';
 import 'inner_widgets/worker_item_view.dart';
 
 class SelectExistingWorkers extends StatefulWidget {
-  List<ShiftWorker>  workers;
+  List<ShiftWorker> workers;
 
   final Function(AddTempResponse) tempWorkerAdded;
 
@@ -19,7 +20,13 @@ class SelectExistingWorkers extends StatefulWidget {
 
   final bool isEditing;
 
-  SelectExistingWorkers({Key? key,required this.workers,this.isEditing = false, required this.shiftId, required this.tempWorkerAdded}) : super(key: key);
+  SelectExistingWorkers(
+      {Key? key,
+      required this.workers,
+      this.isEditing = false,
+      required this.shiftId,
+      required this.tempWorkerAdded})
+      : super(key: key);
 
   @override
   State<SelectExistingWorkers> createState() => _SelectExistingWorkersState();
@@ -31,11 +38,10 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
   String timeElasped = '00:00';
   late Timer _timer;
 
-
   bool isSearching = false;
-  List<ShiftWorker>  workers = [];
+  List<ShiftWorker> workers = [];
 
-  List<ShiftWorker>  filteredWorkers = [];
+  List<ShiftWorker> filteredWorkers = [];
 
   /*
   void startTimer() {
@@ -57,51 +63,41 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
 */
 
   void callSearchService() async {
-
     await EasyLoading.show(
       status: 'loading...',
       maskType: EasyLoadingMaskType.black,
     );
 
-
-    var response = await WorkersService.searchWorkers(widget.workers.first.workerTypeId!.toString());
+    var response = await WorkersService.searchWorkers(
+        widget.workers.first.workerTypeId!.toString());
 
     setState(() {
       workers = response!.searchWorker!;
-
     });
 
-    filteredWorkers =  response!.searchWorker!;
-
-
+    filteredWorkers = response!.searchWorker!;
 
     await EasyLoading.dismiss();
 
+    for (var currentItem in widget.workers) {
+      var find = workers
+          .where((e) =>
+              e.userId == currentItem.userId && currentItem.isSelected == true)
+          .toList();
 
-    for(var currentItem in widget.workers) {
-
-      var find = workers.where((e) => e.userId == currentItem.userId && currentItem.isSelected == true).toList();
-
-      if(find.isNotEmpty) {
-
+      if (find.isNotEmpty) {
         setState(() {
           find.first.isSelected = true;
-
         });
-
       }
-
     }
-
-
   }
+
   @override
   void initState() {
     super.initState();
-    filteredWorkers =  widget.workers;
+    filteredWorkers = widget.workers;
     callSearchService();
-
-
   }
 
   @override
@@ -167,7 +163,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pop(context);
+                          Get.back();
                         },
                         child: const Padding(
                           padding: EdgeInsets.all(4.0),
@@ -192,8 +188,8 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                       ),
                     ),
                     child: Padding(
-                      padding:
-                          const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 8),
                       child: Row(
                         children: [
                           const Icon(
@@ -218,28 +214,24 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                   ),
                                 ),
                                 onChanged: (v) {
-
-
-                                  if(v.isEmpty) {
+                                  if (v.isEmpty) {
                                     setState(() {
                                       isSearching = false;
                                     });
 
                                     return;
-
                                   }
 
-
-
-                                  filteredWorkers = workers.where((e) => (e.firstName! + ' ' + e.lastName!).contains(v)).toList();
+                                  filteredWorkers = workers
+                                      .where((e) =>
+                                          (e.firstName! + ' ' + e.lastName!)
+                                              .contains(v))
+                                      .toList();
 
                                   //filteredWorkers
                                   setState(() {
                                     isSearching = true;
                                   });
-
-
-
                                 }),
                           ),
                         ],
@@ -250,146 +242,115 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                     height: 12,
                   ),
                   PElevatedButton(
-                    text: 'ADD SELECTED WORKERS (${workers.where((e) => e.isSelected).toList().length})',
+                    text:
+                        'ADD SELECTED WORKERS (${workers.where((e) => e.isSelected).toList().length})',
                     onPressed: () {},
                   ),
                   const SizedBox(
                     height: 12,
                   ),
+                  if (isSearching) ...[
+                    for (var currentItem in filteredWorkers) ...[
+                      UserItem(
+                        picUrl: currentItem.picture,
+                        personName: currentItem.firstName! +
+                            ' ' +
+                            currentItem.lastName!,
+                        keyNo: currentItem.key ?? '',
+                        initialSelected: currentItem.isSelected,
+                        disableRatio: widget.isEditing
+                            ? (currentItem.isSelected && !currentItem.newAdded)
+                            : false,
+                        changedStatus: (bool newStatus) {
+                          var find = widget.workers
+                              .where((e) => e.userId == currentItem.userId)
+                              .toList();
+                          setState(() {
+                            currentItem.isSelected = newStatus;
 
-                   if(isSearching) ... [
-                     for(var currentItem in filteredWorkers) ... [
+                            if (find.isNotEmpty) {
+                              setState(() {
+                                find.first.isSelected = newStatus;
+                              });
+                            } else {
+                              setState(() {
+                                widget.workers.add(currentItem);
+                              });
+                            }
+                          });
 
-                       UserItem(
-                         picUrl: currentItem.picture,
-                         personName:
-                         currentItem.firstName! + ' ' + currentItem.lastName!,
-                         keyNo: currentItem.key ?? '',
-                         initialSelected: currentItem.isSelected,
-                         disableRatio: widget.isEditing ? (currentItem.isSelected && !currentItem.newAdded ) : false,
-                         changedStatus: (bool newStatus) {
+                          if (widget.isEditing) {
+                            if (newStatus) {
+                              if (currentItem.newRemove) {
+                              } else {
+                                currentItem.newAdded = true;
+                              }
+                            } else {
+                              if (currentItem.newAdded) {
+                              } else {
+                                currentItem.newRemove = true;
+                              }
+                            }
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                    ],
+                  ] else ...[
+                    for (var currentItem in workers) ...[
+                      UserItem(
+                        picUrl: currentItem.picture,
+                        personName: currentItem.firstName! +
+                            ' ' +
+                            currentItem.lastName!,
+                        keyNo: currentItem.key ?? '',
+                        initialSelected: currentItem.isSelected,
+                        disableRatio: widget.isEditing
+                            ? (currentItem.isSelected && !currentItem.newAdded)
+                            : false,
+                        changedStatus: (bool newStatus) {
+                          var find = widget.workers
+                              .where((e) => e.userId == currentItem.userId)
+                              .toList();
+                          currentItem.isSelected = newStatus;
 
-                           var find = widget.workers.where((e) => e.userId == currentItem.userId).toList();
-                           setState(() {
-                             currentItem.isSelected = newStatus;
+                          if (find.isNotEmpty) {
+                            setState(() {
+                              find.first.isSelected = newStatus;
+                            });
+                          } else {
+                            setState(() {
+                              widget.workers.add(currentItem);
+                            });
+                          }
 
-                             if(find.isNotEmpty) {
-                               setState(() {
-                                 find.first.isSelected = newStatus;
+                          if (widget.isEditing) {
+                            if (newStatus) {
+                              if (currentItem.newRemove) {
+                              } else {
+                                currentItem.newAdded = true;
+                              }
+                            } else {
+                              if (currentItem.newAdded) {
+                              } else {
+                                currentItem.newRemove = true;
 
-                               });
-                             }
-                             else {
-                               setState(() {
-                                 widget.workers.add(currentItem);
-
-                               });
-                             }
-                           });
-
-
-
-
-                           if(widget.isEditing) {
-                             if(newStatus) {
-                               if(currentItem.newRemove){
-
-                               }
-                               else {
-                                 currentItem.newAdded = true;
-                               }
-
-                             }
-                             else {
-                               if(currentItem.newAdded) {
-                               }
-                               else {
-                                 currentItem.newRemove = true;
-                               }
-                             }
-                           }
-
-
-                         },
-                       ),
-
-                       const SizedBox(
-                         height: 12,
-                       ),
-
-                     ],
-                   ] else ... [
-                     for(var currentItem in workers) ... [
-
-                       UserItem(
-                         picUrl: currentItem.picture,
-                         personName:
-                         currentItem.firstName! + ' ' + currentItem.lastName!,
-                         keyNo: currentItem.key ?? '',
-                         initialSelected: currentItem.isSelected,
-                         disableRatio: widget.isEditing ? (currentItem.isSelected && !currentItem.newAdded ) : false,
-                         changedStatus: (bool newStatus) {
-
-                           var find = widget.workers.where((e) => e.userId == currentItem.userId).toList();
-                           currentItem.isSelected = newStatus;
-
-                           if(find.isNotEmpty) {
-                             setState(() {
-                               find.first.isSelected = newStatus;
-                             });
-                           }
-                           else {
-
-                             setState(() {
-                               widget.workers.add(currentItem);
-
-                             });
-
-                           }
-
-
-
-                           if(widget.isEditing) {
-                             if(newStatus) {
-                               if(currentItem.newRemove){
-
-                               }
-                               else {
-                                 currentItem.newAdded = true;
-                               }
-
-                             }
-                             else {
-                               if(currentItem.newAdded) {
-                               }
-                               else {
-                                 currentItem.newRemove = true;
-
-                                 print('');
-                               }
-                             }
-                           }
-                           else {
-
-                           }
-
-
-
-
-                         },
-                       ),
-
-                       const SizedBox(
-                         height: 12,
-                       ),
-
-                     ],
-                   ],
-
+                                print('');
+                              }
+                            }
+                          } else {}
+                        },
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                    ],
+                  ],
                   const SizedBox(
                     height: 8,
                   ),
-                  
                   const Text(
                     'Cannot find workers?',
                     style: TextStyle(color: kPrimaryColor),
@@ -412,14 +373,19 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                           context: context,
                           barrierDismissible: false,
                           builder: (BuildContext context) {
-                            return  AddTempWorker(shiftId: this.widget.shiftId.toString(),);
+                            return AddTempWorker(
+                              shiftId: this.widget.shiftId.toString(),
+                            );
                           });
-                      if(selected != null) {
-
+                      if (selected != null) {
                         print('');
 
-
-                        var res = await WorkersService.addWorkers(widget.shiftId, [selected.data!.id.toString()], ['2022-06-05 06:09:04'], [], [selected.data!.efficiencyCalculation.toString()]);
+                        var res = await WorkersService.addWorkers(
+                            widget.shiftId,
+                            [selected.data!.id.toString()],
+                            ['2022-06-05 06:09:04'],
+                            [],
+                            [selected.data!.efficiencyCalculation.toString()]);
 
                         this.widget.tempWorkerAdded(selected);
 
@@ -439,10 +405,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                          */
                         //Navigator.pop(context,selected);
 
-
-
                       }
-
                     },
                     child: Row(
                       children: [

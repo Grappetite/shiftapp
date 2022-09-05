@@ -1,22 +1,21 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
 import '../config/constants.dart';
-import 'dart:io' show Platform;
-
-import '../model/shifts_model.dart';
 import '../model/login_model.dart';
+import '../model/shifts_model.dart';
 import '../services/workers_service.dart';
 import '../widgets/elevated_button.dart';
 import '../widgets/input_view.dart';
 import 'inner_widgets/alert_title_label.dart';
-import 'login.dart';
 
 class EndShiftFinalScreen extends StatefulWidget {
   final int shiftId;
@@ -31,7 +30,6 @@ class EndShiftFinalScreen extends StatefulWidget {
   final String comments;
   final bool autoOpen;
 
-
   const EndShiftFinalScreen(
       {Key? key,
       required this.shiftId,
@@ -40,7 +38,8 @@ class EndShiftFinalScreen extends StatefulWidget {
       required this.endTime,
       required this.selectedShift,
       required this.comments,
-      required this.process, this.autoOpen = false})
+      required this.process,
+      this.autoOpen = false})
       : super(key: key);
 
   @override
@@ -331,15 +330,12 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                       ),
                       PElevatedButton(
                         onPressed: () async {
-
                           await showDialog(
                               context: context,
                               barrierDismissible: false,
                               builder: (BuildContext context) {
-                                return  ConfirmTimeEnd();
+                                return ConfirmTimeEnd();
                               });
-
-
 
                           return;
 
@@ -377,20 +373,14 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                               prefs.remove('username');
                               prefs.remove('password');
 
-                              if(widget.autoOpen) {
-
-                                Navigator.pop(context);
-                                Navigator.pop(context,true);
-
+                              if (widget.autoOpen) {
+                                Get.back();
+                                Navigator.pop(context, true);
+                              } else {
+                                Get.back();
+                                Navigator.pop(context, true);
+                                Navigator.pop(context, true);
                               }
-                              else {
-
-                                Navigator.pop(context);
-                                Navigator.pop(context,true);
-                                Navigator.pop(context,true);
-                              }
-
-
                             } else {
                               EasyLoading.showError('Error');
                             }
@@ -435,9 +425,6 @@ class KeypadDoneButton extends StatelessWidget {
   }
 }
 
-
-
-
 class ConfirmTimeEnd extends StatefulWidget {
   const ConfirmTimeEnd({Key? key}) : super(key: key);
 
@@ -467,7 +454,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                 alignment: Alignment.topRight,
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    Get.back();
                   },
                   child: Icon(
                     Icons.close,
@@ -500,17 +487,14 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                     Expanded(
                       child: Container(),
                     ),
-
                     Expanded(
                       child: Container(),
                     ),
                     PElevatedButton(
                       onPressed: () async {
-
                         await showTimePicker(
                           context: context,
-                          initialTime: TimeOfDay(
-                              hour: 5, minute: 5),
+                          initialTime: TimeOfDay(hour: 5, minute: 5),
                           initialEntryMode: TimePickerEntryMode.dial,
                         );
 
@@ -521,11 +505,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                           maskType: EasyLoadingMaskType.black,
                         );*/
 
-
-
                         //await EasyLoading.dismiss();
-
-
                       },
                       text: 'ADD AND ASSIGN',
                     ),

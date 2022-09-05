@@ -1,19 +1,15 @@
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Network/API.dart';
 import '../config/constants.dart';
-import '../model/login_model.dart';
 import '../model/shifts_model.dart';
-import 'package:logger/logger.dart';
-
 
 class ShiftService {
   static Future<ShiftStartModel?> startShift(
       int shiftId, int processId, String startTime, String endTime) async {
     try {
       var dio = Dio();
-      final prefs = await SharedPreferences.getInstance();
-
+      //final prefs = await SharedPreferences.getInstance();
 
       Response response = await dio.post(
         baseUrl + 'shifts',
@@ -25,7 +21,7 @@ class ShiftService {
         },
         options: Options(
           headers: {
-            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+            authorization: 'Bearer ' + Api().sp.read(tokenKey)!,
           },
         ),
       );
@@ -37,10 +33,10 @@ class ShiftService {
       if (responseObject.data == null) {
         return null;
       }
- //     final prefs = await SharedPreferences.getInstance();
-   //   responseObject.data!.user!.lastName;
+      //     //final prefs = await SharedPreferences.getInstance();
+      //   responseObject.data!.user!.lastName;
 
-     // prefs.setString(tokenKey, responseObject.token!);
+      // prefs.setString(tokenKey, responseObject.token!);
 
       return responseObject;
     } catch (e) {

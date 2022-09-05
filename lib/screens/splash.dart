@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../Routes/app_pages.dart';
 import '../config/constants.dart';
-import 'login.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -17,21 +18,22 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     loadToNextView();
   }
-  void loadToNextView() async   {
-    await Future.delayed(const Duration(seconds: 1), (){});
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginScreen()),
-    );
 
+  void loadToNextView() async {
+    await Future.delayed(const Duration(seconds: 1), () {});
+    Get.offAllNamed(Routes.login);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         color: mainBackGroundColor,
-        child:  Center(
-          child: Image(image: const AssetImage('assets/images/logo.png'),width: MediaQuery.of(context).size.width / 1.35,),
+        child: Center(
+          child: Image(
+            image: const AssetImage('assets/images/logo.png'),
+            width: MediaQuery.of(context).size.width / 1.35,
+          ),
         ),
       ),
     );

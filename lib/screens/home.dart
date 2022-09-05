@@ -1,30 +1,31 @@
+import 'package:app_popup_menu/app_popup_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shiftapp/screens/shift_start.dart';
-import 'package:app_popup_menu/app_popup_menu.dart';
-import 'package:shiftapp/model/shifts_model.dart';
 import 'package:shiftapp/model/login_model.dart';
+import 'package:shiftapp/model/shifts_model.dart';
+import 'package:shiftapp/screens/shift_start.dart';
 
+import '../Network/API.dart';
 import '../config/constants.dart';
 import 'end_shift.dart';
 import 'login.dart';
 
 class HomeView extends StatefulWidget {
-  final Process processSelected;
+  Process? processSelected;
 
-  final String? comment;
+  String? comment;
 
-  final ShiftItem selectedShift;
+  ShiftItem? selectedShift;
 
-  final bool sessionStarted;
+  bool sessionStarted;
 
-  const HomeView(
+  HomeView(
       {Key? key,
-      required this.processSelected,
-      required this.selectedShift,
+      this.processSelected,
+      this.selectedShift,
       this.sessionStarted = false,
       this.comment})
       : super(key: key);
@@ -39,11 +40,15 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
+    widget.processSelected = Get.arguments["processSelected"];
+    widget.selectedShift = Get.arguments["selectedShift"];
+    widget.sessionStarted = Get.arguments["sessionStarted"];
+    widget.comment = Get.arguments["comment"];
     _controller = PersistentTabController(initialIndex: 0);
   }
 
   void goBack() {
-    Navigator.pop(context);
+    Get.back();
   }
 
   @override
@@ -83,8 +88,8 @@ class _HomeViewState extends State<HomeView> {
   List<Widget> _buildScreens() {
     return [
       HomeMainView(
-        selectedShift: widget.selectedShift,
-        processSelected: widget.processSelected,
+        selectedShift: widget.selectedShift!,
+        processSelected: widget.processSelected!,
         sessionStarted: widget.sessionStarted,
         comment: widget.comment,
         onLogout: () async {
@@ -93,11 +98,8 @@ class _HomeViewState extends State<HomeView> {
             MaterialPageRoute(builder: (context) => const LoginScreen()),
           );
 
-          if(dyanc != null) {
-            if(dyanc == true){
-
-
-            }
+          if (dyanc != null) {
+            if (dyanc == true) {}
           }
         },
       ),
@@ -178,14 +180,12 @@ class _HomeMainViewState extends State<HomeMainView> {
       ),
     );
 
-    if(response != null) {
-      if(response == true){
+    if (response != null) {
+      if (response == true) {
         widget.onLogout();
-
       }
     }
     print('=');
-
   }
 
   @override
@@ -197,15 +197,15 @@ class _HomeMainViewState extends State<HomeMainView> {
         PopupMenuItem(
           value: 1,
           onTap: () async {
-            final prefs = await SharedPreferences.getInstance();
+            //final prefs = await SharedPreferences.getInstance();
 
-            prefs.remove('shiftId');
+            Api().sp.remove('shiftId');
 
-            prefs.remove('selectedShiftName');
-            prefs.remove('selectedShiftEndTime');
-            prefs.remove('selectedShiftStartTime');
-            prefs.remove('username');
-            prefs.remove('password');
+            Api().sp.remove('selectedShiftName');
+            Api().sp.remove('selectedShiftEndTime');
+            Api().sp.remove('selectedShiftStartTime');
+            Api().sp.remove('username');
+            Api().sp.remove('password');
 
             widget.onLogout();
 
@@ -246,12 +246,12 @@ class _HomeMainViewState extends State<HomeMainView> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-
         title: Column(
           children: [
-
-
-            Image.asset('assets/images/toplogo.png',height: 20,),
+            Image.asset(
+              'assets/images/toplogo.png',
+              height: 20,
+            ),
             const SizedBox(
               height: 4,
             ),
@@ -262,7 +262,6 @@ class _HomeMainViewState extends State<HomeMainView> {
                   fontSize: 17,
                   fontWeight: FontWeight.w600),
             ),
-
             const SizedBox(
               height: 2,
             ),
@@ -273,9 +272,8 @@ class _HomeMainViewState extends State<HomeMainView> {
       body: ShiftStart(
         selectedShift: widget.selectedShift,
         processSelected: widget.processSelected,
-        popBack: (){
+        popBack: () {
           widget.onLogout.call();
-
         },
       ),
     );

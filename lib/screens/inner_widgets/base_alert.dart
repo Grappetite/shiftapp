@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../config/constants.dart';
-import '../../widgets/input_view.dart';
 import 'alert_title_label.dart';
 
 class BaseAlert extends StatelessWidget {
-
   final String titleText;
 
   final Widget innerView;
 
-  const BaseAlert({Key? key, required this.titleText, required this.innerView}) : super(key: key);
-
+  const BaseAlert({Key? key, required this.titleText, required this.innerView})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class BaseAlert extends StatelessWidget {
                 alignment: Alignment.topRight,
                 child: IconButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Get.back();
                   },
                   icon: const Icon(
                     Icons.close,
@@ -49,12 +48,10 @@ class BaseAlert extends StatelessWidget {
                     AlertTitleLabel(
                       title: titleText,
                     ),
-
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: innerView,
                     ),
-
                   ],
                 ),
               ),

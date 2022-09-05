@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 import 'package:shiftapp/config/constants.dart';
 
+import '../../model/login_model.dart';
 import '../../model/shifts_model.dart';
 import '../../model/workers_model.dart';
 import '../../services/workers_service.dart';
@@ -9,7 +11,6 @@ import '../../widgets/elevated_button.dart';
 import '../select_exister_workers.dart';
 import '../start_shift_page.dart';
 import 'index_indicator.dart';
-import '../../model/login_model.dart';
 
 class WorkItemView extends StatefulWidget {
   final bool isEditing;
@@ -167,7 +168,8 @@ class _WorkItemViewState extends State<WorkItemView> {
                   for (var currentItem in widget.listLists[i]) ...[
                     UserItem(
                       keyNo: currentItem.key != null ? currentItem.key! : '',
-                      personName: currentItem.firstName! + ' ' + currentItem.lastName!,
+                      personName:
+                          currentItem.firstName! + ' ' + currentItem.lastName!,
                       initialSelected: currentItem.isSelected,
                       picUrl: currentItem.picture,
                       changedStatus: (bool newStatus) async {
@@ -221,7 +223,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                 PElevatedButton(
                   onPressed: () async {
                     if (this.widget.isEditing) {
-                      Navigator.pop(context);
+                      Get.back();
 
                       return;
                     }

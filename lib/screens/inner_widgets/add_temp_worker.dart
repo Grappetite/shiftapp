@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 
 import '../../config/constants.dart';
 import '../../model/worker_type_model.dart';
-import '../../model/workers_model.dart';
 import '../../services/workers_service.dart';
 import '../../widgets/drop_down.dart';
 import '../../widgets/elevated_button.dart';
 import '../../widgets/input_view.dart';
-import 'alert_cancel_ok_buttons.dart';
 import 'alert_title_label.dart';
 
 class AddTempWorker extends StatefulWidget {
@@ -65,7 +64,7 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                 alignment: Alignment.topRight,
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.pop(context);
+                    Get.back();
                   },
                   child: Icon(
                     Icons.close,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 import '../../config/constants.dart';
-import '../../widgets/elevated_button.dart';
 import '../../widgets/input_view.dart';
-import '../workers_listing.dart';
 import 'alert_cancel_ok_buttons.dart';
 import 'alert_title_label.dart';
 
@@ -12,7 +12,13 @@ class ChangeShiftTime extends StatefulWidget {
   final String hours;
   final String date;
 
-  const ChangeShiftTime({Key? key, required this.startTime, required this.endTime, required this.hours, required this.date}) : super(key: key);
+  const ChangeShiftTime(
+      {Key? key,
+      required this.startTime,
+      required this.endTime,
+      required this.hours,
+      required this.date})
+      : super(key: key);
 
   @override
   State<ChangeShiftTime> createState() => _ChangeShiftTimeState();
@@ -32,13 +38,11 @@ class _ChangeShiftTimeState extends State<ChangeShiftTime> {
       content: Container(
         width: MediaQuery.of(context).size.width / 1.15,
         height: MediaQuery.of(context).size.height / 2.25,
-
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: Colors.grey, width: 3),
         ),
-
         child: Column(
           children: [
             Padding(
@@ -47,7 +51,7 @@ class _ChangeShiftTimeState extends State<ChangeShiftTime> {
                 alignment: Alignment.topRight,
                 child: IconButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Get.back();
                   },
                   icon: const Icon(
                     Icons.close,
@@ -111,16 +115,11 @@ class _ChangeShiftTimeState extends State<ChangeShiftTime> {
                     ),
                     AlertCancelOk(
                       okHandler: () {
-
-                        if(timeSelected) {
-
-                          Navigator.pop(context,true);
+                        if (timeSelected) {
+                          Navigator.pop(context, true);
 
                           return;
-
-
                         }
-
 
                         setState(() {
                           timeSelected = true;

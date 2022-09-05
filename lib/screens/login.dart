@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shiftapp/screens/home.dart';
-import 'package:shiftapp/screens/shifts_listing.dart';
+import 'package:get/get.dart';
+import 'package:shiftapp/Network/API.dart';
 import 'package:shiftapp/services/login_service.dart';
 
+import '../Routes/app_pages.dart';
 import '../config/constants.dart';
 import '../model/login_model.dart';
 import '../model/shifts_model.dart';
@@ -45,14 +45,13 @@ class _LoginScreenState extends State<LoginScreen> {
     passwordController.text = 'sidragrap';
     //passwordController.text = 'rzbsun';
 
-
     loadDefaul();
   }
 
   void loadDefaul() async {
-    final prefs = await SharedPreferences.getInstance();
+    //final prefs = await SharedPreferences.getInstance();
 
-    int? shiftId = prefs.getInt('shiftId');
+    int? shiftId = Api().sp.read('shiftId');
 
     if (shiftId != null) {
       await EasyLoading.show(
@@ -60,9 +59,8 @@ class _LoginScreenState extends State<LoginScreen> {
         maskType: EasyLoadingMaskType.black,
       );
 
-
-      String loginUserName = prefs.getString('username')!;
-      String passString = prefs.getString('password')!;
+      String loginUserName = Api().sp.read('username')!;
+      String passString = Api().sp.read('password')!;
 
       LoginResponse? response =
           await LoginService.login(loginUserName, passString);
@@ -70,57 +68,54 @@ class _LoginScreenState extends State<LoginScreen> {
       if (response == null) {
       } else {
         process = response.data!.process!;
-        int processId = prefs.getInt('processId')!;
+        int processId = Api().sp.read('processId')!;
 
         var selectedProcess = process.firstWhere((e) => e.id == processId);
 
-        String shiftName = prefs.getString('selectedShiftName')!;
-        String shiftStartTime = prefs.getString('selectedShiftStartTime')!;
-        String shiftEndTime = prefs.getString('selectedShiftEndTime')!;
+        String shiftName = Api().sp.read('selectedShiftName')!;
+        String shiftStartTime = Api().sp.read('selectedShiftStartTime')!;
+        String shiftEndTime = Api().sp.read('selectedShiftEndTime')!;
 
         var shiftObject = ShiftItem(
           id: shiftId,
           name: shiftName,
           startTime: shiftStartTime,
           endTime: shiftEndTime,
-
         );
-
 
         shiftObject.displayScreen = 1;
 
         await EasyLoading.dismiss();
-
-
-
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => HomeView(
-              selectedShift: shiftObject,
-              processSelected: selectedProcess,
-              sessionStarted: true,
-              comment: prefs.getString('comment'),
-            ),
-          ),
-        );
-
+        Get.offAllNamed(Routes.home, arguments: {
+          "selectedShift": shiftObject,
+          "processSelected": selectedProcess,
+          "sessionStarted": true,
+          "comment": Api().sp.read('comment'),
+        });
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (BuildContext context) => HomeView(
+        //       selectedShift: shiftObject,
+        //       processSelected: selectedProcess,
+        //       sessionStarted: true,
+        //       comment: Api().sp.read('comment'),
+        //     ),
+        //   ),
+        // );
       }
-
-
     }
 
     /*
 
 
-    prefs.setString('selectedShiftStartTime',
+    Api().sp.setString('selectedShiftStartTime',
         widget.selectedShift.startTime!);
 
-    prefs.setString('selectedShiftEndTime',
+    Api().sp.setString('selectedShiftEndTime',
         widget.selectedShift.endTime!);
 
-    prefs.setInt('selectedDisplayScreen',
+    Api().sp.setInt('selectedDisplayScreen',
         widget.selectedShift.displayScreen!);*/
   }
 
@@ -231,7 +226,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       var shifts =
                           await LoginService.getShifts(processSelected.id!);
 
-
                       await EasyLoading.dismiss();
 
                       //shifts!.data!.first.displayScreen = 3;
@@ -240,15 +234,20 @@ class _LoginScreenState extends State<LoginScreen> {
                         EasyLoading.showError('Could not load shifts');
                       } else {
                         if (shifts.data!.isNotEmpty) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => HomeView(
-                                selectedShift: shifts.data!.first,
-                                processSelected: processSelected,
-                              ),
-                            ),
-                          );
+                          // Navigator.pushReplacement(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (BuildContext context) =>
+                          Get.offAllNamed(Routes.home, arguments: {
+                            "selectedShift": shifts.data!.first,
+                            "processSelected": processSelected,
+                          });
+                          // HomeView(
+                          // selectedShift: shifts.data!.first,
+                          // processSelected: processSelected,
+                          // ),
+                          // ),
+                          // );
                         }
                       }
                       print("object");
@@ -281,10 +280,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     } else {
                       await EasyLoading.dismiss();
 
-                      final prefs = await SharedPreferences.getInstance();
+                      //final Api().sp = await SharedPreferences.getInstance();
 
-                      prefs.setString('username', controller.text);
-                      prefs.setString('password', passwordController.text);
+                      Api().sp.write('username', controller.text);
+                      Api().sp.write('password', passwordController.text);
 
                       process = response.data!.process!;
 

@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
+import '../Network/API.dart';
+import '../model/login_model.dart';
 import '../model/shifts_model.dart';
 import '../services/workers_service.dart';
 import 'end_shift.dart';
-import '../model/login_model.dart';
 
 class StartShiftView extends StatefulWidget {
   final int shiftId;
@@ -22,7 +22,6 @@ class StartShiftView extends StatefulWidget {
   final ShiftItem selectedShift;
   final Process process;
 
-
   const StartShiftView(
       {Key? key,
       required this.shiftId,
@@ -32,7 +31,8 @@ class StartShiftView extends StatefulWidget {
       required this.startTime,
       required this.endTime,
       required this.efficiencyCalculation,
-      required this.selectedShift, required this.process})
+      required this.selectedShift,
+      required this.process})
       : super(key: key);
 
   @override
@@ -68,17 +68,21 @@ class _StartShiftViewState extends State<StartShiftView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(//8171999927660000
+    return Scaffold(
+      //8171999927660000
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         centerTitle: true,
         title: Column(
-          children:  [
-            Image.asset('assets/images/toplogo.png',height: 20,),
+          children: [
+            Image.asset(
+              'assets/images/toplogo.png',
+              height: 20,
+            ),
             SizedBox(
               height: 4,
             ),
-             Text(
+            Text(
               widget.process.name!,
               style: const TextStyle(
                   color: Colors.white,
@@ -102,8 +106,7 @@ class _StartShiftViewState extends State<StartShiftView> {
             ExplainerWidget(
               iconName: 'construct',
               title: 'Workers',
-              text1:
-                  text1(),
+              text1: text1(),
               text2: '',
               showWarning: true,
               showIcon: true,
@@ -182,23 +185,22 @@ class _StartShiftViewState extends State<StartShiftView> {
 
                       if (result != null) {
                         if (result.code! == 200) {
-                          final prefs = await SharedPreferences.getInstance();
-                          prefs.setInt('shiftId', widget.selectedShift.id!);
-                          prefs.setInt('processId', widget.processId);
-                          prefs.setString('comment', _controller.text);
+                          //final prefs = await SharedPreferences.getInstance();
+                          Api().sp.write('shiftId', widget.selectedShift.id!);
+                          Api().sp.write('processId', widget.processId);
+                          Api().sp.write('comment', _controller.text);
 
-                          prefs.setString(
+                          Api().sp.write(
                               'selectedShiftName', widget.selectedShift.name!);
 
-                          prefs.setString('selectedShiftStartTime',
+                          Api().sp.write('selectedShiftStartTime',
                               widget.selectedShift.startTime!);
 
-                          prefs.setString('selectedShiftEndTime',
+                          Api().sp.write('selectedShiftEndTime',
                               widget.selectedShift.endTime!);
 
-                          prefs.setInt('selectedDisplayScreen',
+                          Api().sp.write('selectedDisplayScreen',
                               widget.selectedShift.displayScreen!);
-
 
                           Navigator.pushReplacement(
                             context,
@@ -239,9 +241,9 @@ class _StartShiftViewState extends State<StartShiftView> {
   }
 
   String text1() {
-    if(widget.process.headCount == null) {
-      return'${widget.userId.length}/${widget.totalUsersCount} Workers';
+    if (widget.process.headCount == null) {
+      return '${widget.userId.length}/${widget.totalUsersCount} Workers';
     }
-    return'${widget.userId.length}/${widget.process.headCount} Workers';
+    return '${widget.userId.length}/${widget.process.headCount} Workers';
   }
 }

@@ -2,10 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'dart:io';
+import 'package:get/get.dart';
 
 import '../config/constants.dart';
-
 
 class UIUtitilies {
   static void showToast(String message, {int toastSeconds = 5}) {
@@ -22,13 +21,13 @@ class UIUtitilies {
 
   static void showConfirmationDialog(BuildContext context,
       {String? title,
-        String? description,
-        String? button1Text,
-        Color? button1Color,
-        String? button2Text,
-        Color? button2Color,
-        VoidCallback? button1Clicked,
-        VoidCallback? button2Clicked}) {
+      String? description,
+      String? button1Text,
+      Color? button1Color,
+      String? button2Text,
+      Color? button2Color,
+      VoidCallback? button1Clicked,
+      VoidCallback? button2Clicked}) {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -56,14 +55,14 @@ class UIUtitilies {
             actions: [
               PlatformDialogAction(
                 child:
-                Text(button1Text!, style: TextStyle(color: button1Color)),
+                    Text(button1Text!, style: TextStyle(color: button1Color)),
                 onPressed: () {
                   button1Clicked!();
                 },
               ),
               PlatformDialogAction(
                 child:
-                Text(button2Text!, style: TextStyle(color: button2Color)),
+                    Text(button2Text!, style: TextStyle(color: button2Color)),
                 onPressed: () {
                   button2Clicked!();
                 },
@@ -75,12 +74,12 @@ class UIUtitilies {
 
   static void showConfirmationDialogWithoutDescription(BuildContext context,
       {String? title,
-        String? button1Text,
-        Color? button1Color,
-        String? button2Text,
-        Color? button2Color,
-        VoidCallback? button1Clicked,
-        VoidCallback? button2Clicked}) {
+      String? button1Text,
+      Color? button1Color,
+      String? button2Text,
+      Color? button2Color,
+      VoidCallback? button1Clicked,
+      VoidCallback? button2Clicked}) {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -98,14 +97,14 @@ class UIUtitilies {
             actions: [
               PlatformDialogAction(
                 child:
-                Text(button1Text!, style: TextStyle(color: button1Color)),
+                    Text(button1Text!, style: TextStyle(color: button1Color)),
                 onPressed: () {
                   button1Clicked!();
                 },
               ),
               PlatformDialogAction(
                 child:
-                Text(button2Text!, style: TextStyle(color: button2Color)),
+                    Text(button2Text!, style: TextStyle(color: button2Color)),
                 onPressed: () {
                   button2Clicked!();
                 },
@@ -115,15 +114,12 @@ class UIUtitilies {
     );
   }
 
-
-
-  static Future<void> showDialogMessage(
-      BuildContext context,
+  static Future<void> showDialogMessage(BuildContext context,
       {String? title,
-        required String message,
-        String? buttonFirstText,
-        VoidCallback? firstButtonClicked,
-        bool isShowClose = true}) {
+      required String message,
+      String? buttonFirstText,
+      VoidCallback? firstButtonClicked,
+      bool isShowClose = true}) {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -144,7 +140,7 @@ class UIUtitilies {
                   visible: isShowClose,
                   child: InkWell(
                     onTap: () {
-                      Navigator.pop(context);
+                      Get.back();
                     },
                     child: Icon(
                       CupertinoIcons.clear,
@@ -165,7 +161,7 @@ class UIUtitilies {
                   if (firstButtonClicked != null) {
                     firstButtonClicked();
                   } else {
-                    Navigator.pop(context);
+                    Get.back();
                   }
                 },
               ),
@@ -255,7 +251,7 @@ class UIUtitilies {
         child: Container(
           color: Colors.red,
           padding:
-          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: widget,
         ),
       ),
@@ -334,7 +330,7 @@ class UIUtitilies {
                   style: TextStyle(color: kSecondaryColor),
                 ),
                 onPressed: () {
-                  Navigator.pop(context);
+                  Get.back();
                 },
               ),
             ]);
@@ -343,13 +339,13 @@ class UIUtitilies {
   }
 
   static void showMultiDialog(
-      BuildContext context, {
-        required String title,
-        required List<String> buttonsText,
-        required List<String?> buttonsSubText,
-        required List<Color> buttonsColor,
-        required Function(int) buttonActions,
-      }) {
+    BuildContext context, {
+    required String title,
+    required List<String> buttonsText,
+    required List<String?> buttonsSubText,
+    required List<Color> buttonsColor,
+    required Function(int) buttonActions,
+  }) {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -389,7 +385,7 @@ class UIUtitilies {
                     ],
                   ),
                   onPressed: () {
-                    Navigator.pop(context);
+                    Get.back();
 
                     buttonActions(i);
                   },
@@ -404,34 +400,33 @@ class UIUtitilies {
       TextEditingController textEditingController) {
     return textEditingController.text == ''
         ? Container(
-      margin: EdgeInsets.symmetric(horizontal: 8),
-      width: 15.0,
-      height: 15.0,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: Colors.white,
-        ),
-        color: textEditingController.text != ""
-            ? Colors.white
-            : Colors.transparent,
-      ),
-    )
+            margin: EdgeInsets.symmetric(horizontal: 8),
+            width: 15.0,
+            height: 15.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.white,
+              ),
+              color: textEditingController.text != ""
+                  ? Colors.white
+                  : Colors.transparent,
+            ),
+          )
         : Container(
-      margin: EdgeInsets.symmetric(horizontal: 8),
-      width: 15.0,
-      height: 15.0,
-      child: Center(
-        child: Text(
-          textEditingController.text,
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 14,
-          ),
-        ),
-      ),
-    );
+            margin: EdgeInsets.symmetric(horizontal: 8),
+            width: 15.0,
+            height: 15.0,
+            child: Center(
+              child: Text(
+                textEditingController.text,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          );
   }
 }
-

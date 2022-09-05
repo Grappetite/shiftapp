@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../config/constants.dart';
 import '../../widgets/elevated_button.dart';
@@ -8,7 +9,12 @@ class AlertCancelOk extends StatelessWidget {
   final String okButton;
   final VoidCallback okHandler;
 
-  const AlertCancelOk({Key? key, this.cancelTitle, required this.okButton, required this.okHandler}) : super(key: key);
+  const AlertCancelOk(
+      {Key? key,
+      this.cancelTitle,
+      required this.okButton,
+      required this.okHandler})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +32,11 @@ class AlertCancelOk extends StatelessWidget {
               ),
             ),
             onPressed: () {
-              Navigator.pop(context);
-
+              Get.back();
             },
-            child:  Text(
-              cancelTitle ?? 'CANCEL' ,
-              style:
-              const TextStyle(fontSize: 20, color: kPrimaryColor),
+            child: Text(
+              cancelTitle ?? 'CANCEL',
+              style: const TextStyle(fontSize: 20, color: kPrimaryColor),
             ),
           ),
         ),
@@ -42,9 +46,7 @@ class AlertCancelOk extends StatelessWidget {
         Expanded(
           child: PElevatedButton(
             onPressed: () {
-
               okHandler.call();
-
             },
             text: okButton,
           ),
