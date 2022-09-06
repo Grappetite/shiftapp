@@ -2,7 +2,6 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 import 'Network/environment.dart';
 import 'Routes/app_pages.dart';
@@ -11,7 +10,7 @@ import 'config/constants.dart';
 Future<void> main() async {
   runApp(const MyApp());
   WidgetsFlutterBinding.ensureInitialized();
-  await GetStorage.init();
+  // await GetStorage.init();
   const String? environment = String.fromEnvironment(
     'ENVIRONMENT',
     defaultValue: Environment.dev,
