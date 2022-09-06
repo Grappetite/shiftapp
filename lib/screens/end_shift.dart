@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:app_popup_menu/app_popup_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,6 @@ import 'package:shiftapp/screens/shift_start.dart';
 import '../Routes/app_pages.dart';
 import '../model/login_model.dart';
 import '../model/shifts_model.dart';
-import '../services/shift_service.dart';
 import '../services/workers_service.dart';
 
 class EndShiftView extends StatefulWidget {
@@ -111,10 +111,20 @@ class _EndShiftViewState extends State<EndShiftView> {
         PopupMenuItem(
           value: 1,
           onTap: () async {
+            var result = await showOkCancelAlertDialog(
+              context: context,
+              title: 'Warning',
+              message: 'Are you sure you want to discard this shift?',
+              okLabel: 'YES',
+              cancelLabel: 'NO',
+            );
+
+            if (result.index == 1) {
+              return;
+            }
+
             String endTime =
                 DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now());
-
-            ShiftService.cancelShift(this.widget.shiftId!, endTime);
 
             // final prefs = await SharedPreferences.getInstance();
 
@@ -177,6 +187,7 @@ class _EndShiftViewState extends State<EndShiftView> {
     return Scaffold(
       appBar: AppBar(
         leading: Container(),
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: Column(
           children: [
@@ -295,6 +306,8 @@ class _EndShiftViewState extends State<EndShiftView> {
                     "process": widget.process,
                     "execShiftId": this.widget.execShiftId,
                   });
+                  loadUsers();
+
                   // Navigator.push(
                   //   context,
                   //   MaterialPageRoute(

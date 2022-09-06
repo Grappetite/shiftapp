@@ -101,6 +101,8 @@ class ShiftWorker {
   String? key;
   int? efficiencyCalculation;
 
+  bool isTemp = false;
+
   String picture = '';
 
   bool isSelected = false;

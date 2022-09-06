@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:logger/logger.dart';
 
 import '../Network/API.dart';
 import '../config/constants.dart';
@@ -42,8 +41,6 @@ class ShiftService {
   static Future<bool> endShift(int shiftId, int processId, String unitsProduced,
       String comment, String endTime) async {
     try {
-      var logger = Logger();
-
       var dio = Dio();
       // final prefs = await SharedPreferences.getInstance();
 
@@ -54,7 +51,7 @@ class ShiftService {
           'process_id': processId.toString(),
           'end_time': endTime,
           'units_produced': unitsProduced,
-          'comments': comment
+          'comments': 'comment'
         },
         options: Options(
           headers: {

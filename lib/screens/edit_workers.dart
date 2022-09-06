@@ -142,9 +142,8 @@ class _EditWorkersState extends State<EditWorkers> {
             totalItems: widget.totalUsersCount!,
             isEditing: true,
             process: this.widget.process!,
-            reloadData: () {
-              loadWorkers();
-            },
+            reloadData: () {},
+            execShiftId: widget.execShiftId!,
           ),
         ),
       ),

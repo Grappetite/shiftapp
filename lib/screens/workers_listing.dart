@@ -175,7 +175,7 @@ class _WorkersListingState extends State<WorkersListing> {
                 process: this.widget.process!,
                 reloadData: () {
                   loadData();
-                },
+                }, execShiftId: 0,
               ),
             ),
             const SizedBox(

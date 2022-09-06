@@ -17,6 +17,12 @@ class SelectExistingWorkers extends StatefulWidget {
 
   Function(AddTempResponse)? tempWorkerAdded;
 
+  int? workerTypeId;
+
+  //final WorkerType? tempWorkType;
+
+  Function(ShiftWorker)? otherTypeTempWorkerAdded;
+
   int? shiftId;
 
   bool? isEditing;
@@ -29,7 +35,8 @@ class SelectExistingWorkers extends StatefulWidget {
       this.isEditing = false,
       this.shiftId,
       this.tempWorkerAdded,
-      this.processId})
+      this.processId,
+      this.otherTypeTempWorkerAdded})
       : super(key: key);
 
   @override
@@ -41,7 +48,10 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
 
   String timeElasped = '00:00';
   late Timer _timer;
+
   List<ShiftWorker> orignalState = [];
+
+  int currentWorkTypeId = 0;
 
   bool isSearching = false;
   List<ShiftWorker> workers = [];
@@ -73,8 +83,13 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
       maskType: EasyLoadingMaskType.black,
     );
 
-    var response = await WorkersService.searchWorkers(
-        widget.workers!.first.workerTypeId!.toString());
+    if (this.widget.workerTypeId != null) {
+      currentWorkTypeId = widget.workerTypeId!;
+    } else {
+      currentWorkTypeId = widget.workers!.first.workerTypeId!;
+    }
+    var response =
+        await WorkersService.searchWorkers(currentWorkTypeId.toString());
 
     setState(() {
       workers = response!.searchWorker!;
@@ -106,6 +121,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
   @override
   void initState() {
     super.initState();
+
 // <<<<<<< HEAD
 //     filteredWorkers = widget.workers!;
 //     callSearchService();
@@ -115,7 +131,8 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
     widget.shiftId = Get.arguments["shiftId"];
     widget.tempWorkerAdded = Get.arguments["tempWorkerAdded"];
     widget.processId = Get.arguments["processId"];
-    orignalState = [];
+    widget.otherTypeTempWorkerAdded = Get.arguments["otherTypeTempWorkerAdded"];
+
     callSearchService();
   }
 
@@ -264,9 +281,13 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                     text:
                         'ADD SELECTED WORKERS (${workers.where((e) => e.isSelected).toList().length})',
                     onPressed: () {
-                      for (var currentItem in orignalState) {
+                      for (var currentItem in workers) {
                         if (currentItem.isSelected) {
-                          widget.workers!.add(currentItem);
+                          if (currentWorkTypeId != currentItem.workerTypeId) {
+                            widget.otherTypeTempWorkerAdded!(currentItem);
+                          } else {
+                            widget.workers!.add(currentItem);
+                          }
                         }
                       }
 
@@ -289,7 +310,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                             ? (currentItem.isSelected && !currentItem.newAdded)
                             : false,
                         changedStatus: (bool newStatus) {
-                          var find = orignalState
+                          var find = workers
                               .where((e) => e.userId == currentItem.userId)
                               .toList();
 
@@ -302,7 +323,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                               });
                             } else {
                               setState(() {
-                                orignalState.add(currentItem);
+                                workers.add(currentItem);
                               });
                             }
                           });
@@ -328,52 +349,74 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                     ],
                   ] else ...[
                     for (var currentItem in workers) ...[
-                      UserItem(
-                        picUrl: currentItem.picture,
-                        personName: currentItem.firstName! +
-                            ' ' +
-                            currentItem.lastName!,
-                        keyNo: currentItem.key ?? '',
-                        initialSelected: currentItem.isSelected,
-                        disableRatio: widget.isEditing!
-                            ? (currentItem.isSelected && !currentItem.newAdded)
-                            : false,
-                        changedStatus: (bool newStatus) {
-                          var find = orignalState
-                              .where((e) => e.userId == currentItem.userId)
-                              .toList();
-                          currentItem.isSelected = newStatus;
+// <<<<<<< HEAD
+//                       UserItem(
+//                         picUrl: currentItem.picture,
+//                         personName: currentItem.firstName! +
+//                             ' ' +
+//                             currentItem.lastName!,
+//                         keyNo: currentItem.key ?? '',
+//                         initialSelected: currentItem.isSelected,
+//                         disableRatio: widget.isEditing!
+//                             ? (currentItem.isSelected && !currentItem.newAdded)
+//                             : false,
+//                         changedStatus: (bool newStatus) {
+//                           var find = orignalState
+//                               .where((e) => e.userId == currentItem.userId)
+//                               .toList();
+//                           currentItem.isSelected = newStatus;
+// =======
+// >>>>>>> master
 
-                          if (find.isNotEmpty) {
-                            setState(() {
-                              find.first.isSelected = newStatus;
-                            });
-                          } else {
-                            setState(() {
-                              orignalState.add(currentItem);
-                            });
-                          }
+                      if (currentItem.isSelected) ...[
+                        UserItem(
+                          picUrl: currentItem.picture,
+                          personName: currentItem.firstName! +
+                              ' ' +
+                              currentItem.lastName!,
+                          keyNo: currentItem.key ?? '',
+                          initialSelected: currentItem.isSelected,
+                          disableRatio: widget.isEditing!
+                              ? (currentItem.isSelected &&
+                                  !currentItem.newAdded)
+                              : false,
+                          changedStatus: (bool newStatus) {
+                            var find = workers
+                                .where((e) => e.userId == currentItem.userId)
+                                .toList();
+                            currentItem.isSelected = newStatus;
 
-                          if (widget.isEditing!) {
-                            if (newStatus) {
-                              if (currentItem.newRemove) {
-                              } else {
-                                currentItem.newAdded = true;
-                              }
+                            if (find.isNotEmpty) {
+                              setState(() {
+                                find.first.isSelected = newStatus;
+                              });
                             } else {
-                              if (currentItem.newAdded) {
-                              } else {
-                                currentItem.newRemove = true;
-
-                                print('');
-                              }
+                              setState(() {
+                                workers.add(currentItem);
+                              });
                             }
-                          } else {}
-                        },
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
+
+                            if (widget.isEditing!) {
+                              if (newStatus) {
+                                if (currentItem.newRemove) {
+                                } else {
+                                  currentItem.newAdded = true;
+                                }
+                              } else {
+                                if (currentItem.newAdded) {
+                                } else {
+                                  currentItem.newRemove = true;
+
+                                  print('');
+                                }
+                              }
+                            } else {}
+                          },
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                      ],
                     ],
                   ],
                   const SizedBox(
@@ -407,6 +450,20 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                             );
                           });
                       if (selected != null) {
+                        selected.data!.isSelected = true;
+                        selected.data!.isTemp = true;
+
+                        setState(() {
+                          this.workers.add(selected.data!);
+                        });
+
+                        if (this.isSearching) {
+                          this.searchController.text = '';
+                          setState(() {
+                            this.isSearching = false;
+                          });
+                        }
+
                         String dateString =
                             DateFormat("yyyy-MM-dd hh:mm:ss").format(
                           DateTime.now(),
@@ -418,8 +475,6 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                             [dateString],
                             [],
                             [selected.data!.efficiencyCalculation.toString()]);
-
-                        this.widget.tempWorkerAdded!(selected);
 
                         print('');
                       }

@@ -15,6 +15,8 @@ import 'index_indicator.dart';
 class WorkItemView extends StatefulWidget {
   final bool isEditing;
 
+  final int execShiftId;
+
   final VoidCallback reloadData;
 
   final int currentIntex;
@@ -40,7 +42,8 @@ class WorkItemView extends StatefulWidget {
       required this.selectedShift,
       this.isEditing = false,
       required this.process,
-      required this.reloadData})
+      required this.reloadData,
+      required this.execShiftId})
       : super(key: key);
 
   @override
@@ -187,7 +190,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                           );
 
                           var response = await WorkersService.addWorkers(
-                              widget.shiftId!,
+                              widget.execShiftId,
                               [currentItem.id!.toString()],
                               [dateString],
                               [],
@@ -206,7 +209,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                           );
 
                           var response = await WorkersService.removeWorkers(
-                              widget.shiftId!,
+                              widget.execShiftId!,
                               [currentItem.id!.toString()],
                               [dateString],
                               [],
@@ -323,19 +326,46 @@ class _WorkItemViewState extends State<WorkItemView> {
               "shiftId": widget.selectedShift.id!,
               "tempWorkerAdded": (AddTempResponse tmp) {
                 this.widget.reloadData();
+
                 var index =
                     this.widget.listNames.indexOf(tmp.data!.workerType!);
+
                 var resulf = this
                     .widget
                     .listNames
                     .contains(tmp.data!.workerType!)
                     .toString();
+
                 setState(() {
                   this.widget.listLists[index].add(tmp.data!);
                 });
+
                 print('object');
               },
               "processId": widget.processId.toString(),
+              "otherTypeTempWorkerAdded": (worker) {
+                bool listExists = false;
+
+                for (var currentList in widget.listLists) {
+                  if (currentList.first.workerTypeId == worker.workerTypeId) {
+                    setState(() {
+                      currentList.add(worker);
+                    });
+
+                    listExists = true;
+                  }
+                }
+
+                if (!listExists) {
+                  setState(() {
+                    widget.listNames.add(worker.workerType!);
+
+                    widget.listLists.add([worker]);
+                  });
+
+                  print('');
+                }
+              },
             });
             // Navigator.of(context).push(
             //   MaterialPageRoute(
@@ -365,6 +395,15 @@ class _WorkItemViewState extends State<WorkItemView> {
             //     ),
             //   ),
             // );
+// =======
+//             var response = await Navigator.of(context).push(
+//               MaterialPageRoute(
+//                 builder: (context) => SelectExistingWorkers(
+//
+//                 ),
+//               ),
+//             );
+// >>>>>>> master
 
             if (response == null) {
               return;
@@ -412,7 +451,7 @@ class _WorkItemViewState extends State<WorkItemView> {
 
                 return;
               }
-              var response = await WorkersService.addWorkers(widget.shiftId!,
+              var response = await WorkersService.addWorkers(widget.execShiftId,
                   workerIds, startTime, [], efficiencyCalculation);
 
               await EasyLoading.dismiss();
