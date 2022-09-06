@@ -30,7 +30,6 @@ class EndShiftFinalScreen extends StatefulWidget {
 
   final ShiftItem selectedShift;
 
-  final String comments;
   final bool autoOpen;
 
   const EndShiftFinalScreen(
@@ -40,7 +39,6 @@ class EndShiftFinalScreen extends StatefulWidget {
       required this.startTime,
       required this.endTime,
       required this.selectedShift,
-      required this.comments,
       required this.process,
       this.autoOpen = false,
       required this.executeShiftId})
@@ -362,7 +360,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                 });
 
                             if (answer != null) {
-                              if (!answer) {
+                              if (answer == false) {
                                 return;
                               }
                             }
@@ -375,8 +373,8 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                 widget.executeShiftId,
                                 widget.processId,
                                 textController.text,
-                                widget.comments,
-                                widget.endTime);
+                                 answer,
+                                );
 
                             await EasyLoading.dismiss();
 
@@ -605,15 +603,9 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                         Expanded(
                           child: PElevatedButton(
                             onPressed: () async {
-                              //addTempWorkers
 
                               Navigator.pop(context, widget.shiftItem.endTime);
-                              /* await EasyLoading.show(
-                                status: 'loading...',
-                                maskType: EasyLoadingMaskType.black,
-                              );*/
 
-                              //await EasyLoading.dismiss();
                             },
                             text: 'YES',
                           ),

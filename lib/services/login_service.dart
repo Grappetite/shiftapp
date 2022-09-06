@@ -19,9 +19,6 @@ class LoginService {
 
       print(response.data['data']);
 
-      if(responseObject.data == null) {
-        return null;
-      }
       final prefs = await SharedPreferences.getInstance();
       responseObject.data!.user!.lastName;
 

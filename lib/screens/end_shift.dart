@@ -22,7 +22,6 @@ class EndShiftView extends StatefulWidget {
   final List<String> userId;
   final List<String> efficiencyCalculation;
   final ShiftItem selectedShift;
-  final String comment;
   final Process process;
 
   final bool autoOpen;
@@ -36,7 +35,6 @@ class EndShiftView extends StatefulWidget {
       required this.userId,
       required this.efficiencyCalculation,
       required this.selectedShift,
-      this.comment = '',
       this.startedBefore = false,
       required this.process,
       this.autoOpen = false,
@@ -85,10 +83,7 @@ class _EndShiftViewState extends State<EndShiftView> {
   }
 
   void loadShiftId() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    this.executeShiftId = prefs.getInt('execute_shift_id');
-
+    this.executeShiftId = widget.execShiftId;
     loadUsers();
   }
 
@@ -312,7 +307,7 @@ class _EndShiftViewState extends State<EndShiftView> {
                       ),
                     ),
                   );
-                  
+
                   loadUsers();
 
                 },
@@ -371,7 +366,6 @@ class _EndShiftViewState extends State<EndShiftView> {
                             shiftId: widget.shiftId,
                             processId: widget.processId,
                             endTime: widget.selectedShift.endTime!,
-                            comments: widget.comment,
                             process: widget.process,
                             executeShiftId: executeShiftId!,
                           ),

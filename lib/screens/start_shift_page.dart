@@ -13,6 +13,7 @@ import 'end_shift.dart';
 import '../model/login_model.dart';
 
 class StartShiftView extends StatefulWidget {
+
   final int shiftId;
   final int processId;
   final List<String> userId;
@@ -100,35 +101,41 @@ class _StartShiftViewState extends State<StartShiftView> {
             const SizedBox(
               height: 16,
             ),
-            ExplainerWidget(
-              iconName: 'construct',
-              title: 'Workers',
-              text1:
-                  text1(),
-              text2: '',
-              showWarning: true,
-              showIcon: true,
-              backgroundColor: lightGreenColor,
-              postIcon: Icons.check,
-              postIconColor: Colors.green,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: ExplainerWidget(
+                iconName: 'construct',
+                title: 'Workers',
+                text1:
+                    text1(),
+                text2: '',
+                showWarning: true,
+                showIcon: true,
+                backgroundColor: lightGreenColor,
+                postIcon: Icons.check,
+                postIconColor: Colors.green,
+              ),
             ),
             //
             const SizedBox(
               height: 16,
             ),
-            ExplainerWidget(
-              iconName: 'construct',
-              title: 'PPE',
-              text1: '2/5 Planned PPE per Worker Type',
-              text2: '',
-              showWarning: true,
-              showIcon: true,
-              backgroundColor: lightRedColor,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: ExplainerWidget(
+                iconName: 'construct',
+                title: 'PPE',
+                text1: '2/5 Planned PPE per Worker Type',
+                text2: '',
+                showWarning: true,
+                showIcon: true,
+                backgroundColor: lightRedColor,
+              ),
             ),
 
             SizedBox(height: 8,),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8.0),
               child: TextFormField(
                 decoration: const InputDecoration(
                   hintText: 'Enter Comments',
@@ -186,17 +193,35 @@ class _StartShiftViewState extends State<StartShiftView> {
                       widget.startTime,
                       widget.endTime,
                       widget.userId,
-                      widget.efficiencyCalculation);
+                      widget.efficiencyCalculation,_controller.text);
 
                   await EasyLoading.dismiss();
 
                   if (result != null) {
+
+                    if(result.status == 'error') {
+
+                      showAlertDialog(
+                        context: context,
+                        title: 'Error',
+                        message: result.message,
+                        actions: [
+                          AlertDialogAction(
+                            label: MaterialLocalizations.of(context)
+                                .okButtonLabel,
+                            key: OkCancelResult.ok,
+                          )
+                        ],
+                      );
+
+                      return;
+                    }
+
                     if (result.code! == 200) {
 
                       final prefs = await SharedPreferences.getInstance();
                       prefs.setInt('shiftId', widget.selectedShift.id!);
                       prefs.setInt('processId', widget.processId);
-                      prefs.setString('comment', _controller.text);
 
                       prefs.setString(
                           'selectedShiftName', widget.selectedShift.name!);
@@ -226,7 +251,6 @@ class _StartShiftViewState extends State<StartShiftView> {
                               shiftId: widget.shiftId,
                               processId: widget.processId,
                               selectedShift: widget.selectedShift,
-                              comment: _controller.text,
                               process: widget.process,
                               execShiftId : result.data!.executeShiftId!
                           ),

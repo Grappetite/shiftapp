@@ -35,6 +35,8 @@ class ShiftItem {
   int? displayScreen;
   String? displayScreenMessage;
 
+  int? executedShiftId;
+
   bool shiftStartTimeCustomized = false;
   bool shiftEndTimeCustomized = false;
 

@@ -177,6 +177,11 @@ class _WorkItemViewState extends State<WorkItemView> {
                       initialSelected: currentItem.isSelected,
                       picUrl: currentItem.picture,
                       changedStatus: (bool newStatus) async {
+
+                        setState(() {
+                          currentItem.isSelected = newStatus;
+                        });
+
                         String dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
                             .format(DateTime.now());
 
@@ -227,7 +232,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                               );
 
                               var response = await WorkersService.removeWorkers(
-                                  widget.execShiftId!, [
+                                  widget.execShiftId, [
                                 currentItem.id!.toString()
                               ], [
                                 dateString

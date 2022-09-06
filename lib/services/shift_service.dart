@@ -49,7 +49,6 @@ class ShiftService {
       int shiftId,
       int processId,
       String unitsProduced,
-      String comment,
       String endTime) async {
     try {
 

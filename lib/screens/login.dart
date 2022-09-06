@@ -39,11 +39,16 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
 
     controller.text = 'sidra+supervisor@grappetite.com';
-    //controller.text = 'asfa+sup3@grappetite.com';
+
+    controller.text = 'asfa+s@grappetite.com';
+    controller.text = 'asfa+supervisor@grappetite.com';
+     pwd:
+
 
     //
     passwordController.text = 'sidragrap';
-    //passwordController.text = 'rzbsun';
+    passwordController.text = 'isqvqx';
+    passwordController.text = 'oznytw';
 
 
     loadDefaul();
@@ -54,7 +59,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     int? shiftId = prefs.getInt('shiftId');
 
-    if (shiftId != null) {
+    if (shiftId
+        != null) {
       await EasyLoading.show(
         status: 'loading...',
         maskType: EasyLoadingMaskType.black,
@@ -67,30 +73,41 @@ class _LoginScreenState extends State<LoginScreen> {
       LoginResponse? response =
           await LoginService.login(loginUserName, passString);
 
+
       if (response == null) {
+        await EasyLoading.dismiss();
+
       } else {
+
+        if(response.data!.shiftDetails == null) {
+          await EasyLoading.dismiss();
+
+          prefs.remove('username');
+
+          prefs.remove('password');
+
+          prefs.remove('shiftId');
+          return;
+
+        }
         process = response.data!.process!;
-        int processId = prefs.getInt('processId')!;
 
-        var selectedProcess = process.firstWhere((e) => e.id == processId);
 
-        String shiftName = prefs.getString('selectedShiftName')!;
-        String shiftStartTime = prefs.getString('selectedShiftStartTime')!;
-        String shiftEndTime = prefs.getString('selectedShiftEndTime')!;
+
 
         var shiftObject = ShiftItem(
-          id: shiftId,
-          name: shiftName,
-          startTime: shiftStartTime,
-          endTime: shiftEndTime,
+          id: response.data!.shiftDetails!.shiftId!,
+          name: response.data!.shiftDetails!.shiftName!,
+          startTime: response.data!.shiftDetails!.executeShiftStartTime,
+          endTime: response.data!.shiftDetails!.executeShiftEndTime,
         );
 
 
-        shiftObject.displayScreen = 1;
+        shiftObject.executedShiftId = response.data!.shiftDetails!.executeShiftId;
+
+        shiftObject.displayScreen = 2;
 
         await EasyLoading.dismiss();
-
-
 
 
         Navigator.pushReplacement(
@@ -98,9 +115,8 @@ class _LoginScreenState extends State<LoginScreen> {
           MaterialPageRoute(
             builder: (BuildContext context) => HomeView(
               selectedShift: shiftObject,
-              processSelected: selectedProcess,
+              processSelected: response.data!.shiftDetails!.process!,
               sessionStarted: true,
-              comment: prefs.getString('comment'),
             ),
           ),
         );
@@ -110,17 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     }
 
-    /*
 
-
-    prefs.setString('selectedShiftStartTime',
-        widget.selectedShift.startTime!);
-
-    prefs.setString('selectedShiftEndTime',
-        widget.selectedShift.endTime!);
-
-    prefs.setInt('selectedDisplayScreen',
-        widget.selectedShift.displayScreen!);*/
   }
 
   @override
@@ -274,6 +280,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     LoginResponse? response = await LoginService.login(
                         controller.text, passwordController.text);
 
+
                     if (response == null) {
                       await EasyLoading.dismiss();
                       EasyLoading.showError('Could not login successfully');
@@ -284,6 +291,15 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       prefs.setString('username', controller.text);
                       prefs.setString('password', passwordController.text);
+
+                      if(response.data!.shiftDetails != null) {
+                        prefs.setInt('shiftId', response.data!.shiftDetails!.shiftId!);
+                        loadDefaul();
+
+                        //prefs.reload();
+
+                        return;
+                      }
 
                       process = response.data!.process!;
 

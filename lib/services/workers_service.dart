@@ -6,19 +6,19 @@ import '../model/worker_type_model.dart';
 import '../model/workers_model.dart';
 
 class WorkersService {
-  static Future<WorkersListing?> getShiftWorkers(int? shiftId,int processId) async {
+  static Future<WorkersListing?> getShiftWorkers(
+      int? shiftId, int processId) async {
     try {
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
 
       String url = baseUrl + "newWorkerList/" + processId.toString();
-      if (shiftId!= null) {
+      if (shiftId != null) {
         url = baseUrl + 'manageWorkerLisiting/' + shiftId.toString();
       }
 
       var token = prefs.getString(tokenKey);
       print('');
-
 
       Response response = await dio.get(url,
           options: Options(
@@ -31,12 +31,11 @@ class WorkersService {
 
       var responseObject = WorkersListing.fromJson(response.data);
 
-
       if (responseObject.data == null) {
         return null;
       }
 
-      if(responseObject.data!.shiftWorker == null){
+      if (responseObject.data!.shiftWorker == null) {
         responseObject.data!.shiftWorker = [];
       }
 
@@ -63,7 +62,8 @@ class WorkersService {
       );
       print(response.data);
 
-      var responseObject = WorkersListing.fromJson(response.data,isSearch: true);
+      var responseObject =
+          WorkersListing.fromJson(response.data, isSearch: true);
       if (responseObject.searchWorker == null) {
         return null;
       }
@@ -100,12 +100,11 @@ class WorkersService {
 
       print(response.data);
 
-      if(response.data['code'] == 200){
+      if (response.data['code'] == 200) {
         return true;
       }
 
       return false;
-
     } catch (e) {
       return false;
     }
@@ -140,28 +139,24 @@ class WorkersService {
 
       print(response.data);
 
-      if(response.data['code'] == 200){
+      if (response.data['code'] == 200) {
         return true;
       }
 
       return false;
-
     } catch (e) {
       return false;
     }
   }
 
-
-
-
-
   static Future<AddWorkersResponse?> addShiftWorker(
       int shiftId,
-      int processId ,
+      int processId,
       String startTime,
       String endTime,
       List<String> workerUserId,
-      List<String> efficiencyCalculation) async {
+      List<String> efficiencyCalculation,
+      String comment) async {
     try {
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
@@ -172,9 +167,11 @@ class WorkersService {
           'shift_id': shiftId.toString(),
           'process_id': processId.toString(),
           'start_time': startTime,
-          'end_time' : endTime,
-          'worker_user_id' : workerUserId,
-          'efficiency_calculation': efficiencyCalculation
+          'end_time': endTime,
+          'worker_user_id': workerUserId,
+          'efficiency_calculation': efficiencyCalculation ,
+          'comment' : comment,
+
         },
         options: Options(
           headers: {
@@ -183,8 +180,6 @@ class WorkersService {
         ),
       );
 
-      print(response.data);
-
       var responseObject = AddWorkersResponse.fromJson(response.data);
 
       if (responseObject.code != 200) {
@@ -192,16 +187,23 @@ class WorkersService {
       }
 
       return responseObject;
+    } on DioError catch (e) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx and is also not 304.
+      if (e.response != null) {
+        if (e.response!.data != null) {
+          return AddWorkersResponse.fromJson(e.response!.data!, error: true);
+        }
+      } else {
+        return null;
+      }
     } catch (e) {
       return null;
     }
   }
 
-
-
-
-
-  static Future<WorkerTypeResponse?> getWorkTypes(String shiftId,String processId) async {
+  static Future<WorkerTypeResponse?> getWorkTypes(
+      String shiftId, String processId) async {
     try {
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
@@ -227,7 +229,12 @@ class WorkersService {
   }
 
   static Future<AddTempResponse?> addTempWorkers(
-      String firstName, String lastName, String key, String workerType,String shiftId , String startTime) async {
+      String firstName,
+      String lastName,
+      String key,
+      String workerType,
+      String shiftId,
+      String startTime) async {
     try {
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
@@ -240,8 +247,8 @@ class WorkersService {
           'last_name': lastName,
           'key': key,
           'worker_type': workerType,
-          'execute_shift_id' : shiftId ,
-          'start_time' : startTime
+          'execute_shift_id': shiftId,
+          'start_time': startTime
         },
         options: Options(
           headers: {

@@ -4,6 +4,7 @@ class LoginResponse {
   Data? data;
   String? message;
 
+
   //this.status
   LoginResponse({ this.token, this.data, this.message});
 
@@ -12,6 +13,12 @@ class LoginResponse {
     token = json['token'];
     data = json['data'] != null ? Data.fromJson(json['data']) : null;
     message = json['message'];
+
+
+
+    print('');
+
+    /**/
   }
 
   Map<String, dynamic> toJson() {
@@ -31,6 +38,7 @@ class LoginResponse {
 class Data {
   User? user;
   List<Process>? process;
+  ShiftStartDetails? shiftDetails;
 
   Data({this.user, this.process});
 
@@ -42,6 +50,11 @@ class Data {
         process!.add(Process.fromJson(v));
       });
     }
+
+    if(json.keys.contains('shiftStartDetails')) {
+      shiftDetails = json['shiftStartDetails'] != null ? ShiftStartDetails.fromJson(json['shiftStartDetails']) : null;
+    }
+
   }
 
   Map<String, dynamic> toJson() {
@@ -65,10 +78,9 @@ class User {
   User({this.id, this.name, this.lastName, this.key});
 
   User.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = json ['id'];
     name = json['name'];
     lastName = json['last_name'];
-    //key = json['key'];
     key = "";
 
   }
@@ -93,7 +105,13 @@ class Process {
   Process({this.id, this.name});
 
   Process.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+
+    if(json.keys.contains('process_id')) {
+      id = json['process_id'];
+    } else {
+      id = json['id'];
+    }
+
     name = json['processName'];
     unit = json['unit'];
     baseline = json['baseline'];
@@ -105,6 +123,61 @@ class Process {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
+    return data;
+  }
+}
+
+class ShiftStartDetails {
+  int? executeShiftId;
+  String? executeShiftStatus;
+  String? executeShiftStartTime;
+  String? executeShiftEndTime;
+  int? processId;
+  int? shiftId;
+  String? shiftName;
+  String? shiftStartTime;
+  String? shiftEndTime;
+
+  Process? process;
+
+  ShiftStartDetails(
+      {this.executeShiftId,
+        this.executeShiftStatus,
+        this.executeShiftStartTime,
+        this.executeShiftEndTime,
+        this.processId,
+        this.shiftId,
+        this.shiftName,
+        this.shiftStartTime,
+        this.shiftEndTime});
+
+  ShiftStartDetails.fromJson(Map<String, dynamic> json) {
+    executeShiftId = json['execute_shift_id'];
+    executeShiftStatus = json['execute_shift_status'];
+    executeShiftStartTime = json['execute_shift_start_time'];
+    executeShiftEndTime = json['execute_shift_end_time'];
+    processId = json['process_id'];
+    shiftId = json['shift_id'];
+    shiftName = json['shift_name'];
+    shiftStartTime = json['shift_start_time'];
+    shiftEndTime = json['shift_end_time'];
+    process = Process.fromJson(json);
+    print('object');
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['execute_shift_id'] = this.executeShiftId;
+    data['execute_shift_status'] = this.executeShiftStatus;
+    data['execute_shift_start_time'] = this.executeShiftStartTime;
+    data['execute_shift_end_time'] = this.executeShiftEndTime;
+    data['process_id'] = this.processId;
+    data['shift_id'] = this.shiftId;
+    data['shift_name'] = this.shiftName;
+    data['shift_start_time'] = this.shiftStartTime;
+    data['shift_end_time'] = this.shiftEndTime;
+
+
     return data;
   }
 }

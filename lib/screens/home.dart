@@ -15,7 +15,6 @@ import 'login.dart';
 class HomeView extends StatefulWidget {
   final Process processSelected;
 
-  final String? comment;
 
   final ShiftItem selectedShift;
 
@@ -25,8 +24,7 @@ class HomeView extends StatefulWidget {
       {Key? key,
       required this.processSelected,
       required this.selectedShift,
-      this.sessionStarted = false,
-      this.comment})
+      this.sessionStarted = false})
       : super(key: key);
 
   @override
@@ -86,7 +84,6 @@ class _HomeViewState extends State<HomeView> {
         selectedShift: widget.selectedShift,
         processSelected: widget.processSelected,
         sessionStarted: widget.sessionStarted,
-        comment: widget.comment,
         onLogout: () async {
           var dyanc = await Navigator.push(
             context,
@@ -158,12 +155,11 @@ class _HomeMainViewState extends State<HomeMainView> {
       maskType: EasyLoadingMaskType.black,
     );
 
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(milliseconds: 10));
     await EasyLoading.dismiss();
 
-    final prefs = await SharedPreferences.getInstance();
 
-    var executeShiftId = prefs.getInt('execute_shift_id');
+    var executeShiftId = this.widget.selectedShift.executedShiftId;
 
 
     var response = await Navigator.pushReplacement(
@@ -176,7 +172,6 @@ class _HomeMainViewState extends State<HomeMainView> {
           shiftId: widget.selectedShift.id!,
           processId: widget.processSelected.id!,
           selectedShift: widget.selectedShift,
-          comment: widget.comment!,
           startedBefore: true,
           process: widget.processSelected, execShiftId: executeShiftId!,
         ),
