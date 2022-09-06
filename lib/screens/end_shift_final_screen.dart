@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io' show Platform;
 
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,19 +11,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
 import '../config/constants.dart';
-import 'dart:io' show Platform;
-
-import '../model/shifts_model.dart';
 import '../model/login_model.dart';
+import '../model/shifts_model.dart';
 import '../services/shift_service.dart';
-import '../services/workers_service.dart';
 import '../widgets/elevated_button.dart';
 import '../widgets/input_view.dart';
 import 'inner_widgets/alert_title_label.dart';
-import 'login.dart';
-import 'package:adaptive_dialog/adaptive_dialog.dart';
-
-
 
 class EndShiftFinalScreen extends StatefulWidget {
   final int shiftId;
@@ -47,7 +42,8 @@ class EndShiftFinalScreen extends StatefulWidget {
       required this.selectedShift,
       required this.comments,
       required this.process,
-      this.autoOpen = false, required this.executeShiftId})
+      this.autoOpen = false,
+      required this.executeShiftId})
       : super(key: key);
 
   @override
@@ -339,19 +335,18 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                       PElevatedButton(
                         onPressed: () async {
                           if (textController.text.isEmpty) {
-
                             final result = await showAlertDialog(
                               context: context,
                               title: 'Error',
                               message: 'Please write down the units products',
                               actions: [
                                 AlertDialogAction(
-                                  label: MaterialLocalizations.of(context).okButtonLabel,
+                                  label: MaterialLocalizations.of(context)
+                                      .okButtonLabel,
                                   key: OkCancelResult.ok,
                                 )
                               ],
                             );
-
 
                             print('');
 
@@ -366,11 +361,9 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                   );
                                 });
 
-
-                            if(answer != null) {
-                              if(!answer) {
+                            if (answer != null) {
+                              if (!answer) {
                                 return;
-
                               }
                             }
                             await EasyLoading.show(
@@ -408,7 +401,6 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                 Navigator.pop(context);
                                 Navigator.pop(context, true);
                               } else {
-
                                 Navigator.pop(context);
                                 Navigator.pop(context, true);
                                 Navigator.pop(context, true);
@@ -474,6 +466,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
     super.initState();
   }
 
+  TimeOfDay? newTime;
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -537,8 +530,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                     ),
                     GestureDetector(
                       onTap: () async {
-
-                        final TimeOfDay? newTime = await showTimePicker(
+                        TimeOfDay? newTime = await showTimePicker(
                           context: context,
                           initialTime: TimeOfDay(
                               hour: DateTime.now().hour,
@@ -546,17 +538,14 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                           initialEntryMode: TimePickerEntryMode.dial,
                         );
 
-                        if(newTime != null) {
+                        if (newTime != null) {
                           var customSelectedStartTime = widget.shiftItem
                               .makeTimeStringFromHourMinute(
-                              newTime.hour, newTime.minute);
+                                  newTime.hour, newTime.minute);
 
                           setState(() {
-                            widget.shiftItem.endTime =
-                                customSelectedStartTime;
+                            widget.shiftItem.endTime = customSelectedStartTime;
                           });
-
-
                         }
                       },
                       child: InputView(
@@ -603,11 +592,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                         Expanded(
                           child: PElevatedButton(
                             onPressed: () async {
-
                               Navigator.pop(context, false);
-
-
-
                             },
                             text: 'NO',
                             backGroundColor: Colors.white,
@@ -622,7 +607,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                             onPressed: () async {
                               //addTempWorkers
 
-                              Navigator.pop(context);
+                              Navigator.pop(context, widget.shiftItem.endTime);
                               /* await EasyLoading.show(
                                 status: 'loading...',
                                 maskType: EasyLoadingMaskType.black,

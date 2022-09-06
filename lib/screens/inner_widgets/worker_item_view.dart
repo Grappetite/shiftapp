@@ -3,14 +3,15 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 import 'package:shiftapp/config/constants.dart';
 
+import '../../model/login_model.dart';
 import '../../model/shifts_model.dart';
 import '../../model/workers_model.dart';
 import '../../services/workers_service.dart';
 import '../../widgets/elevated_button.dart';
+import '../end_shift_final_screen.dart';
 import '../select_exister_workers.dart';
 import '../start_shift_page.dart';
 import 'index_indicator.dart';
-import '../../model/login_model.dart';
 
 class WorkItemView extends StatefulWidget {
   final bool isEditing;
@@ -42,7 +43,8 @@ class WorkItemView extends StatefulWidget {
       required this.selectedShift,
       this.isEditing = false,
       required this.process,
-      required this.reloadData, required this.execShiftId})
+      required this.reloadData,
+      required this.execShiftId})
       : super(key: key);
 
   @override
@@ -175,14 +177,14 @@ class _WorkItemViewState extends State<WorkItemView> {
                       initialSelected: currentItem.isSelected,
                       picUrl: currentItem.picture,
                       changedStatus: (bool newStatus) async {
-                        setState(() {
-                          currentItem.isSelected = newStatus;
-                        });
-
                         String dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
                             .format(DateTime.now());
 
                         if (widget.isEditing && newStatus) {
+                          setState(() {
+                            currentItem.isSelected = newStatus;
+                          });
+
                           await EasyLoading.show(
                             status: 'Adding...',
                             maskType: EasyLoadingMaskType.black,
@@ -202,23 +204,44 @@ class _WorkItemViewState extends State<WorkItemView> {
                             EasyLoading.showError('Error');
                           }
                         } else if (widget.isEditing && !newStatus) {
-                          await EasyLoading.show(
-                            status: 'Removing...',
-                            maskType: EasyLoadingMaskType.black,
-                          );
+                          /// Mahboob Work
+                          await showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return ConfirmTimeEnd(
+                                  shiftItem: this.widget.selectedShift,
+                                );
+                              }).then((value) async {
+                            if (value != false) {
+                              dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
+                                  .format(DateTime.parse(value));
+                              setState(() {
+                                currentItem.isSelected = newStatus;
+                              });
 
-                          var response = await WorkersService.removeWorkers(
-                              widget.execShiftId!,
-                              [currentItem.id!.toString()],
-                              [dateString],
-                              [],
-                              [currentItem.efficiencyCalculation.toString()]);
-                          await EasyLoading.dismiss();
+                              /// end
+                              await EasyLoading.show(
+                                status: 'Removing...',
+                                maskType: EasyLoadingMaskType.black,
+                              );
 
-                          if (response) {
-                          } else {
-                            EasyLoading.showError('Error');
-                          }
+                              var response = await WorkersService.removeWorkers(
+                                  widget.execShiftId!, [
+                                currentItem.id!.toString()
+                              ], [
+                                dateString
+                              ], [], [
+                                currentItem.efficiencyCalculation.toString()
+                              ]);
+                              await EasyLoading.dismiss();
+
+                              if (response) {
+                              } else {
+                                EasyLoading.showError('Error');
+                              }
+                            }
+                          });
                         }
                       },
                     ),
@@ -336,28 +359,25 @@ class _WorkItemViewState extends State<WorkItemView> {
                   otherTypeTempWorkerAdded: (worker) {
                     bool listExists = false;
 
-                    for(var currentList in widget.listLists){
-                      if(currentList.first.workerTypeId == worker.workerTypeId) {
+                    for (var currentList in widget.listLists) {
+                      if (currentList.first.workerTypeId ==
+                          worker.workerTypeId) {
                         setState(() {
                           currentList.add(worker);
                         });
 
                         listExists = true;
-
                       }
                     }
 
-                    if(!listExists) {
+                    if (!listExists) {
                       setState(() {
                         widget.listNames.add(worker.workerType!);
 
                         widget.listLists.add([worker]);
-
                       });
 
-
                       print('');
-
                     }
                   },
                 ),
