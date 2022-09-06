@@ -489,21 +489,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
         ),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 8, top: 4),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Icon(
-                    Icons.close,
-                    color: kPrimaryColor,
-                  ),
-                ),
-              ),
-            ),
+           SizedBox(height: 8,),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
