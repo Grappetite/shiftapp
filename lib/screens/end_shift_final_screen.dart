@@ -20,31 +20,31 @@ import '../widgets/input_view.dart';
 import 'inner_widgets/alert_title_label.dart';
 
 class EndShiftFinalScreen extends StatefulWidget {
-  final int shiftId;
-  final int processId;
-  final Process process;
+  int? shiftId;
+  int? processId;
+  Process? process;
 
-  final int executeShiftId;
+  int? executeShiftId;
 
-  final String startTime;
-  final String endTime;
+  String? startTime;
+  String? endTime;
 
-  final ShiftItem selectedShift;
+  ShiftItem? selectedShift;
 
-  final String comments;
-  final bool autoOpen;
+  String? comments;
+  bool? autoOpen;
 
-  const EndShiftFinalScreen(
+  EndShiftFinalScreen(
       {Key? key,
-      required this.shiftId,
-      required this.processId,
-      required this.startTime,
-      required this.endTime,
-      required this.selectedShift,
-      required this.comments,
-      required this.process,
+      this.shiftId,
+      this.processId,
+      this.startTime,
+      this.endTime,
+      this.selectedShift,
+      this.comments,
+      this.process,
       this.autoOpen = false,
-      required this.executeShiftId})
+      this.executeShiftId})
       : super(key: key);
 
   @override
@@ -68,15 +68,15 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
-        if (widget.selectedShift.timeRemaining.contains('Over')) {
+        if (widget.selectedShift!.timeRemaining.contains('Over')) {
           timeRemaining =
-              widget.selectedShift.timeRemaining.replaceAll('Over ', '');
+              widget.selectedShift!.timeRemaining.replaceAll('Over ', '');
           isTimeOver = true;
         } else {
-          timeRemaining = widget.selectedShift.timeRemaining;
+          timeRemaining = widget.selectedShift!.timeRemaining;
         }
         setState(() {
-          timeElasped = widget.selectedShift.timeElasped;
+          timeElasped = widget.selectedShift!.timeElasped;
         });
 
         print('');
@@ -89,6 +89,15 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
     super.dispose();
     doneButton.dispose();
     setupFocusNode(doneButton);
+    widget.shiftId = Get.arguments["shiftId"];
+    widget.processId = Get.arguments["processId"];
+    widget.process = Get.arguments["process"];
+    widget.executeShiftId = Get.arguments["executeShiftId"];
+    widget.startTime = Get.arguments["startTime"];
+    widget.endTime = Get.arguments["endTime"];
+    widget.selectedShift = Get.arguments["selectedShift"];
+    widget.comments = Get.arguments["comments"];
+    widget.autoOpen = Get.arguments["autoOpen"];
   }
 
   static OverlayEntry? _overlayEntry;
@@ -159,7 +168,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
               height: 4,
             ),
             Text(
-              widget.process.name!,
+              widget.process!.name!,
               style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -174,7 +183,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
       body: Column(
         children: [
           TimerTopWidget(
-              selectedShift: widget.selectedShift, timeElasped: timeElasped),
+              selectedShift: widget.selectedShift!, timeElasped: timeElasped),
           Expanded(
             child: Padding(
               padding:
@@ -312,7 +321,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                   height: 8,
                                 ),
                                 Text(
-                                  '${widget.process.unit} Processed',
+                                  '${widget.process!.unit} Processed',
                                   style: const TextStyle(
                                       color: kPrimaryColor, fontSize: 16),
                                 ),
@@ -370,7 +379,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                 barrierDismissible: false,
                                 builder: (BuildContext context) {
                                   return ConfirmTimeEnd(
-                                    shiftItem: this.widget.selectedShift,
+                                    shiftItem: this.widget.selectedShift!,
                                   );
                                 });
 
@@ -380,11 +389,11 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                             );
 
                             var check = await ShiftService.endShift(
-                                widget.executeShiftId,
-                                widget.processId,
-                                textController.text,
-                                widget.comments,
-                                widget.endTime);
+                                widget.executeShiftId!,
+                                widget.processId!,
+                                textController.text!,
+                                widget.comments!,
+                                widget.endTime!);
 
                             await EasyLoading.dismiss();
 
@@ -405,20 +414,20 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                               Api().sp.remove('username');
                               Api().sp.remove('password');
 
-                              if (widget.autoOpen) {
+                              if (widget.autoOpen!) {
 // <<<<<<< HEAD
 //                                 Get.back();
-//                                 Navigator.pop(context, true);
+//                                 Get.back(result:true);
 //                               } else {
 //                                 Get.back();
 // =======
-                                Navigator.pop(context);
-                                Navigator.pop(context, true);
+                                Get.back();
+                                Get.back(result: true);
                               } else {
-                                Navigator.pop(context);
+                                Get.back();
 // >>>>>>> master
-                                Navigator.pop(context, true);
-                                Navigator.pop(context, true);
+                                Get.back(result: true);
+                                Get.back(result: true);
                               }
                             } else {
                               EasyLoading.showError('Error');
@@ -617,7 +626,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                         Expanded(
                           child: PElevatedButton(
                             onPressed: () async {
-                              Navigator.pop(context, true);
+                              Get.back(result: true);
 
                               //addTempWorkers
 
@@ -641,7 +650,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                             onPressed: () async {
                               //addTempWorkers
 
-                              Navigator.pop(context);
+                              Get.back();
                               /* await EasyLoading.show(
                                 status: 'loading...',
                                 maskType: EasyLoadingMaskType.black,

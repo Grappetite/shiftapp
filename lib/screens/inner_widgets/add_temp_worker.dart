@@ -202,7 +202,8 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                         await EasyLoading.dismiss();
 
                         if (response != null) {
-                          Navigator.pop(context, response);
+                          // Navigator.pop(context, response);
+                          Get.back(result: response);
                         }
                       },
                       text: 'ADD AND ASSIGN',

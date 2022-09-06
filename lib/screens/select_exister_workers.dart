@@ -13,23 +13,23 @@ import 'inner_widgets/add_temp_worker.dart';
 import 'inner_widgets/worker_item_view.dart';
 
 class SelectExistingWorkers extends StatefulWidget {
-  final List<ShiftWorker> workers;
+  List<ShiftWorker>? workers;
 
-  final Function(AddTempResponse) tempWorkerAdded;
+  Function(AddTempResponse)? tempWorkerAdded;
 
-  final int shiftId;
+  int? shiftId;
 
-  final bool isEditing;
+  bool? isEditing;
 
-  final String processId;
+  String? processId;
 
   SelectExistingWorkers(
       {Key? key,
-      required this.workers,
+      this.workers,
       this.isEditing = false,
-      required this.shiftId,
-      required this.tempWorkerAdded,
-      required this.processId})
+      this.shiftId,
+      this.tempWorkerAdded,
+      this.processId})
       : super(key: key);
 
   @override
@@ -74,7 +74,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
     );
 
     var response = await WorkersService.searchWorkers(
-        widget.workers.first.workerTypeId!.toString());
+        widget.workers!.first.workerTypeId!.toString());
 
     setState(() {
       workers = response!.searchWorker!;
@@ -84,7 +84,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
 
     await EasyLoading.dismiss();
 
-    for (var currentItem in widget.workers) {
+    for (var currentItem in widget.workers!) {
 // <<<<<<< HEAD
 //       var find = workers
 //           .where((e) =>
@@ -107,9 +107,14 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
   void initState() {
     super.initState();
 // <<<<<<< HEAD
-//     filteredWorkers = widget.workers;
+//     filteredWorkers = widget.workers!;
 //     callSearchService();
 // =======
+    widget.workers = Get.arguments["workers"];
+    widget.isEditing = Get.arguments["isEditing"];
+    widget.shiftId = Get.arguments["shiftId"];
+    widget.tempWorkerAdded = Get.arguments["tempWorkerAdded"];
+    widget.processId = Get.arguments["processId"];
     orignalState = [];
     callSearchService();
   }
@@ -261,11 +266,11 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                     onPressed: () {
                       for (var currentItem in orignalState) {
                         if (currentItem.isSelected) {
-                          widget.workers.add(currentItem);
+                          widget.workers!.add(currentItem);
                         }
                       }
 
-                      Navigator.pop(context, true);
+                      Get.back(result: true);
                     },
                   ),
                   const SizedBox(
@@ -280,7 +285,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                             currentItem.lastName!,
                         keyNo: currentItem.key ?? '',
                         initialSelected: currentItem.isSelected,
-                        disableRatio: widget.isEditing
+                        disableRatio: widget.isEditing!
                             ? (currentItem.isSelected && !currentItem.newAdded)
                             : false,
                         changedStatus: (bool newStatus) {
@@ -302,7 +307,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                             }
                           });
 
-                          if (widget.isEditing) {
+                          if (widget.isEditing!) {
                             if (newStatus) {
                               if (currentItem.newRemove) {
                               } else {
@@ -330,7 +335,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                             currentItem.lastName!,
                         keyNo: currentItem.key ?? '',
                         initialSelected: currentItem.isSelected,
-                        disableRatio: widget.isEditing
+                        disableRatio: widget.isEditing!
                             ? (currentItem.isSelected && !currentItem.newAdded)
                             : false,
                         changedStatus: (bool newStatus) {
@@ -349,7 +354,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                             });
                           }
 
-                          if (widget.isEditing) {
+                          if (widget.isEditing!) {
                             if (newStatus) {
                               if (currentItem.newRemove) {
                               } else {
@@ -398,7 +403,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                           builder: (BuildContext context) {
                             return AddTempWorker(
                               shiftId: this.widget.shiftId.toString(),
-                              processId: this.widget.processId,
+                              processId: this.widget.processId!,
                             );
                           });
                       if (selected != null) {
@@ -408,13 +413,13 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                         );
 
                         var res = await WorkersService.addWorkers(
-                            widget.shiftId,
+                            widget.shiftId!,
                             [selected.data!.id.toString()],
                             [dateString],
                             [],
                             [selected.data!.efficiencyCalculation.toString()]);
 
-                        this.widget.tempWorkerAdded(selected);
+                        this.widget.tempWorkerAdded!(selected);
 
                         print('');
                       }

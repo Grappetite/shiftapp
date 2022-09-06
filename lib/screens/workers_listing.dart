@@ -2,27 +2,28 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
+import '../model/login_model.dart';
 import '../model/shifts_model.dart';
 import '../model/workers_model.dart';
 import '../services/workers_service.dart';
 import 'inner_widgets/worker_item_view.dart';
-import '../model/login_model.dart';
 
 class WorkersListing extends StatefulWidget {
-  final int? shiftId;
-  final ShiftItem selectedShift;
+  int? shiftId;
+  ShiftItem? selectedShift;
 
-  final int processId;
-  final Process process;
+  int? processId;
+  Process? process;
 
-  const WorkersListing(
+  WorkersListing(
       {Key? key,
-      required this.shiftId,
-      required this.processId,
-      required this.selectedShift,
-      required this.process})
+      this.shiftId,
+      this.processId,
+      this.selectedShift,
+      this.process})
       : super(key: key);
 
   @override
@@ -40,7 +41,7 @@ class _WorkersListingState extends State<WorkersListing> {
       oneSec,
       (Timer timer) {
         setState(() {
-          timeElasped = widget.selectedShift.timeElasped;
+          timeElasped = widget.selectedShift!.timeElasped;
         });
 
         print('');
@@ -62,11 +63,12 @@ class _WorkersListingState extends State<WorkersListing> {
       status: 'loading...',
       maskType: EasyLoadingMaskType.black,
     );
-    var responseShift = await WorkersService.getShiftWorkers(widget.shiftId,widget.processId);
+    var responseShift =
+        await WorkersService.getShiftWorkers(widget.shiftId, widget.processId!);
 
     if (responseShift!.data!.worker!.isEmpty) {
-      responseShift =
-          await WorkersService.getShiftWorkers(widget.selectedShift.id,widget.processId);
+      responseShift = await WorkersService.getShiftWorkers(
+          widget.selectedShift!.id, widget.processId!);
     }
     List<ShiftWorker> shiftWorkers = [];
 
@@ -82,12 +84,11 @@ class _WorkersListingState extends State<WorkersListing> {
 
     var seen = <String>{};
 
-    if(shiftWorkers.isNotEmpty) {
+    if (shiftWorkers.isNotEmpty) {
       shiftWorkers.where((student) => seen.add(student.workerType!)).toList();
 
       listNames = seen.toList();
-    }
-    else {
+    } else {
       listNames = [];
     }
 
@@ -112,7 +113,10 @@ class _WorkersListingState extends State<WorkersListing> {
   void initState() {
     super.initState();
     //startTimer();
-
+    widget.shiftId = Get.arguments["shiftId"];
+    widget.processId = Get.arguments["processId"];
+    widget.selectedShift = Get.arguments["selectedShift"];
+    widget.process = Get.arguments["process"];
     loadData();
   }
 
@@ -133,7 +137,7 @@ class _WorkersListingState extends State<WorkersListing> {
                   height: 4,
                 ),
                 Text(
-                  widget.process.name!,
+                  widget.process!.name!,
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -153,7 +157,7 @@ class _WorkersListingState extends State<WorkersListing> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TimerTopWidget(
-              selectedShift: widget.selectedShift,
+              selectedShift: widget.selectedShift!,
               timeElasped: timeElasped,
             ),
             const SizedBox(
@@ -166,9 +170,9 @@ class _WorkersListingState extends State<WorkersListing> {
                 listNames: listNames,
                 listLists: listLists,
                 shiftId: widget.shiftId,
-                processId: widget.processId,
-                selectedShift: widget.selectedShift,
-                process: this.widget.process,
+                processId: widget.processId!,
+                selectedShift: widget.selectedShift!,
+                process: this.widget.process!,
                 reloadData: () {
                   loadData();
                 },

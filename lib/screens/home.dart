@@ -9,9 +9,8 @@ import 'package:shiftapp/model/shifts_model.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
 import '../Network/API.dart';
+import '../Routes/app_pages.dart';
 import '../config/constants.dart';
-import 'end_shift.dart';
-import 'login.dart';
 
 class HomeView extends StatefulWidget {
   Process? processSelected;
@@ -93,10 +92,11 @@ class _HomeViewState extends State<HomeView> {
         sessionStarted: widget.sessionStarted ?? false,
         comment: widget.comment,
         onLogout: () async {
-          var dyanc = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const LoginScreen()),
-          );
+          var dyanc = await Get.toNamed(Routes.login);
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => const LoginScreen()),
+          // );
 
           if (dyanc != null) {
             if (dyanc == true) {}
@@ -165,23 +165,35 @@ class _HomeMainViewState extends State<HomeMainView> {
 
     var executeShiftId = Api().sp.read('execute_shift_id');
 
-    var response = await Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => EndShiftView(
-          autoOpen: true,
-          userId: const [],
-          efficiencyCalculation: const [],
-          shiftId: widget.selectedShift.id!,
-          processId: widget.processSelected.id!,
-          selectedShift: widget.selectedShift,
-          comment: widget.comment!,
-          startedBefore: true,
-          process: widget.processSelected,
-          execShiftId: executeShiftId!,
-        ),
-      ),
-    );
+    var response = await Get.offNamed(Routes.endShift, arguments: {
+      "autoOpen": true,
+      "userId": const [],
+      "efficiencyCalculation": const [],
+      "shiftId": widget.selectedShift.id!,
+      "processId": widget.processSelected.id!,
+      "selectedShift": widget.selectedShift,
+      "comment": widget.comment!,
+      "startedBefore": true,
+      "process": widget.processSelected,
+      "execShiftId": executeShiftId!,
+    });
+    // Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (BuildContext context) => EndShiftView(
+    //       autoOpen: true,
+    //       userId: const [],
+    //       efficiencyCalculation: const [],
+    //       shiftId: widget.selectedShift.id!,
+    //       processId: widget.processSelected.id!,
+    //       selectedShift: widget.selectedShift,
+    //       comment: widget.comment!,
+    //       startedBefore: true,
+    //       process: widget.processSelected,
+    //       execShiftId: executeShiftId!,
+    //     ),
+    //   ),
+    // );
 
     if (response != null) {
       if (response == true) {

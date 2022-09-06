@@ -2,37 +2,39 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
 import '../Network/API.dart';
+import '../Routes/app_pages.dart';
 import '../model/login_model.dart';
 import '../model/shifts_model.dart';
 import '../services/workers_service.dart';
 import 'end_shift.dart';
 
 class StartShiftView extends StatefulWidget {
-  final int shiftId;
-  final int processId;
-  final List<String> userId;
-  final int totalUsersCount;
-  final String startTime;
-  final String endTime;
-  final List<String> efficiencyCalculation;
-  final ShiftItem selectedShift;
-  final Process process;
+  int? shiftId;
+  int? processId;
+  List<String>? userId;
+  int? totalUsersCount;
+  String? startTime;
+  String? endTime;
+  List<String>? efficiencyCalculation;
+  ShiftItem? selectedShift;
+  Process? process;
 
-  const StartShiftView(
+  StartShiftView(
       {Key? key,
-      required this.shiftId,
-      required this.processId,
-      required this.userId,
-      required this.totalUsersCount,
-      required this.startTime,
-      required this.endTime,
-      required this.efficiencyCalculation,
-      required this.selectedShift,
-      required this.process})
+      this.shiftId,
+      this.processId,
+      this.userId,
+      this.totalUsersCount,
+      this.startTime,
+      this.endTime,
+      this.efficiencyCalculation,
+      this.selectedShift,
+      this.process})
       : super(key: key);
 
   @override
@@ -52,7 +54,7 @@ class _StartShiftViewState extends State<StartShiftView> {
       oneSec,
       (Timer timer) {
         setState(() {
-          timeElasped = widget.selectedShift.timeElasped;
+          timeElasped = widget.selectedShift!.timeElasped;
         });
 
         print('');
@@ -63,6 +65,15 @@ class _StartShiftViewState extends State<StartShiftView> {
   @override
   void initState() {
     super.initState();
+    widget.shiftId = Get.arguments["shiftId"];
+    widget.endTime = Get.arguments["endTime"];
+    widget.processId = Get.arguments["processId"];
+    widget.startTime = Get.arguments["startTime"];
+    widget.efficiencyCalculation = Get.arguments["efficiencyCalculation"];
+    widget.userId = Get.arguments["userId"];
+    widget.totalUsersCount = Get.arguments["totalUsersCount"];
+    widget.selectedShift = Get.arguments["selectedShift"];
+    widget.process = Get.arguments["process"];
     //startTimer();
   }
 
@@ -83,7 +94,7 @@ class _StartShiftViewState extends State<StartShiftView> {
               height: 4,
             ),
             Text(
-              widget.process.name!,
+              widget.process!.name!,
               style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -99,7 +110,7 @@ class _StartShiftViewState extends State<StartShiftView> {
         child: Column(
           children: [
             TimerTopWidget(
-                selectedShift: widget.selectedShift, timeElasped: timeElasped),
+                selectedShift: widget.selectedShift!, timeElasped: timeElasped),
             const SizedBox(
               height: 16,
             ),
@@ -166,60 +177,69 @@ class _StartShiftViewState extends State<StartShiftView> {
                   );
 
                   var result = await WorkersService.addShiftWorker(
-                      widget.shiftId,
-                      widget.processId,
-                      widget.startTime,
-                      widget.endTime,
-                      widget.userId,
-                      widget.efficiencyCalculation);
+                      widget.shiftId!,
+                      widget.processId!,
+                      widget.startTime!,
+                      widget.endTime!,
+                      widget.userId!,
+                      widget.efficiencyCalculation!);
 
                   await EasyLoading.dismiss();
 
                   if (result != null) {
                     if (result.code! == 200) {
                       // final prefs = await SharedPreferences.getInstance();
-                      Api().sp.write('shiftId', widget.selectedShift.id!);
+                      Api().sp.write('shiftId', widget.selectedShift!.id!);
                       Api().sp.write('processId', widget.processId);
                       Api().sp.write('comment', _controller.text);
 
                       Api().sp.write(
-                          'selectedShiftName', widget.selectedShift.name!);
+                          'selectedShiftName', widget.selectedShift!.name!);
 
                       Api().sp.write('selectedShiftStartTime',
-                          widget.selectedShift.startTime!);
+                          widget.selectedShift!.startTime!);
 
                       Api().sp.write('selectedShiftEndTime',
-                          widget.selectedShift.endTime!);
+                          widget.selectedShift!.endTime!);
 
                       Api().sp.write('selectedDisplayScreen',
-                          widget.selectedShift.displayScreen!);
+                          widget.selectedShift!.displayScreen!);
 
                       Api().sp.write(
                           'execute_shift_id', result.data!.executeShiftId!);
-
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => EndShiftView(
-                              userId: widget.userId,
-                              efficiencyCalculation:
-                                  widget.efficiencyCalculation,
-                              shiftId: widget.shiftId,
-                              processId: widget.processId,
-                              selectedShift: widget.selectedShift,
-                              comment: _controller.text,
-                              process: widget.process,
-                              execShiftId: result.data!.executeShiftId!),
-                        ),
-                      );
+                      Get.offNamed(Routes.endShift, arguments: {
+                        "userId": widget.userId!,
+                        "efficiencyCalculation": widget.efficiencyCalculation,
+                        "shiftId": widget.shiftId,
+                        "processId": widget.processId,
+                        "selectedShift": widget.selectedShift!,
+                        "comment": _controller.text,
+                        "process": widget.process!,
+                        "execShiftId": result.data!.executeShiftId!
+                      });
+                      // Navigator.pushReplacement(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (BuildContext context) => EndShiftView(
+                      //         userId: widget.userId!,
+                      //         efficiencyCalculation:
+                      //             widget.efficiencyCalculation,
+                      //         shiftId: widget.shiftId,
+                      //         processId: widget.processId,
+                      //         selectedShift: widget.selectedShift!,
+                      //         comment: _controller.text,
+                      //         process: widget.process!,
+                      //         execShiftId: result.data!.executeShiftId!),
+                      //   ),
+                      // );
 // <<<<<<< HEAD
 //
 //                       var result = await WorkersService.addShiftWorker(
 //                           widget.shiftId,
-//                           widget.processId,
+//                           widget.process!Id,
 //                           widget.startTime,
 //                           widget.endTime,
-//                           widget.userId,
+//                           widget.userId!,
 //                           widget.efficiencyCalculation);
 //
 //                       await EasyLoading.dismiss();
@@ -228,7 +248,7 @@ class _StartShiftViewState extends State<StartShiftView> {
 //                         if (result.code! == 200) {
 //                           //final prefs = await SharedPreferences.getInstance();
 //                           Api().sp.write('shiftId', widget.selectedShift.id!);
-//                           Api().sp.write('processId', widget.processId);
+//                           Api().sp.write('processId', widget.process!Id);
 //                           Api().sp.write('comment', _controller.text);
 //
 //                           Api().sp.write(
@@ -247,14 +267,14 @@ class _StartShiftViewState extends State<StartShiftView> {
 //                             context,
 //                             MaterialPageRoute(
 //                               builder: (BuildContext context) => EndShiftView(
-//                                 userId: widget.userId,
+//                                 userId: widget.userId!,
 //                                 efficiencyCalculation:
 //                                     widget.efficiencyCalculation,
 //                                 shiftId: widget.shiftId,
-//                                 processId: widget.processId,
+//                                 processId: widget.process!Id,
 //                                 selectedShift: widget.selectedShift,
 //                                 comment: _controller.text,
-//                                 process: widget.process,
+//                                 process: widget.process!,
 //                               ),
 //                             ),
 //                           );
@@ -291,9 +311,9 @@ class _StartShiftViewState extends State<StartShiftView> {
   }
 
   String text1() {
-    if (widget.process.headCount == null) {
-      return '${widget.userId.length}/${widget.totalUsersCount} Workers';
+    if (widget.process!.headCount == null) {
+      return '${widget.userId!.length}/${widget.totalUsersCount} Workers';
     }
-    return '${widget.userId.length}/${widget.process.headCount} Workers';
+    return '${widget.userId!.length}/${widget.process!.headCount} Workers';
   }
 }

@@ -4,13 +4,12 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shiftapp/config/constants.dart';
 
+import '../../Routes/app_pages.dart';
 import '../../model/login_model.dart';
 import '../../model/shifts_model.dart';
 import '../../model/workers_model.dart';
 import '../../services/workers_service.dart';
 import '../../widgets/elevated_button.dart';
-import '../select_exister_workers.dart';
-import '../start_shift_page.dart';
 import 'index_indicator.dart';
 
 class WorkItemView extends StatefulWidget {
@@ -263,22 +262,32 @@ class _WorkItemViewState extends State<WorkItemView> {
                     if (workerIds.isEmpty) {
                       return;
                     }
-
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => StartShiftView(
-                          shiftId: widget.selectedShift.id!,
-                          endTime: widget.selectedShift.endTime!,
-                          processId: widget.processId,
-                          startTime: widget.selectedShift.startTime!,
-                          efficiencyCalculation: efficiencyCalculation,
-                          userId: workerIds,
-                          totalUsersCount: totalCountTemp,
-                          selectedShift: widget.selectedShift,
-                          process: this.widget.process,
-                        ),
-                      ),
-                    );
+                    Get.toNamed(Routes.startShift, arguments: {
+                      "shiftId": widget.selectedShift.id!,
+                      "endTime": widget.selectedShift.endTime!,
+                      "processId": widget.processId,
+                      "startTime": widget.selectedShift.startTime!,
+                      "efficiencyCalculation": efficiencyCalculation,
+                      "userId": workerIds,
+                      "totalUsersCount": totalCountTemp,
+                      "selectedShift": widget.selectedShift,
+                      "process": this.widget.process,
+                    });
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => StartShiftView(
+                    //       shiftId: widget.selectedShift.id!,
+                    //       endTime: widget.selectedShift.endTime!,
+                    //       processId: widget.processId,
+                    //       startTime: widget.selectedShift.startTime!,
+                    //       efficiencyCalculation: efficiencyCalculation,
+                    //       userId: workerIds,
+                    //       totalUsersCount: totalCountTemp,
+                    //       selectedShift: widget.selectedShift,
+                    //       process: this.widget.process,
+                    //     ),
+                    //   ),
+                    // );
                   },
                   text: this.widget.isEditing ? 'RETURN TO SHIFT' : 'NEXT',
                 ),
@@ -307,34 +316,55 @@ class _WorkItemViewState extends State<WorkItemView> {
         ),
         IconButton(
           onPressed: () async {
-            var response = await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => SelectExistingWorkers(
-                  workers: workers,
-                  isEditing: widget.isEditing,
-                  shiftId: widget.selectedShift.id!,
-                  tempWorkerAdded: (AddTempResponse tmp) {
-                    this.widget.reloadData();
-
-                    var index =
-                        this.widget.listNames.indexOf(tmp.data!.workerType!);
-
-                    var resulf = this
-                        .widget
-                        .listNames
-                        .contains(tmp.data!.workerType!)
-                        .toString();
-
-                    setState(() {
-                      this.widget.listLists[index].add(tmp.data!);
-                    });
-
-                    print('object');
-                  },
-                  processId: widget.processId.toString(),
-                ),
-              ),
-            );
+            var response =
+                await Get.toNamed(Routes.selectedExistingWorker, arguments: {
+              "workers": workers,
+              "isEditing": widget.isEditing,
+              "shiftId": widget.selectedShift.id!,
+              "tempWorkerAdded": (AddTempResponse tmp) {
+                this.widget.reloadData();
+                var index =
+                    this.widget.listNames.indexOf(tmp.data!.workerType!);
+                var resulf = this
+                    .widget
+                    .listNames
+                    .contains(tmp.data!.workerType!)
+                    .toString();
+                setState(() {
+                  this.widget.listLists[index].add(tmp.data!);
+                });
+                print('object');
+              },
+              "processId": widget.processId.toString(),
+            });
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (context) => SelectExistingWorkers(
+            //       workers: workers,
+            //       isEditing: widget.isEditing,
+            //       shiftId: widget.selectedShift.id!,
+            //       tempWorkerAdded: (AddTempResponse tmp) {
+            //         this.widget.reloadData();
+            //
+            //         var index =
+            //             this.widget.listNames.indexOf(tmp.data!.workerType!);
+            //
+            //         var resulf = this
+            //             .widget
+            //             .listNames
+            //             .contains(tmp.data!.workerType!)
+            //             .toString();
+            //
+            //         setState(() {
+            //           this.widget.listLists[index].add(tmp.data!);
+            //         });
+            //
+            //         print('object');
+            //       },
+            //       processId: widget.processId.toString(),
+            //     ),
+            //   ),
+            // );
 
             if (response == null) {
               return;

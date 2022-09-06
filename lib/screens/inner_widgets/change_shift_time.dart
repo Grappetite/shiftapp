@@ -116,7 +116,7 @@ class _ChangeShiftTimeState extends State<ChangeShiftTime> {
                     AlertCancelOk(
                       okHandler: () {
                         if (timeSelected) {
-                          Navigator.pop(context, true);
+                          Get.back(result: true);
 
                           return;
                         }

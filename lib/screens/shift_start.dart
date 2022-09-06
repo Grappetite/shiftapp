@@ -2,15 +2,14 @@ import 'dart:async';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:shiftapp/screens/workers_listing.dart';
 import 'package:shiftapp/util/string.dart';
 
+import '../Routes/app_pages.dart';
 import '../config/constants.dart';
-import '../model/shifts_model.dart';
 import '../model/login_model.dart';
-import '../services/shift_service.dart';
+import '../model/shifts_model.dart';
 import '../widgets/elevated_button.dart';
 import 'inner_widgets/change_shift_time.dart';
 
@@ -149,11 +148,11 @@ class _ShiftStartState extends State<ShiftStart> {
                               var currenMinute =
                                   widget.selectedShift.showStartTimeMinute;
 
-
                               final TimeOfDay? newTime = await showTimePicker(
                                 context: context,
                                 initialTime: TimeOfDay(
-                                    hour: DateTime.now().hour, minute: DateTime.now().minute),
+                                    hour: DateTime.now().hour,
+                                    minute: DateTime.now().minute),
                                 initialEntryMode: TimePickerEntryMode.dial,
                               );
 
@@ -267,11 +266,13 @@ class _ShiftStartState extends State<ShiftStart> {
                               var currenMinute =
                                   widget.selectedShift.showEndTimeMinute;
 
-
                               final TimeOfDay? newTime = await showTimePicker(
                                 context: context,
                                 initialTime: TimeOfDay(
-                                    hour: DateTime.now().add(Duration(hours: 8)).hour, minute: DateTime.now().minute),
+                                    hour: DateTime.now()
+                                        .add(Duration(hours: 8))
+                                        .hour,
+                                    minute: DateTime.now().minute),
                                 initialEntryMode: TimePickerEntryMode.dial,
                               );
 
@@ -368,16 +369,22 @@ class _ShiftStartState extends State<ShiftStart> {
                 // return;
               }
 
-              var waitVal = await Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => WorkersListing(
-                    shiftId: null,
-                    processId: widget.processSelected.id!,
-                    selectedShift: widget.selectedShift,
-                    process: widget.processSelected,
-                  ),
-                ),
-              );
+              var waitVal = await Get.toNamed(Routes.workerListing, arguments: {
+                "shiftId": null,
+                "processId": widget.processSelected.id!,
+                "selectedShift": widget.selectedShift,
+                "process": widget.processSelected,
+              });
+              // Navigator.of(context).push(
+              //   MaterialPageRoute(
+              //     builder: (context) => WorkersListing(
+              //       shiftId: null,
+              //       processId: widget.processSelected.id!,
+              //       selectedShift: widget.selectedShift,
+              //       process: widget.processSelected,
+              //     ),
+              //   ),
+              // );
 
               if (waitVal != null) {
                 if (waitVal == true) {

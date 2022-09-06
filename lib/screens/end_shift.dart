@@ -8,39 +8,38 @@ import 'package:shiftapp/Network/API.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
+import '../Routes/app_pages.dart';
 import '../model/login_model.dart';
 import '../model/shifts_model.dart';
 import '../services/shift_service.dart';
 import '../services/workers_service.dart';
-import 'edit_workers.dart';
-import 'end_shift_final_screen.dart';
 
 class EndShiftView extends StatefulWidget {
-  final bool startedBefore;
-  final int shiftId;
-  final int processId;
-  final List<String> userId;
-  final List<String> efficiencyCalculation;
-  final ShiftItem selectedShift;
-  final String comment;
-  final Process process;
+  bool? startedBefore;
+  int? shiftId;
+  int? processId;
+  List<String>? userId;
+  List<String>? efficiencyCalculation;
+  ShiftItem? selectedShift;
+  String? comment;
+  Process? process;
 
-  final bool autoOpen;
+  bool? autoOpen;
 
-  final int execShiftId;
+  int? execShiftId;
 
-  const EndShiftView(
+  EndShiftView(
       {Key? key,
-      required this.shiftId,
-      required this.processId,
-      required this.userId,
-      required this.efficiencyCalculation,
-      required this.selectedShift,
+      this.shiftId,
+      this.processId,
+      this.userId,
+      this.efficiencyCalculation,
+      this.selectedShift,
       this.comment = '',
       this.startedBefore = false,
-      required this.process,
+      this.process,
       this.autoOpen = false,
-      required this.execShiftId})
+      this.execShiftId})
       : super(key: key);
 
   @override
@@ -67,16 +66,16 @@ class _EndShiftViewState extends State<EndShiftView> {
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
-        if (widget.selectedShift.timeRemaining.contains('Over')) {
+        if (widget.selectedShift!.timeRemaining.contains('Over')) {
           timeRemaining =
-              widget.selectedShift.timeRemaining.replaceAll('Over ', '');
+              widget.selectedShift!.timeRemaining.replaceAll('Over ', '');
           isTimeOver = true;
         } else {
-          timeRemaining = widget.selectedShift.timeRemaining;
+          timeRemaining = widget.selectedShift!.timeRemaining;
         }
 
         setState(() {
-          timeElasped = widget.selectedShift.timeElasped;
+          timeElasped = widget.selectedShift!.timeElasped;
         });
 
         print('');
@@ -95,7 +94,16 @@ class _EndShiftViewState extends State<EndShiftView> {
   @override
   void initState() {
     super.initState();
-
+    widget.startedBefore = Get.arguments["startedBefore"];
+    widget.shiftId = Get.arguments["shiftId"];
+    widget.processId = Get.arguments["processId"];
+    widget.userId = Get.arguments["userId"];
+    widget.efficiencyCalculation = Get.arguments["efficiencyCalculation"];
+    widget.selectedShift = Get.arguments["selectedShift"];
+    widget.comment = Get.arguments["comment"];
+    widget.process = Get.arguments["process"];
+    widget.autoOpen = Get.arguments["autoOpen"];
+    widget.execShiftId = Get.arguments["execShiftId"];
     loadShiftId();
 
     appMenu02 = AppPopupMenu<int>(
@@ -106,7 +114,7 @@ class _EndShiftViewState extends State<EndShiftView> {
             String endTime =
                 DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now());
 
-            ShiftService.cancelShift(this.widget.shiftId, endTime);
+            ShiftService.cancelShift(this.widget.shiftId!, endTime);
 
             // final prefs = await SharedPreferences.getInstance();
 
@@ -118,7 +126,7 @@ class _EndShiftViewState extends State<EndShiftView> {
             Api().sp.remove('username');
             Api().sp.remove('password');
 
-            if (widget.autoOpen) {
+            if (widget.autoOpen!) {
               Get.back(result: true);
             } else {
               Get.back(result: true);
@@ -151,8 +159,8 @@ class _EndShiftViewState extends State<EndShiftView> {
   }
 
   void loadUsers() async {
-    var responseShift =
-        await WorkersService.getShiftWorkers(executeShiftId!, widget.processId);
+    var responseShift = await WorkersService.getShiftWorkers(
+        executeShiftId!, widget.processId!);
 
     numberSelected = responseShift!.data!.shiftWorker!.length;
 
@@ -180,7 +188,7 @@ class _EndShiftViewState extends State<EndShiftView> {
               height: 4,
             ),
             Text(
-              widget.process.name!,
+              widget.process!.name!,
               style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -197,7 +205,7 @@ class _EndShiftViewState extends State<EndShiftView> {
         child: Column(
           children: [
             TimerTopWidget(
-                selectedShift: widget.selectedShift, timeElasped: timeElasped),
+                selectedShift: widget.selectedShift!, timeElasped: timeElasped),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Container(
@@ -269,29 +277,41 @@ class _EndShiftViewState extends State<EndShiftView> {
               child: ExplainerWidget(
                 iconName: 'filled-walk',
                 title: 'MANAGE WORKERS',
-                text1: widget.process.headCount != null
-                    ? '$numberSelected /${widget.process.headCount} Workers'
+                text1: widget.process!.headCount != null
+                    ? '$numberSelected /${widget.process!.headCount} Workers'
                     : '$numberSelected /$totalUsersCount Workers',
                 text2: 'Tap to Add or remove',
                 showWarning: false,
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => EditWorkers(
-                        startTime: widget.selectedShift.startTime!,
-                        processId: widget.processId,
-                        endTime: widget.selectedShift.endTime!,
-                        userId: [],
-                        efficiencyCalculation: [],
-                        shiftId: widget.shiftId,
-                        totalUsersCount: widget.userId.length,
-                        selectedShift: widget.selectedShift,
-                        process: widget.process,
-                        execShiftId: this.widget.execShiftId,
-                      ),
-                    ),
-                  );
+                  Get.toNamed(Routes.editWorkers, arguments: {
+                    "startTime": widget.selectedShift!.startTime!,
+                    "processId": widget.processId,
+                    "endTime": widget.selectedShift!.endTime!,
+                    "userId": [],
+                    "efficiencyCalculation": [],
+                    "shiftId": widget.shiftId,
+                    "totalUsersCount": widget.userId!.length,
+                    "selectedShift": widget.selectedShift,
+                    "process": widget.process,
+                    "execShiftId": this.widget.execShiftId,
+                  });
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (BuildContext context) => EditWorkers(
+                  //       startTime: widget.selectedShift.startTime!,
+                  //       processId: widget.processId,
+                  //       endTime: widget.selectedShift.endTime!,
+                  //       userId: [],
+                  //       efficiencyCalculation: [],
+                  //       shiftId: widget.shiftId,
+                  //       totalUsersCount: widget.userId.length,
+                  //       selectedShift: widget.selectedShift,
+                  //       process: widget.process,
+                  //       execShiftId: this.widget.execShiftId,
+                  //     ),
+                  //   ),
+                  // );
                 },
               ),
             ),
@@ -339,21 +359,32 @@ class _EndShiftViewState extends State<EndShiftView> {
                   flex: 52,
                   child: TextButton(
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => EndShiftFinalScreen(
-                            autoOpen: widget.autoOpen,
-                            startTime: widget.selectedShift.startTime!,
-                            selectedShift: widget.selectedShift,
-                            shiftId: widget.shiftId,
-                            processId: widget.processId,
-                            endTime: widget.selectedShift.endTime!,
-                            comments: '',
-                            process: widget.process,
-                            executeShiftId: executeShiftId!,
-                          ),
-                        ),
-                      );
+                      Get.toNamed(Routes.endShiftFinal, arguments: {
+                        "autoOpen": widget.autoOpen,
+                        "startTime": widget.selectedShift!.startTime!,
+                        "selectedShift": widget.selectedShift,
+                        "shiftId": widget.shiftId,
+                        "processId": widget.processId,
+                        "endTime": widget.selectedShift!.endTime!,
+                        "comments": '',
+                        "process": widget.process,
+                        "executeShiftId": executeShiftId!,
+                      });
+                      // Navigator.of(context).push(
+                      //   MaterialPageRoute(
+                      //     builder: (context) => EndShiftFinalScreen(
+                      //       autoOpen: widget.autoOpen,
+                      //       startTime: widget.selectedShift.startTime!,
+                      //       selectedShift: widget.selectedShift,
+                      //       shiftId: widget.shiftId,
+                      //       processId: widget.processId,
+                      //       endTime: widget.selectedShift.endTime!,
+                      //       comments: '',
+                      //       process: widget.process,
+                      //       executeShiftId: executeShiftId!,
+                      //     ),
+                      //   ),
+                      // );
                     },
                     child: Image.asset('assets/images/end-shift.png'),
                   ),

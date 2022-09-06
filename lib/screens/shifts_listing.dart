@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:shiftapp/model/shifts_model.dart';
+import 'package:get/get.dart';
 import 'package:shiftapp/model/login_model.dart';
+import 'package:shiftapp/model/shifts_model.dart';
 
-import 'home.dart';
+import '../Routes/app_pages.dart';
 
 class ShiftsListing extends StatefulWidget {
   ShiftsResponse shiftResponse;
@@ -41,22 +42,28 @@ class _ShiftsListingState extends State<ShiftsListing> {
                 itemBuilder: (context, index) {
                   return ListTile(
                     onTap: () {
-                      var shiftSelected =
-                          widget.shiftResponse.data![index];
+                      var shiftSelected = widget.shiftResponse.data![index];
 
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => HomeView(
-                            selectedShift: shiftSelected,
-                            processSelected: widget.processSelected,
-                          ),
-                        ),
-                      );
-
+                      Get.offNamed(Routes.home, arguments: {
+                        "selectedShift": shiftSelected,
+                        "processSelected": widget.processSelected,
+                      });
+                      // Navigator.pushReplacement(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (BuildContext context) =>
+                      //         HomeView(
+                      //       selectedShift: shiftSelected,
+                      //       processSelected: widget.processSelected,
+                      //     ),
+                      // ),
+                      // );
                     },
                     title: Text(widget.shiftResponse.data![index].name!),
-                    subtitle: Text(widget.shiftResponse.data![index].startTime! + ' to ' + widget.shiftResponse.data![index].endTime!),
+                    subtitle: Text(
+                        widget.shiftResponse.data![index].startTime! +
+                            ' to ' +
+                            widget.shiftResponse.data![index].endTime!),
                   );
                 },
                 separatorBuilder: (context, index) {
