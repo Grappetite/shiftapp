@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:app_popup_menu/app_popup_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -38,7 +39,8 @@ class EndShiftView extends StatefulWidget {
       this.comment = '',
       this.startedBefore = false,
       required this.process,
-      this.autoOpen = false , required this.execShiftId})
+      this.autoOpen = false,
+      required this.execShiftId})
       : super(key: key);
 
   @override
@@ -46,9 +48,7 @@ class EndShiftView extends StatefulWidget {
 }
 
 class _EndShiftViewState extends State<EndShiftView> {
-
   late AppPopupMenu<int> appMenu02;
-
 
   int? executeShiftId;
 
@@ -90,25 +90,42 @@ class _EndShiftViewState extends State<EndShiftView> {
     this.executeShiftId = prefs.getInt('execute_shift_id');
 
     loadUsers();
-
   }
+
   @override
   void initState() {
     super.initState();
 
     loadShiftId();
 
-
     appMenu02 = AppPopupMenu<int>(
       menuItems: [
         PopupMenuItem(
           value: 1,
           onTap: () async {
-            String endTime = DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now());
+            var result = await showOkCancelAlertDialog(
+              context: context,
+              title: 'Warning',
+              message: 'Are you sure you want to discard this shift?',
+              okLabel: 'YES',
+              cancelLabel: 'NO',
 
+            );
+
+            if(result.index == 1) {
+              return;
+            }
+
+
+
+
+
+
+
+            String endTime =
+                DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now());
 
             ShiftService.cancelShift(this.widget.shiftId, endTime);
-
 
             final prefs = await SharedPreferences.getInstance();
 
@@ -120,22 +137,14 @@ class _EndShiftViewState extends State<EndShiftView> {
             prefs.remove('username');
             prefs.remove('password');
 
-
-
             if (widget.autoOpen) {
-
               Navigator.pop(context, true);
             } else {
-
-
               Navigator.pop(context, true);
               Navigator.pop(context, true);
             }
 
-
             /// widget.onLogout();
-
-
           },
           child: const Text(
             'Discard Shift',
@@ -157,15 +166,12 @@ class _EndShiftViewState extends State<EndShiftView> {
       color: kPrimaryColor,
     );
 
-
     startTimer();
-
-
   }
 
   void loadUsers() async {
     var responseShift =
-        await WorkersService.getShiftWorkers(executeShiftId!,widget.processId);
+        await WorkersService.getShiftWorkers(executeShiftId!, widget.processId);
 
     numberSelected = responseShift!.data!.shiftWorker!.length;
 
@@ -182,6 +188,7 @@ class _EndShiftViewState extends State<EndShiftView> {
     return Scaffold(
       appBar: AppBar(
         leading: Container(),
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: Column(
           children: [
@@ -205,7 +212,6 @@ class _EndShiftViewState extends State<EndShiftView> {
           ],
         ),
         actions: [appMenu02],
-
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -288,8 +294,8 @@ class _EndShiftViewState extends State<EndShiftView> {
                     : '$numberSelected /$totalUsersCount Workers',
                 text2: 'Tap to Add or remove',
                 showWarning: false,
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                  var response = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) => EditWorkers(
@@ -301,10 +307,14 @@ class _EndShiftViewState extends State<EndShiftView> {
                         shiftId: widget.shiftId,
                         totalUsersCount: widget.userId.length,
                         selectedShift: widget.selectedShift,
-                        process: widget.process, execShiftId: this.widget.execShiftId,
+                        process: widget.process,
+                        execShiftId: this.widget.execShiftId,
                       ),
                     ),
                   );
+                  
+                  loadUsers();
+
                 },
               ),
             ),
@@ -361,7 +371,7 @@ class _EndShiftViewState extends State<EndShiftView> {
                             shiftId: widget.shiftId,
                             processId: widget.processId,
                             endTime: widget.selectedShift.endTime!,
-                            comments: '',
+                            comments: widget.comment,
                             process: widget.process,
                             executeShiftId: executeShiftId!,
                           ),

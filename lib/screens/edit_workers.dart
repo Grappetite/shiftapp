@@ -138,7 +138,7 @@ class _EditWorkersState extends State<EditWorkers> {
 
               loadWorkers();
 
-          },
+          }, execShiftId: widget.execShiftId,
           ),
         ),
       ),

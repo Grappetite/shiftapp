@@ -53,8 +53,6 @@ class ShiftService {
       String endTime) async {
     try {
 
-      var logger = Logger();
-
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
 
@@ -65,7 +63,7 @@ class ShiftService {
           'process_id': processId.toString(),
           'end_time': endTime,
           'units_produced': unitsProduced,
-          'comments' : comment
+          'comments' : 'comment'
         },
         options: Options(
           headers: {

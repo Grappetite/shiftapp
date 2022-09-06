@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -156,6 +157,24 @@ class _StartShiftViewState extends State<StartShiftView> {
               width: MediaQuery.of(context).size.width / 1.7,
               child: TextButton(
                 onPressed: () async {
+
+                  if(_controller.text.isEmpty) {
+
+                    showAlertDialog(
+                      context: context,
+                      title: 'Error',
+                      message: 'Please add comment.',
+                      actions: [
+                        AlertDialogAction(
+                          label: MaterialLocalizations.of(context)
+                              .okButtonLabel,
+                          key: OkCancelResult.ok,
+                        )
+                      ],
+                    );
+                    return;
+
+                  }
                   await EasyLoading.show(
                     status: 'loading...',
                     maskType: EasyLoadingMaskType.black,

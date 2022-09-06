@@ -340,8 +340,6 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                         onPressed: () async {
                           if (textController.text.isEmpty) {
 
-                            
-
                             final result = await showAlertDialog(
                               context: context,
                               title: 'Error',
@@ -356,7 +354,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
 
 
                             print('');
-                            
+
                             return;
                           } else {
                             var answer = await showDialog(
@@ -369,6 +367,12 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                 });
 
 
+                            if(answer != null) {
+                              if(!answer) {
+                                return;
+
+                              }
+                            }
                             await EasyLoading.show(
                               status: 'Adding...',
                               maskType: EasyLoadingMaskType.black,
@@ -600,17 +604,10 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                           child: PElevatedButton(
                             onPressed: () async {
 
-                              Navigator.pop(context, true);
+                              Navigator.pop(context, false);
 
 
-                              //addTempWorkers
 
-                              /* await EasyLoading.show(
-                                status: 'loading...',
-                                maskType: EasyLoadingMaskType.black,
-                              );*/
-
-                              //await EasyLoading.dismiss();
                             },
                             text: 'NO',
                             backGroundColor: Colors.white,
