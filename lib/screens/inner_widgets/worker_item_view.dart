@@ -10,6 +10,7 @@ import '../../model/shifts_model.dart';
 import '../../model/workers_model.dart';
 import '../../services/workers_service.dart';
 import '../../widgets/elevated_button.dart';
+import '../end_shift_final_screen.dart';
 import 'index_indicator.dart';
 
 class WorkItemView extends StatefulWidget {
@@ -176,14 +177,14 @@ class _WorkItemViewState extends State<WorkItemView> {
                       initialSelected: currentItem.isSelected,
                       picUrl: currentItem.picture,
                       changedStatus: (bool newStatus) async {
-                        setState(() {
-                          currentItem.isSelected = newStatus;
-                        });
-
                         String dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
                             .format(DateTime.now());
 
                         if (widget.isEditing && newStatus) {
+                          setState(() {
+                            currentItem.isSelected = newStatus;
+                          });
+
                           await EasyLoading.show(
                             status: 'Adding...',
                             maskType: EasyLoadingMaskType.black,
@@ -203,23 +204,44 @@ class _WorkItemViewState extends State<WorkItemView> {
                             EasyLoading.showError('Error');
                           }
                         } else if (widget.isEditing && !newStatus) {
-                          await EasyLoading.show(
-                            status: 'Removing...',
-                            maskType: EasyLoadingMaskType.black,
-                          );
+                          /// Mahboob Work
+                          await showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return ConfirmTimeEnd(
+                                  shiftItem: this.widget.selectedShift,
+                                );
+                              }).then((value) async {
+                            if (value != false) {
+                              dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
+                                  .format(DateTime.parse(value));
+                              setState(() {
+                                currentItem.isSelected = newStatus;
+                              });
 
-                          var response = await WorkersService.removeWorkers(
-                              widget.execShiftId!,
-                              [currentItem.id!.toString()],
-                              [dateString],
-                              [],
-                              [currentItem.efficiencyCalculation.toString()]);
-                          await EasyLoading.dismiss();
+                              /// end
+                              await EasyLoading.show(
+                                status: 'Removing...',
+                                maskType: EasyLoadingMaskType.black,
+                              );
 
-                          if (response) {
-                          } else {
-                            EasyLoading.showError('Error');
-                          }
+                              var response = await WorkersService.removeWorkers(
+                                  widget.execShiftId!, [
+                                currentItem.id!.toString()
+                              ], [
+                                dateString
+                              ], [], [
+                                currentItem.efficiencyCalculation.toString()
+                              ]);
+                              await EasyLoading.dismiss();
+
+                              if (response) {
+                              } else {
+                                EasyLoading.showError('Error');
+                              }
+                            }
+                          });
                         }
                       },
                     ),

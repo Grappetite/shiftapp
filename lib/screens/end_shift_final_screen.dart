@@ -496,6 +496,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
     super.initState();
   }
 
+  TimeOfDay? newTime;
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -569,7 +570,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
 // =======
                     GestureDetector(
                       onTap: () async {
-                        final TimeOfDay? newTime = await showTimePicker(
+                        TimeOfDay? newTime = await showTimePicker(
                           context: context,
                           initialTime: TimeOfDay(
                               hour: DateTime.now().hour,
@@ -632,7 +633,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                         Expanded(
                           child: PElevatedButton(
                             onPressed: () async {
-                              Get.back(result: true);
+                              Get.back(result: false);
                             },
                             text: 'NO',
                             backGroundColor: Colors.white,
@@ -647,7 +648,8 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                             onPressed: () async {
                               //addTempWorkers
 
-                              Get.back();
+                              Get.back(result: widget.shiftItem.endTime);
+
                               /* await EasyLoading.show(
                                 status: 'loading...',
                                 maskType: EasyLoadingMaskType.black,
