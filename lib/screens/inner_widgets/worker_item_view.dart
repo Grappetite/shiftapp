@@ -242,6 +242,10 @@ class _WorkItemViewState extends State<WorkItemView> {
                               }
                             }
                           });
+                        } else {
+                          setState(() {
+                            currentItem.isSelected = newStatus;
+                          });
                         }
                       },
                     ),
