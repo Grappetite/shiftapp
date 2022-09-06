@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
 import '../../model/login_model.dart';
@@ -64,10 +63,10 @@ class _EditWorkersState extends State<EditWorkers> {
   int workersSelected = 0;
 
   void loadWorkers() async {
-    await EasyLoading.show(
-      status: 'Adding...',
-      maskType: EasyLoadingMaskType.black,
-    );
+    // await EasyLoading.show(
+    //   status: 'Adding...',
+    //   maskType: EasyLoadingMaskType.black,
+    // );
 
     var responseShift = await WorkersService.getShiftWorkers(
         widget.execShiftId, widget.processId!);
@@ -89,7 +88,7 @@ class _EditWorkersState extends State<EditWorkers> {
     shiftWorkers.where((student) => seen.add(student.workerType!)).toList();
 
     listNames = seen.toList();
-    await EasyLoading.dismiss();
+    //await EasyLoading.dismiss();
 
     for (var currentItem in listNames) {
       var response =

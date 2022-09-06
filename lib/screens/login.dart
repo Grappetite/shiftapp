@@ -54,10 +54,10 @@ class _LoginScreenState extends State<LoginScreen> {
     int? shiftId = Api().sp.read('shiftId');
 
     if (shiftId != null) {
-      await EasyLoading.show(
-        status: 'loading...',
-        maskType: EasyLoadingMaskType.black,
-      );
+      // await EasyLoading.show(
+      //   status: 'loading...',
+      //   maskType: EasyLoadingMaskType.black,
+      // );
 
       String loginUserName = Api().sp.read('username')!;
       String passString = Api().sp.read('password')!;
@@ -85,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
         shiftObject.displayScreen = 1;
 
-        await EasyLoading.dismiss();
+        //await EasyLoading.dismiss();
         Get.offAllNamed(Routes.home, arguments: {
           "selectedShift": shiftObject,
           "processSelected": selectedProcess,
@@ -217,16 +217,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (processIndexSelected == -1) {
                         return;
                       }
-                      await EasyLoading.show(
-                        status: 'loading...',
-                        maskType: EasyLoadingMaskType.black,
-                      );
+                      // await EasyLoading.show(
+                      //   status: 'loading...',
+                      //   maskType: EasyLoadingMaskType.black,
+                      // );
                       var processSelected = process[processIndexSelected];
 
                       var shifts =
                           await LoginService.getShifts(processSelected.id!);
 
-                      await EasyLoading.dismiss();
+                      //await EasyLoading.dismiss();
 
                       //shifts!.data!.first.displayScreen = 3;
 
@@ -266,19 +266,19 @@ class _LoginScreenState extends State<LoginScreen> {
                       return;
                     }
 
-                    await EasyLoading.show(
-                      status: 'loading...',
-                      maskType: EasyLoadingMaskType.black,
-                    );
+                    // await EasyLoading.show(
+                    //   status: 'loading...',
+                    //   maskType: EasyLoadingMaskType.black,
+                    // );
 
                     LoginResponse? response = await LoginService.login(
                         controller.text, passwordController.text);
 
                     if (response == null) {
-                      await EasyLoading.dismiss();
+                      //await EasyLoading.dismiss();
                       EasyLoading.showError('Could not login successfully');
                     } else {
-                      await EasyLoading.dismiss();
+                      //await EasyLoading.dismiss();
 
                       //final Api().sp = await SharedPreferences.getInstance();
 

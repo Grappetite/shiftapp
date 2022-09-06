@@ -6,6 +6,7 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:dio/dio.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:shiftapp/Network/environment.dart';
+import 'package:shiftapp/config/constants.dart';
 
 import 'appExceptions.dart';
 
@@ -20,20 +21,38 @@ const String placeHolder =
 class Api {
   var sp = GetStorage();
 
-  Future<dynamic> get(String url, {fullUrl}) async {
+  Future<dynamic> get(String url, {fullUrl, isProgressShow = false}) async {
+    if (isProgressShow == false) {
+      BotToast.showLoading();
+    }
     Dio dio = Dio(BaseOptions(
       connectTimeout: 5000,
       receiveTimeout: 5000,
     ));
     print('Api Get, url $url');
-    dio.options.headers['Authorization'] = "Bearer ${sp.read('token')}";
+    dio.options.headers['Authorization'] = "Bearer ${sp.read(tokenKey)}";
     if (url != "") {
       try {
         final response = await dio.get(fullUrl ?? apiUrl + url);
+        Future.delayed(Duration(seconds: 1), () {
+          if (isProgressShow == false) {
+            BotToast.closeAllLoading();
+          }
+        });
         return response;
       } on SocketException {
+        Future.delayed(Duration(seconds: 1), () {
+          if (isProgressShow == false) {
+            BotToast.closeAllLoading();
+          }
+        });
         throw FetchDataException('No Internet connection');
       } on DioError catch (e) {
+        Future.delayed(Duration(seconds: 1), () {
+          if (isProgressShow == false) {
+            BotToast.closeAllLoading();
+          }
+        });
         return _returnResponse(e.response!);
       }
     }
@@ -47,7 +66,7 @@ class Api {
       connectTimeout: 5000,
       receiveTimeout: 5000,
     ));
-    dio.options.headers['Authorization'] = "Bearer ${sp.read('token')}";
+    dio.options.headers['Authorization'] = "Bearer ${sp.read(tokenKey)}";
 
     try {
       final response = await dio.post(
@@ -99,8 +118,8 @@ class Api {
     }
     Dio dio = Dio();
     if (auth == false) {
-      print(sp.read('token'));
-      dio.options.headers['Authorization'] = "Bearer ${sp.read('token')}";
+      print(sp.read(tokenKey));
+      dio.options.headers['Authorization'] = "Bearer ${sp.read(tokenKey)}";
     }
 
     try {
@@ -147,8 +166,14 @@ class Api {
         print(responseJson);
         return responseJson;
       case 400:
-        BotToast.showText(text: response.data["message"][0].toString());
-        throw BadRequestException(response.data.toString());
+        BotToast.showText(
+            text:
+                response.data["message"].runtimeType.toString().toLowerCase() ==
+                        "string"
+                    ? response.data["message"]
+                    : response.data["message"][0].toString());
+
+        break;
       case 401:
         BotToast.showText(text: response.data["message"][0].toString());
         break;

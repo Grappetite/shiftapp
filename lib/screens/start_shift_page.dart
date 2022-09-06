@@ -172,28 +172,25 @@ class _StartShiftViewState extends State<StartShiftView> {
               width: MediaQuery.of(context).size.width / 1.7,
               child: TextButton(
                 onPressed: () async {
-
-                  if(_controller.text.isEmpty) {
-
+                  if (_controller.text.isEmpty) {
                     showAlertDialog(
                       context: context,
                       title: 'Error',
                       message: 'Please add comment.',
                       actions: [
                         AlertDialogAction(
-                          label: MaterialLocalizations.of(context)
-                              .okButtonLabel,
+                          label:
+                              MaterialLocalizations.of(context).okButtonLabel,
                           key: OkCancelResult.ok,
                         )
                       ],
                     );
                     return;
-
                   }
-                  await EasyLoading.show(
-                    status: 'loading...',
-                    maskType: EasyLoadingMaskType.black,
-                  );
+                  // await EasyLoading.show(
+                  //   status: 'loading...',
+                  //   maskType: EasyLoadingMaskType.black,
+                  // );
 
                   var result = await WorkersService.addShiftWorker(
                       widget.shiftId!,
@@ -203,7 +200,7 @@ class _StartShiftViewState extends State<StartShiftView> {
                       widget.userId!,
                       widget.efficiencyCalculation!);
 
-                  await EasyLoading.dismiss();
+                  //await EasyLoading.dismiss();
 
                   if (result != null) {
                     if (result.code! == 200) {
@@ -261,7 +258,7 @@ class _StartShiftViewState extends State<StartShiftView> {
 //                           widget.userId!,
 //                           widget.efficiencyCalculation);
 //
-//                       await EasyLoading.dismiss();
+//                       //await EasyLoading.dismiss();
 //
 //                       if (result != null) {
 //                         if (result.code! == 200) {

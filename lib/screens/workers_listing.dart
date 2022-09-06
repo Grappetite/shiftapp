@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
@@ -59,10 +58,10 @@ class _WorkersListingState extends State<WorkersListing> {
   bool isLoader = true;
 
   void loadData() async {
-    await EasyLoading.show(
-      status: 'loading...',
-      maskType: EasyLoadingMaskType.black,
-    );
+    // await EasyLoading.show(
+    //   status: 'loading...',
+    //   maskType: EasyLoadingMaskType.black,
+    // );
     var responseShift =
         await WorkersService.getShiftWorkers(widget.shiftId, widget.processId!);
 
@@ -92,7 +91,7 @@ class _WorkersListingState extends State<WorkersListing> {
       listNames = [];
     }
 
-    await EasyLoading.dismiss();
+    //await EasyLoading.dismiss();
 
     for (var currentItem in listNames) {
       var response =
@@ -175,7 +174,8 @@ class _WorkersListingState extends State<WorkersListing> {
                 process: this.widget.process!,
                 reloadData: () {
                   loadData();
-                }, execShiftId: 0,
+                },
+                execShiftId: 0,
               ),
             ),
             const SizedBox(

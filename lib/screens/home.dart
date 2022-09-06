@@ -1,7 +1,6 @@
 import 'package:app_popup_menu/app_popup_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shiftapp/model/login_model.dart';
@@ -155,13 +154,13 @@ class _HomeMainViewState extends State<HomeMainView> {
   late AppPopupMenu<int> appMenu02;
 
   void moveToEndSession() async {
-    await EasyLoading.show(
-      status: 'loading...',
-      maskType: EasyLoadingMaskType.black,
-    );
+    // await EasyLoading.show(
+    //   status: 'loading...',
+    //   maskType: EasyLoadingMaskType.black,
+    // );
 
     await Future.delayed(const Duration(seconds: 1));
-    await EasyLoading.dismiss();
+    //await EasyLoading.dismiss();
 
     var executeShiftId = Api().sp.read('execute_shift_id');
 

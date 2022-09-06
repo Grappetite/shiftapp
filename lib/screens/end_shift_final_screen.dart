@@ -389,10 +389,10 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                               }
                             }
 
-                            await EasyLoading.show(
-                              status: 'Adding...',
-                              maskType: EasyLoadingMaskType.black,
-                            );
+                            // await EasyLoading.show(
+                            //   status: 'Adding...',
+                            //   maskType: EasyLoadingMaskType.black,
+                            // );
 
                             var check = await ShiftService.endShift(
                                 widget.executeShiftId!,
@@ -401,7 +401,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                 widget.comments!,
                                 widget.endTime!);
 
-                            await EasyLoading.dismiss();
+                            //await EasyLoading.dismiss();
 
                             if (check) {
                               await EasyLoading.showSuccess(
@@ -655,7 +655,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                                 maskType: EasyLoadingMaskType.black,
                               );*/
 
-                              //await EasyLoading.dismiss();
+                              ////await EasyLoading.dismiss();
                             },
                             text: 'YES',
                           ),

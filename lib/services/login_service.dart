@@ -7,12 +7,12 @@ import '../model/shifts_model.dart';
 
 class LoginService {
   static Future<LoginResponse?> login(String username, String password) async {
-    try {
-      var dio = Dio();
+    // try {
+    var dio = Dio();
 
-      Response response = await dio.post(
-        baseUrl + 'login',
-        data: {'email': username, 'password': password},
+    Response response = await Api().post(
+      {'email': username, 'password': password}, 'login',
+
 // <<<<<<< HEAD
 //           options: Options(
 //             headers: {
@@ -20,55 +20,47 @@ class LoginService {
 //             },
 //           ));
 // =======
-      );
+    );
 
-      var responseObject = LoginResponse.fromJson(response.data);
+    print(response.data['data']);
 
-      print(response.data['data']);
-
-      if (responseObject.data == null) {
-        return null;
-      }
-      //final prefs = await SharedPreferences.getInstance();
-      responseObject.data!.user!.lastName;
-
-      Api().sp.write(tokenKey, responseObject.token!);
-
-      return responseObject;
-    } catch (e) {
+    if (response.statusCode != 200) {
       return null;
     }
+    var responseObject = LoginResponse.fromJson(response.data);
+
+    //final prefs = await SharedPreferences.getInstance();
+    responseObject.data!.user!.lastName;
+
+    Api().sp.write(tokenKey, responseObject.token!);
+
+    return responseObject;
+    // } catch (e) {
+    //   return null;
+    // }
   }
 
   static Future<ShiftsResponse?> getShifts(int processId) async {
-    try {
-      var dio = Dio();
-      //final prefs = await SharedPreferences.getInstance();
+    var dio = Dio();
+    //final prefs = await SharedPreferences.getInstance();
 
-      Response response =
-          await dio.get(baseUrl + 'shifts/' + processId.toString(),
-              options: Options(
-                headers: {
-                  authorization: 'Bearer ' + Api().sp.read(tokenKey)!,
-                },
-              ));
+    Response response = await Api().get(
+      'shifts/' + processId.toString(),
+    );
 
-      //handle 404
+    //handle 404
 
-      print(response.data);
+    print(response.data);
 
-      var responseObject = ShiftsResponse.fromJson(response.data);
-
-      if (responseObject.data == null) {
-        return null;
-      }
-      if (responseObject.data!.isEmpty) {
-        return null;
-      }
-
-      return responseObject;
-    } catch (e) {
+    if (response.statusCode == null) {
       return null;
     }
+    var responseObject = ShiftsResponse.fromJson(response.data);
+
+    if (responseObject.data!.isEmpty) {
+      return null;
+    }
+
+    return responseObject;
   }
 }

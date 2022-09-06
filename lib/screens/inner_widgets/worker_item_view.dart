@@ -185,10 +185,10 @@ class _WorkItemViewState extends State<WorkItemView> {
                             currentItem.isSelected = newStatus;
                           });
 
-                          await EasyLoading.show(
-                            status: 'Adding...',
-                            maskType: EasyLoadingMaskType.black,
-                          );
+                          // await EasyLoading.show(
+                          //   status: 'Adding...',
+                          //   maskType: EasyLoadingMaskType.black,
+                          // );
 
                           var response = await WorkersService.addWorkers(
                               widget.execShiftId,
@@ -197,7 +197,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                               [],
                               [currentItem.efficiencyCalculation.toString()]);
 
-                          await EasyLoading.dismiss();
+                          //await EasyLoading.dismiss();
 
                           if (response) {
                           } else {
@@ -221,10 +221,10 @@ class _WorkItemViewState extends State<WorkItemView> {
                               });
 
                               /// end
-                              await EasyLoading.show(
-                                status: 'Removing...',
-                                maskType: EasyLoadingMaskType.black,
-                              );
+                              // await EasyLoading.show(
+                              //   status: 'Removing...',
+                              //   maskType: EasyLoadingMaskType.black,
+                              // );
 
                               var response = await WorkersService.removeWorkers(
                                   widget.execShiftId!, [
@@ -234,7 +234,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                               ], [], [
                                 currentItem.efficiencyCalculation.toString()
                               ]);
-                              await EasyLoading.dismiss();
+                              //await EasyLoading.dismiss();
 
                               if (response) {
                               } else {
@@ -467,20 +467,20 @@ class _WorkItemViewState extends State<WorkItemView> {
                 workersLabel = 'WORKERS';
               });
 
-              await EasyLoading.show(
-                status: 'Adding...',
-                maskType: EasyLoadingMaskType.black,
-              );
+              // await EasyLoading.show(
+              //   status: 'Adding...',
+              //   maskType: EasyLoadingMaskType.black,
+              // );
 
               if (workerIds.isEmpty) {
-                await EasyLoading.dismiss();
+                //await EasyLoading.dismiss();
 
                 return;
               }
               var response = await WorkersService.addWorkers(widget.execShiftId,
                   workerIds, startTime, [], efficiencyCalculation);
 
-              await EasyLoading.dismiss();
+              //await EasyLoading.dismiss();
 
               if (response) {
               } else {

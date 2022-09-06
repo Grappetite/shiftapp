@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -78,10 +77,10 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
 */
 
   void callSearchService() async {
-    await EasyLoading.show(
-      status: 'loading...',
-      maskType: EasyLoadingMaskType.black,
-    );
+    // await EasyLoading.show(
+    //   status: 'loading...',
+    //   maskType: EasyLoadingMaskType.black,
+    // );
 
     if (this.widget.workerTypeId != null) {
       currentWorkTypeId = widget.workerTypeId!;
@@ -97,7 +96,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
 
     filteredWorkers = response!.searchWorker!;
 
-    await EasyLoading.dismiss();
+    //await EasyLoading.dismiss();
 
     for (var currentItem in widget.workers!) {
 // <<<<<<< HEAD

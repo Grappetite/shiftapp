@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shiftapp/Network/API.dart';
@@ -182,10 +181,10 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                     PElevatedButton(
                       onPressed: () async {
                         //addTempWorkers
-                        await EasyLoading.show(
-                          status: 'loading...',
-                          maskType: EasyLoadingMaskType.black,
-                        );
+                        // await EasyLoading.show(
+                        //   status: 'loading...',
+                        //   maskType: EasyLoadingMaskType.black,
+                        // );
 
                         String dateString =
                             DateFormat("yyyy-MM-dd hh:mm:ss").format(
@@ -199,7 +198,7 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                             selectedWorkerTypeID,
                             widget.shiftId,
                             dateString);
-                        await EasyLoading.dismiss();
+                        //await EasyLoading.dismiss();
 
                         if (response != null) {
                           // Navigator.pop(context, response);
