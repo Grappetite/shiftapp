@@ -39,10 +39,6 @@ class _AddTempWorkerState extends State<AddTempWorker> {
 
   void loadWorkerTypes() async {
 
-    final prefs = await SharedPreferences.getInstance();
-
-    tempWorkerId = prefs.getInt('execute_shift_id');
-
     //execute_shift_id
 
     var result = await WorkersService.getWorkTypes(this.widget.shiftId,widget.processId);

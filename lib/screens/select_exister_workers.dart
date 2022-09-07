@@ -22,9 +22,12 @@ class SelectExistingWorkers extends StatefulWidget {
   final Function(ShiftWorker) otherTypeTempWorkerAdded;
 
 
+  final String listName;
+
   final int shiftId;
 
   final bool isEditing;
+
 
   final String processId;
 
@@ -33,7 +36,8 @@ class SelectExistingWorkers extends StatefulWidget {
       required this.workers,
       this.isEditing = false,
       required this.shiftId,
-      required this.tempWorkerAdded, required this.processId,this.workerTypeId, required this.otherTypeTempWorkerAdded})
+      required this.tempWorkerAdded, required this.processId,this.workerTypeId, required this.otherTypeTempWorkerAdded, required this.listName,
+         })
       : super(key: key);
 
 
@@ -260,7 +264,6 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                         'ADD SELECTED WORKERS (${workers.where((e) => e.isSelected).toList().length})',
                     onPressed: () {
 
-
                       for(var currentItem in workers) {
                         if(currentItem.isSelected) {
 
@@ -271,7 +274,6 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                           else {
                             widget.workers.add(currentItem);
                           }
-
                         }
                       }
 

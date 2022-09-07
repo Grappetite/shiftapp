@@ -296,7 +296,7 @@ class _ShiftStartState extends State<ShiftStart> {
                                           'Hours',
                                       date: widget
                                           .selectedShift.showStartDateOnly,
-                                      endTime: widget.selectedShift.showEndTime,
+                                      endTime: customSelectedEndTime.timeToShow,
                                       startTime: buildShowStartTime(),
                                     );
                                   });

@@ -1,8 +1,10 @@
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../../model/login_model.dart';
 import '../model/shifts_model.dart';
+import '../model/worker_type_model.dart';
 import '../model/workers_model.dart';
 import '../services/workers_service.dart';
 import 'inner_widgets/worker_item_view.dart';
@@ -51,6 +53,42 @@ class _EditWorkersState extends State<EditWorkers> {
 
   int workersSelected = 0;
 
+  bool showCategories = false;
+
+  List<WorkerType> workerType = [];
+
+  void loadWorkerTypes() async {
+
+    //execute_shift_id
+
+    var result = await WorkersService.getWorkTypes(widget.shiftId.toString(),widget.processId.toString());
+
+
+    if(result != null) {
+      setState(() {
+        workerType = result.data!;
+      });
+      for(var currentItem in workerType){
+
+
+        setState(() {
+          listNames.add(currentItem.name!);
+          listLists.add([]);
+        });
+
+
+      }
+
+      await EasyLoading.dismiss();
+
+
+    }
+   // workerType = result!.data!;
+    setState(() {
+     // workerType = result.data!;
+    });
+  }
+
   void loadWorkers() async {
     await EasyLoading.show(
       status: 'Adding...',
@@ -59,6 +97,34 @@ class _EditWorkersState extends State<EditWorkers> {
 
     var responseShift = await WorkersService.getShiftWorkers(
         widget.execShiftId, widget.processId);
+
+    if (responseShift != null) {
+
+      if (responseShift.data!.shiftWorker!.length == 0) {
+        showCategories = true;
+        loadWorkerTypes();
+
+        return;
+      }
+      await EasyLoading.dismiss();
+
+
+
+    } else {
+      await EasyLoading.dismiss();
+
+      showAlertDialog(
+        context: context,
+        title: 'Error',
+        message: 'Error while loading data',
+        actions: [
+          AlertDialogAction(
+            label: MaterialLocalizations.of(context).okButtonLabel,
+            key: OkCancelResult.ok,
+          )
+        ],
+      );
+    }
 
     List<ShiftWorker> shiftWorkers = [];
 
@@ -77,7 +143,6 @@ class _EditWorkersState extends State<EditWorkers> {
     shiftWorkers.where((student) => seen.add(student.workerType!)).toList();
 
     listNames = seen.toList();
-    await EasyLoading.dismiss();
 
     for (var currentItem in listNames) {
       var response =
@@ -134,6 +199,7 @@ class _EditWorkersState extends State<EditWorkers> {
               loadWorkers();
             },
             execShiftId: widget.execShiftId,
+            workerType: this.workerType,
           ),
         ),
       ),

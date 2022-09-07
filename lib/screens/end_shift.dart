@@ -113,7 +113,7 @@ class _EndShiftViewState extends State<EndShiftView> {
             String endTime =
                 DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now());
 
-            ShiftService.cancelShift(this.widget.shiftId, endTime);
+            ShiftService.cancelShift(this.widget.execShiftId, endTime);
 
             final prefs = await SharedPreferences.getInstance();
 
