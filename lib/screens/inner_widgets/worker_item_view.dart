@@ -177,9 +177,6 @@ class _WorkItemViewState extends State<WorkItemView> {
                       initialSelected: currentItem.isSelected,
                       picUrl: currentItem.picture,
                       changedStatus: (bool newStatus) async {
-
-
-
                         String dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
                             .format(DateTime.now());
 
@@ -207,13 +204,13 @@ class _WorkItemViewState extends State<WorkItemView> {
                             EasyLoading.showError('Error');
                           }
                         } else if (widget.isEditing && !newStatus) {
-
                           await showDialog(
                               context: context,
                               barrierDismissible: false,
                               builder: (BuildContext context) {
                                 return ConfirmTimeEnd(
                                   shiftItem: this.widget.selectedShift,
+                                  editing: widget.isEditing,
                                 );
                               }).then((value) async {
                             if (value != false) {
