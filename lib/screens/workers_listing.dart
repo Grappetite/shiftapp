@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
+import '../model/login_model.dart';
 import '../model/shifts_model.dart';
 import '../model/workers_model.dart';
 import '../services/workers_service.dart';
 import 'inner_widgets/worker_item_view.dart';
-import '../model/login_model.dart';
 
 class WorkersListing extends StatefulWidget {
   final int? shiftId;
@@ -62,11 +62,12 @@ class _WorkersListingState extends State<WorkersListing> {
       status: 'loading...',
       maskType: EasyLoadingMaskType.black,
     );
-    var responseShift = await WorkersService.getShiftWorkers(widget.shiftId,widget.processId);
+    var responseShift =
+        await WorkersService.getShiftWorkers(widget.shiftId, widget.processId);
 
     if (responseShift!.data!.worker!.isEmpty) {
-      responseShift =
-          await WorkersService.getShiftWorkers(widget.selectedShift.id,widget.processId);
+      responseShift = await WorkersService.getShiftWorkers(
+          widget.selectedShift.id, widget.processId);
     }
     List<ShiftWorker> shiftWorkers = [];
 
@@ -82,12 +83,11 @@ class _WorkersListingState extends State<WorkersListing> {
 
     var seen = <String>{};
 
-    if(shiftWorkers.isNotEmpty) {
+    if (shiftWorkers.isNotEmpty) {
       shiftWorkers.where((student) => seen.add(student.workerType!)).toList();
 
       listNames = seen.toList();
-    }
-    else {
+    } else {
       listNames = [];
     }
 
@@ -136,7 +136,7 @@ class _WorkersListingState extends State<WorkersListing> {
                   widget.process.name!,
                   style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 18,
+                      fontSize: 14,
                       fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(
@@ -171,7 +171,8 @@ class _WorkersListingState extends State<WorkersListing> {
                 process: this.widget.process,
                 reloadData: () {
                   loadData();
-                }, execShiftId: 0,
+                },
+                execShiftId: 0,
               ),
             ),
             const SizedBox(

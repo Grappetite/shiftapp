@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import '../../model/login_model.dart';
 import '../model/shifts_model.dart';
 import '../model/workers_model.dart';
 import '../services/workers_service.dart';
 import 'inner_widgets/worker_item_view.dart';
-import '../../model/login_model.dart';
 
 class EditWorkers extends StatefulWidget {
   final int shiftId;
@@ -29,7 +29,9 @@ class EditWorkers extends StatefulWidget {
       required this.startTime,
       required this.endTime,
       required this.efficiencyCalculation,
-      required this.selectedShift, required this.process, required this.execShiftId})
+      required this.selectedShift,
+      required this.process,
+      required this.execShiftId})
       : super(key: key);
 
   @override
@@ -37,26 +39,17 @@ class EditWorkers extends StatefulWidget {
 }
 
 class _EditWorkersState extends State<EditWorkers> {
+  List<List<ShiftWorker>> listLists = [];
+  List<String> listNames = [];
 
-   List<List<ShiftWorker>> listLists = [];
-   List<String> listNames = [];
-
-
-   @override
+  @override
   void initState() {
-
-
-
-
-
-     super.initState();
+    super.initState();
 
     loadWorkers();
-
   }
 
-   int workersSelected = 0;
-
+  int workersSelected = 0;
 
   void loadWorkers() async {
     await EasyLoading.show(
@@ -64,7 +57,8 @@ class _EditWorkersState extends State<EditWorkers> {
       maskType: EasyLoadingMaskType.black,
     );
 
-    var responseShift = await WorkersService.getShiftWorkers(widget.execShiftId,widget.processId);
+    var responseShift = await WorkersService.getShiftWorkers(
+        widget.execShiftId, widget.processId);
 
     List<ShiftWorker> shiftWorkers = [];
 
@@ -87,40 +81,40 @@ class _EditWorkersState extends State<EditWorkers> {
 
     for (var currentItem in listNames) {
       var response =
-      shiftWorkers.where((e) => e.workerType == currentItem).toList();
+          shiftWorkers.where((e) => e.workerType == currentItem).toList();
       setState(() {
         listLists.add(response);
       });
     }
-
-
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  AppBar(
-      centerTitle: true,
-      title: Column(
-        children:  [
-          Image.asset('assets/images/toplogo.png',height: 20,),
-          SizedBox(
-            height: 4,
-          ),
-          Text(
-            widget.process.name!,
-            style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w600),
-          ),
-          SizedBox(
-            height: 2,
-          ),
-        ],
+      appBar: AppBar(
+        centerTitle: true,
+        title: Column(
+          children: [
+            Image.asset(
+              'assets/images/toplogo.png',
+              height: 20,
+            ),
+            SizedBox(
+              height: 4,
+            ),
+            Text(
+              widget.process.name!,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600),
+            ),
+            SizedBox(
+              height: 2,
+            ),
+          ],
+        ),
       ),
-    ),
       body: SizedBox(
         width: double.infinity,
         height: double.infinity,
@@ -134,11 +128,12 @@ class _EditWorkersState extends State<EditWorkers> {
             selectedShift: widget.selectedShift,
             shiftId: widget.shiftId,
             totalItems: widget.totalUsersCount,
-            isEditing: true, process: this.widget.process, reloadData: () {
-
+            isEditing: true,
+            process: this.widget.process,
+            reloadData: () {
               loadWorkers();
-
-          }, execShiftId: widget.execShiftId,
+            },
+            execShiftId: widget.execShiftId,
           ),
         ),
       ),

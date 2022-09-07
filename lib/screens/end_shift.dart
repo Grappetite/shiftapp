@@ -8,12 +8,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
+import '../model/login_model.dart';
 import '../model/shifts_model.dart';
 import '../services/shift_service.dart';
 import '../services/workers_service.dart';
 import 'edit_workers.dart';
 import 'end_shift_final_screen.dart';
-import '../model/login_model.dart';
 
 class EndShiftView extends StatefulWidget {
   final bool startedBefore;
@@ -104,18 +104,11 @@ class _EndShiftViewState extends State<EndShiftView> {
               message: 'Are you sure you want to discard this shift?',
               okLabel: 'YES',
               cancelLabel: 'NO',
-
             );
 
-            if(result.index == 1) {
+            if (result.index == 1) {
               return;
             }
-
-
-
-
-
-
 
             String endTime =
                 DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now());
@@ -198,7 +191,7 @@ class _EndShiftViewState extends State<EndShiftView> {
               widget.process.name!,
               style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600),
             ),
             SizedBox(
@@ -309,7 +302,6 @@ class _EndShiftViewState extends State<EndShiftView> {
                   );
 
                   loadUsers();
-
                 },
               ),
             ),

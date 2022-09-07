@@ -159,7 +159,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
               widget.process.name!,
               style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600),
             ),
             SizedBox(
@@ -370,11 +370,11 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                             );
 
                             var check = await ShiftService.endShift(
-                                widget.executeShiftId,
-                                widget.processId,
-                                textController.text,
-                                 answer,
-                                );
+                              widget.executeShiftId,
+                              widget.processId,
+                              textController.text,
+                              answer,
+                            );
 
                             await EasyLoading.dismiss();
 
@@ -603,9 +603,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                         Expanded(
                           child: PElevatedButton(
                             onPressed: () async {
-
                               Navigator.pop(context, widget.shiftItem.endTime);
-
                             },
                             text: 'YES',
                           ),

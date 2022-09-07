@@ -7,13 +7,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
+import '../model/login_model.dart';
 import '../model/shifts_model.dart';
 import '../services/workers_service.dart';
 import 'end_shift.dart';
-import '../model/login_model.dart';
 
 class StartShiftView extends StatefulWidget {
-
   final int shiftId;
   final int processId;
   final List<String> userId;
@@ -24,7 +23,6 @@ class StartShiftView extends StatefulWidget {
   final ShiftItem selectedShift;
   final Process process;
 
-
   const StartShiftView(
       {Key? key,
       required this.shiftId,
@@ -34,7 +32,8 @@ class StartShiftView extends StatefulWidget {
       required this.startTime,
       required this.endTime,
       required this.efficiencyCalculation,
-      required this.selectedShift, required this.process})
+      required this.selectedShift,
+      required this.process})
       : super(key: key);
 
   @override
@@ -70,21 +69,25 @@ class _StartShiftViewState extends State<StartShiftView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(//8171999927660000
+    return Scaffold(
+      //8171999927660000
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         centerTitle: true,
         title: Column(
-          children:  [
-            Image.asset('assets/images/toplogo.png',height: 20,),
+          children: [
+            Image.asset(
+              'assets/images/toplogo.png',
+              height: 20,
+            ),
             SizedBox(
               height: 4,
             ),
-             Text(
+            Text(
               widget.process.name!,
               style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600),
             ),
             SizedBox(
@@ -106,8 +109,7 @@ class _StartShiftViewState extends State<StartShiftView> {
               child: ExplainerWidget(
                 iconName: 'construct',
                 title: 'Workers',
-                text1:
-                    text1(),
+                text1: text1(),
                 text2: '',
                 showWarning: true,
                 showIcon: true,
@@ -133,9 +135,12 @@ class _StartShiftViewState extends State<StartShiftView> {
               ),
             ),
 
-            SizedBox(height: 8,),
+            SizedBox(
+              height: 8,
+            ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
               child: TextFormField(
                 decoration: const InputDecoration(
                   hintText: 'Enter Comments',
@@ -159,28 +164,24 @@ class _StartShiftViewState extends State<StartShiftView> {
               ),
             ),
 
-
             SizedBox(
               width: MediaQuery.of(context).size.width / 1.7,
               child: TextButton(
                 onPressed: () async {
-
-                  if(_controller.text.isEmpty) {
-
+                  if (_controller.text.isEmpty) {
                     showAlertDialog(
                       context: context,
                       title: 'Error',
                       message: 'Please add comment.',
                       actions: [
                         AlertDialogAction(
-                          label: MaterialLocalizations.of(context)
-                              .okButtonLabel,
+                          label:
+                              MaterialLocalizations.of(context).okButtonLabel,
                           key: OkCancelResult.ok,
                         )
                       ],
                     );
                     return;
-
                   }
                   await EasyLoading.show(
                     status: 'loading...',
@@ -193,22 +194,21 @@ class _StartShiftViewState extends State<StartShiftView> {
                       widget.startTime,
                       widget.endTime,
                       widget.userId,
-                      widget.efficiencyCalculation,_controller.text);
+                      widget.efficiencyCalculation,
+                      _controller.text);
 
                   await EasyLoading.dismiss();
 
                   if (result != null) {
-
-                    if(result.status == 'error') {
-
+                    if (result.status == 'error') {
                       showAlertDialog(
                         context: context,
                         title: 'Error',
                         message: result.message,
                         actions: [
                           AlertDialogAction(
-                            label: MaterialLocalizations.of(context)
-                                .okButtonLabel,
+                            label:
+                                MaterialLocalizations.of(context).okButtonLabel,
                             key: OkCancelResult.ok,
                           )
                         ],
@@ -218,7 +218,6 @@ class _StartShiftViewState extends State<StartShiftView> {
                     }
 
                     if (result.code! == 200) {
-
                       final prefs = await SharedPreferences.getInstance();
                       prefs.setInt('shiftId', widget.selectedShift.id!);
                       prefs.setInt('processId', widget.processId);
@@ -235,11 +234,8 @@ class _StartShiftViewState extends State<StartShiftView> {
                       prefs.setInt('selectedDisplayScreen',
                           widget.selectedShift.displayScreen!);
 
-                      prefs.setInt('execute_shift_id',
-                          result.data!.executeShiftId!);
-
-
-
+                      prefs.setInt(
+                          'execute_shift_id', result.data!.executeShiftId!);
 
                       Navigator.pushReplacement(
                         context,
@@ -247,13 +243,12 @@ class _StartShiftViewState extends State<StartShiftView> {
                           builder: (BuildContext context) => EndShiftView(
                               userId: widget.userId,
                               efficiencyCalculation:
-                              widget.efficiencyCalculation,
+                                  widget.efficiencyCalculation,
                               shiftId: widget.shiftId,
                               processId: widget.processId,
                               selectedShift: widget.selectedShift,
                               process: widget.process,
-                              execShiftId : result.data!.executeShiftId!
-                          ),
+                              execShiftId: result.data!.executeShiftId!),
                         ),
                       );
                     }
@@ -274,9 +269,9 @@ class _StartShiftViewState extends State<StartShiftView> {
   }
 
   String text1() {
-    if(widget.process.headCount == null) {
-      return'${widget.userId.length}/${widget.totalUsersCount} Workers';
+    if (widget.process.headCount == null) {
+      return '${widget.userId.length}/${widget.totalUsersCount} Workers';
     }
-    return'${widget.userId.length}/${widget.process.headCount} Workers';
+    return '${widget.userId.length}/${widget.process.headCount} Workers';
   }
 }
