@@ -178,9 +178,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                       picUrl: currentItem.picture,
                       changedStatus: (bool newStatus) async {
 
-                        setState(() {
-                          currentItem.isSelected = newStatus;
-                        });
+
 
                         String dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
                             .format(DateTime.now());
@@ -209,7 +207,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                             EasyLoading.showError('Error');
                           }
                         } else if (widget.isEditing && !newStatus) {
-                          /// Mahboob Work
+
                           await showDialog(
                               context: context,
                               barrierDismissible: false,
@@ -246,6 +244,10 @@ class _WorkItemViewState extends State<WorkItemView> {
                                 EasyLoading.showError('Error');
                               }
                             }
+                          });
+                        } else {
+                          setState(() {
+                            currentItem.isSelected = newStatus;
                           });
                         }
                       },
