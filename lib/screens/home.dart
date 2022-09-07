@@ -167,7 +167,6 @@ class _HomeMainViewState extends State<HomeMainView> {
       "shiftId": widget.selectedShift.id!,
       "processId": widget.processSelected.id!,
       "selectedShift": widget.selectedShift,
-      "comment": widget.comment!,
       "startedBefore": true,
       "process": widget.processSelected,
       "execShiftId": executeShiftId!,

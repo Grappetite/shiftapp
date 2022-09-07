@@ -12,11 +12,11 @@ class EditWorkers extends StatefulWidget {
   int? execShiftId;
 
   int? processId;
-  List<String>? userId;
+  List<dynamic>? userId;
   int? totalUsersCount;
   String? startTime;
   String? endTime;
-  List<String>? efficiencyCalculation;
+  List<dynamic>? efficiencyCalculation;
   ShiftItem? selectedShift;
   Process? process;
 
@@ -46,7 +46,7 @@ class _EditWorkersState extends State<EditWorkers> {
   void initState() {
     widget.shiftId = Get.arguments["shiftId"];
     widget.execShiftId = Get.arguments["execShiftId"];
-    widget.processId = Get.arguments["process"];
+    widget.processId = Get.arguments["processId"];
     widget.userId = Get.arguments["userId"];
     widget.totalUsersCount = Get.arguments["totalUsersCount"];
     widget.startTime = Get.arguments["startTime"];

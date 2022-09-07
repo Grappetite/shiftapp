@@ -51,10 +51,10 @@ class _LoginScreenState extends State<LoginScreen> {
           await LoginService.login(loginUserName, passString);
 
       if (response == null) {
-        await EasyLoading.dismiss();
+        // await EasyLoading.dismiss();
       } else {
         if (response.data!.shiftDetails == null) {
-          await EasyLoading.dismiss();
+          // await EasyLoading.dismiss();
 
           Api().sp.remove('username');
 

@@ -89,15 +89,6 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
     super.dispose();
     doneButton.dispose();
     setupFocusNode(doneButton);
-    widget.shiftId = Get.arguments["shiftId"];
-    widget.processId = Get.arguments["processId"];
-    widget.process = Get.arguments["process"];
-    widget.executeShiftId = Get.arguments["executeShiftId"];
-    widget.startTime = Get.arguments["startTime"];
-    widget.endTime = Get.arguments["endTime"];
-    widget.selectedShift = Get.arguments["selectedShift"];
-    widget.comments = Get.arguments["comments"];
-    widget.autoOpen = Get.arguments["autoOpen"];
   }
 
   static OverlayEntry? _overlayEntry;
@@ -151,6 +142,15 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
     super.initState();
     setupFocusNode(doneButton);
     startTimer();
+    widget.shiftId = Get.arguments["shiftId"];
+    widget.processId = Get.arguments["processId"];
+    widget.process = Get.arguments["process"];
+    widget.executeShiftId = Get.arguments["executeShiftId"];
+    widget.startTime = Get.arguments["startTime"];
+    widget.endTime = Get.arguments["endTime"];
+    widget.selectedShift = Get.arguments["selectedShift"];
+    widget.comments = Get.arguments["comments"];
+    widget.autoOpen = Get.arguments["autoOpen"] ?? false;
   }
 
   @override

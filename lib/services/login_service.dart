@@ -11,24 +11,16 @@ class LoginService {
     var dio = Dio();
 
     Response response = await Api().post(
-      {'email': username, 'password': password}, 'login',
-
-// <<<<<<< HEAD
-//           options: Options(
-//             headers: {
-//               authorization: mainLoginToken,
-//             },
-//           ));
-// =======
+      {'email': username, 'password': password},
+      'login',
     );
 
     print(response.data['data']);
 
-    if (response.statusCode != 200) {
+    if (response.statusCode == 200) {
       var responseObject = LoginResponse.fromJson(response.data);
 
       print(response.data['data']);
-      responseObject.data!.user!.lastName;
 
       Api().sp.write(tokenKey, responseObject.token!);
 

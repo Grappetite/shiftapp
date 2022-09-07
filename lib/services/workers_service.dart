@@ -25,7 +25,7 @@ class WorkersService {
 
     print(response.data);
 
-    if (response.statusCode != 200) {
+    if (response.statusCode == 200) {
       print(response.data);
 
       var responseObject = WorkersListing.fromJson(response.data);
@@ -61,7 +61,7 @@ class WorkersService {
     );
     print(response.data);
 
-    if (response.statusCode != 200) {
+    if (response.statusCode == 200) {
       var responseObject =
           WorkersListing.fromJson(response.data, isSearch: true);
       if (responseObject.searchWorker == null) {
@@ -193,7 +193,7 @@ class WorkersService {
 
     // print(response!.data);
 
-    if (response!.statusCode != 200) {
+    if (response!.statusCode == 200) {
       var responseObject = AddWorkersResponse.fromJson(response.data);
 
       return responseObject;
@@ -210,7 +210,7 @@ class WorkersService {
 
     print(response.data);
 
-    if (response.statusCode != 200) {
+    if (response.statusCode == 200) {
       return null;
     }
     var responseObject = WorkerTypeResponse.fromJson(response.data);
