@@ -115,6 +115,7 @@ class _StartShiftViewState extends State<StartShiftView> {
             const SizedBox(
               height: 16,
             ),
+
             ExplainerWidget(
               iconName: 'construct',
               title: 'Workers',
@@ -130,21 +131,25 @@ class _StartShiftViewState extends State<StartShiftView> {
             const SizedBox(
               height: 16,
             ),
-            ExplainerWidget(
-              iconName: 'construct',
-              title: 'PPE',
-              text1: '2/5 Planned PPE per Worker Type',
-              text2: '',
-              showWarning: true,
-              showIcon: true,
-              backgroundColor: lightRedColor,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: ExplainerWidget(
+                iconName: 'construct',
+                title: 'PPE',
+                text1: '2/5 Planned PPE per Worker Type',
+                text2: '',
+                showWarning: true,
+                showIcon: true,
+                backgroundColor: lightRedColor,
+              ),
             ),
 
             SizedBox(
               height: 8,
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
               child: TextFormField(
                 decoration: const InputDecoration(
                   hintText: 'Enter Comments',
@@ -198,11 +203,29 @@ class _StartShiftViewState extends State<StartShiftView> {
                       widget.startTime!,
                       widget.endTime!,
                       widget.userId!,
-                      widget.efficiencyCalculation!);
+                      widget.efficiencyCalculation!,
+                      _controller.text);
 
                   //await EasyLoading.dismiss();
 
                   if (result != null) {
+                    if (result.status == 'error') {
+                      showAlertDialog(
+                        context: context,
+                        title: 'Error',
+                        message: result.message,
+                        actions: [
+                          AlertDialogAction(
+                            label:
+                                MaterialLocalizations.of(context).okButtonLabel,
+                            key: OkCancelResult.ok,
+                          )
+                        ],
+                      );
+
+                      return;
+                    }
+
                     if (result.code! == 200) {
                       // final prefs = await SharedPreferences.getInstance();
                       Api().sp.write('shiftId', widget.selectedShift!.id!);
@@ -212,12 +235,23 @@ class _StartShiftViewState extends State<StartShiftView> {
                       Api().sp.write(
                           'selectedShiftName', widget.selectedShift!.name!);
 
+                      Api().sp.write('shiftId', widget.selectedShift!.id!);
+                      Api().sp.write('processId', widget.processId);
+
                       Api().sp.write('selectedShiftStartTime',
                           widget.selectedShift!.startTime!);
 
                       Api().sp.write('selectedShiftEndTime',
                           widget.selectedShift!.endTime!);
 
+                      Api().sp.write('selectedDisplayScreen',
+                          widget.selectedShift!.displayScreen!);
+
+// <<<<<<< HEAD
+                      Api().sp.write(
+                          'execute_shift_id', result.data!.executeShiftId!);
+
+// =======
                       Api().sp.write('selectedDisplayScreen',
                           widget.selectedShift!.displayScreen!);
 
@@ -233,81 +267,23 @@ class _StartShiftViewState extends State<StartShiftView> {
                         "process": widget.process!,
                         "execShiftId": result.data!.executeShiftId!
                       });
+
                       // Navigator.pushReplacement(
                       //   context,
                       //   MaterialPageRoute(
                       //     builder: (BuildContext context) => EndShiftView(
-                      //         userId: widget.userId!,
+                      //         userId: widget.userId,
                       //         efficiencyCalculation:
-                      //             widget.efficiencyCalculation,
+                      //         widget.efficiencyCalculation,
                       //         shiftId: widget.shiftId,
                       //         processId: widget.processId,
-                      //         selectedShift: widget.selectedShift!,
-                      //         comment: _controller.text,
-                      //         process: widget.process!,
-                      //         execShiftId: result.data!.executeShiftId!),
+                      //         selectedShift: widget.selectedShift,
+                      //         process: widget.process,
+                      //         execShiftId : result.data!.executeShiftId!
+                      //     ),
                       //   ),
                       // );
-// <<<<<<< HEAD
-//
-//                       var result = await WorkersService.addShiftWorker(
-//                           widget.shiftId,
-//                           widget.process!Id,
-//                           widget.startTime,
-//                           widget.endTime,
-//                           widget.userId!,
-//                           widget.efficiencyCalculation);
-//
-//                       //await EasyLoading.dismiss();
-//
-//                       if (result != null) {
-//                         if (result.code! == 200) {
-//                           //final prefs = await SharedPreferences.getInstance();
-//                           Api().sp.write('shiftId', widget.selectedShift.id!);
-//                           Api().sp.write('processId', widget.process!Id);
-//                           Api().sp.write('comment', _controller.text);
-//
-//                           Api().sp.write(
-//                               'selectedShiftName', widget.selectedShift.name!);
-//
-//                           Api().sp.write('selectedShiftStartTime',
-//                               widget.selectedShift.startTime!);
-//
-//                           Api().sp.write('selectedShiftEndTime',
-//                               widget.selectedShift.endTime!);
-//
-//                           Api().sp.write('selectedDisplayScreen',
-//                               widget.selectedShift.displayScreen!);
-//
-//                           Navigator.pushReplacement(
-//                             context,
-//                             MaterialPageRoute(
-//                               builder: (BuildContext context) => EndShiftView(
-//                                 userId: widget.userId!,
-//                                 efficiencyCalculation:
-//                                     widget.efficiencyCalculation,
-//                                 shiftId: widget.shiftId,
-//                                 processId: widget.process!Id,
-//                                 selectedShift: widget.selectedShift,
-//                                 comment: _controller.text,
-//                                 process: widget.process!,
-//                               ),
-//                             ),
-//                           );
-//                         }
-//                       } else {
-//                         EasyLoading.showError('Could not load data');
-//                       }
-//                     },
-//                     child: Image.asset('assets/images/start_button.png'),
-//                   ),
-//                 ),
-//                 Expanded(
-//                   flex: 22,
-//                   child: Container(),
-//                 ),
-//               ],
-// =======
+// >>>>>>> master
                     }
                   } else {
                     EasyLoading.showError('Could not load data');

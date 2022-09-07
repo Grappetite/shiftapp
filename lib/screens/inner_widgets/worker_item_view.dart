@@ -177,6 +177,9 @@ class _WorkItemViewState extends State<WorkItemView> {
                       initialSelected: currentItem.isSelected,
                       picUrl: currentItem.picture,
                       changedStatus: (bool newStatus) async {
+
+
+
                         String dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
                             .format(DateTime.now());
 
@@ -204,7 +207,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                             EasyLoading.showError('Error');
                           }
                         } else if (widget.isEditing && !newStatus) {
-                          /// Mahboob Work
+
                           await showDialog(
                               context: context,
                               barrierDismissible: false,
@@ -227,7 +230,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                               // );
 
                               var response = await WorkersService.removeWorkers(
-                                  widget.execShiftId!, [
+                                  widget.execShiftId, [
                                 currentItem.id!.toString()
                               ], [
                                 dateString

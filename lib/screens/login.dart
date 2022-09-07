@@ -34,20 +34,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   int processIndexSelected = -1;
 
-  @override
-  void initState() {
-    super.initState();
-
-    controller.text = 'sidra+supervisor@grappetite.com';
-    //controller.text = 'asfa+sup3@grappetite.com';
-
-    //
-    passwordController.text = 'sidragrap';
-    //passwordController.text = 'rzbsun';
-
-    loadDefaul();
-  }
-
   void loadDefaul() async {
     //final prefs = await SharedPreferences.getInstance();
 
@@ -58,7 +44,6 @@ class _LoginScreenState extends State<LoginScreen> {
       //   status: 'loading...',
       //   maskType: EasyLoadingMaskType.black,
       // );
-
       String loginUserName = Api().sp.read('username')!;
       String passString = Api().sp.read('password')!;
 
@@ -66,57 +51,94 @@ class _LoginScreenState extends State<LoginScreen> {
           await LoginService.login(loginUserName, passString);
 
       if (response == null) {
+        await EasyLoading.dismiss();
       } else {
+        if (response.data!.shiftDetails == null) {
+          await EasyLoading.dismiss();
+
+          Api().sp.remove('username');
+
+          Api().sp.remove('password');
+
+          Api().sp.remove('shiftId');
+          return;
+        }
         process = response.data!.process!;
-        int processId = Api().sp.read('processId')!;
-
-        var selectedProcess = process.firstWhere((e) => e.id == processId);
-
-        String shiftName = Api().sp.read('selectedShiftName')!;
-        String shiftStartTime = Api().sp.read('selectedShiftStartTime')!;
-        String shiftEndTime = Api().sp.read('selectedShiftEndTime')!;
 
         var shiftObject = ShiftItem(
-          id: shiftId,
-          name: shiftName,
-          startTime: shiftStartTime,
-          endTime: shiftEndTime,
+          id: response.data!.shiftDetails!.shiftId!,
+          name: response.data!.shiftDetails!.shiftName!,
+          startTime: response.data!.shiftDetails!.executeShiftStartTime,
+          endTime: response.data!.shiftDetails!.executeShiftEndTime,
         );
 
-        shiftObject.displayScreen = 1;
+// <<<<<<< HEAD
+//         shiftObject.displayScreen = 1;
+//
+//         //await EasyLoading.dismiss();
+//         Get.offAllNamed(Routes.home, arguments: {
+//           "selectedShift": shiftObject,
+//           "processSelected": selectedProcess,
+//           "sessionStarted": true,
+//           "comment": Api().sp.read('comment'),
+//         });
+//         //     // Navigator.pushReplacement(
+//         //     //   context,
+//         //     //   MaterialPageRoute(
+//         //     //     builder: (BuildContext context) => HomeView(
+//         //     //       selectedShift: shiftObject,
+//         //     //       processSelected: selectedProcess,
+//         //     //       sessionStarted: true,
+//         //     //       comment: Api().sp.read('comment'),
+//         //     //     ),
+//         //     //   ),
+//         //     // );
+// =======
 
-        //await EasyLoading.dismiss();
+        shiftObject.executedShiftId =
+            response.data!.shiftDetails!.executeShiftId;
+
+        shiftObject.displayScreen = 2;
+
+        // await EasyLoading.dismiss();
         Get.offAllNamed(Routes.home, arguments: {
           "selectedShift": shiftObject,
-          "processSelected": selectedProcess,
+          "processSelected": response.data!.shiftDetails!.process!,
           "sessionStarted": true,
-          "comment": Api().sp.read('comment'),
         });
-        //     // Navigator.pushReplacement(
-        //     //   context,
-        //     //   MaterialPageRoute(
-        //     //     builder: (BuildContext context) => HomeView(
-        //     //       selectedShift: shiftObject,
-        //     //       processSelected: selectedProcess,
-        //     //       sessionStarted: true,
-        //     //       comment: Api().sp.read('comment'),
-        //     //     ),
-        //     //   ),
-        //     // );
+
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (BuildContext context) => HomeView(
+        //       selectedShift: shiftObject,
+        //       processSelected: response.data!.shiftDetails!.process!,
+        //       sessionStarted: true,
+        //     ),
+        //   ),
+        // );
+
+// >>>>>>> master
       }
     }
+  }
 
-    /*
+  @override
+  void initState() {
+    super.initState();
 
+    controller.text = 'sidra+supervisor@grappetite.com';
 
-    Api().sp.setString('selectedShiftStartTime',
-        widget.selectedShift.startTime!);
+    controller.text = 'asfa+s@grappetite.com';
+    controller.text = 'asfa+supervisor@grappetite.com';
+    pwd:
 
-    Api().sp.setString('selectedShiftEndTime',
-        widget.selectedShift.endTime!);
+    //
+    passwordController.text = 'sidragrap';
+    passwordController.text = 'isqvqx';
+    passwordController.text = 'oznytw';
 
-    Api().sp.setInt('selectedDisplayScreen',
-        widget.selectedShift.displayScreen!);*/
+    loadDefaul();
   }
 
   @override
@@ -284,6 +306,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       Api().sp.write('username', controller.text);
                       Api().sp.write('password', passwordController.text);
+
+                      if (response.data!.shiftDetails != null) {
+                        Api().sp.write(
+                            'shiftId', response.data!.shiftDetails!.shiftId!);
+                        loadDefaul();
+
+                        //prefs.reload();
+
+                        return;
+                      }
 
                       process = response.data!.process!;
 

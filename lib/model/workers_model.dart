@@ -183,13 +183,18 @@ class AddWorkersResponse {
   String? message;
   AddWorkerData? data;
 
-  AddWorkersResponse({this.code, this.status, this.message});
+  String? error;
 
-  AddWorkersResponse.fromJson(Map<String, dynamic> json) {
+
+  AddWorkersResponse({this.code, this.status, this.message  });
+
+  AddWorkersResponse.fromJson(Map<String, dynamic> json,{bool error = false}) {
     code = json['code'];
     status = json['status'];
     message = json['message'];
-    data = json['data'] != null ? new AddWorkerData.fromJson(json['data']) : null;
+    if(error == false) {
+      data = json['data'] != null ? new AddWorkerData.fromJson(json['data']) : null;
+    }
 
   }
 

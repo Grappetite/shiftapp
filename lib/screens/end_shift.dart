@@ -88,6 +88,8 @@ class _EndShiftViewState extends State<EndShiftView> {
 
     this.executeShiftId = Api().sp.read('execute_shift_id');
 
+    // this.executeShiftId = widget.execShiftId;
+
     loadUsers();
   }
 

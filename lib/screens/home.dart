@@ -14,19 +14,16 @@ import '../config/constants.dart';
 class HomeView extends StatefulWidget {
   Process? processSelected;
 
-  String? comment;
-
   ShiftItem? selectedShift;
 
   bool? sessionStarted;
 
-  HomeView(
-      {Key? key,
-      this.processSelected,
-      this.selectedShift,
-      this.sessionStarted = false,
-      this.comment})
-      : super(key: key);
+  HomeView({
+    Key? key,
+    this.processSelected,
+    this.selectedShift,
+    this.sessionStarted = false,
+  }) : super(key: key);
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -41,7 +38,7 @@ class _HomeViewState extends State<HomeView> {
     widget.processSelected = Get.arguments["processSelected"];
     widget.selectedShift = Get.arguments["selectedShift"];
     widget.sessionStarted = Get.arguments["sessionStarted"];
-    widget.comment = Get.arguments["comment"];
+    // widget.comment = Get.arguments["comment"];
     _controller = PersistentTabController(initialIndex: 0);
   }
 
@@ -89,7 +86,6 @@ class _HomeViewState extends State<HomeView> {
         selectedShift: widget.selectedShift!,
         processSelected: widget.processSelected!,
         sessionStarted: widget.sessionStarted ?? false,
-        comment: widget.comment,
         onLogout: () async {
           var dyanc = await Get.toNamed(Routes.login);
           // Navigator.push(

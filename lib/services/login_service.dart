@@ -25,16 +25,16 @@ class LoginService {
     print(response.data['data']);
 
     if (response.statusCode != 200) {
-      return null;
+      var responseObject = LoginResponse.fromJson(response.data);
+
+      print(response.data['data']);
+      responseObject.data!.user!.lastName;
+
+      Api().sp.write(tokenKey, responseObject.token!);
+
+      return responseObject;
     }
-    var responseObject = LoginResponse.fromJson(response.data);
 
-    //final prefs = await SharedPreferences.getInstance();
-    responseObject.data!.user!.lastName;
-
-    Api().sp.write(tokenKey, responseObject.token!);
-
-    return responseObject;
     // } catch (e) {
     //   return null;
     // }

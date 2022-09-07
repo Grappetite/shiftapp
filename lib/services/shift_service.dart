@@ -29,11 +29,8 @@ class ShiftService {
     return responseObject;
   }
 
-  static Future<bool> endShift(int shiftId, int processId, String unitsProduced,
-      String comment, String endTime) async {
-    var dio = Dio();
-    // final prefs = await SharedPreferences.getInstance();
-
+  static Future<bool> endShift(
+      int shiftId, int processId, String unitsProduced, String endTime) async {
     Response response = await Api().post({
       'execute_shift_id': shiftId.toString(),
       'process_id': processId.toString(),

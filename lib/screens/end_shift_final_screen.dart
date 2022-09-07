@@ -384,7 +384,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                 });
 
                             if (answer != null) {
-                              if (!answer) {
+                              if (answer == false) {
                                 return;
                               }
                             }
@@ -395,11 +395,19 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                             // );
 
                             var check = await ShiftService.endShift(
-                                widget.executeShiftId!,
-                                widget.processId!,
-                                textController.text!,
-                                widget.comments!,
-                                widget.endTime!);
+                              widget.executeShiftId!,
+                              widget.processId!,
+                              textController.text,
+                              answer,
+                            );
+
+// <<<<<<< HEAD
+//                                 widget.executeShiftId!,
+//                                 widget.processId!,
+//                                 textController.text!,
+//                                 widget.comments!,
+//                                 widget.endTime!);
+// =======
 
                             //await EasyLoading.dismiss();
 
@@ -646,8 +654,6 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                         Expanded(
                           child: PElevatedButton(
                             onPressed: () async {
-                              //addTempWorkers
-
                               Get.back(result: widget.shiftItem.endTime);
 
                               /* await EasyLoading.show(

@@ -16,7 +16,6 @@ class WorkersService {
     if (shiftId != null) {
       url = 'manageWorkerLisiting/' + shiftId.toString();
     }
-
     var token = Api().sp.read(tokenKey);
     print('');
 
@@ -27,7 +26,19 @@ class WorkersService {
     print(response.data);
 
     if (response.statusCode != 200) {
-      return null;
+      print(response.data);
+
+      var responseObject = WorkersListing.fromJson(response.data);
+
+      if (responseObject.data == null) {
+        return null;
+      }
+
+      if (responseObject.data!.shiftWorker == null) {
+        responseObject.data!.shiftWorker = [];
+      }
+
+      return responseObject;
     }
     var responseObject = WorkersListing.fromJson(response.data);
 
@@ -51,7 +62,12 @@ class WorkersService {
     print(response.data);
 
     if (response.statusCode != 200) {
-      return null;
+      var responseObject =
+          WorkersListing.fromJson(response.data, isSearch: true);
+      if (responseObject.searchWorker == null) {
+        return null;
+      }
+      return responseObject;
     }
     var responseObject = WorkersListing.fromJson(response.data, isSearch: true);
 
@@ -157,7 +173,8 @@ class WorkersService {
       String startTime,
       String endTime,
       List<String> workerUserId,
-      List<String> efficiencyCalculation) async {
+      List<String> efficiencyCalculation,
+      String comment) async {
     var dio = Dio();
     //final prefs = await SharedPreferences.getInstance();
 
@@ -168,7 +185,8 @@ class WorkersService {
         'start_time': startTime,
         'end_time': endTime,
         'worker_user_id': workerUserId,
-        'efficiency_calculation': efficiencyCalculation
+        'efficiency_calculation': efficiencyCalculation,
+        'comment': comment,
       },
       'addShiftWorker',
     );
@@ -176,11 +194,10 @@ class WorkersService {
     // print(response!.data);
 
     if (response!.statusCode != 200) {
-      return null;
-    }
-    var responseObject = AddWorkersResponse.fromJson(response.data);
+      var responseObject = AddWorkersResponse.fromJson(response.data);
 
-    return responseObject;
+      return responseObject;
+    }
   }
 
   static Future<WorkerTypeResponse?> getWorkTypes(
@@ -223,7 +240,6 @@ class WorkersService {
       },
       'workers',
     );
-
     print(response.data);
 
     if (response.statusCode != 200) {
