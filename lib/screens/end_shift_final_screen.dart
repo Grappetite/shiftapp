@@ -449,8 +449,11 @@ class KeypadDoneButton extends StatelessWidget {
 
 class ConfirmTimeEnd extends StatefulWidget {
   final ShiftItem shiftItem;
+  final bool editing;
 
-  const ConfirmTimeEnd({Key? key, required this.shiftItem}) : super(key: key);
+  const ConfirmTimeEnd(
+      {Key? key, required this.shiftItem, this.editing = false})
+      : super(key: key);
 
   @override
   State<ConfirmTimeEnd> createState() => _ConfirmTimeEndState();
@@ -472,7 +475,9 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
       backgroundColor: Colors.transparent,
       content: Container(
         width: MediaQuery.of(context).size.width / 1.15,
-        height: MediaQuery.of(context).size.height / 2.0,
+        height: widget.editing
+            ? MediaQuery.of(context).size.height / 3.5
+            : MediaQuery.of(context).size.height / 2.0,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -483,17 +488,20 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
             Padding(
               padding: const EdgeInsets.only(right: 8, top: 4),
               child: Align(
-                alignment: Alignment.topRight,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Icon(
-                    Icons.close,
-                    color: kPrimaryColor,
+                  alignment: Alignment.topRight,
+                  child: SizedBox(
+                    height: 15,
+                  )
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Navigator.pop(context);
+                  //   },
+                  //   child: Icon(
+                  //     Icons.close,
+                  //     color: kPrimaryColor,
+                  //   ),
+                  // ),
                   ),
-                ),
-              ),
             ),
             Expanded(
               child: Padding(
@@ -511,71 +519,89 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                         SizedBox(
                           width: 8,
                         ),
-                        const AlertTitleLabel(
-                          title: 'CLOST SHIFT',
+                        AlertTitleLabel(
+                          title:
+                              widget.editing ? "Remove worker" : 'CLOST SHIFT',
                         ),
                       ],
                     ),
                     const SizedBox(
                       height: 12,
                     ),
-                    Text(
-                      'Adjust shift ent time if different to current:',
-                      style: TextStyle(color: kPrimaryColor, fontSize: 12),
-                    ),
-                    Expanded(
-                      child: Container(),
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        TimeOfDay? newTime = await showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay(
-                              hour: DateTime.now().hour,
-                              minute: DateTime.now().minute),
-                          initialEntryMode: TimePickerEntryMode.dial,
-                        );
+                    widget.editing
+                        ? Container()
+                        : Text(
+                            'Adjust shift ent time if different to current:',
+                            style:
+                                TextStyle(color: kPrimaryColor, fontSize: 12),
+                          ),
+                    widget.editing
+                        ? Container()
+                        : Expanded(
+                            child: Container(),
+                          ),
+                    widget.editing
+                        ? Container()
+                        : GestureDetector(
+                            onTap: () async {
+                              TimeOfDay? newTime = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay(
+                                    hour: DateTime.now().hour,
+                                    minute: DateTime.now().minute),
+                                initialEntryMode: TimePickerEntryMode.dial,
+                              );
 
-                        if (newTime != null) {
-                          var customSelectedStartTime = widget.shiftItem
-                              .makeTimeStringFromHourMinute(
-                                  newTime.hour, newTime.minute);
+                              if (newTime != null) {
+                                var customSelectedStartTime = widget.shiftItem
+                                    .makeTimeStringFromHourMinute(
+                                        newTime.hour, newTime.minute);
 
-                          setState(() {
-                            widget.shiftItem.endTime = customSelectedStartTime;
-                          });
-                        }
-                      },
-                      child: InputView(
-                        isDisabled: true,
-                        showError: false,
-                        hintText: 'Shift End Time',
-                        onChange: (newValue) {},
-                        controller: TextEditingController(
-                            text: widget.shiftItem.showEndTime),
-                        text: widget.shiftItem.showEndTime,
-                        suffixIcon: Icons.expand_circle_down_outlined,
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(),
-                    ),
+                                setState(() {
+                                  widget.shiftItem.endTime =
+                                      customSelectedStartTime;
+                                });
+                              }
+                            },
+                            child: InputView(
+                              isDisabled: true,
+                              showError: false,
+                              hintText: 'Shift End Time',
+                              onChange: (newValue) {},
+                              controller: TextEditingController(
+                                  text: widget.shiftItem.showEndTime),
+                              text: widget.shiftItem.showEndTime,
+                              suffixIcon: Icons.expand_circle_down_outlined,
+                            ),
+                          ),
+                    widget.editing
+                        ? Container()
+                        : Expanded(
+                            child: Container(),
+                          ),
 
+                    widget.editing
+                        ? Container()
+                        : Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              dataToDisplay(),
+                              style: TextStyle(
+                                  color: kPrimaryColor,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                    widget.editing
+                        ? Container()
+                        : Expanded(
+                            child: Container(),
+                          ),
                     Align(
                       alignment: Alignment.center,
                       child: Text(
-                        dataToDisplay(),
-                        style: TextStyle(
-                            color: kPrimaryColor, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(),
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Are you sure you want to close this shift?',
+                        widget.editing
+                            ? "Are you sure you want to remove this worker?"
+                            : 'Are you sure you want to close this shift?',
                         textAlign: TextAlign.center,
                         style: TextStyle(color: kPrimaryColor),
                       ),
@@ -603,7 +629,11 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                         Expanded(
                           child: PElevatedButton(
                             onPressed: () async {
-                              Navigator.pop(context, widget.shiftItem.endTime);
+                              Navigator.pop(
+                                  context,
+                                  widget.editing
+                                      ? DateTime.now().toString()
+                                      : widget.shiftItem.endTime);
                             },
                             text: 'YES',
                           ),
