@@ -98,7 +98,7 @@ class _StartShiftViewState extends State<StartShiftView> {
               widget.process!.name!,
               style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600),
             ),
             SizedBox(
@@ -115,17 +115,19 @@ class _StartShiftViewState extends State<StartShiftView> {
             const SizedBox(
               height: 16,
             ),
-
-            ExplainerWidget(
-              iconName: 'construct',
-              title: 'Workers',
-              text1: text1(),
-              text2: '',
-              showWarning: true,
-              showIcon: true,
-              backgroundColor: lightGreenColor,
-              postIcon: Icons.check,
-              postIconColor: Colors.green,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: ExplainerWidget(
+                iconName: 'construct',
+                title: 'Workers',
+                text1: text1(),
+                text2: '',
+                showWarning: true,
+                showIcon: true,
+                backgroundColor: lightGreenColor,
+                postIcon: Icons.check,
+                postIconColor: Colors.green,
+              ),
             ),
             //
             const SizedBox(
@@ -267,23 +269,6 @@ class _StartShiftViewState extends State<StartShiftView> {
                         "process": widget.process!,
                         "execShiftId": result.data!.executeShiftId!
                       });
-
-                      // Navigator.pushReplacement(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (BuildContext context) => EndShiftView(
-                      //         userId: widget.userId,
-                      //         efficiencyCalculation:
-                      //         widget.efficiencyCalculation,
-                      //         shiftId: widget.shiftId,
-                      //         processId: widget.processId,
-                      //         selectedShift: widget.selectedShift,
-                      //         process: widget.process,
-                      //         execShiftId : result.data!.executeShiftId!
-                      //     ),
-                      //   ),
-                      // );
-// >>>>>>> master
                     }
                   } else {
                     EasyLoading.showError('Could not load data');

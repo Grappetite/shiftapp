@@ -117,7 +117,7 @@ class _EditWorkersState extends State<EditWorkers> {
               widget.process!.name!,
               style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600),
             ),
             SizedBox(
@@ -141,7 +141,9 @@ class _EditWorkersState extends State<EditWorkers> {
             totalItems: widget.totalUsersCount!,
             isEditing: true,
             process: this.widget.process!,
-            reloadData: () {},
+            reloadData: () {
+              loadWorkers();
+            },
             execShiftId: widget.execShiftId!,
           ),
         ),

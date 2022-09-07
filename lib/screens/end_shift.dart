@@ -204,7 +204,7 @@ class _EndShiftViewState extends State<EndShiftView> {
               widget.process!.name!,
               style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600),
             ),
             SizedBox(
@@ -309,24 +309,6 @@ class _EndShiftViewState extends State<EndShiftView> {
                     "execShiftId": this.widget.execShiftId,
                   });
                   loadUsers();
-
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (BuildContext context) => EditWorkers(
-                  //       startTime: widget.selectedShift.startTime!,
-                  //       processId: widget.processId,
-                  //       endTime: widget.selectedShift.endTime!,
-                  //       userId: [],
-                  //       efficiencyCalculation: [],
-                  //       shiftId: widget.shiftId,
-                  //       totalUsersCount: widget.userId.length,
-                  //       selectedShift: widget.selectedShift,
-                  //       process: widget.process,
-                  //       execShiftId: this.widget.execShiftId,
-                  //     ),
-                  //   ),
-                  // );
                 },
               ),
             ),

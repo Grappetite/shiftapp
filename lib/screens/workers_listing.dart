@@ -139,7 +139,7 @@ class _WorkersListingState extends State<WorkersListing> {
                   widget.process!.name!,
                   style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 18,
+                      fontSize: 14,
                       fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(

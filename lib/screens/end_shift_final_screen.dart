@@ -171,7 +171,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
               widget.process!.name!,
               style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600),
             ),
             SizedBox(
@@ -655,13 +655,6 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                           child: PElevatedButton(
                             onPressed: () async {
                               Get.back(result: widget.shiftItem.endTime);
-
-                              /* await EasyLoading.show(
-                                status: 'loading...',
-                                maskType: EasyLoadingMaskType.black,
-                              );*/
-
-                              ////await EasyLoading.dismiss();
                             },
                             text: 'YES',
                           ),
