@@ -18,8 +18,8 @@ class EndShiftView extends StatefulWidget {
   bool? startedBefore;
   int? shiftId;
   int? processId;
-  List<String>? userId;
-  List<String>? efficiencyCalculation;
+  List<dynamic>? userId;
+  List<dynamic>? efficiencyCalculation;
   ShiftItem? selectedShift;
   String? comment;
   Process? process;
