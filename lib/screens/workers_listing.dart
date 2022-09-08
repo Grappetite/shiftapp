@@ -138,7 +138,7 @@ class _WorkersListingState extends State<WorkersListing> {
 
     }
 
-    if (responseShift!.data!.worker!.isEmpty) {
+    if (responseShift.data!.worker!.isEmpty) {
       showCategories = true;
       loadWorkerTypes();
       return;

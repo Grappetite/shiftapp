@@ -17,9 +17,11 @@ class AddTempWorker extends StatefulWidget {
   final String shiftId;
 
 
+  final int exId;
+
   final String processId;
 
-  const AddTempWorker({Key? key, required this.shiftId, required this.processId}) : super(key: key);
+  const AddTempWorker({Key? key, required this.shiftId, required this.processId, required this.exId}) : super(key: key);
 
   @override
   State<AddTempWorker> createState() => _AddTempWorkerState();
@@ -190,13 +192,15 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                           DateTime.now(),
                         );
 
+
                         var response = await WorkersService.addTempWorkers(
                             firstNameController.text,
                             surnameController.text,
                             personalNoController.text,
                             selectedWorkerTypeID,
-                            widget.shiftId,
+                            widget.exId != 0 ? widget.exId.toString() : widget.shiftId,
                             dateString);
+
                         await EasyLoading.dismiss();
 
                         if (response != null) {

@@ -18,7 +18,6 @@ class WorkItemView extends StatefulWidget {
   final bool isEditing;
   final List<WorkerType> workerType;
 
-
   final int execShiftId;
 
   final VoidCallback reloadData;
@@ -47,7 +46,8 @@ class WorkItemView extends StatefulWidget {
       this.isEditing = false,
       required this.process,
       required this.reloadData,
-      required this.execShiftId, this.workerType = const []})
+      required this.execShiftId,
+      this.workerType = const []})
       : super(key: key);
 
   @override
@@ -340,15 +340,14 @@ class _WorkItemViewState extends State<WorkItemView> {
           onPressed: () async {
             int? workerIdType;
 
-            if(this.widget.workerType.isNotEmpty) {
+            if (this.widget.workerType.isNotEmpty) {
+              var items = widget.workerType
+                  .where((element) => element.name == widget.listNames[index])
+                  .toList();
 
-             var items =  widget.workerType.where((element) => element.name == widget.listNames[index]).toList();
-
-             if(items.isNotEmpty) {
-               workerIdType  = items.first.id;
-
-             }
-
+              if (items.isNotEmpty) {
+                workerIdType = items.first.id;
+              }
             }
 
             var response = await Navigator.of(context).push(
@@ -383,13 +382,12 @@ class _WorkItemViewState extends State<WorkItemView> {
                     int i = 0;
 
                     for (var currentList in widget.listLists) {
-
-                      if(currentList.isEmpty) {
-                        int indexOf = widget.listNames[i].indexOf(worker.workerType!);
+                      if (currentList.isEmpty) {
+                        int indexOf =
+                            widget.listNames[i].indexOf(worker.workerType!);
                         widget.listLists[indexOf].add(worker);
                         break;
-                      }
-                      else {
+                      } else {
                         if (currentList.first.workerTypeId ==
                             worker.workerTypeId) {
                           setState(() {
@@ -400,10 +398,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                         }
 
                         i++;
-
-
                       }
-
                     }
 
                     if (!listExists) {
@@ -415,7 +410,9 @@ class _WorkItemViewState extends State<WorkItemView> {
 
                       print('');
                     }
-                  }, listName: this.widget.listNames[index],
+                  },
+                  listName: this.widget.listNames[index],
+                  exShiftId: this.widget.execShiftId,
                 ),
               ),
             );

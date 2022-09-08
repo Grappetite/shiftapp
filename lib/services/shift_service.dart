@@ -16,7 +16,6 @@ class ShiftService {
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
 
-      var cc = prefs.getString(tokenKey);
 
       Response response = await dio.post(
         baseUrl + 'cancelShift',
