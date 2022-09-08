@@ -12,6 +12,7 @@ import 'package:shiftapp/screens/shift_start.dart';
 import '../Routes/app_pages.dart';
 import '../model/login_model.dart';
 import '../model/shifts_model.dart';
+import '../services/shift_service.dart';
 import '../services/workers_service.dart';
 
 class EndShiftView extends StatefulWidget {
@@ -128,7 +129,7 @@ class _EndShiftViewState extends State<EndShiftView> {
             String endTime =
                 DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now());
 
-            // final prefs = await SharedPreferences.getInstance();
+            ShiftService.cancelShift(this.widget.execShiftId!, endTime);
 
             Api().sp.remove('shiftId');
 

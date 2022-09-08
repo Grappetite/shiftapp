@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:shiftapp/Network/API.dart';
 
 import '../../config/constants.dart';
 import '../../model/worker_type_model.dart';
@@ -38,8 +37,6 @@ class _AddTempWorkerState extends State<AddTempWorker> {
 
   void loadWorkerTypes() async {
     // final prefs = await SharedPreferences.getInstance();
-
-    tempWorkerId = Api().sp.read('execute_shift_id');
 
     //execute_shift_id
 

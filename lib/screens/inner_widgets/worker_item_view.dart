@@ -7,6 +7,7 @@ import 'package:shiftapp/config/constants.dart';
 import '../../Routes/app_pages.dart';
 import '../../model/login_model.dart';
 import '../../model/shifts_model.dart';
+import '../../model/worker_type_model.dart';
 import '../../model/workers_model.dart';
 import '../../services/workers_service.dart';
 import '../../widgets/elevated_button.dart';
@@ -15,6 +16,7 @@ import 'index_indicator.dart';
 
 class WorkItemView extends StatefulWidget {
   final bool isEditing;
+  final List<WorkerType> workerType;
 
   final int execShiftId;
 
@@ -44,7 +46,8 @@ class WorkItemView extends StatefulWidget {
       this.isEditing = false,
       required this.process,
       required this.reloadData,
-      required this.execShiftId})
+      required this.execShiftId,
+      this.workerType = const []})
       : super(key: key);
 
   @override
@@ -382,6 +385,27 @@ class _WorkItemViewState extends State<WorkItemView> {
                   }
                 }
 
+                int i = 0;
+
+                for (var currentList in widget.listLists) {
+                  if (currentList.isEmpty) {
+                    int indexOf =
+                        widget.listNames[i].indexOf(worker.workerType!);
+                    widget.listLists[indexOf].add(worker);
+                    break;
+                  } else {
+                    if (currentList.first.workerTypeId == worker.workerTypeId) {
+                      setState(() {
+                        currentList.add(worker);
+                      });
+
+                      listExists = true;
+                    }
+
+                    i++;
+                  }
+                }
+
                 if (!listExists) {
                   setState(() {
                     widget.listNames.add(worker.workerType!);
@@ -392,44 +416,8 @@ class _WorkItemViewState extends State<WorkItemView> {
                   print('');
                 }
               },
+              "listName": this.widget.listNames[index],
             });
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (context) => SelectExistingWorkers(
-            //       workers: workers,
-            //       isEditing: widget.isEditing,
-            //       shiftId: widget.selectedShift.id!,
-            //       tempWorkerAdded: (AddTempResponse tmp) {
-            //         this.widget.reloadData();
-            //
-            //         var index =
-            //             this.widget.listNames.indexOf(tmp.data!.workerType!);
-            //
-            //         var resulf = this
-            //             .widget
-            //             .listNames
-            //             .contains(tmp.data!.workerType!)
-            //             .toString();
-            //
-            //         setState(() {
-            //           this.widget.listLists[index].add(tmp.data!);
-            //         });
-            //
-            //         print('object');
-            //       },
-            //       processId: widget.processId.toString(),
-            //     ),
-            //   ),
-            // );
-// =======
-//             var response = await Navigator.of(context).push(
-//               MaterialPageRoute(
-//                 builder: (context) => SelectExistingWorkers(
-//
-//                 ),
-//               ),
-//             );
-// >>>>>>> master
 
             if (response == null) {
               return;

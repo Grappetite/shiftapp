@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
 import '../model/login_model.dart';
 import '../model/shifts_model.dart';
+import '../model/worker_type_model.dart';
 import '../model/workers_model.dart';
 import '../services/workers_service.dart';
 import 'inner_widgets/worker_item_view.dart';
@@ -55,7 +57,50 @@ class _WorkersListingState extends State<WorkersListing> {
 
   int workersSelected = 0;
 
+  List<WorkerType> workerType = [];
+
   bool isLoader = true;
+  void loadWorkerTypes() async {
+    //execute_shift_id
+
+    var result = await WorkersService.getWorkTypes(
+        widget.shiftId.toString(), widget.processId.toString());
+
+    if (result != null) {
+      setState(() {
+        workerType = result.data!;
+      });
+      for (var currentItem in workerType) {
+        setState(() {
+          listNames.add(currentItem.name!);
+          listLists.add([]);
+        });
+      }
+
+      // await EasyLoading.dismiss();
+
+    } else {
+      // await EasyLoading.dismiss();
+
+      showAlertDialog(
+        context: context,
+        title: 'Error',
+        message: 'Error while loading data',
+        actions: [
+          AlertDialogAction(
+            label: MaterialLocalizations.of(context).okButtonLabel,
+            key: OkCancelResult.ok,
+          )
+        ],
+      );
+    }
+    // workerType = result!.data!;
+    setState(() {
+      // workerType = result.data!;
+    });
+  }
+
+  bool showCategories = false;
 
   void loadData() async {
     // await EasyLoading.show(
@@ -65,13 +110,37 @@ class _WorkersListingState extends State<WorkersListing> {
     var responseShift =
         await WorkersService.getShiftWorkers(widget.shiftId, widget.processId!);
 
+    if (responseShift == null) {
+      // await EasyLoading.dismiss();
+      showAlertDialog(
+        context: context,
+        title: 'Error',
+        message: 'Error while loading data',
+        actions: [
+          AlertDialogAction(
+            label: MaterialLocalizations.of(context).okButtonLabel,
+            key: OkCancelResult.ok,
+          )
+        ],
+      );
+
+      return;
+    }
+
     if (responseShift!.data!.worker!.isEmpty) {
-      responseShift = await WorkersService.getShiftWorkers(
-          widget.selectedShift!.id, widget.processId!);
+// <<<<<<< HEAD
+//       responseShift = await WorkersService.getShiftWorkers(
+//           widget.selectedShift!.id, widget.processId!);
+// =======
+      showCategories = true;
+      loadWorkerTypes();
+      return;
+
+// >>>>>>> master
     }
     List<ShiftWorker> shiftWorkers = [];
 
-    shiftWorkers.addAll(responseShift!.data!.worker!);
+    shiftWorkers.addAll(responseShift.data!.worker!);
 
     workersSelected = responseShift.data!.shiftWorker!.length;
 
@@ -176,6 +245,7 @@ class _WorkersListingState extends State<WorkersListing> {
                   loadData();
                 },
                 execShiftId: 0,
+                workerType: this.workerType,
               ),
             ),
             const SizedBox(

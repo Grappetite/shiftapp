@@ -25,9 +25,8 @@ class SelectExistingWorkers extends StatefulWidget {
   int? shiftId;
 
   bool? isEditing;
-
+  String? listName;
   String? processId;
-
   SelectExistingWorkers(
       {Key? key,
       this.workers,
@@ -35,7 +34,8 @@ class SelectExistingWorkers extends StatefulWidget {
       this.shiftId,
       this.tempWorkerAdded,
       this.processId,
-      this.otherTypeTempWorkerAdded})
+      this.otherTypeTempWorkerAdded,
+      this.listName})
       : super(key: key);
 
   @override
@@ -131,6 +131,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
     widget.tempWorkerAdded = Get.arguments["tempWorkerAdded"];
     widget.processId = Get.arguments["processId"];
     widget.otherTypeTempWorkerAdded = Get.arguments["otherTypeTempWorkerAdded"];
+    widget.listName = Get.arguments["listName"];
 
     callSearchService();
   }
