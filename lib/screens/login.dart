@@ -34,6 +34,28 @@ class _LoginScreenState extends State<LoginScreen> {
 
   int processIndexSelected = -1;
 
+  @override
+  void initState() {
+    super.initState();
+
+    //controller.text = 'sidra+supervisor@grappetite.com';
+
+    // controller.text = 'asfa+s@grappetite.com';
+    // controller.text = 'asfa+supervisor@grappetite.com';
+    pwd:
+    // controller.text = 'tauqeer+supervisor@grappetite.com';
+
+    //
+
+    //
+    //passwordController.text = 'sidragrap';
+    /// passwordController.text = 'isqvqx';
+    //   passwordController.text = 'oznytw';
+    //passwordController.text = 'Tauqeer123';
+
+    loadDefaul();
+  }
+
   void loadDefaul() async {
     //final prefs = await SharedPreferences.getInstance();
 
@@ -121,24 +143,6 @@ class _LoginScreenState extends State<LoginScreen> {
 // >>>>>>> master
       }
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    controller.text = 'sidra+supervisor@grappetite.com';
-
-    controller.text = 'asfa+s@grappetite.com';
-    controller.text = 'asfa+supervisor@grappetite.com';
-    pwd:
-
-    //
-    passwordController.text = 'sidragrap';
-    passwordController.text = 'isqvqx';
-    passwordController.text = 'oznytw';
-
-    loadDefaul();
   }
 
   @override

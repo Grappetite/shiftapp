@@ -92,14 +92,14 @@ class _ShiftStartState extends State<ShiftStart> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    const Text(
-                      'NEXT SHIFT:',
+                     Text(
+                      widget.selectedShift.displayScreen == 2 ? 'CURRENT SHIFT' : 'NEXT SHIFT:',
                       style: TextStyle(
                           color: kPrimaryColor,
                           fontSize: 20,
                           fontWeight: FontWeight.w600),
                     ),
-                    if (widget.selectedShift.displayScreen! == 1 ||
+                     if (widget.selectedShift.displayScreen! == 1 ||
                         widget.selectedShift.displayScreen == 3) ...[
                       const Text(
                         'NO AVAILABLE SHIFTS',
@@ -324,6 +324,22 @@ class _ShiftStartState extends State<ShiftStart> {
                           ),
                         ],
                       ),
+
+
+                       if (widget.selectedShift.displayScreenMessage !=
+                           null) ...[
+                         Text(
+                           widget.selectedShift.displayScreenMessage!,
+                           style: const TextStyle(
+                               color: kPrimaryColor,
+                               fontSize: 21,
+                               fontWeight: FontWeight.w700),
+                         ),
+                       ] else ... [
+
+
+                       ],
+
                     ],
                     if (1 == 2) ...[
                       OutlinedButton(
@@ -366,7 +382,7 @@ class _ShiftStartState extends State<ShiftStart> {
             onPressed: () async {
               if (widget.selectedShift.displayScreen! == 1 ||
                   widget.selectedShift.displayScreen! == 3) {
-                // return;
+                 return;
               }
 
               var waitVal = await Get.toNamed(Routes.workerListing, arguments: {

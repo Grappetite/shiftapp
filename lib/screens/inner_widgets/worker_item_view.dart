@@ -375,16 +375,6 @@ class _WorkItemViewState extends State<WorkItemView> {
               "otherTypeTempWorkerAdded": (worker) {
                 bool listExists = false;
 
-                for (var currentList in widget.listLists) {
-                  if (currentList.first.workerTypeId == worker.workerTypeId) {
-                    setState(() {
-                      currentList.add(worker);
-                    });
-
-                    listExists = true;
-                  }
-                }
-
                 int i = 0;
 
                 for (var currentList in widget.listLists) {
@@ -417,6 +407,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                 }
               },
               "listName": this.widget.listNames[index],
+              "exShiftId": this.widget.execShiftId,
             });
 
             if (response == null) {

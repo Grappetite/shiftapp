@@ -127,11 +127,7 @@ class _WorkersListingState extends State<WorkersListing> {
       return;
     }
 
-    if (responseShift!.data!.worker!.isEmpty) {
-// <<<<<<< HEAD
-//       responseShift = await WorkersService.getShiftWorkers(
-//           widget.selectedShift!.id, widget.processId!);
-// =======
+    if (responseShift.data!.worker!.isEmpty) {
       showCategories = true;
       loadWorkerTypes();
       return;

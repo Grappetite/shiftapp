@@ -23,6 +23,7 @@ class SelectExistingWorkers extends StatefulWidget {
   Function(ShiftWorker)? otherTypeTempWorkerAdded;
 
   int? shiftId;
+  int? exShiftId;
 
   bool? isEditing;
   String? listName;
@@ -35,7 +36,8 @@ class SelectExistingWorkers extends StatefulWidget {
       this.tempWorkerAdded,
       this.processId,
       this.otherTypeTempWorkerAdded,
-      this.listName})
+      this.listName,
+      this.exShiftId})
       : super(key: key);
 
   @override
@@ -132,6 +134,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
     widget.processId = Get.arguments["processId"];
     widget.otherTypeTempWorkerAdded = Get.arguments["otherTypeTempWorkerAdded"];
     widget.listName = Get.arguments["listName"];
+    widget.exShiftId = Get.arguments["exShiftId"];
 
     callSearchService();
   }
@@ -290,7 +293,6 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                           }
                         }
                       }
-
                       Get.back(result: true);
                     },
                   ),
@@ -349,25 +351,6 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                     ],
                   ] else ...[
                     for (var currentItem in workers) ...[
-// <<<<<<< HEAD
-//                       UserItem(
-//                         picUrl: currentItem.picture,
-//                         personName: currentItem.firstName! +
-//                             ' ' +
-//                             currentItem.lastName!,
-//                         keyNo: currentItem.key ?? '',
-//                         initialSelected: currentItem.isSelected,
-//                         disableRatio: widget.isEditing!
-//                             ? (currentItem.isSelected && !currentItem.newAdded)
-//                             : false,
-//                         changedStatus: (bool newStatus) {
-//                           var find = orignalState
-//                               .where((e) => e.userId == currentItem.userId)
-//                               .toList();
-//                           currentItem.isSelected = newStatus;
-// =======
-// >>>>>>> master
-
                       if (currentItem.isSelected) ...[
                         UserItem(
                           picUrl: currentItem.picture,
@@ -447,11 +430,13 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                             return AddTempWorker(
                               shiftId: this.widget.shiftId.toString(),
                               processId: this.widget.processId!,
+                              exId: this.widget.exShiftId!,
                             );
                           });
                       if (selected != null) {
                         selected.data!.isSelected = true;
                         selected.data!.isTemp = true;
+                        selected.data!.newAdded = true;
 
                         setState(() {
                           this.workers.add(selected.data!);
@@ -475,7 +460,6 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                             [dateString],
                             [],
                             [selected.data!.efficiencyCalculation.toString()]);
-
                         print('');
                       }
                     },

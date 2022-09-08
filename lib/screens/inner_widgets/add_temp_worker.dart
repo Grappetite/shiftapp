@@ -12,11 +12,15 @@ import 'alert_title_label.dart';
 
 class AddTempWorker extends StatefulWidget {
   final String shiftId;
+  final int exId;
 
   final String processId;
 
   const AddTempWorker(
-      {Key? key, required this.shiftId, required this.processId})
+      {Key? key,
+      required this.shiftId,
+      required this.processId,
+      required this.exId})
       : super(key: key);
 
   @override
@@ -193,9 +197,10 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                             surnameController.text,
                             personalNoController.text,
                             selectedWorkerTypeID,
-                            widget.shiftId,
+                            widget.exId != 0
+                                ? widget.exId.toString()
+                                : widget.shiftId,
                             dateString);
-                        //await EasyLoading.dismiss();
 
                         if (response != null) {
                           // Navigator.pop(context, response);

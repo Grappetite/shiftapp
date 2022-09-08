@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 
 import '../Network/API.dart';
-import '../config/constants.dart';
 import '../model/shifts_model.dart';
 
 class ShiftService {
@@ -10,8 +9,6 @@ class ShiftService {
     String endTime,
   ) async {
     var dio = Dio();
-
-    var cc = Api().sp.read(tokenKey);
 
     Response response = await Api().post(
       {'execute_shift_id': shiftId.toString(), 'end_time': endTime},
