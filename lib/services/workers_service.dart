@@ -14,7 +14,7 @@ class WorkersService {
 
       String url = baseUrl + "newWorkerList/" + processId.toString();
       if (shiftId != null) {
-        url = baseUrl + 'manageWorkerLisiting/' + shiftId.toString();
+        url = baseUrl + 'newWorkerList/'+  processId.toString() + '/' +  shiftId.toString();
 
       }
       print('');
