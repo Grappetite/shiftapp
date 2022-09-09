@@ -5,6 +5,7 @@ import 'package:shiftapp/screens/end_shift_final_screen.dart';
 import 'package:shiftapp/screens/select_exister_workers.dart';
 import 'package:shiftapp/screens/start_shift_page.dart';
 
+import '../Bindings/AuthBinding.dart';
 import '../screens/home.dart';
 import '../screens/login.dart';
 import '../screens/splash.dart';
@@ -22,7 +23,7 @@ class AppPages {
     GetPage(
       name: _Paths.login,
       page: () => LoginScreen(),
-      // binding: AuthBinding(),
+      binding: AuthBinding(),
     ),
     GetPage(
       name: _Paths.home,
