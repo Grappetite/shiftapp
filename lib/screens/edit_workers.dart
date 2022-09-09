@@ -100,6 +100,7 @@ class _EditWorkersState extends State<EditWorkers> {
 
     if (responseShift != null) {
 
+
       if (responseShift.data!.shiftWorker!.length == 0) {
         showCategories = true;
         loadWorkerTypes();
@@ -128,7 +129,11 @@ class _EditWorkersState extends State<EditWorkers> {
 
     List<ShiftWorker> shiftWorkers = [];
 
-    shiftWorkers.addAll(responseShift!.data!.worker!);
+    responseShift!.data!.worker = responseShift.data!.shiftWorker!.where((e) => e.isAdded == false).toList();
+    responseShift.data!.shiftWorker = responseShift.data!.shiftWorker!.where((e) => e.isAdded == true).toList();
+
+
+    shiftWorkers.addAll(responseShift.data!.worker!);
 
     workersSelected = responseShift.data!.shiftWorker!.length;
 

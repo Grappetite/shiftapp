@@ -9,6 +9,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/screens/shift_start.dart';
+import 'package:shiftapp/util/string.dart';
 
 import '../config/constants.dart';
 import '../model/login_model.dart';
@@ -333,7 +334,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                       PElevatedButton(
                         onPressed: () async {
                           if (textController.text.isEmpty) {
-                            final result = await showAlertDialog(
+                            showAlertDialog(
                               context: context,
                               title: 'Error',
                               message: 'Please write down the units products',
@@ -364,6 +365,8 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                 return;
                               }
                             }
+
+
                             await EasyLoading.show(
                               status: 'Adding...',
                               maskType: EasyLoadingMaskType.black,
@@ -462,12 +465,15 @@ class ConfirmTimeEnd extends StatefulWidget {
 class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
   String timeToShow = '0';
 
+  String customTimeSelectedToSend = '';
+
   @override
   void initState() {
     super.initState();
   }
 
   TimeOfDay? newTime;
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -488,20 +494,11 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
             Padding(
               padding: const EdgeInsets.only(right: 8, top: 4),
               child: Align(
-                  alignment: Alignment.topRight,
-                  child: SizedBox(
-                    height: 15,
-                  )
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     Navigator.pop(context);
-                  //   },
-                  //   child: Icon(
-                  //     Icons.close,
-                  //     color: kPrimaryColor,
-                  //   ),
-                  // ),
-                  ),
+                alignment: Alignment.topRight,
+                child: SizedBox(
+                  height: 15,
+                ),
+              ),
             ),
             Expanded(
               child: Padding(
@@ -558,8 +555,9 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                                         newTime.hour, newTime.minute);
 
                                 setState(() {
-                                  widget.shiftItem.endTime =
+                                  customTimeSelectedToSend =
                                       customSelectedStartTime;
+                                  // widget.shiftItem.endTime = customSelectedStartTime;
                                 });
                               }
                             },
@@ -569,8 +567,8 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                               hintText: 'Shift End Time',
                               onChange: (newValue) {},
                               controller: TextEditingController(
-                                  text: widget.shiftItem.showEndTime),
-                              text: widget.shiftItem.showEndTime,
+                                  text: findEndTime().timeToShow),
+                              text: findEndTime().timeToShow,
                               suffixIcon: Icons.expand_circle_down_outlined,
                             ),
                           ),
@@ -629,11 +627,8 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                         Expanded(
                           child: PElevatedButton(
                             onPressed: () async {
-                              Navigator.pop(
-                                  context,
-                                  widget.editing
-                                      ? DateTime.now().toString()
-                                      : widget.shiftItem.endTime);
+                              String result = findEndTime();
+                              Navigator.pop(context, result);
                             },
                             text: 'YES',
                           ),
@@ -651,6 +646,34 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
         ),
       ),
     );
+  }
+
+  String findEndTime() {
+    var result = '';
+    if (widget.editing) {
+
+      result = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
+    } else {
+      result = widget.shiftItem.endTime!;
+
+      if(customTimeSelectedToSend.isNotEmpty) {
+        return customTimeSelectedToSend;
+      }
+      var difference =
+          DateTime.now().difference(widget.shiftItem.endDateObject);
+
+      var minutesRemaining = difference.inMinutes;
+
+      if (minutesRemaining > -30 && minutesRemaining < 30) {
+      } else {
+        String endTime =
+            DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
+
+        result = endTime;
+      }
+      print('');
+    }
+    return result;
   }
 
   String dataToDisplay() {

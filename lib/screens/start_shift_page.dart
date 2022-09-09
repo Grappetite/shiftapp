@@ -11,6 +11,7 @@ import '../model/login_model.dart';
 import '../model/shifts_model.dart';
 import '../services/workers_service.dart';
 import 'end_shift.dart';
+import 'inner_widgets/coming_soon_container.dart';
 
 class StartShiftView extends StatefulWidget {
   final int shiftId;
@@ -122,9 +123,9 @@ class _StartShiftViewState extends State<StartShiftView> {
             const SizedBox(
               height: 16,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: ExplainerWidget(
+            ComingSoonContainer(
+              innerWidget: ExplainerWidget(
+                comingSoon: true,
                 iconName: 'construct',
                 title: 'PPE',
                 text1: '2/5 Planned PPE per Worker Type',
@@ -133,6 +134,7 @@ class _StartShiftViewState extends State<StartShiftView> {
                 showIcon: true,
                 backgroundColor: lightRedColor,
               ),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
             ),
 
             SizedBox(

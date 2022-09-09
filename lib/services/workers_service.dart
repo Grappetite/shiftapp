@@ -15,9 +15,8 @@ class WorkersService {
       String url = baseUrl + "newWorkerList/" + processId.toString();
       if (shiftId != null) {
         url = baseUrl + 'manageWorkerLisiting/' + shiftId.toString();
-      }
 
-      var token = prefs.getString(tokenKey);
+      }
       print('');
 
       Response response = await dio.get(url,
@@ -216,10 +215,16 @@ class WorkersService {
 
       var responseObject = WorkerTypeResponse.fromJson(response.data);
 
+
       print(response.data);
 
       if (responseObject.data == null) {
         return null;
+      }
+
+      if(responseObject.data!.isEmpty){
+
+        return getWorkTypes('', '');
       }
 
       return responseObject;

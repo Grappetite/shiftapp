@@ -107,6 +107,9 @@ class ShiftWorker {
 
   bool isSelected = false;
 
+  bool isAdded = false;
+
+
   bool newAdded = false;
   bool newRemove = false;
 
@@ -133,6 +136,20 @@ class ShiftWorker {
     key = json['key'];
     efficiencyCalculation = json['efficiencyCalculation'];
     picture = json['picture'];
+
+    if(json.keys.contains('worker_add')){
+
+
+      isAdded = json['worker_add'] == '1';
+      print('object');
+
+    }
+
+
+
+    print('object');
+
+
   }
 
   Map<String, dynamic> toJson() {

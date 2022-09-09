@@ -43,15 +43,16 @@ class _LoginScreenState extends State<LoginScreen> {
   // controller.text = 'asfa+s@grappetite.com';
    // controller.text = 'asfa+supervisor@grappetite.com';
      pwd:
-   // controller.text = 'tauqeer+supervisor@grappetite.com';
+   controller.text = 'tauqeer+supervisor@grappetite.com';
 
     //
 
     //
+
    //passwordController.text = 'sidragrap';
    /// passwordController.text = 'isqvqx';
  //   passwordController.text = 'oznytw';
-   //passwordController.text = 'Tauqeer123';
+   passwordController.text = 'Tauqeer123';
 
 
     loadDefaul();

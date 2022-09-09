@@ -249,6 +249,7 @@ class _WorkersListingState extends State<WorkersListing> {
                 },
                 execShiftId: 0,
                 workerType: this.workerType,
+
               ),
             ),
             const SizedBox(
