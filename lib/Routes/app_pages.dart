@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:shiftapp/Bindings/HomeBinding.dart';
 import 'package:shiftapp/screens/edit_workers.dart';
 import 'package:shiftapp/screens/end_shift.dart';
 import 'package:shiftapp/screens/end_shift_final_screen.dart';
@@ -28,7 +29,7 @@ class AppPages {
     GetPage(
       name: _Paths.home,
       page: () => HomeView(),
-      // binding: AuthBinding(),
+      binding: HomeBinding(),
     ),
     GetPage(
       name: _Paths.editWorkers,

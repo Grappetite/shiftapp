@@ -71,15 +71,15 @@ class HomeView extends StatelessWidget {
         processSelected: processSelected!,
         sessionStarted: sessionStarted ?? false,
         onLogout: () async {
-          var dyanc = await Get.toNamed(Routes.login);
+          var dyanc = Get.offAllNamed(Routes.login);
           // Navigator.push(
           //   context,
           //   MaterialPageRoute(builder: (context) => const LoginScreen()),
           // );
 
-          if (dyanc != null) {
-            if (dyanc == true) {}
-          }
+          // if (dyanc != null) {
+          //   if (dyanc == true) {}
+          // }
         },
       ),
       Container(
