@@ -7,40 +7,24 @@ import 'package:shiftapp/model/login_model.dart';
 import 'package:shiftapp/model/shifts_model.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
+import '../Controllers/HomeController.dart';
 import '../Network/API.dart';
 import '../Routes/app_pages.dart';
 import '../config/constants.dart';
 
-class HomeView extends StatefulWidget {
-  Process? processSelected;
+class HomeView extends StatelessWidget {
+  PersistentTabController _controller =
+      PersistentTabController(initialIndex: 0);
+  Process? processSelected = Get.arguments["processSelected"];
+  ShiftItem? selectedShift = Get.arguments["selectedShift"];
+  bool? sessionStarted = Get.arguments["sessionStarted"] ?? false;
 
-  ShiftItem? selectedShift;
-
-  bool? sessionStarted;
-
-  HomeView({
-    Key? key,
-    this.processSelected,
-    this.selectedShift,
-    this.sessionStarted = false,
-  }) : super(key: key);
-
-  @override
-  State<HomeView> createState() => _HomeViewState();
-}
-
-class _HomeViewState extends State<HomeView> {
-  late PersistentTabController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    widget.processSelected = Get.arguments["processSelected"];
-    widget.selectedShift = Get.arguments["selectedShift"];
-    widget.sessionStarted = Get.arguments["sessionStarted"];
-    // widget.comment = Get.arguments["comment"];
-    _controller = PersistentTabController(initialIndex: 0);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // comment = Get.arguments["comment"];
+  //   _controller = PersistentTabController(initialIndex: 0);
+  // }
 
   void goBack() {
     Get.back();
@@ -83,9 +67,9 @@ class _HomeViewState extends State<HomeView> {
   List<Widget> _buildScreens() {
     return [
       HomeMainView(
-        selectedShift: widget.selectedShift!,
-        processSelected: widget.processSelected!,
-        sessionStarted: widget.sessionStarted ?? false,
+        selectedShift: selectedShift!,
+        processSelected: processSelected!,
+        sessionStarted: sessionStarted ?? false,
         onLogout: () async {
           var dyanc = await Get.toNamed(Routes.login);
           // Navigator.push(
@@ -125,7 +109,7 @@ class _HomeViewState extends State<HomeView> {
   }
 }
 
-class HomeMainView extends StatefulWidget {
+class HomeMainView extends StatelessWidget {
   final Process processSelected;
 
   final ShiftItem selectedShift;
@@ -133,7 +117,7 @@ class HomeMainView extends StatefulWidget {
   final String? comment;
   final VoidCallback onLogout;
 
-  const HomeMainView(
+  HomeMainView(
       {Key? key,
       required this.processSelected,
       required this.selectedShift,
@@ -142,142 +126,137 @@ class HomeMainView extends StatefulWidget {
       required this.onLogout})
       : super(key: key);
 
-  @override
-  State<HomeMainView> createState() => _HomeMainViewState();
-}
+  HomeController controller = Get.find();
+  late AppPopupMenu<int> appMenu02 = AppPopupMenu<int>(
+    menuItems: [
+      PopupMenuItem(
+        value: 1,
+        onTap: () async {
+          //final prefs = await SharedPreferences.getInstance();
 
-class _HomeMainViewState extends State<HomeMainView> {
-  late AppPopupMenu<int> appMenu02;
+          Api().sp.remove('shiftId');
 
-  void moveToEndSession() async {
-    // await EasyLoading.show(
-    //   status: 'loading...',
-    //   maskType: EasyLoadingMaskType.black,
-    // );
+          Api().sp.remove('selectedShiftName');
+          Api().sp.remove('selectedShiftEndTime');
+          Api().sp.remove('selectedShiftStartTime');
+          Api().sp.remove('username');
+          Api().sp.remove('password');
 
-    await Future.delayed(const Duration(seconds: 1));
-    //await EasyLoading.dismiss();
-
-    var executeShiftId = Api().sp.read('execute_shift_id');
-
-    var response = await Get.offNamed(Routes.endShift, arguments: {
-      "autoOpen": true,
-      "userId": const [],
-      "efficiencyCalculation": const [],
-      "shiftId": widget.selectedShift.id!,
-      "processId": widget.processSelected.id!,
-      "selectedShift": widget.selectedShift,
-      "startedBefore": true,
-      "process": widget.processSelected,
-      "execShiftId": executeShiftId!,
-    });
-    // Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (BuildContext context) => EndShiftView(
-    //       autoOpen: true,
-    //       userId: const [],
-    //       efficiencyCalculation: const [],
-    //       shiftId: widget.selectedShift.id!,
-    //       processId: widget.processSelected.id!,
-    //       selectedShift: widget.selectedShift,
-    //       comment: widget.comment!,
-    //       startedBefore: true,
-    //       process: widget.processSelected,
-    //       execShiftId: executeShiftId!,
-    //     ),
-    //   ),
-    // );
-
-    if (response != null) {
-      if (response == true) {
-        widget.onLogout();
-      }
-    }
-    print('=');
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    appMenu02 = AppPopupMenu<int>(
-      menuItems: [
-        PopupMenuItem(
-          value: 1,
-          onTap: () async {
-            //final prefs = await SharedPreferences.getInstance();
-
-            Api().sp.remove('shiftId');
-
-            Api().sp.remove('selectedShiftName');
-            Api().sp.remove('selectedShiftEndTime');
-            Api().sp.remove('selectedShiftStartTime');
-            Api().sp.remove('username');
-            Api().sp.remove('password');
-
-            widget.onLogout();
-          },
-          child: const Text(
-            'Logout',
-            style: TextStyle(
-              color: Colors.white,
-            ),
+          onLogout();
+        },
+        child: const Text(
+          'Logout',
+          style: TextStyle(
+            color: Colors.white,
           ),
         ),
-      ],
-      initialValue: 2,
-      onSelected: (int value) {},
-      onCanceled: () {},
-      elevation: 4,
-      icon: const Icon(Icons.more_vert),
-      offset: const Offset(0, 65),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
       ),
-      color: kPrimaryColor,
-    );
+    ],
+    initialValue: 2,
+    onSelected: (int value) {},
+    onCanceled: () {},
+    elevation: 4,
+    icon: const Icon(Icons.more_vert),
+    offset: const Offset(0, 65),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(16),
+    ),
+    color: kPrimaryColor,
+  );
 
-    if (widget.sessionStarted) {
-      moveToEndSession();
-    }
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+
+  // appMenu02 = AppPopupMenu<int>(
+  //   menuItems: [
+  //     PopupMenuItem(
+  //       value: 1,
+  //       onTap: () async {
+  //         //final prefs = await SharedPreferences.getInstance();
+  //
+  //         Api().sp.remove('shiftId');
+  //
+  //         Api().sp.remove('selectedShiftName');
+  //         Api().sp.remove('selectedShiftEndTime');
+  //         Api().sp.remove('selectedShiftStartTime');
+  //         Api().sp.remove('username');
+  //         Api().sp.remove('password');
+  //
+  //         onLogout();
+  //       },
+  //       child: const Text(
+  //         'Logout',
+  //         style: TextStyle(
+  //           color: Colors.white,
+  //         ),
+  //       ),
+  //     ),
+  //   ],
+  //   initialValue: 2,
+  //   onSelected: (int value) {},
+  //   onCanceled: () {},
+  //   elevation: 4,
+  //   icon: const Icon(Icons.more_vert),
+  //   offset: const Offset(0, 65),
+  //   shape: RoundedRectangleBorder(
+  //     borderRadius: BorderRadius.circular(16),
+  //   ),
+  //   color: kPrimaryColor,
+  // );
+  // if (sessionStarted) {
+  // moveToEndSession();
+  // }
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Column(
-          children: [
-            Image.asset(
-              'assets/images/toplogo.png',
-              height: 20,
+    return GetBuilder<HomeController>(
+      initState: (s) {
+        if (sessionStarted) {
+          controller.moveToEndSession(
+              processSelected: processSelected,
+              selectedShift: selectedShift,
+              sessionStarted: sessionStarted,
+              onLogout: onLogout);
+        }
+      },
+      builder: (logic) {
+        return Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Column(
+              children: [
+                Image.asset(
+                  'assets/images/toplogo.png',
+                  height: 20,
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  processSelected.name!,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(
+                  height: 2,
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 4,
-            ),
-            Text(
-              widget.processSelected.name!,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(
-              height: 2,
-            ),
-          ],
-        ),
-        actions: [appMenu02],
-      ),
-      body: ShiftStart(
-        selectedShift: widget.selectedShift,
-        processSelected: widget.processSelected,
-        popBack: () {
-          widget.onLogout.call();
-        },
-      ),
+            actions: [appMenu02],
+          ),
+          body: ShiftStart(
+            selectedShift: selectedShift,
+            processSelected: processSelected,
+            popBack: () {
+              onLogout.call();
+            },
+          ),
+        );
+      },
     );
   }
 }
