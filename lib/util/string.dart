@@ -17,7 +17,6 @@ extension StringExtension on String {
   String get timeToShow {
     DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(this);
     String date = DateFormat("hh:mm a").format(tempDate);
-
     return date;
 
   }

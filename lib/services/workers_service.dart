@@ -10,8 +10,6 @@ class WorkersService {
   static Future<WorkersListing?> getShiftWorkers(
       int? shiftId, int processId) async {
     var dio = Dio();
-    //final prefs = await SharedPreferences.getInstance();
-
     String url = "newWorkerList/" + processId.toString();
     if (shiftId != null) {
       url = 'manageWorkerLisiting/' + shiftId.toString();
@@ -22,7 +20,6 @@ class WorkersService {
     Response response = await Api().get(
       url,
     );
-
     print(response.data);
 
     if (response.statusCode == 200) {
@@ -211,11 +208,16 @@ class WorkersService {
     print(response.data);
 
     if (response.statusCode == 200) {
-      return null;
-    }
-    var responseObject = WorkerTypeResponse.fromJson(response.data);
+      var responseObject = WorkerTypeResponse.fromJson(response.data);
+      if (responseObject.data == null) {
+        return null;
+      }
+      if (responseObject.data!.isEmpty) {
+        return getWorkTypes('', '');
+      }
 
-    return responseObject;
+      return responseObject;
+    }
   }
 
   static Future<AddTempResponse?> addTempWorkers(

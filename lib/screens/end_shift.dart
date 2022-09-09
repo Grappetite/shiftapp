@@ -14,6 +14,7 @@ import '../model/login_model.dart';
 import '../model/shifts_model.dart';
 import '../services/shift_service.dart';
 import '../services/workers_service.dart';
+import 'inner_widgets/coming_soon_container.dart';
 
 class EndShiftView extends StatefulWidget {
   bool? startedBefore;
@@ -175,6 +176,18 @@ class _EndShiftViewState extends State<EndShiftView> {
     var responseShift = await WorkersService.getShiftWorkers(
         executeShiftId!, widget.processId!);
 
+    if (responseShift != null) {
+      int count = responseShift.data!.shiftWorker!.length;
+
+      if (count != 0) {
+        responseShift.data!.worker = responseShift.data!.shiftWorker!
+            .where((e) => e.isAdded == false)
+            .toList();
+        responseShift.data!.shiftWorker = responseShift.data!.shiftWorker!
+            .where((e) => e.isAdded == true)
+            .toList();
+      }
+    }
     numberSelected = responseShift!.data!.shiftWorker!.length;
 
     setState(() {
@@ -256,31 +269,15 @@ class _EndShiftViewState extends State<EndShiftView> {
             const SizedBox(
               height: 16,
             ),
-            Padding(
+            ComingSoonContainer(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Stack(
-                children: [
-                  ExplainerWidget(
-                    comingSoon: true,
-                    iconName: 'construct',
-                    title: 'SOP REQUIRED',
-                    text1: '4 Workers require SOP Training',
-                    text2: 'Tap to train now or swipe to ignore',
-                    showWarning: true,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 30),
-                    child: Center(
-                      child: Text(
-                        'Coming Soon',
-                        style: TextStyle(
-                            color: kPrimaryColor,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 20),
-                      ),
-                    ),
-                  ),
-                ],
+              innerWidget: ExplainerWidget(
+                comingSoon: true,
+                iconName: 'construct',
+                title: 'SOP REQUIRED',
+                text1: '4 Workers require SOP Training',
+                text2: 'Tap to train now or swipe to ignore',
+                showWarning: true,
               ),
             ),
             const SizedBox(
@@ -316,32 +313,16 @@ class _EndShiftViewState extends State<EndShiftView> {
             const SizedBox(
               height: 16,
             ),
-            Padding(
+            ComingSoonContainer(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Stack(
-                children: [
-                  ExplainerWidget(
-                    comingSoon: true,
-                    iconName: 'exclamation',
-                    title: 'INCIDENTS',
-                    text1: '5',
-                    text2: 'Tap to train now or swipe to ignore',
-                    showWarning: false,
-                    text1_2: '01:50:00',
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 30),
-                    child: Center(
-                      child: Text(
-                        'Coming Soon',
-                        style: TextStyle(
-                            color: kPrimaryColor,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 20),
-                      ),
-                    ),
-                  ),
-                ],
+              innerWidget: ExplainerWidget(
+                comingSoon: true,
+                iconName: 'exclamation',
+                title: 'INCIDENTS',
+                text1: '5',
+                text2: 'Tap to train now or swipe to ignore',
+                showWarning: false,
+                text1_2: '01:50:00',
               ),
             ),
             const SizedBox(
