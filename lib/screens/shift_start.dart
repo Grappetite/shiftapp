@@ -1,9 +1,8 @@
-import 'dart:async';
-
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:shiftapp/Controllers/HomeController.dart';
 import 'package:shiftapp/util/string.dart';
 
 import '../Routes/app_pages.dart';
@@ -13,432 +12,425 @@ import '../model/shifts_model.dart';
 import '../widgets/elevated_button.dart';
 import 'inner_widgets/change_shift_time.dart';
 
-class ShiftStart extends StatefulWidget {
+class ShiftStart extends StatelessWidget {
   final Process processSelected;
 
   final VoidCallback popBack;
 
   final ShiftItem selectedShift;
 
-  const ShiftStart(
+  ShiftStart(
       {Key? key,
       required this.processSelected,
       required this.selectedShift,
       required this.popBack})
       : super(key: key);
 
-  @override
-  State<ShiftStart> createState() => _ShiftStartState();
-}
-
-class _ShiftStartState extends State<ShiftStart> {
   bool showingWorkersListing = false;
 
-  String timeElasped = '00:00';
+  // String timeElasped = '00:00';
 
-  late Timer _timer;
-
-  void startTimer() {
-    const oneSec = Duration(seconds: 1);
-
-    _timer = Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        setState(() {
-          timeElasped = widget.selectedShift.timeElasped;
-        });
-
-        print('');
-      },
-    );
-  }
+  // late Timer _timer;
+  //
+  // void startTimer() {
+  //   const oneSec = Duration(seconds: 1);
+  //
+  //   _timer = Timer.periodic(
+  //     oneSec,
+  //     (Timer timer) {
+  //       setState(() {
+  //         timeElasped = selectedShift.timeElasped;
+  //       });
+  //
+  //       print('');
+  //     },
+  //   );
+  // }
 
   String customSelectedStartTime = '';
   String customSelectedEndTime = '';
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
+  // @override
+  // void initState() {
+  //   super.initState();
+  // }
+  HomeController controller = Get.find();
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          flex: 6,
-          child: TimerTopWidget(
-              selectedShift: widget.selectedShift, timeElasped: timeElasped),
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        Expanded(
-          flex: 30,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-            child: Container(
-              width: MediaQuery.of(context).size.width / 1.14,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: kPrimaryColor,
+    return GetBuilder<HomeController>(builder: (logic) {
+      return Column(
+        children: [
+          Expanded(
+            flex: 6,
+            child: TimerTopWidget(
+                selectedShift: selectedShift,
+                timeElasped: controller.timeElasped),
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          Expanded(
+            flex: 30,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+              child: Container(
+                width: MediaQuery.of(context).size.width / 1.14,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: kPrimaryColor,
+                  ),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(16),
+                  ),
                 ),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(16),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                     Text(
-                      widget.selectedShift.displayScreen == 2 ? 'CURRENT SHIFT' : 'NEXT SHIFT:',
-                      style: TextStyle(
-                          color: kPrimaryColor,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600),
-                    ),
-                     if (widget.selectedShift.displayScreen! == 1 ||
-                        widget.selectedShift.displayScreen == 3) ...[
-                      const Text(
-                        'NO AVAILABLE SHIFTS',
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        selectedShift.displayScreen == 2
+                            ? 'CURRENT SHIFT'
+                            : 'NEXT SHIFT:',
                         style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
+                            color: kPrimaryColor,
+                            fontSize: 20,
                             fontWeight: FontWeight.w600),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Next Shift available at ',
-                            style: TextStyle(
-                                color: kPrimaryColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
-                          ),
+                      if (selectedShift.displayScreen! == 1 ||
+                          selectedShift.displayScreen == 3) ...[
+                        const Text(
+                          'NO AVAILABLE SHIFTS',
+                          style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Next Shift available at ',
+                              style: TextStyle(
+                                  color: kPrimaryColor,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            Text(
+                              buildShowStartTime(),
+                              style: const TextStyle(
+                                  color: kPrimaryColor,
+                                  fontSize: 21,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
+                        if (selectedShift.displayScreenMessage != null) ...[
                           Text(
-                            buildShowStartTime(),
+                            selectedShift.displayScreenMessage!,
                             style: const TextStyle(
                                 color: kPrimaryColor,
                                 fontSize: 21,
                                 fontWeight: FontWeight.w700),
                           ),
                         ],
-                      ),
-                      if (widget.selectedShift.displayScreenMessage !=
-                          null) ...[
-                        Text(
-                          widget.selectedShift.displayScreenMessage!,
-                          style: const TextStyle(
-                              color: kPrimaryColor,
-                              fontSize: 21,
-                              fontWeight: FontWeight.w700),
-                        ),
-                      ],
-                    ] else ...[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              var currenHours =
-                                  widget.selectedShift.showStartTimeHour;
-                              var currenMinute =
-                                  widget.selectedShift.showStartTimeMinute;
+                      ] else ...[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () async {
+                                var currenHours =
+                                    selectedShift.showStartTimeHour;
+                                var currenMinute =
+                                    selectedShift.showStartTimeMinute;
 
-                              final TimeOfDay? newTime = await showTimePicker(
-                                context: context,
-                                initialTime: TimeOfDay(
-                                    hour: DateTime.now().hour,
-                                    minute: DateTime.now().minute),
-                                initialEntryMode: TimePickerEntryMode.dial,
-                              );
+                                final TimeOfDay? newTime = await showTimePicker(
+                                  context: context,
+                                  initialTime: TimeOfDay(
+                                      hour: DateTime.now().hour,
+                                      minute: DateTime.now().minute),
+                                  initialEntryMode: TimePickerEntryMode.dial,
+                                );
 
-                              if (newTime != null) {
-                                customSelectedStartTime = widget.selectedShift
-                                    .makeTimeStringFromHourMinute(
-                                        newTime.hour, newTime.minute);
+                                if (newTime != null) {
+                                  customSelectedStartTime = selectedShift
+                                      .makeTimeStringFromHourMinute(
+                                          newTime.hour, newTime.minute);
 
-                                DateTime tempStart =
-                                    DateFormat("yyyy-MM-dd hh:mm:ss")
-                                        .parse(customSelectedStartTime);
-                                DateTime tempEnd =
-                                    DateFormat("yyyy-MM-dd hh:mm:ss")
-                                        .parse(widget.selectedShift.endTime!);
-                                var differenceT =
-                                    tempEnd.difference(tempStart).inHours;
+                                  DateTime tempStart =
+                                      DateFormat("yyyy-MM-dd hh:mm:ss")
+                                          .parse(customSelectedStartTime);
+                                  DateTime tempEnd =
+                                      DateFormat("yyyy-MM-dd hh:mm:ss")
+                                          .parse(selectedShift.endTime!);
+                                  var differenceT =
+                                      tempEnd.difference(tempStart).inHours;
 
-                                if (differenceT < 0) {
-                                  showAlertDialog(
-                                    context: context,
-                                    title: 'Error',
-                                    message: 'Invalid time selected',
-                                    actions: [
-                                      AlertDialogAction(
-                                        label: MaterialLocalizations.of(context)
-                                            .okButtonLabel,
-                                        key: OkCancelResult.ok,
-                                      )
-                                    ],
-                                  );
+                                  if (differenceT < 0) {
+                                    showAlertDialog(
+                                      context: context,
+                                      title: 'Error',
+                                      message: 'Invalid time selected',
+                                      actions: [
+                                        AlertDialogAction(
+                                          label:
+                                              MaterialLocalizations.of(context)
+                                                  .okButtonLabel,
+                                          key: OkCancelResult.ok,
+                                        )
+                                      ],
+                                    );
 
+                                    return;
+                                  }
+                                  String endDate = '';
+
+                                  if (differenceT < 8) {
+                                    int hoursToAdd = 8 - differenceT;
+                                    print(hoursToAdd);
+
+                                    String date =
+                                        DateFormat("yyyy-MM-dd HH:mm:ss")
+                                            .format(
+                                      selectedShift.endDateObject.add(
+                                        (Duration(hours: hoursToAdd)),
+                                      ),
+                                    );
+                                    endDate = date;
+                                  }
+                                  print('object');
+
+                                  bool? selected = await showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (BuildContext context) {
+                                        return ChangeShiftTime(
+                                          hours: selectedShift.endDateObject
+                                                  .difference(selectedShift
+                                                      .startDateObject)
+                                                  .inHours
+                                                  .toString() +
+                                              ' ' +
+                                              'Hours',
+                                          date: selectedShift.showStartDateOnly,
+                                          endTime: endDate.isNotEmpty
+                                              ? endDate.timeToShow
+                                              : selectedShift
+                                                  .endTime!.timeToShow,
+                                          startTime: customSelectedStartTime
+                                              .timeToShow,
+                                        );
+                                      });
+
+                                  if (selected == true) {
+                                    if (endDate.isNotEmpty) {
+                                      selectedShift.endTime = endDate;
+                                    }
+
+                                    selectedShift.startTime =
+                                        customSelectedStartTime;
+                                    controller.update();
+                                  }
+                                }
+
+                                print('');
+
+                                //yyyy-MM-dd hh:mm:ss
+
+                                // newTime.hour;
+                                //  newTime.minute;
+                              },
+                              child: Text(
+                                buildShowStartTime(),
+                                style: const TextStyle(
+                                    color: kPrimaryColor,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ),
+                            const Text(
+                              ' to ',
+                              style: TextStyle(
+                                  color: kPrimaryColor,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                var currenHours = selectedShift.showEndTimeHour;
+                                var currenMinute =
+                                    selectedShift.showEndTimeMinute;
+
+                                final TimeOfDay? newTime = await showTimePicker(
+                                  context: context,
+                                  initialTime: TimeOfDay(
+                                      hour: DateTime.now()
+                                          .add(Duration(hours: 8))
+                                          .hour,
+                                      minute: DateTime.now().minute),
+                                  initialEntryMode: TimePickerEntryMode.dial,
+                                );
+
+                                if (newTime == null) {
                                   return;
                                 }
-                                String endDate = '';
-
-                                if (differenceT < 8) {
-                                  int hoursToAdd = 8 - differenceT;
-                                  print(hoursToAdd);
-
-                                  String date =
-                                      DateFormat("yyyy-MM-dd HH:mm:ss").format(
-                                    widget.selectedShift.endDateObject.add(
-                                      (Duration(hours: hoursToAdd)),
-                                    ),
-                                  );
-                                  endDate = date;
-                                }
-                                print('object');
+                                customSelectedEndTime =
+                                    selectedShift.makeTimeStringFromHourMinute(
+                                        newTime.hour, newTime.minute);
 
                                 bool? selected = await showDialog(
                                     context: context,
                                     barrierDismissible: false,
                                     builder: (BuildContext context) {
                                       return ChangeShiftTime(
-                                        hours: widget
-                                                .selectedShift.endDateObject
-                                                .difference(widget.selectedShift
+                                        hours: selectedShift.endDateObject
+                                                .difference(selectedShift
                                                     .startDateObject)
                                                 .inHours
                                                 .toString() +
                                             ' ' +
                                             'Hours',
-                                        date: widget
-                                            .selectedShift.showStartDateOnly,
-                                        endTime: endDate.isNotEmpty
-                                            ? endDate.timeToShow
-                                            : widget.selectedShift.endTime!
-                                                .timeToShow,
-                                        startTime:
-                                            customSelectedStartTime.timeToShow,
+                                        date: selectedShift.showStartDateOnly,
+                                        endTime:
+                                            customSelectedEndTime.timeToShow,
+                                        startTime: buildShowStartTime(),
                                       );
                                     });
 
-                                if (selected == true) {
-                                  if (endDate.isNotEmpty) {
-                                    widget.selectedShift.endTime = endDate;
-                                  }
-                                  setState(() {
-                                    widget.selectedShift.startTime =
-                                        customSelectedStartTime;
-                                  });
+                                if (selected != null) {
+                                  if (selected == true) {
+                                    selectedShift.endTime =
+                                        customSelectedEndTime;
+                                    controller.update();
+                                  } else {}
+                                  return;
                                 }
-                              }
 
-                              print('');
-
-                              //yyyy-MM-dd hh:mm:ss
-
-                              // newTime.hour;
-                              //  newTime.minute;
-                            },
-                            child: Text(
-                              buildShowStartTime(),
-                              style: const TextStyle(
-                                  color: kPrimaryColor,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w700),
+                                print('');
+                              },
+                              child: Text(
+                                selectedShift.showEndTime,
+                                style: const TextStyle(
+                                    color: kPrimaryColor,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w700),
+                              ),
                             ),
-                          ),
-                          const Text(
-                            ' to ',
-                            style: TextStyle(
+                          ],
+                        ),
+                        if (selectedShift.displayScreenMessage != null) ...[
+                          Text(
+                            selectedShift.displayScreenMessage!,
+                            style: const TextStyle(
                                 color: kPrimaryColor,
-                                fontSize: 22,
+                                fontSize: 21,
                                 fontWeight: FontWeight.w700),
                           ),
-                          GestureDetector(
-                            onTap: () async {
-                              var currenHours =
-                                  widget.selectedShift.showEndTimeHour;
-                              var currenMinute =
-                                  widget.selectedShift.showEndTimeMinute;
-
-                              final TimeOfDay? newTime = await showTimePicker(
-                                context: context,
-                                initialTime: TimeOfDay(
-                                    hour: DateTime.now()
-                                        .add(Duration(hours: 8))
-                                        .hour,
-                                    minute: DateTime.now().minute),
-                                initialEntryMode: TimePickerEntryMode.dial,
-                              );
-
-                              if (newTime == null) {
-                                return;
-                              }
-                              customSelectedEndTime = widget.selectedShift
-                                  .makeTimeStringFromHourMinute(
-                                      newTime.hour, newTime.minute);
-
-                              bool? selected = await showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (BuildContext context) {
-                                    return ChangeShiftTime(
-                                      hours: widget.selectedShift.endDateObject
-                                              .difference(widget.selectedShift
-                                                  .startDateObject)
-                                              .inHours
-                                              .toString() +
-                                          ' ' +
-                                          'Hours',
-                                      date: widget
-                                          .selectedShift.showStartDateOnly,
-                                      endTime: customSelectedEndTime.timeToShow,
-                                      startTime: buildShowStartTime(),
-                                    );
-                                  });
-
-                              if (selected != null) {
-                                if (selected == true) {
-                                  setState(() {
-                                    widget.selectedShift.endTime =
-                                        customSelectedEndTime;
-                                  });
-                                } else {}
-                                return;
-                              }
-
-                              print('');
-                            },
-                            child: Text(
-                              widget.selectedShift.showEndTime,
-                              style: const TextStyle(
-                                  color: kPrimaryColor,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w700),
+                        ] else
+                          ...[],
+                      ],
+                      if (1 == 2) ...[
+                        OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            onSurface: kPrimaryColor,
+                            side: const BorderSide(
+                              width: 1,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.0),
                             ),
                           ),
-                        ],
-                      ),
+                          onPressed: () async {
+                            bool? selected = await showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return Container(); //ChangeShiftTime();
+                                });
 
-
-                       if (widget.selectedShift.displayScreenMessage !=
-                           null) ...[
-                         Text(
-                           widget.selectedShift.displayScreenMessage!,
-                           style: const TextStyle(
-                               color: kPrimaryColor,
-                               fontSize: 21,
-                               fontWeight: FontWeight.w700),
-                         ),
-                       ] else ... [
-
-
-                       ],
-
-                    ],
-                    if (1 == 2) ...[
-                      OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                          onSurface: kPrimaryColor,
-                          side: const BorderSide(
-                            width: 1,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16.0),
+                            if (selected != null) {
+                              return;
+                            }
+                          },
+                          child: const Text(
+                            'CHANGE SHIFT TIMES',
+                            style:
+                                TextStyle(fontSize: 20, color: kPrimaryColor),
                           ),
                         ),
-                        onPressed: () async {
-                          bool? selected = await showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) {
-                                return Container(); //ChangeShiftTime();
-                              });
-
-                          if (selected != null) {
-                            return;
-                          }
-                        },
-                        child: const Text(
-                          'CHANGE SHIFT TIMES',
-                          style: TextStyle(fontSize: 20, color: kPrimaryColor),
-                        ),
-                      ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        Expanded(
-          flex: 44,
-          child: TextButton(
-            onPressed: () async {
-              if (widget.selectedShift.displayScreen! == 1 ||
-                  widget.selectedShift.displayScreen! == 3) {
-                 return;
-              }
-
-              var waitVal = await Get.toNamed(Routes.workerListing, arguments: {
-                "shiftId": null,
-                "processId": widget.processSelected.id!,
-                "selectedShift": widget.selectedShift,
-                "process": widget.processSelected,
-              });
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     builder: (context) => WorkersListing(
-              //       shiftId: null,
-              //       processId: widget.processSelected.id!,
-              //       selectedShift: widget.selectedShift,
-              //       process: widget.processSelected,
-              //     ),
-              //   ),
-              // );
-
-              if (waitVal != null) {
-                if (waitVal == true) {
-                  this.widget.popBack.call();
+          Expanded(
+            flex: 44,
+            child: TextButton(
+              onPressed: () async {
+                if (selectedShift.displayScreen! == 1 ||
+                    selectedShift.displayScreen! == 3) {
+                  return;
                 }
-              }
-              //
-            },
-            child: Image.asset(imageName()),
-          ),
-        ),
-        Expanded(
-          flex: 20,
-          child: Center(
-            child: PElevatedButton(
-              onPressed: () {},
-              text: 'VIEW PREVIOUS SHIFT',
-              backGroundColor: Colors.grey,
+
+                var waitVal =
+                    await Get.toNamed(Routes.workerListing, arguments: {
+                  "shiftId": null,
+                  "processId": processSelected.id!,
+                  "selectedShift": selectedShift,
+                  "process": processSelected,
+                });
+                // Navigator.of(context).push(
+                //   MaterialPageRoute(
+                //     builder: (context) => WorkersListing(
+                //       shiftId: null,
+                //       processId: processSelected.id!,
+                //       selectedShift: selectedShift,
+                //       process: processSelected,
+                //     ),
+                //   ),
+                // );
+
+                if (waitVal != null) {
+                  if (waitVal == true) {
+                    this.popBack.call();
+                  }
+                }
+                //
+              },
+              child: Image.asset(imageName()),
             ),
           ),
-        ),
+          Expanded(
+            flex: 20,
+            child: Center(
+              child: PElevatedButton(
+                onPressed: () {},
+                text: 'VIEW PREVIOUS SHIFT',
+                backGroundColor: Colors.grey,
+              ),
+            ),
+          ),
 
-        const SizedBox(
-          height: 16,
-        ),
+          const SizedBox(
+            height: 16,
+          ),
 
 //#5EC1DC40
-      ],
-    );
+        ],
+      );
+    });
   }
 
   String buildShowStartTime() {
-    return widget.selectedShift.showStartTime;
+    return selectedShift.showStartTime;
   }
 
   String imageName() {
-    if (widget.selectedShift.displayScreen! == 1 ||
-        widget.selectedShift.displayScreen! == 3) {
+    if (selectedShift.displayScreen! == 1 ||
+        selectedShift.displayScreen! == 3) {
       return 'assets/images/start_disable.png';
     }
     return 'assets/images/start_button.png';

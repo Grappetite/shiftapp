@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:shiftapp/Controllers/HomeController.dart';
 import 'package:shiftapp/Network/API.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
@@ -19,39 +20,21 @@ import '../widgets/elevated_button.dart';
 import '../widgets/input_view.dart';
 import 'inner_widgets/alert_title_label.dart';
 
-class EndShiftFinalScreen extends StatefulWidget {
-  int? shiftId;
-  int? processId;
-  Process? process;
+class EndShiftFinalScreen extends StatelessWidget {
+  int? shiftId = Get.arguments["shiftId"];
+  int? processId = Get.arguments["processId"];
+  Process? process = Get.arguments["process"];
 
-  int? executeShiftId;
+  int? executeShiftId = Get.arguments["executeShiftId"];
 
-  String? startTime;
-  String? endTime;
+  String? startTime = Get.arguments["startTime"];
+  String? endTime = Get.arguments["endTime"];
 
-  ShiftItem? selectedShift;
+  ShiftItem? selectedShift = Get.arguments["selectedShift"];
 
-  String? comments;
-  bool? autoOpen;
+  String? comments = Get.arguments["comments"];
+  bool? autoOpen = Get.arguments["autoOpen"] ?? false;
 
-  EndShiftFinalScreen(
-      {Key? key,
-      this.shiftId,
-      this.processId,
-      this.startTime,
-      this.endTime,
-      this.selectedShift,
-      this.comments,
-      this.process,
-      this.autoOpen = false,
-      this.executeShiftId})
-      : super(key: key);
-
-  @override
-  State<EndShiftFinalScreen> createState() => _EndShiftFinalScreenState();
-}
-
-class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
   FocusNode doneButton = FocusNode();
 
   final textController = TextEditingController();
@@ -61,34 +44,26 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
   late Timer _timer;
 
   String timeRemaining = '00:00';
-
+  HomeController controller = Get.find();
   void startTimer() {
     const oneSec = Duration(seconds: 1);
 
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
-        if (widget.selectedShift!.timeRemaining.contains('Over')) {
-          timeRemaining =
-              widget.selectedShift!.timeRemaining.replaceAll('Over ', '');
+        if (selectedShift!.timeRemaining.contains('Over')) {
+          timeRemaining = selectedShift!.timeRemaining.replaceAll('Over ', '');
           isTimeOver = true;
         } else {
-          timeRemaining = widget.selectedShift!.timeRemaining;
+          timeRemaining = selectedShift!.timeRemaining;
         }
-        setState(() {
-          timeElasped = widget.selectedShift!.timeElasped;
-        });
+
+        timeElasped = selectedShift!.timeElasped;
+        controller.update();
 
         print('');
       },
     );
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    doneButton.dispose();
-    setupFocusNode(doneButton);
   }
 
   static OverlayEntry? _overlayEntry;
@@ -120,7 +95,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
     }
   }
 
-  void setupFocusNode(FocusNode node) {
+  void setupFocusNode(FocusNode node, context) {
     node.addListener(
       () {
         bool hasFocus = node.hasFocus;
@@ -138,212 +113,201 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    setupFocusNode(doneButton);
-    startTimer();
-    widget.shiftId = Get.arguments["shiftId"];
-    widget.processId = Get.arguments["processId"];
-    widget.process = Get.arguments["process"];
-    widget.executeShiftId = Get.arguments["executeShiftId"];
-    widget.startTime = Get.arguments["startTime"];
-    widget.endTime = Get.arguments["endTime"];
-    widget.selectedShift = Get.arguments["selectedShift"];
-    widget.comments = Get.arguments["comments"];
-    widget.autoOpen = Get.arguments["autoOpen"] ?? false;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Column(
-          children: [
-            Image.asset(
-              'assets/images/toplogo.png',
-              height: 20,
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Text(
-              widget.process!.name!,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600),
-            ),
-            SizedBox(
-              height: 2,
-            ),
-          ],
+    return GetBuilder<HomeController>(initState: (c) {
+      setupFocusNode(doneButton, context);
+      startTimer();
+    }, builder: (logic) {
+      return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Column(
+            children: [
+              Image.asset(
+                'assets/images/toplogo.png',
+                height: 20,
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              Text(
+                process!.name!,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600),
+              ),
+              SizedBox(
+                height: 2,
+              ),
+            ],
+          ),
         ),
-      ),
-      body: Column(
-        children: [
-          TimerTopWidget(
-              selectedShift: widget.selectedShift!, timeElasped: timeElasped),
-          Expanded(
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 16),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.grey, width: 3),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Row(
-                        children: const [
-                          Icon(
-                            Icons.check_circle_outline,
-                            color: kPrimaryColor,
-                          ),
-                          Text(
-                            'END SHIFT: SHIFT SUMMARY',
-                            style: TextStyle(
-                                color: kPrimaryColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: lightRedColor,
-                              width: 3,
+        body: Column(
+          children: [
+            TimerTopWidget(
+                selectedShift: selectedShift!, timeElasped: timeElasped),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    left: 8, right: 8, top: 8, bottom: 16),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.grey, width: 3),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Row(
+                          children: const [
+                            Icon(
+                              Icons.check_circle_outline,
+                              color: kPrimaryColor,
                             ),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(
-                                24,
+                            Text(
+                              'END SHIFT: SHIFT SUMMARY',
+                              style: TextStyle(
+                                  color: kPrimaryColor,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 12,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: lightRedColor,
+                                width: 3,
+                              ),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(
+                                  24,
+                                ),
                               ),
                             ),
-                          ),
-                          width: double.infinity,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 16, horizontal: 16),
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                isTimeOver
-                                    ? ('TIME OVER : $timeRemaining')
-                                    : ('TIME REMAINING: $timeRemaining'),
-                                style: const TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700),
+                            width: double.infinity,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 16, horizontal: 16),
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  isTimeOver
+                                      ? ('TIME OVER : $timeRemaining')
+                                      : ('TIME REMAINING: $timeRemaining'),
+                                  style: const TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w700),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: kPrimaryColor,
-                              width: 1,
-                            ),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(
-                                24,
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: kPrimaryColor,
+                                width: 1,
+                              ),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(
+                                  24,
+                                ),
                               ),
                             ),
-                          ),
-                          width: double.infinity,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 16, horizontal: 16),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.handyman,
+                            width: double.infinity,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 16, horizontal: 16),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.handyman,
+                                        color: kPrimaryColor,
+                                      ),
+                                      SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text(
+                                        'UNIT PRODUCTS',
+                                        style: TextStyle(
+                                            color: kPrimaryColor,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w700),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(),
+                                      ),
+                                      Expanded(
+                                        child: TextField(
+                                          controller: textController,
+                                          textAlign: TextAlign.center,
+                                          focusNode: doneButton,
+                                          keyboardType: TextInputType.number,
+                                          inputFormatters: [
+                                            FilteringTextInputFormatter
+                                                .digitsOnly
+                                          ], // Only numbers can be entered
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Container(),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  Text(
+                                    '${process!.unit} Processed',
+                                    style: const TextStyle(
+                                        color: kPrimaryColor, fontSize: 16),
+                                  ),
+                                  const SizedBox(
+                                    height: 6,
+                                  ),
+                                  const Text(
+                                    'Enter the volume above',
+                                    style: TextStyle(
                                       color: kPrimaryColor,
                                     ),
-                                    SizedBox(
-                                      width: 8,
-                                    ),
-                                    Text(
-                                      'UNIT PRODUCTS',
-                                      style: TextStyle(
-                                          color: kPrimaryColor,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Container(),
-                                    ),
-                                    Expanded(
-                                      child: TextField(
-                                        controller: textController,
-                                        textAlign: TextAlign.center,
-                                        focusNode: doneButton,
-                                        keyboardType: TextInputType.number,
-                                        inputFormatters: [
-                                          FilteringTextInputFormatter.digitsOnly
-                                        ], // Only numbers can be entered
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Container(),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  '${widget.process!.unit} Processed',
-                                  style: const TextStyle(
-                                      color: kPrimaryColor, fontSize: 16),
-                                ),
-                                const SizedBox(
-                                  height: 6,
-                                ),
-                                const Text(
-                                  'Enter the volume above',
-                                  style: TextStyle(
-                                    color: kPrimaryColor,
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Container(),
-                      ),
-                      PElevatedButton(
-                        onPressed: () async {
+                        Expanded(
+                          child: Container(),
+                        ),
+                        PElevatedButton(
+                          onPressed: () async {
 // <<<<<<< HEAD
 //                           await showDialog(
 //                               context: context,
@@ -356,109 +320,110 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
 //
 // =======
 // >>>>>>> master
-                          if (textController.text.isEmpty) {
-                            final result = await showAlertDialog(
-                              context: context,
-                              title: 'Error',
-                              message: 'Please write down the units products',
-                              actions: [
-                                AlertDialogAction(
-                                  label: MaterialLocalizations.of(context)
-                                      .okButtonLabel,
-                                  key: OkCancelResult.ok,
-                                )
-                              ],
-                            );
-
-                            print('');
-
-                            return;
-                          } else {
-                            var answer = await showDialog(
+                            if (textController.text.isEmpty) {
+                              final result = await showAlertDialog(
                                 context: context,
-                                barrierDismissible: false,
-                                builder: (BuildContext context) {
-                                  return ConfirmTimeEnd(
-                                    shiftItem: this.widget.selectedShift!,
-                                  );
-                                });
-
-                            if (answer != null) {
-                              if (answer == false) {
-                                return;
-                              }
-                            }
-
-                            // await EasyLoading.show(
-                            //   status: 'Adding...',
-                            //   maskType: EasyLoadingMaskType.black,
-                            // );
-
-                            var check = await ShiftService.endShift(
-                              widget.executeShiftId!,
-                              widget.processId!,
-                              textController.text,
-                              answer,
-                            );
-
-// <<<<<<< HEAD
-//                                 widget.executeShiftId!,
-//                                 widget.processId!,
-//                                 textController.text!,
-//                                 widget.comments!,
-//                                 widget.endTime!);
-// =======
-
-                            //await EasyLoading.dismiss();
-
-                            if (check) {
-                              await EasyLoading.showSuccess(
-                                'Closed shift successfully',
-                                duration: const Duration(seconds: 2),
+                                title: 'Error',
+                                message: 'Please write down the units products',
+                                actions: [
+                                  AlertDialogAction(
+                                    label: MaterialLocalizations.of(context)
+                                        .okButtonLabel,
+                                    key: OkCancelResult.ok,
+                                  )
+                                ],
                               );
 
-                              // final prefs =
-                              //     await SharedPreferences.getInstance();
+                              print('');
 
-                              Api().sp.remove('shiftId');
+                              return;
+                            } else {
+                              var answer = await showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (BuildContext context) {
+                                    return ConfirmTimeEnd(
+                                      shiftItem: this.selectedShift!,
+                                    );
+                                  });
 
-                              Api().sp.remove('selectedShiftName');
-                              Api().sp.remove('selectedShiftEndTime');
-                              Api().sp.remove('selectedShiftStartTime');
-                              Api().sp.remove('username');
-                              Api().sp.remove('password');
+                              if (answer != null) {
+                                if (answer == false) {
+                                  return;
+                                }
+                              }
 
-                              if (widget.autoOpen!) {
+                              // await EasyLoading.show(
+                              //   status: 'Adding...',
+                              //   maskType: EasyLoadingMaskType.black,
+                              // );
+
+                              var check = await ShiftService.endShift(
+                                executeShiftId!,
+                                processId!,
+                                textController.text,
+                                answer,
+                              );
+
+// <<<<<<< HEAD
+//                                 executeShiftId!,
+//                                 processId!,
+//                                 textController.text!,
+//                                 comments!,
+//                                 endTime!);
+// =======
+
+                              //await EasyLoading.dismiss();
+
+                              if (check) {
+                                await EasyLoading.showSuccess(
+                                  'Closed shift successfully',
+                                  duration: const Duration(seconds: 2),
+                                );
+
+                                // final prefs =
+                                //     await SharedPreferences.getInstance();
+
+                                Api().sp.remove('shiftId');
+
+                                Api().sp.remove('selectedShiftName');
+                                Api().sp.remove('selectedShiftEndTime');
+                                Api().sp.remove('selectedShiftStartTime');
+                                Api().sp.remove('username');
+                                Api().sp.remove('password');
+
+                                if (autoOpen!) {
 // <<<<<<< HEAD
 //                                 Get.back();
 //                                 Get.back(result:true);
 //                               } else {
 //                                 Get.back();
 // =======
-                                Get.back();
-                                Get.back(result: true);
-                              } else {
-                                Get.back();
+                                  Get.back();
+                                  Get.back(result: true);
+                                } else {
+                                  Get.back();
 // >>>>>>> master
-                                Get.back(result: true);
-                                Get.back(result: true);
+                                  Get.back(result: true);
+                                  Get.back(result: true);
+                                }
+                              } else {
+                                EasyLoading.showError('Error');
                               }
-                            } else {
-                              EasyLoading.showError('Error');
                             }
-                          }
-                        },
-                        text: 'CLOSE SHIFT',
-                      ),
-                    ],
+                          },
+                          text: 'CLOSE SHIFT',
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 }
 
@@ -508,6 +473,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
   }
 
   TimeOfDay? newTime;
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
