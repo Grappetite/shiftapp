@@ -170,7 +170,7 @@ class _StartShiftViewState extends State<StartShiftView> {
               width: MediaQuery.of(context).size.width / 1.7,
               child: TextButton(
                 onPressed: () async {
-                  if (_controller.text.isEmpty) {
+                  if (_controller.text.isEmpty && 1 == 2) {
                     showAlertDialog(
                       context: context,
                       title: 'Error',
