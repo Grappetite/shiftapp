@@ -209,7 +209,7 @@ class ShiftItem {
       displayScreen = 2;
     }
     //displayScreen = 3;
-   // displayScreen = 2;
+    displayScreen = 2;
 
   }
 

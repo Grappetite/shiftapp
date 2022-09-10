@@ -10,13 +10,15 @@ class WorkersService {
   static Future<WorkersListing?> getShiftWorkers(
       int? shiftId, int processId) async {
     var dio = Dio();
-    String url = "newWorkerList/" + processId.toString();
-    if (shiftId != null) {
-      url = 'manageWorkerLisiting/' + shiftId.toString();
-    }
-    var token = Api().sp.read(tokenKey);
-    print('');
 
+    String url = baseUrl + "newWorkerList/" + processId.toString();
+    if (shiftId != null) {
+      url = baseUrl +
+          'newWorkerList/' +
+          processId.toString() +
+          '/' +
+          shiftId.toString();
+    }
     Response response = await Api().get(
       url,
     );

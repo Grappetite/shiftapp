@@ -92,14 +92,16 @@ class _ShiftStartState extends State<ShiftStart> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                     Text(
-                      widget.selectedShift.displayScreen == 2 ? 'CURRENT SHIFT' : 'NEXT SHIFT:',
+                    Text(
+                      widget.selectedShift.displayScreen == 2
+                          ? 'CURRENT SHIFT'
+                          : 'NEXT SHIFT:',
                       style: TextStyle(
                           color: kPrimaryColor,
                           fontSize: 20,
                           fontWeight: FontWeight.w600),
                     ),
-                     if (widget.selectedShift.displayScreen! == 1 ||
+                    if (widget.selectedShift.displayScreen! == 1 ||
                         widget.selectedShift.displayScreen == 3) ...[
                       const Text(
                         'NO AVAILABLE SHIFTS',
@@ -143,10 +145,13 @@ class _ShiftStartState extends State<ShiftStart> {
                         children: [
                           GestureDetector(
                             onTap: () async {
-                              var currenHours =
-                                  widget.selectedShift.showStartTimeHour;
-                              var currenMinute =
-                                  widget.selectedShift.showStartTimeMinute;
+// <<<<<<< HEAD
+//                               var currenHours =
+//                                   widget.selectedShift.showStartTimeHour;
+//                               var currenMinute =
+//                                   widget.selectedShift.showStartTimeMinute;
+// =======
+// >>>>>>> master
 
                               final TimeOfDay? newTime = await showTimePicker(
                                 context: context,
@@ -199,6 +204,11 @@ class _ShiftStartState extends State<ShiftStart> {
                                     ),
                                   );
                                   endDate = date;
+
+                                  tempEnd = DateFormat("yyyy-MM-dd hh:mm:ss")
+                                      .parse(date);
+
+                                  print('object');
                                 }
                                 print('object');
 
@@ -207,14 +217,18 @@ class _ShiftStartState extends State<ShiftStart> {
                                     barrierDismissible: false,
                                     builder: (BuildContext context) {
                                       return ChangeShiftTime(
-                                        hours: widget
-                                                .selectedShift.endDateObject
-                                                .difference(widget.selectedShift
-                                                    .startDateObject)
+                                        hours: tempEnd
+                                                .difference(tempStart)
                                                 .inHours
                                                 .toString() +
                                             ' ' +
-                                            'Hours',
+                                            'Hours : ' +
+                                            (tempEnd
+                                                        .difference(tempStart)
+                                                        .inMinutes %
+                                                    60)
+                                                .toString() +
+                                            ' Minutes',
                                         date: widget
                                             .selectedShift.showStartDateOnly,
                                         endTime: endDate.isNotEmpty
@@ -238,11 +252,6 @@ class _ShiftStartState extends State<ShiftStart> {
                               }
 
                               print('');
-
-                              //yyyy-MM-dd hh:mm:ss
-
-                              // newTime.hour;
-                              //  newTime.minute;
                             },
                             child: Text(
                               buildShowStartTime(),
@@ -324,22 +333,17 @@ class _ShiftStartState extends State<ShiftStart> {
                           ),
                         ],
                       ),
-
-
-                       if (widget.selectedShift.displayScreenMessage !=
-                           null) ...[
-                         Text(
-                           widget.selectedShift.displayScreenMessage!,
-                           style: const TextStyle(
-                               color: kPrimaryColor,
-                               fontSize: 21,
-                               fontWeight: FontWeight.w700),
-                         ),
-                       ] else ... [
-
-
-                       ],
-
+                      if (widget.selectedShift.displayScreenMessage !=
+                          null) ...[
+                        Text(
+                          widget.selectedShift.displayScreenMessage!,
+                          style: const TextStyle(
+                              color: kPrimaryColor,
+                              fontSize: 21,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ] else
+                        ...[],
                     ],
                     if (1 == 2) ...[
                       OutlinedButton(
@@ -382,7 +386,7 @@ class _ShiftStartState extends State<ShiftStart> {
             onPressed: () async {
               if (widget.selectedShift.displayScreen! == 1 ||
                   widget.selectedShift.displayScreen! == 3) {
-                 return;
+                return;
               }
 
               var waitVal = await Get.toNamed(Routes.workerListing, arguments: {

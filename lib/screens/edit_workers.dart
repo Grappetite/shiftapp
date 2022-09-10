@@ -130,14 +130,20 @@ class _EditWorkersState extends State<EditWorkers> {
 
     List<ShiftWorker> shiftWorkers = [];
 
-    responseShift!.data!.worker = responseShift.data!.shiftWorker!
-        .where((e) => e.isAdded == false)
-        .toList();
-    responseShift.data!.shiftWorker = responseShift.data!.shiftWorker!
-        .where((e) => e.isAdded == true)
-        .toList();
+// <<<<<<< HEAD
+//     responseShift!.data!.worker = responseShift.data!.shiftWorker!
+//         .where((e) => e.isAdded == false)
+//         .toList();
+//     responseShift.data!.shiftWorker = responseShift.data!.shiftWorker!
+//         .where((e) => e.isAdded == true)
+//         .toList();
+// =======
+//  //   responseShift!.data!.worker = responseShift.data!.shiftWorker!.where((e) => e.isAdded == false).toList();
+//    // responseShift.data!.shiftWorker = responseShift.data!.shiftWorker!.where((e) => e.isAdded == true).toList();
+//
+// >>>>>>> master
 
-    shiftWorkers.addAll(responseShift.data!.worker!);
+    shiftWorkers.addAll(responseShift!.data!.worker!);
 
     workersSelected = responseShift.data!.shiftWorker!.length;
 
