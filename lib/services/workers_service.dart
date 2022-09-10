@@ -11,13 +11,9 @@ class WorkersService {
       int? shiftId, int processId) async {
     var dio = Dio();
 
-    String url = baseUrl + "newWorkerList/" + processId.toString();
+    String url = "newWorkerList/" + processId.toString();
     if (shiftId != null) {
-      url = baseUrl +
-          'newWorkerList/' +
-          processId.toString() +
-          '/' +
-          shiftId.toString();
+      url = 'newWorkerList/' + processId.toString() + '/' + shiftId.toString();
     }
     Response response = await Api().get(
       url,

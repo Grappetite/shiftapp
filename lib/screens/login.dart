@@ -22,9 +22,11 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool showLogin = true;
 
-  TextEditingController controller = TextEditingController();
+  TextEditingController controller =
+      TextEditingController(text: "mahboob+supervisor@grappetite.com");
 
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController passwordController =
+      TextEditingController(text: "Mahboob321");
 
   String selectedString = "";
 
