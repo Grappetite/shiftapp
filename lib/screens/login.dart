@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiftapp/screens/NewDropdownPage.dart';
 import 'package:shiftapp/screens/home.dart';
 import 'package:shiftapp/services/login_service.dart';
 
 import '../config/constants.dart';
 import '../model/login_model.dart';
 import '../model/shifts_model.dart';
-import '../widgets/drop_down.dart';
 import '../widgets/elevated_button.dart';
 import '../widgets/input_view.dart';
 
@@ -165,44 +165,44 @@ class _LoginScreenState extends State<LoginScreen> {
                         isSecure: true,
                       ),
                     ),
-                    Visibility(
-                      visible: !showLogin,
-                      child: const Align(
-                        alignment: Alignment.topLeft,
-                        child: Text(
-                          'Please select Process',
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    Visibility(
-                      visible: !showLogin,
-                      child: DropDown(
-                        labelText: 'Title',
-                        currentList:
-                            process.map((e) => e.name!.trim()).toList(),
-                        showError: false,
-                        onChange: (newString) {
-                          setState(() {
-                            selectedString = newString;
-                          });
-
-                          processIndexSelected = process
-                              .map((e) => e.name!.trim())
-                              .toList()
-                              .indexOf(newString);
-
-                          //final List<String> cityNames = cities.map((city) => city.name).toList();
-                        },
-                        placeHolderText: 'Process',
-                        preSelected: selectedString,
-                      ),
-                    ),
+                    // Visibility(
+                    //   visible: !showLogin,
+                    //   child: const Align(
+                    //     alignment: Alignment.topLeft,
+                    //     child: Text(
+                    //       'Please select Process',
+                    //       style: TextStyle(
+                    //         fontSize: 18,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // const SizedBox(
+                    //   height: 24,
+                    // ),
+                    // Visibility(
+                    //   visible: !showLogin,
+                    //   child: DropDown(
+                    //     labelText: 'Title',
+                    //     currentList:
+                    //         process.map((e) => e.name!.trim()).toList(),
+                    //     showError: false,
+                    //     onChange: (newString) {
+                    //       setState(() {
+                    //         selectedString = newString;
+                    //       });
+                    //
+                    //       processIndexSelected = process
+                    //           .map((e) => e.name!.trim())
+                    //           .toList()
+                    //           .indexOf(newString);
+                    //
+                    //       //final List<String> cityNames = cities.map((city) => city.name).toList();
+                    //     },
+                    //     placeHolderText: 'Process',
+                    //     preSelected: selectedString,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -290,6 +290,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
 
                       process = response.data!.process!;
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) =>
+                              DropDownPage(process: process)));
 
                       setState(() {
                         showLogin = false;

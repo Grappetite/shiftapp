@@ -1,12 +1,12 @@
+import 'package:app_popup_menu/app_popup_menu.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shiftapp/screens/shift_start.dart';
-import 'package:app_popup_menu/app_popup_menu.dart';
-import 'package:shiftapp/model/shifts_model.dart';
 import 'package:shiftapp/model/login_model.dart';
+import 'package:shiftapp/model/shifts_model.dart';
+import 'package:shiftapp/screens/shift_start.dart';
 
 import '../config/constants.dart';
 import 'end_shift.dart';
@@ -14,7 +14,6 @@ import 'login.dart';
 
 class HomeView extends StatefulWidget {
   final Process processSelected;
-
 
   final ShiftItem selectedShift;
 
@@ -33,9 +32,47 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   late PersistentTabController _controller;
-
+  late AppPopupMenu<int> appMenu02;
   @override
   void initState() {
+    appMenu02 = AppPopupMenu<int>(
+      menuItems: [
+        PopupMenuItem(
+          value: 1,
+          onTap: () async {
+            final prefs = await SharedPreferences.getInstance();
+
+            prefs.remove('shiftId');
+
+            prefs.remove('selectedShiftName');
+            prefs.remove('selectedShiftEndTime');
+            prefs.remove('selectedShiftStartTime');
+            prefs.remove('username');
+            prefs.remove('password');
+            var dyanc = await Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+            );
+          },
+          child: const Text(
+            'Logout',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+      initialValue: 2,
+      onSelected: (int value) {},
+      onCanceled: () {},
+      elevation: 4,
+      icon: const Icon(Icons.more_vert),
+      offset: const Offset(0, 65),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      color: kPrimaryColor,
+    );
     super.initState();
     _controller = PersistentTabController(initialIndex: 0);
   }
@@ -46,35 +83,67 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return PersistentTabView(
-      context,
-      controller: _controller,
-      screens: _buildScreens(),
-      items: _navBarsItems(),
-      confineInSafeArea: true,
-      backgroundColor: kPrimaryColor,
-      handleAndroidBackButtonPress: true,
-      resizeToAvoidBottomInset: true,
-      stateManagement: true,
-      hideNavigationBarWhenKeyboardShows: true,
-      decoration: NavBarDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        colorBehindNavBar: Colors.white,
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(Icons.arrow_back)),
+        title: Column(
+          children: [
+            Image.asset(
+              'assets/images/toplogo.png',
+              height: 20,
+            ),
+            const SizedBox(
+              height: 4,
+            ),
+            Text(
+              widget.processSelected.name!,
+              style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(
+              height: 2,
+            ),
+          ],
+        ),
+        actions: [appMenu02],
       ),
-      popAllScreensOnTapOfSelectedTab: true,
-      popActionScreens: PopActionScreensType.all,
-      itemAnimationProperties: const ItemAnimationProperties(
-        duration: Duration(milliseconds: 200),
-        curve: Curves.ease,
+      body: PersistentTabView(
+        context,
+        controller: _controller,
+        screens: _buildScreens(),
+        items: _navBarsItems(),
+        confineInSafeArea: true,
+        backgroundColor: kPrimaryColor,
+        handleAndroidBackButtonPress: true,
+        resizeToAvoidBottomInset: true,
+        stateManagement: true,
+        hideNavigationBarWhenKeyboardShows: true,
+        decoration: NavBarDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          colorBehindNavBar: Colors.white,
+        ),
+        popAllScreensOnTapOfSelectedTab: true,
+        popActionScreens: PopActionScreensType.all,
+        itemAnimationProperties: const ItemAnimationProperties(
+          duration: Duration(milliseconds: 200),
+          curve: Curves.ease,
+        ),
+        screenTransitionAnimation: const ScreenTransitionAnimation(
+          // Screen transition animation on change of selected tab.
+          animateTabTransition: true,
+          curve: Curves.ease,
+          duration: Duration(milliseconds: 200),
+        ),
+        navBarStyle:
+            NavBarStyle.style3, // Choose the nav bar style with this property.
       ),
-      screenTransitionAnimation: const ScreenTransitionAnimation(
-        // Screen transition animation on change of selected tab.
-        animateTabTransition: true,
-        curve: Curves.ease,
-        duration: Duration(milliseconds: 200),
-      ),
-      navBarStyle:
-          NavBarStyle.style3, // Choose the nav bar style with this property.
     );
   }
 
@@ -85,17 +154,14 @@ class _HomeViewState extends State<HomeView> {
         processSelected: widget.processSelected,
         sessionStarted: widget.sessionStarted,
         onLogout: () async {
-          var dyanc = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const LoginScreen()),
-          );
+          // var dyanc = await Navigator.pushReplacement(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => const LoginScreen()),
+          // );
 
-          if(dyanc != null) {
-            if(dyanc == true){
-
-
-            }
-          }
+          // if (dyanc != null) {
+          //   if (dyanc == true) {}
+          // }
         },
       ),
       Container(
@@ -147,8 +213,6 @@ class HomeMainView extends StatefulWidget {
 }
 
 class _HomeMainViewState extends State<HomeMainView> {
-  late AppPopupMenu<int> appMenu02;
-
   void moveToEndSession() async {
     await EasyLoading.show(
       status: 'loading...',
@@ -158,9 +222,7 @@ class _HomeMainViewState extends State<HomeMainView> {
     await Future.delayed(const Duration(milliseconds: 10));
     await EasyLoading.dismiss();
 
-
     var executeShiftId = this.widget.selectedShift.executedShiftId;
-
 
     var response = await Navigator.pushReplacement(
       context,
@@ -173,63 +235,23 @@ class _HomeMainViewState extends State<HomeMainView> {
           processId: widget.processSelected.id!,
           selectedShift: widget.selectedShift,
           startedBefore: true,
-          process: widget.processSelected, execShiftId: executeShiftId!,
+          process: widget.processSelected,
+          execShiftId: executeShiftId!,
         ),
       ),
     );
 
-    if(response != null) {
-      if(response == true){
+    if (response != null) {
+      if (response == true) {
         widget.onLogout();
-
       }
     }
     print('=');
-
   }
 
   @override
   void initState() {
     super.initState();
-
-    appMenu02 = AppPopupMenu<int>(
-      menuItems: [
-        PopupMenuItem(
-          value: 1,
-          onTap: () async {
-            final prefs = await SharedPreferences.getInstance();
-
-            prefs.remove('shiftId');
-
-            prefs.remove('selectedShiftName');
-            prefs.remove('selectedShiftEndTime');
-            prefs.remove('selectedShiftStartTime');
-            prefs.remove('username');
-            prefs.remove('password');
-
-            widget.onLogout();
-
-
-          },
-          child: const Text(
-            'Logout',
-            style: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ],
-      initialValue: 2,
-      onSelected: (int value) {},
-      onCanceled: () {},
-      elevation: 4,
-      icon: const Icon(Icons.more_vert),
-      offset: const Offset(0, 65),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      color: kPrimaryColor,
-    );
 
     if (widget.sessionStarted) {
       moveToEndSession();
@@ -239,36 +261,11 @@ class _HomeMainViewState extends State<HomeMainView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-
-        title: Column(
-          children: [
-            Image.asset('assets/images/toplogo.png',height: 20,),
-            const SizedBox(
-              height: 4,
-            ),
-            Text(
-              widget.processSelected.name!,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600),
-            ),
-
-            const SizedBox(
-              height: 2,
-            ),
-          ],
-        ),
-        actions: [appMenu02],
-      ),
       body: ShiftStart(
         selectedShift: widget.selectedShift,
         processSelected: widget.processSelected,
-        popBack: (){
+        popBack: () {
           widget.onLogout.call();
-
         },
       ),
     );
