@@ -181,7 +181,8 @@ class _WorkItemViewState extends State<WorkItemView> {
                       picUrl: currentItem.picture,
                       changedStatus: (bool newStatus) async {
                         String dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
-                            .format(DateTime.now());
+                            .format(
+                                DateTime.now().toUtc().add(Duration(hours: 2)));
 
                         if (widget.isEditing && newStatus) {
                           setState(() {
@@ -217,8 +218,9 @@ class _WorkItemViewState extends State<WorkItemView> {
                                 );
                               }).then((value) async {
                             if (value != false) {
-                              dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
-                                  .format(DateTime.parse(value));
+                              // dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
+                              //     .format(DateTime.parse(value));
+                              dateString = value;
                               setState(() {
                                 currentItem.isSelected = newStatus;
                               });
@@ -270,7 +272,7 @@ class _WorkItemViewState extends State<WorkItemView> {
 
                     List<String> efficiencyCalculation = [];
                     String dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
-                        .format(DateTime.now());
+                        .format(DateTime.now().toUtc().add(Duration(hours: 2)));
 
                     setState(() {
                       for (var curentItem in widget.listLists) {
@@ -433,7 +435,7 @@ class _WorkItemViewState extends State<WorkItemView> {
               List<String> efficiencyCalculation = [];
 
               String dateString = DateFormat("yyyy-MM-dd hh:mm:ss").format(
-                DateTime.now(),
+                DateTime.now().toUtc().add(Duration(hours: 2)),
               );
 
               for (var currentObject in newlyAdded) {

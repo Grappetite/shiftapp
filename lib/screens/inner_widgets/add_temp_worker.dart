@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../config/constants.dart';
 import '../../model/worker_type_model.dart';
-import '../../model/workers_model.dart';
 import '../../services/workers_service.dart';
 import '../../widgets/drop_down.dart';
 import '../../widgets/elevated_button.dart';
 import '../../widgets/input_view.dart';
-import 'alert_cancel_ok_buttons.dart';
 import 'alert_title_label.dart';
 
 class AddTempWorker extends StatefulWidget {
   final String shiftId;
 
-
   final int exId;
 
   final String processId;
 
-  const AddTempWorker({Key? key, required this.shiftId, required this.processId, required this.exId}) : super(key: key);
+  const AddTempWorker(
+      {Key? key,
+      required this.shiftId,
+      required this.processId,
+      required this.exId})
+      : super(key: key);
 
   @override
   State<AddTempWorker> createState() => _AddTempWorkerState();
@@ -40,10 +41,10 @@ class _AddTempWorkerState extends State<AddTempWorker> {
   String selectedWorkerTypeID = '';
 
   void loadWorkerTypes() async {
-
     //execute_shift_id
 
-    var result = await WorkersService.getWorkTypes(this.widget.shiftId,widget.processId);
+    var result = await WorkersService.getWorkTypes(
+        this.widget.shiftId, widget.processId);
     workerType = result!.data!;
     setState(() {
       workerType = result.data!;
@@ -165,8 +166,6 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                                       .firstWhere((e) => e.name == newString)
                                       .id!
                                       .toString();
-
-
                                 },
                                 placeHolderText: 'Worker Type',
                                 preSelected: selectedWorkerType,
@@ -189,16 +188,17 @@ class _AddTempWorkerState extends State<AddTempWorker> {
 
                         String dateString =
                             DateFormat("yyyy-MM-dd hh:mm:ss").format(
-                          DateTime.now(),
+                          DateTime.now().toUtc().add(Duration(hours: 2)),
                         );
-
 
                         var response = await WorkersService.addTempWorkers(
                             firstNameController.text,
                             surnameController.text,
                             personalNoController.text,
                             selectedWorkerTypeID,
-                            widget.exId != 0 ? widget.exId.toString() : widget.shiftId,
+                            widget.exId != 0
+                                ? widget.exId.toString()
+                                : widget.shiftId,
                             dateString);
 
                         await EasyLoading.dismiss();

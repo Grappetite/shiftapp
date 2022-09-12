@@ -111,8 +111,8 @@ class _EndShiftViewState extends State<EndShiftView> {
               return;
             }
 
-            String endTime =
-                DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now());
+            String endTime = DateFormat("yyyy-MM-dd hh:mm:ss")
+                .format(DateTime.now().toUtc().add(Duration(hours: 2)));
 
             ShiftService.cancelShift(this.widget.execShiftId, endTime);
 
@@ -162,19 +162,19 @@ class _EndShiftViewState extends State<EndShiftView> {
     var responseShift =
         await WorkersService.getShiftWorkers(executeShiftId!, widget.processId);
 
-
-    if(responseShift != null) {
+    if (responseShift != null) {
       int count = responseShift.data!.shiftWorker!.length;
 
-      if(count != 0){
-
-        responseShift.data!.worker = responseShift.data!.shiftWorker!.where((e) => e.isAdded == false).toList();
-        responseShift.data!.shiftWorker = responseShift.data!.shiftWorker!.where((e) => e.isAdded == true).toList();
-
+      if (count != 0) {
+        responseShift.data!.worker = responseShift.data!.shiftWorker!
+            .where((e) => e.isAdded == false)
+            .toList();
+        responseShift.data!.shiftWorker = responseShift.data!.shiftWorker!
+            .where((e) => e.isAdded == true)
+            .toList();
       }
     }
     numberSelected = responseShift!.data!.shiftWorker!.length;
-
 
     setState(() {
       totalUsersCount = responseShift.data!.shiftWorker!.length +
@@ -255,16 +255,17 @@ class _EndShiftViewState extends State<EndShiftView> {
             const SizedBox(
               height: 16,
             ),
-
-            ComingSoonContainer(padding: const EdgeInsets.symmetric(horizontal: 8.0), innerWidget: ExplainerWidget(
-              comingSoon: true,
-              iconName: 'construct',
-              title: 'SOP REQUIRED',
-              text1: '4 Workers require SOP Training',
-              text2: 'Tap to train now or swipe to ignore',
-              showWarning: true,
-            ),),
-
+            ComingSoonContainer(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              innerWidget: ExplainerWidget(
+                comingSoon: true,
+                iconName: 'construct',
+                title: 'SOP REQUIRED',
+                text1: '4 Workers require SOP Training',
+                text2: 'Tap to train now or swipe to ignore',
+                showWarning: true,
+              ),
+            ),
             const SizedBox(
               height: 16,
             ),
@@ -304,16 +305,18 @@ class _EndShiftViewState extends State<EndShiftView> {
             const SizedBox(
               height: 16,
             ),
-            ComingSoonContainer(padding: const EdgeInsets.symmetric(horizontal: 8.0), innerWidget: ExplainerWidget(
-              comingSoon: true,
-              iconName: 'exclamation',
-              title: 'INCIDENTS',
-              text1: '5',
-              text2: 'Tap to train now or swipe to ignore',
-              showWarning: false,
-              text1_2: '01:50:00',
-            ),),
-
+            ComingSoonContainer(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              innerWidget: ExplainerWidget(
+                comingSoon: true,
+                iconName: 'exclamation',
+                title: 'INCIDENTS',
+                text1: '5',
+                text2: 'Tap to train now or swipe to ignore',
+                showWarning: false,
+                text1_2: '01:50:00',
+              ),
+            ),
             const SizedBox(
               height: 16,
             ),

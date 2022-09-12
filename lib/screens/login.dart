@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/screens/home.dart';
-import 'package:shiftapp/screens/shifts_listing.dart';
 import 'package:shiftapp/services/login_service.dart';
 
 import '../config/constants.dart';
@@ -22,9 +21,11 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool showLogin = true;
 
-  TextEditingController controller = TextEditingController();
+  TextEditingController controller =
+      TextEditingController(text: "mahboob+supervisor@grappetite.com");
 
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController passwordController =
+      TextEditingController(text: "Mahboob321");
 
   String selectedString = "";
 
@@ -40,20 +41,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
     //controller.text = 'sidra+supervisor@grappetite.com';
 
-  // controller.text = 'asfa+s@grappetite.com';
-   // controller.text = 'asfa+supervisor@grappetite.com';
-     pwd:
-   controller.text = 'tauqeer+supervisor@grappetite.com';
+    // controller.text = 'asfa+s@grappetite.com';
+    // controller.text = 'asfa+supervisor@grappetite.com';
+    pwd:
+    // controller.text = 'tauqeer+supervisor@grappetite.com';
 
     //
 
     //
 
-   //passwordController.text = 'sidragrap';
-   /// passwordController.text = 'isqvqx';
- //   passwordController.text = 'oznytw';
-   passwordController.text = 'Tauqeer123';
-
+    //passwordController.text = 'sidragrap';
+    /// passwordController.text = 'isqvqx';
+    //   passwordController.text = 'oznytw';
+    //   passwordController.text = 'Tauqeer123';
 
     loadDefaul();
   }
@@ -63,13 +63,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
     int? shiftId = prefs.getInt('shiftId');
 
-    if (shiftId
-        != null) {
+    if (shiftId != null) {
       await EasyLoading.show(
         status: 'loading...',
         maskType: EasyLoadingMaskType.black,
       );
-
 
       String loginUserName = prefs.getString('username')!;
       String passString = prefs.getString('password')!;
@@ -77,13 +75,10 @@ class _LoginScreenState extends State<LoginScreen> {
       LoginResponse? response =
           await LoginService.login(loginUserName, passString);
 
-
       if (response == null) {
         await EasyLoading.dismiss();
-
       } else {
-
-        if(response.data!.shiftDetails == null) {
+        if (response.data!.shiftDetails == null) {
           await EasyLoading.dismiss();
 
           prefs.remove('username');
@@ -92,12 +87,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
           prefs.remove('shiftId');
           return;
-
         }
         process = response.data!.process!;
-
-
-
 
         var shiftObject = ShiftItem(
           id: response.data!.shiftDetails!.shiftId!,
@@ -106,13 +97,12 @@ class _LoginScreenState extends State<LoginScreen> {
           endTime: response.data!.shiftDetails!.executeShiftEndTime,
         );
 
-
-        shiftObject.executedShiftId = response.data!.shiftDetails!.executeShiftId;
+        shiftObject.executedShiftId =
+            response.data!.shiftDetails!.executeShiftId;
 
         shiftObject.displayScreen = 2;
 
         await EasyLoading.dismiss();
-
 
         Navigator.pushReplacement(
           context,
@@ -124,13 +114,8 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         );
-
       }
-
-
     }
-
-
   }
 
   @override
@@ -240,7 +225,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       var shifts =
                           await LoginService.getShifts(processSelected.id!);
 
-
                       await EasyLoading.dismiss();
 
                       //shifts!.data!.first.displayScreen = 3;
@@ -284,7 +268,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     LoginResponse? response = await LoginService.login(
                         controller.text, passwordController.text);
 
-
                     if (response == null) {
                       await EasyLoading.dismiss();
                       EasyLoading.showError('Could not login successfully');
@@ -296,8 +279,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       prefs.setString('username', controller.text);
                       prefs.setString('password', passwordController.text);
 
-                      if(response.data!.shiftDetails != null) {
-                        prefs.setInt('shiftId', response.data!.shiftDetails!.shiftId!);
+                      if (response.data!.shiftDetails != null) {
+                        prefs.setInt(
+                            'shiftId', response.data!.shiftDetails!.shiftId!);
                         loadDefaul();
 
                         //prefs.reload();

@@ -17,21 +17,25 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     loadToNextView();
   }
-  void loadToNextView() async   {
-    await Future.delayed(const Duration(seconds: 1), (){});
-    Navigator.push(
+
+  void loadToNextView() async {
+    await Future.delayed(const Duration(seconds: 1), () {});
+    Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const LoginScreen()),
     );
-
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         color: mainBackGroundColor,
-        child:  Center(
-          child: Image(image: const AssetImage('assets/images/logo.png'),width: MediaQuery.of(context).size.width / 1.35,),
+        child: Center(
+          child: Image(
+            image: const AssetImage('assets/images/logo.png'),
+            width: MediaQuery.of(context).size.width / 1.35,
+          ),
         ),
       ),
     );

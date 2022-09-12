@@ -20,15 +20,15 @@ class DropDown extends StatefulWidget {
 
   DropDown(
       {required this.labelText,
-        required this.placeHolderText,
-        this.controller,
-        required this.currentList,
-        required this.onChange,
-        required this.showError,
-        this.preSelected = '',
-        this.padding = true,
-        this.enabled = true,
-        this.removeText = false});
+      required this.placeHolderText,
+      this.controller,
+      required this.currentList,
+      required this.onChange,
+      required this.showError,
+      this.preSelected = '',
+      this.padding = true,
+      this.enabled = true,
+      this.removeText = false});
 
   @override
   _DropDownState createState() => _DropDownState();
@@ -41,7 +41,6 @@ class _DropDownState extends State<DropDown> {
 
   @override
   void initState() {
-
     super.initState();
     if (this.widget.preSelected != null) {
       selectedString = widget.preSelected!;
@@ -58,11 +57,10 @@ class _DropDownState extends State<DropDown> {
     return Container(
       decoration: BoxDecoration(
           border: Border.all(color: Colors.grey),
-          borderRadius: const BorderRadius.all(Radius.circular(8))
-      ),
+          borderRadius: const BorderRadius.all(Radius.circular(8))),
       child: Padding(
         padding: widget.padding
-            ? const EdgeInsets.symmetric(horizontal: 16,vertical: 16)
+            ? const EdgeInsets.symmetric(horizontal: 16, vertical: 16)
             : EdgeInsets.zero,
         child: GestureDetector(
           onTap: () {
@@ -78,9 +76,9 @@ class _DropDownState extends State<DropDown> {
                   listToShow = widget.currentList
                       .where(
                         (e) => e.toLowerCase().contains(
-                      searchField.toLowerCase(),
-                    ),
-                  )
+                              searchField.toLowerCase(),
+                            ),
+                      )
                       .toList();
                 } else {
                   listToShow = widget.currentList;
@@ -93,15 +91,14 @@ class _DropDownState extends State<DropDown> {
                       insetPadding: const EdgeInsets.symmetric(
                           horizontal: 40.0, vertical: 80.0),
                       contentPadding:
-                      const EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 12.0),
+                          const EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 12.0),
                       title: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
                             widget.placeHolderText,
                             style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal),
+                                fontSize: 14, fontWeight: FontWeight.normal),
                           ),
                           const SizedBox(
                             height: 8,
@@ -118,16 +115,15 @@ class _DropDownState extends State<DropDown> {
                             ),
                             onChanged: (v) {
                               setState(
-                                    () {
+                                () {
                                   searchField = v;
                                   if (searchField.isNotEmpty) {
-                                    listToShow = widget
-                                        .currentList
+                                    listToShow = widget.currentList
                                         .where(
                                           (e) => e.toLowerCase().contains(
-                                        searchField.toLowerCase(),
-                                      ),
-                                    )
+                                                searchField.toLowerCase(),
+                                              ),
+                                        )
                                         .toList();
                                   } else {
                                     listToShow = widget.currentList;
@@ -146,47 +142,52 @@ class _DropDownState extends State<DropDown> {
                       children: [
                         listToShow.isEmpty
                             ? const Center(
-                          child: Text('No record found'),
-                        )
+                                child: Text('No record found'),
+                              )
                             : SizedBox(
-                          width:
-                          MediaQuery.of(context).size.width - 128,
-                          child: ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: listToShow.length,
-                            itemBuilder:
-                                (BuildContext ctxt, int index) {
-                              return Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.stretch,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.pop(context);
+                                width: MediaQuery.of(context).size.width - 128,
+                                child: Scrollbar(
+                                  thumbVisibility: true,
+                                  trackVisibility: true,
+                                  controller: ScrollController(
+                                      initialScrollOffset: 0.0),
+                                  child: ListView.builder(
+                                    // physics:
+                                    //     const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: listToShow.length,
+                                    itemBuilder:
+                                        (BuildContext ctxt, int index) {
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.pop(context);
 
-                                      selectedString =
-                                      listToShow[index];
+                                              selectedString =
+                                                  listToShow[index];
 
-                                      widget.onChange(
-                                          selectedString);
-
+                                              widget.onChange(selectedString);
+                                            },
+                                            child: Text(
+                                              listToShow[index],
+                                              style:
+                                                  const TextStyle(fontSize: 16),
+                                            ),
+                                          ),
+                                          Divider(
+                                            height: 12,
+                                            thickness: 1,
+                                            color: Colors.grey[50],
+                                          ),
+                                        ],
+                                      );
                                     },
-                                    child: Text(
-                                      listToShow[index],
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
                                   ),
-                                  Divider(
-                                    height: 12,
-                                    thickness: 1,
-                                    color: Colors.grey[50],
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        ),
+                                ),
+                              ),
                       ],
                     );
                   },
@@ -198,30 +199,28 @@ class _DropDownState extends State<DropDown> {
             children: [
               Expanded(
                 flex: 9,
-                child:  (selectedString.isEmpty &&
-                    widget.preSelected!.isEmpty)
+                child: (selectedString.isEmpty && widget.preSelected!.isEmpty)
                     ? Text(
-                  widget.placeHolderText,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey[500],
-                  ),
-                )
+                        widget.placeHolderText,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.grey[500],
+                        ),
+                      )
                     : Text(
-                  selectedString.isEmpty
-                      ? widget.preSelected!
-                      : selectedString,
-                  style: const TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
+                        selectedString.isEmpty
+                            ? widget.preSelected!
+                            : selectedString,
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
               ),
               const Padding(
                 padding: EdgeInsets.only(right: 8.0),
                 child: Icon(
                   Icons.keyboard_arrow_down,
-                  color:
-                  Colors.grey,
+                  color: Colors.grey,
                 ),
               )
             ],
@@ -231,4 +230,3 @@ class _DropDownState extends State<DropDown> {
     );
   }
 }
-
