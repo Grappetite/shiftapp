@@ -1,13 +1,14 @@
 import 'dart:async';
-import 'dart:io' show Platform;
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiftapp/screens/login.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 import 'package:shiftapp/util/string.dart';
 
@@ -119,20 +120,20 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
   }
 
   void setupFocusNode(FocusNode node) {
-    node.addListener(
-      () {
-        bool hasFocus = node.hasFocus;
-        if (hasFocus) {
-          if (Platform.isIOS) {
-            showDoneButtonOverlay(context);
-          }
-        } else {
-          if (Platform.isIOS) {
-            removeDoneButtonOverlay();
-          }
-        }
-      },
-    );
+    // node.addListener(
+    //   () {
+    //     bool hasFocus = node.hasFocus;
+    //     if (hasFocus) {
+    //       if (Platform.isIOS) {
+    //         showDoneButtonOverlay(context);
+    //       }
+    //     } else {
+    //       if (Platform.isIOS) {
+    //         removeDoneButtonOverlay();
+    //       }
+    //     }
+    //   },
+    // );
   }
 
   @override
@@ -396,15 +397,15 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                               prefs.remove('selectedShiftStartTime');
                               prefs.remove('username');
                               prefs.remove('password');
-
-                              if (widget.autoOpen) {
-                                Navigator.pop(context);
-                                Navigator.pop(context, true);
-                              } else {
-                                Navigator.pop(context);
-                                Navigator.pop(context, true);
-                                Navigator.pop(context, true);
-                              }
+                              Get.offAll(LoginScreen());
+                              // if (widget.autoOpen) {
+                              //   Navigator.pop(context);
+                              //   Navigator.pop(context, true);
+                              // } else {
+                              //   Navigator.pop(context);
+                              //   Navigator.pop(context, true);
+                              //   Navigator.pop(context, true);
+                              // }
                             } else {
                               EasyLoading.showError('Error');
                             }

@@ -34,6 +34,7 @@ class ShiftItem {
   String? endTime;
   int? displayScreen;
   String? displayScreenMessage;
+  String? displayScreenReady;
 
   int? executedShiftId;
 
@@ -184,6 +185,7 @@ class ShiftItem {
     name = json['name'];
     startTime = json['start_time'];
     displayScreenMessage = json['display_screen_message'];
+    displayScreenReady = json['display_screen_already'];
 
     String date = DateFormat("yyyy-MM-dd").format(DateTime.now());
 

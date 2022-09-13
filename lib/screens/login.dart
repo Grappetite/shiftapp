@@ -22,10 +22,10 @@ class _LoginScreenState extends State<LoginScreen> {
   bool showLogin = true;
 
   TextEditingController controller =
-      TextEditingController(text: "mahboob+supervisor@grappetite.com");
+      TextEditingController(text: "andy+supervisor@grappetite.com");
 
   TextEditingController passwordController =
-      TextEditingController(text: "Mahboob321");
+      TextEditingController(text: "AndyS123");
 
   String selectedString = "";
 

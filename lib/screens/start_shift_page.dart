@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/screens/shift_start.dart';
@@ -193,7 +194,12 @@ class _StartShiftViewState extends State<StartShiftView> {
                   var result = await WorkersService.addShiftWorker(
                       widget.shiftId,
                       widget.processId,
-                      widget.startTime,
+
+                      ///before at
+                      // widget.startTime,
+                      ///after
+                      DateFormat("yyyy-MM-dd hh:mm:ss").format(
+                          DateTime.now().toUtc().add(Duration(hours: 2))),
                       widget.endTime,
                       widget.userId,
                       widget.efficiencyCalculation,

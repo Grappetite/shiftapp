@@ -55,7 +55,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
 
   int currentWorkTypeId = 0;
 
-  bool isSearching = false;
+  bool isSearching = true;
   List<ShiftWorker> workers = [];
 
   List<ShiftWorker> filteredWorkers = [];
@@ -230,7 +230,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                 onChanged: (v) {
                                   if (v.isEmpty) {
                                     setState(() {
-                                      isSearching = false;
+                                      isSearching = true;
                                     });
 
                                     return;
@@ -239,7 +239,8 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                   filteredWorkers = workers
                                       .where((e) =>
                                           (e.firstName! + ' ' + e.lastName!)
-                                              .contains(v))
+                                              .toLowerCase()
+                                              .contains(v.toLowerCase()))
                                       .toList();
 
                                   //filteredWorkers
@@ -421,7 +422,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                         if (this.isSearching) {
                           this.searchController.text = '';
                           setState(() {
-                            this.isSearching = false;
+                            this.isSearching = true;
                           });
                         }
                         String dateString =
