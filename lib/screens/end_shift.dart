@@ -275,8 +275,8 @@ class _EndShiftViewState extends State<EndShiftView> {
                 iconName: 'filled-walk',
                 title: 'MANAGE WORKERS',
                 text1: widget.process.headCount != null
-                    ? '$numberSelected /${widget.process.headCount} Workers'
-                    : '$numberSelected /$totalUsersCount Workers',
+                    ? '$numberSelected/${widget.process.headCount} Workers'
+                    : '$numberSelected/$totalUsersCount Workers',
                 text2: 'Tap to Add or remove',
                 showWarning: false,
                 onTap: () async {

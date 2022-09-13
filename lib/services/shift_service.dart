@@ -2,27 +2,21 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config/constants.dart';
-import '../model/login_model.dart';
 import '../model/shifts_model.dart';
-import 'package:logger/logger.dart';
-
+import 'login_service.dart';
 
 class ShiftService {
-
-
   static Future<ShiftStartModel?> cancelShift(
-      int shiftId , String endTime, ) async {
+    int shiftId,
+    String endTime,
+  ) async {
     try {
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
 
-
       Response response = await dio.post(
         baseUrl + 'cancelShift',
-        data: {
-          'execute_shift_id': shiftId.toString(),
-          'end_time': endTime
-        },
+        data: {'execute_shift_id': shiftId.toString(), 'end_time': endTime},
         options: Options(
           headers: {
             authorization: 'Bearer ' + prefs.getString(tokenKey)!,
@@ -39,18 +33,14 @@ class ShiftService {
       }
 
       return responseObject;
-    } catch (e) {
-      return null;
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
     }
   }
 
   static Future<bool> endShift(
-      int shiftId,
-      int processId,
-      String unitsProduced,
-      String endTime) async {
+      int shiftId, int processId, String unitsProduced, String endTime) async {
     try {
-
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
 
@@ -61,7 +51,7 @@ class ShiftService {
           'process_id': processId.toString(),
           'end_time': endTime,
           'units_produced': unitsProduced,
-          'comments' : 'comment'
+          'comments': 'comment'
         },
         options: Options(
           headers: {
@@ -70,19 +60,15 @@ class ShiftService {
         ),
       );
 
-
       print(response.data);
 
-      if(response.data['code'] == 200){
+      if (response.data['code'] == 200) {
         return true;
       }
 
       return false;
-
-    } catch (e) {
-      return false;
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
     }
   }
-
-
 }

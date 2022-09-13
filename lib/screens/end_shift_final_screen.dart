@@ -517,7 +517,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                         ),
                         AlertTitleLabel(
                           title:
-                              widget.editing ? "Remove worker" : 'CLOST SHIFT',
+                              widget.editing ? "Remove worker" : 'CLOSE SHIFT',
                         ),
                       ],
                     ),

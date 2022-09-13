@@ -49,6 +49,7 @@ dependencies:
   logger: ^1.1.0
   restart_app: ^1.1.0+1
   adaptive_dialog: ^1.8.0
+  get: ^4.6.5
 
 
 dev_dependencies:

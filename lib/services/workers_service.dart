@@ -1,9 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../config/constants.dart';
 import '../model/worker_type_model.dart';
 import '../model/workers_model.dart';
+import 'login_service.dart';
 
 class WorkersService {
   static Future<WorkersListing?> getShiftWorkers(
@@ -14,8 +15,11 @@ class WorkersService {
 
       String url = baseUrl + "newWorkerList/" + processId.toString();
       if (shiftId != null) {
-        url = baseUrl + 'newWorkerList/'+  processId.toString() + '/' +  shiftId.toString();
-
+        url = baseUrl +
+            'newWorkerList/' +
+            processId.toString() +
+            '/' +
+            shiftId.toString();
       }
       print('');
 
@@ -168,9 +172,8 @@ class WorkersService {
           'start_time': startTime,
           'end_time': endTime,
           'worker_user_id': workerUserId,
-          'efficiency_calculation': efficiencyCalculation ,
-          'comment' : comment,
-
+          'efficiency_calculation': efficiencyCalculation,
+          'comment': comment,
         },
         options: Options(
           headers: {
@@ -215,15 +218,13 @@ class WorkersService {
 
       var responseObject = WorkerTypeResponse.fromJson(response.data);
 
-
       print(response.data);
 
       if (responseObject.data == null) {
         return null;
       }
 
-      if(responseObject.data!.isEmpty){
-
+      if (responseObject.data!.isEmpty) {
         return getWorkTypes('', '');
       }
 
@@ -275,8 +276,8 @@ class WorkersService {
       // prefs.setString(tokenKey, responseObject.token!);
 
       return responseObject;
-    } catch (e) {
-      return null;
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
     }
   }
 }

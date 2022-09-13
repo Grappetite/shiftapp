@@ -81,18 +81,11 @@ class ShiftItem {
       int remainingSeconds = check1.inHours * 60 * 60;
       return _printDuration(check1);
     } else {
-
       var differance = endDateObject.difference(DateTime.now());
-
 
       check1 = DateTime.now().difference(endDateObject);
 
-
-
       return 'Over ' + _printDuration(check1);
-
-
-
     }
 
     return '';
@@ -107,7 +100,6 @@ class ShiftItem {
     DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(endTime!);
     return tempDate;
   }
-
 
   String get showStartTime {
     DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(startTime!);
@@ -205,12 +197,11 @@ class ShiftItem {
     endTime = result;
 
     displayScreen = int.parse(json['display_screen']);
-    if(displayScreen == 1) {
+    if (displayScreen == 1) {
       displayScreen = 2;
     }
-    //displayScreen = 3;
-    displayScreen = 2;
-
+    // //displayScreen = 3;
+    // displayScreen = 2;
   }
 
   Map<String, dynamic> toJson() {

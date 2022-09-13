@@ -196,9 +196,7 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                             surnameController.text,
                             personalNoController.text,
                             selectedWorkerTypeID,
-                            widget.exId != 0
-                                ? widget.exId.toString()
-                                : widget.shiftId,
+                            widget.exId.toString(),
                             dateString);
 
                         await EasyLoading.dismiss();

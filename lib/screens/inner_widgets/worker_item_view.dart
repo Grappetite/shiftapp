@@ -466,7 +466,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                 return;
               }
               var response = await WorkersService.addWorkers(widget.execShiftId,
-                  workerIds, startTime, [], efficiencyCalculation);
+                  workerIds, [dateString], [], efficiencyCalculation);
 
               await EasyLoading.dismiss();
 
