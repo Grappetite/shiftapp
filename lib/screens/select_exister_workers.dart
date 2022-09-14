@@ -427,7 +427,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                         }
                         String dateString =
                             DateFormat("yyyy-MM-dd hh:mm:ss").format(
-                          DateTime.now().toUtc().add(Duration(hours: 2)),
+                          DateTime.now(),
                         );
 
                         var res = await WorkersService.addWorkers(

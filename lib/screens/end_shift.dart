@@ -111,8 +111,8 @@ class _EndShiftViewState extends State<EndShiftView> {
               return;
             }
 
-            String endTime = DateFormat("yyyy-MM-dd hh:mm:ss")
-                .format(DateTime.now().toUtc().add(Duration(hours: 2)));
+            String endTime =
+                DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now());
 
             ShiftService.cancelShift(this.widget.execShiftId, endTime);
 

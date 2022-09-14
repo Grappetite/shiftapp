@@ -46,80 +46,150 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return PersistentTabView(
-      context,
-      controller: _controller,
-      screens: _buildScreens(),
-      items: _navBarsItems(),
-      confineInSafeArea: true,
-      backgroundColor: kPrimaryColor,
-      handleAndroidBackButtonPress: true,
-      resizeToAvoidBottomInset: true,
-      stateManagement: true,
-      hideNavigationBarWhenKeyboardShows: true,
-      decoration: NavBarDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        colorBehindNavBar: Colors.white,
-      ),
-      popAllScreensOnTapOfSelectedTab: true,
-      popActionScreens: PopActionScreensType.all,
-      itemAnimationProperties: const ItemAnimationProperties(
-        duration: Duration(milliseconds: 200),
-        curve: Curves.ease,
-      ),
-      screenTransitionAnimation: const ScreenTransitionAnimation(
-        // Screen transition animation on change of selected tab.
-        animateTabTransition: true,
-        curve: Curves.ease,
-        duration: Duration(milliseconds: 200),
-      ),
-      navBarStyle:
-          NavBarStyle.style3, // Choose the nav bar style with this property.
-    );
-  }
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        body: TabBarView(
+          children: [
+            HomeMainView(
+              selectedShift: widget.selectedShift,
+              processSelected: widget.processSelected,
+              sessionStarted: widget.sessionStarted,
+              onLogout: () async {
+                // var dyanc = await Navigator.pushReplacement(
+                //   context,
+                //   MaterialPageRoute(builder: (context) => const LoginScreen()),
+                // );
 
-  List<Widget> _buildScreens() {
-    return [
-      HomeMainView(
-        selectedShift: widget.selectedShift,
-        processSelected: widget.processSelected,
-        sessionStarted: widget.sessionStarted,
-        onLogout: () async {
-          // var dyanc = await Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => const LoginScreen()),
-          // );
-
-          // if (dyanc != null) {
-          //   if (dyanc == true) {}
-          // }
-        },
-      ),
-      Container(
-        child: const Center(
-          child: Text('SOPs are not available right now'),
+                // if (dyanc != null) {
+                //   if (dyanc == true) {}
+                // }
+              },
+            ),
+            Container(
+              child: const Center(
+                child: Text('SOPs are not available right now'),
+              ),
+              color: Colors.white,
+            )
+          ],
         ),
-        color: Colors.white,
-      )
-    ];
+        bottomNavigationBar: Container(
+          color: kPrimaryColor,
+          child: TabBar(
+              indicator: UnderlineTabIndicator(
+                borderSide: BorderSide(color: Colors.white, width: 5.0),
+                insets: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 45.0),
+              ),
+              labelColor: Colors.white,
+              indicatorColor: Colors.white,
+              tabs: [
+                Tab(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.home,
+                          color: Colors.white,
+                        ),
+                        Text("Home")
+                      ],
+                    ),
+                  ),
+                  // text: "Home",
+                ),
+                Tab(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: Column(
+                      children: [
+                        const Icon(CupertinoIcons.settings),
+                        Text("SOP")
+                      ],
+                    ),
+                  ),
+                  // text: "SOP",
+                ),
+              ]),
+        ),
+      ),
+    );
+    ;
+    //   PersistentTabView(
+    //   context,
+    //   controller: _controller,
+    //   screens: _buildScreens(),
+    //   items: _navBarsItems(),
+    //   confineInSafeArea: true,
+    //   backgroundColor: kPrimaryColor,
+    //   handleAndroidBackButtonPress: true,
+    //   resizeToAvoidBottomInset: true,
+    //   stateManagement: true,
+    //   hideNavigationBarWhenKeyboardShows: true,
+    //   decoration: NavBarDecoration(
+    //     borderRadius: BorderRadius.circular(10.0),
+    //     colorBehindNavBar: Colors.white,
+    //   ),
+    //   popAllScreensOnTapOfSelectedTab: true,
+    //   popActionScreens: PopActionScreensType.all,
+    //   itemAnimationProperties: const ItemAnimationProperties(
+    //     duration: Duration(milliseconds: 200),
+    //     curve: Curves.ease,
+    //   ),
+    //   screenTransitionAnimation: const ScreenTransitionAnimation(
+    //     // Screen transition animation on change of selected tab.
+    //     animateTabTransition: true,
+    //     curve: Curves.ease,
+    //     duration: Duration(milliseconds: 200),
+    //   ),
+    //   navBarStyle:
+    //       NavBarStyle.style3, // Choose the nav bar style with this property.
+    // );
   }
 
-  List<PersistentBottomNavBarItem> _navBarsItems() {
-    return [
-      PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.clock),
-        title: ("SHIFTS"),
-        activeColorPrimary: Colors.white,
-        inactiveColorPrimary: Colors.grey.shade500,
-      ),
-      PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.settings),
-        title: ("SOP"),
-        activeColorPrimary: Colors.white,
-        inactiveColorPrimary: Colors.grey.shade500,
-      ),
-    ];
-  }
+  // List<Widget> _buildScreens() {
+  //   return [
+  //     HomeMainView(
+  //       selectedShift: widget.selectedShift,
+  //       processSelected: widget.processSelected,
+  //       sessionStarted: widget.sessionStarted,
+  //       onLogout: () async {
+  //         // var dyanc = await Navigator.pushReplacement(
+  //         //   context,
+  //         //   MaterialPageRoute(builder: (context) => const LoginScreen()),
+  //         // );
+  //
+  //         // if (dyanc != null) {
+  //         //   if (dyanc == true) {}
+  //         // }
+  //       },
+  //     ),
+  //     Container(
+  //       child: const Center(
+  //         child: Text('SOPs are not available right now'),
+  //       ),
+  //       color: Colors.white,
+  //     )
+  //   ];
+  // }
+
+  // List<PersistentBottomNavBarItem> _navBarsItems() {
+  //   return [
+  //     PersistentBottomNavBarItem(
+  //       icon: const Icon(CupertinoIcons.clock),
+  //       title: ("SHIFTS"),
+  //       activeColorPrimary: Colors.white,
+  //       inactiveColorPrimary: Colors.grey.shade500,
+  //     ),
+  //     PersistentBottomNavBarItem(
+  //       icon: const Icon(CupertinoIcons.settings),
+  //       title: ("SOP"),
+  //       activeColorPrimary: Colors.white,
+  //       inactiveColorPrimary: Colors.grey.shade500,
+  //     ),
+  //   ];
+  // }
 }
 
 class HomeMainView extends StatefulWidget {

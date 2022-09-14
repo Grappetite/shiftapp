@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:shiftapp/screens/login.dart';
 import 'package:shiftapp/screens/splash.dart';
 
 import 'config/constants.dart';
@@ -40,14 +39,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: MaterialColor(0xFF0E577F, primaryMap),
       ),
-      initialRoute: '/splash',
-      routes: {
-        // When navigating to the "/" route, build the FirstScreen widget.
-        '/': (context) => const LoginScreen(),
-        '/splash': (context) => const SplashScreen(),
-      },
       builder: EasyLoading.init(),
-      // home: const SplashScreen(),
+      home: const SplashScreen(),
     );
   }
 } //

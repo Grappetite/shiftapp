@@ -198,8 +198,7 @@ class _StartShiftViewState extends State<StartShiftView> {
                       ///before at
                       // widget.startTime,
                       ///after
-                      DateFormat("yyyy-MM-dd hh:mm:ss").format(
-                          DateTime.now().toUtc().add(Duration(hours: 2))),
+                      DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()),
                       widget.endTime,
                       widget.userId,
                       widget.efficiencyCalculation,

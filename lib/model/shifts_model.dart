@@ -49,11 +49,17 @@ class ShiftItem {
   }
 
   String get timeElasped {
-    var check1 = DateTime.now().difference(startDateObject);
+    var check1 = DateTime.now()
+        // .toUtc()
+        // .subtract(Duration(hours: 3))
+        .difference(startDateObject);
 
     if (check1.inSeconds > 0) {
       // event already passed
-      var differance = DateTime.now().difference(endDateObject);
+      var differance = DateTime.now()
+          // .toUtc()
+          // .subtract(Duration(hours: 3))
+          .difference(startDateObject);
 
       int sec = differance.inSeconds;
 
@@ -72,7 +78,7 @@ class ShiftItem {
 
     if (check1.inSeconds > 0) {
       // event already passed
-      var differance = DateTime.now().difference(endDateObject);
+      var differance = endDateObject.difference(DateTime.now());
 
       int sec = differance.inSeconds;
 
@@ -84,7 +90,7 @@ class ShiftItem {
     } else {
       var differance = endDateObject.difference(DateTime.now());
 
-      check1 = DateTime.now().difference(endDateObject);
+      check1 = endDateObject.difference(DateTime.now());
 
       return 'Over ' + _printDuration(check1);
     }

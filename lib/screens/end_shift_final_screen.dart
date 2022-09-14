@@ -278,7 +278,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                       width: 8,
                                     ),
                                     Text(
-                                      'UNIT PRODUCTS',
+                                      '${widget.process.unit} Processed',
                                       style: TextStyle(
                                           color: kPrimaryColor,
                                           fontSize: 18,
@@ -651,8 +651,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
   String findEndTime() {
     var result = '';
     if (widget.editing) {
-      result = DateFormat("yyyy-MM-dd HH:mm:ss")
-          .format(DateTime.now().toUtc().add(Duration(hours: 2)));
+      result = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
     } else {
       result = widget.shiftItem.endTime!;
 
@@ -666,8 +665,8 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
 
       if (minutesRemaining > -30 && minutesRemaining < 30) {
       } else {
-        String endTime = DateFormat("yyyy-MM-dd HH:mm:ss")
-            .format(DateTime.now().toUtc().add(Duration(hours: 2)));
+        String endTime =
+            DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
 
         result = endTime;
       }

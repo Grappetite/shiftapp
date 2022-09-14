@@ -22,10 +22,10 @@ class _LoginScreenState extends State<LoginScreen> {
   bool showLogin = true;
 
   TextEditingController controller =
-      TextEditingController(text: "andy+supervisor@grappetite.com");
+      TextEditingController(text: "mahboob+supervisor@grappetite.com");
 
   TextEditingController passwordController =
-      TextEditingController(text: "AndyS123");
+      TextEditingController(text: "Mahboob321");
 
   String selectedString = "";
 
@@ -290,14 +290,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
 
                       process = response.data!.process!;
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) =>
-                              DropDownPage(process: process)));
 
                       setState(() {
                         showLogin = false;
                       });
-
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) =>
+                              DropDownPage(process: process)));
                       return;
                     }
                     return;

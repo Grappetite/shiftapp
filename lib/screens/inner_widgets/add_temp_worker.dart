@@ -188,7 +188,7 @@ class _AddTempWorkerState extends State<AddTempWorker> {
 
                         String dateString =
                             DateFormat("yyyy-MM-dd hh:mm:ss").format(
-                          DateTime.now().toUtc().add(Duration(hours: 2)),
+                          DateTime.now(),
                         );
 
                         var response = await WorkersService.addTempWorkers(

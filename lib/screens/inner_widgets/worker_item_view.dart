@@ -180,10 +180,12 @@ class _WorkItemViewState extends State<WorkItemView> {
                       initialSelected: currentItem.isSelected,
                       picUrl: currentItem.picture,
                       changedStatus: (bool newStatus) async {
-                        String dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
-                            .format(
-                                DateTime.now().toUtc().add(Duration(hours: 2)));
+                        String dateString = widget.selectedShift.startTime!;
 
+                        ///previously
+                        // DateFormat("yyyy-MM-dd hh:mm:ss")
+                        //     .format(DateTime.now());
+                        ///end
                         if (widget.isEditing && newStatus) {
                           setState(() {
                             currentItem.isSelected = newStatus;
@@ -208,6 +210,9 @@ class _WorkItemViewState extends State<WorkItemView> {
                             EasyLoading.showError('Error');
                           }
                         } else if (widget.isEditing && !newStatus) {
+                          setState(() {
+                            currentItem.isSelected = currentItem.isSelected;
+                          });
                           await showDialog(
                               context: context,
                               barrierDismissible: false,
@@ -245,6 +250,10 @@ class _WorkItemViewState extends State<WorkItemView> {
                               } else {
                                 EasyLoading.showError('Error');
                               }
+                            } else {
+                              setState(() {
+                                currentItem.isSelected = currentItem.isSelected;
+                              });
                             }
                           });
                         } else {
@@ -272,7 +281,7 @@ class _WorkItemViewState extends State<WorkItemView> {
 
                     List<String> efficiencyCalculation = [];
                     String dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
-                        .format(DateTime.now().toUtc().add(Duration(hours: 2)));
+                        .format(DateTime.now());
 
                     setState(() {
                       for (var curentItem in widget.listLists) {
@@ -435,7 +444,7 @@ class _WorkItemViewState extends State<WorkItemView> {
               List<String> efficiencyCalculation = [];
 
               String dateString = DateFormat("yyyy-MM-dd hh:mm:ss").format(
-                DateTime.now().toUtc().add(Duration(hours: 2)),
+                DateTime.now(),
               );
 
               for (var currentObject in newlyAdded) {
