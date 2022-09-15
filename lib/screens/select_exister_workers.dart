@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 
 import '../config/constants.dart';
+import '../model/shifts_model.dart';
 import '../model/workers_model.dart';
 import '../services/workers_service.dart';
 import '../widgets/elevated_button.dart';
@@ -29,7 +30,7 @@ class SelectExistingWorkers extends StatefulWidget {
   final bool isEditing;
 
   final String processId;
-
+  final ShiftItem shift;
   SelectExistingWorkers({
     Key? key,
     required this.workers,
@@ -41,6 +42,7 @@ class SelectExistingWorkers extends StatefulWidget {
     required this.otherTypeTempWorkerAdded,
     required this.listName,
     required this.exShiftId,
+    required this.shift,
   }) : super(key: key);
 
   @override
@@ -90,12 +92,12 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
     } else {
       currentWorkTypeId = widget.workers.first.workerTypeId!;
     }
-    var response =
-        await WorkersService.searchWorkers(currentWorkTypeId.toString());
+    var response = widget.isEditing
+        ? await WorkersService.searchWorkers(currentWorkTypeId.toString(),
+            executionid: widget.exShiftId)
+        : await WorkersService.searchWorkers(currentWorkTypeId.toString());
 
-    setState(() {
-      workers = response!.searchWorker!;
-    });
+    workers = response!.searchWorker!;
 
     filteredWorkers = response!.searchWorker!;
 
@@ -106,6 +108,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
         workers.removeWhere((e) => e.id == currentItem.id);
       });
     }
+    setState(() {});
   }
 
   @override
@@ -118,30 +121,30 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Column(
-          children: const [
+        centerTitle: true,
+        title:
+            // Column(
+            //   children:  [
             Text(
-              'Main Warehouse',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700),
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Text(
-              'Receiving',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600),
-            ),
-            SizedBox(
-              height: 2,
-            ),
-          ],
+          widget.shift.name!,
+          style: TextStyle(
+              color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
         ),
+        // SizedBox(
+        //   height: 4,
+        // ),
+        // Text(
+        //   'Receiving',
+        //   style: TextStyle(
+        //       color: Colors.white,
+        //       fontSize: 18,
+        //       fontWeight: FontWeight.w600),
+        // ),
+        // SizedBox(
+        //   height: 2,
+        // ),
+        // ],
+        // ),
       ),
       body: Align(
         alignment: Alignment.center,

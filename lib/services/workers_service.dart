@@ -43,17 +43,21 @@ class WorkersService {
       }
 
       return responseObject;
-    } catch (e) {
-      return null;
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
     }
   }
 
-  static Future<WorkersListing?> searchWorkers(String searchId) async {
+  static Future<WorkersListing?> searchWorkers(String searchId,
+      {int? executionid}) async {
     //{{shift_url}I/searchWorker/2
     try {
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
-      String url = baseUrl + 'searchWorker/' + searchId;
+      String url = baseUrl +
+          'searchWorker/' +
+          searchId +
+          (executionid != null ? "/${executionid.toString()}" : '');
 
       Response response = await dio.get(
         url,
@@ -71,8 +75,8 @@ class WorkersService {
         return null;
       }
       return responseObject;
-    } catch (e) {
-      return null;
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
     }
   }
 
@@ -108,8 +112,8 @@ class WorkersService {
       }
 
       return false;
-    } catch (e) {
-      return false;
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
     }
   }
 
@@ -147,8 +151,8 @@ class WorkersService {
       }
 
       return false;
-    } catch (e) {
-      return false;
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
     }
   }
 
@@ -199,8 +203,8 @@ class WorkersService {
       } else {
         return null;
       }
-    } catch (e) {
-      return null;
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
     }
   }
 
@@ -229,8 +233,8 @@ class WorkersService {
       }
 
       return responseObject;
-    } catch (e) {
-      return null;
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
     }
   }
 

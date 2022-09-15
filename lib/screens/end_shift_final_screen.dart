@@ -338,7 +338,8 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                             showAlertDialog(
                               context: context,
                               title: 'Error',
-                              message: 'Please write down the units products',
+                              message:
+                                  'Please write down the ${widget.process.unit} Processed',
                               actions: [
                                 AlertDialogAction(
                                   label: MaterialLocalizations.of(context)
@@ -362,52 +363,52 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                 });
 
                             if (answer != null) {
-                              if (answer == false) {
-                                return;
+                              if (answer != false) {
+                                // return;
+
+                                await EasyLoading.show(
+                                  status: 'Adding...',
+                                  maskType: EasyLoadingMaskType.black,
+                                );
+
+                                var check = await ShiftService.endShift(
+                                  widget.executeShiftId,
+                                  widget.processId,
+                                  textController.text,
+                                  answer,
+                                );
+
+                                await EasyLoading.dismiss();
+
+                                if (check) {
+                                  await EasyLoading.showSuccess(
+                                    'Closed shift successfully',
+                                    duration: const Duration(seconds: 2),
+                                  );
+
+                                  final prefs =
+                                      await SharedPreferences.getInstance();
+
+                                  prefs.remove('shiftId');
+
+                                  prefs.remove('selectedShiftName');
+                                  prefs.remove('selectedShiftEndTime');
+                                  prefs.remove('selectedShiftStartTime');
+                                  prefs.remove('username');
+                                  prefs.remove('password');
+                                  Get.offAll(LoginScreen());
+                                  // if (widget.autoOpen) {
+                                  //   Navigator.pop(context);
+                                  //   Navigator.pop(context, true);
+                                  // } else {
+                                  //   Navigator.pop(context);
+                                  //   Navigator.pop(context, true);
+                                  //   Navigator.pop(context, true);
+                                  // }
+                                } else {
+                                  EasyLoading.showError('Error');
+                                }
                               }
-                            }
-
-                            await EasyLoading.show(
-                              status: 'Adding...',
-                              maskType: EasyLoadingMaskType.black,
-                            );
-
-                            var check = await ShiftService.endShift(
-                              widget.executeShiftId,
-                              widget.processId,
-                              textController.text,
-                              answer,
-                            );
-
-                            await EasyLoading.dismiss();
-
-                            if (check) {
-                              await EasyLoading.showSuccess(
-                                'Closed shift successfully',
-                                duration: const Duration(seconds: 2),
-                              );
-
-                              final prefs =
-                                  await SharedPreferences.getInstance();
-
-                              prefs.remove('shiftId');
-
-                              prefs.remove('selectedShiftName');
-                              prefs.remove('selectedShiftEndTime');
-                              prefs.remove('selectedShiftStartTime');
-                              prefs.remove('username');
-                              prefs.remove('password');
-                              Get.offAll(LoginScreen());
-                              // if (widget.autoOpen) {
-                              //   Navigator.pop(context);
-                              //   Navigator.pop(context, true);
-                              // } else {
-                              //   Navigator.pop(context);
-                              //   Navigator.pop(context, true);
-                              //   Navigator.pop(context, true);
-                              // }
-                            } else {
-                              EasyLoading.showError('Error');
                             }
                           }
                         },
@@ -472,7 +473,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
     super.initState();
   }
 
-  TimeOfDay? newTime;
+  // TimeOfDay? newTime;
 
   @override
   Widget build(BuildContext context) {
@@ -481,9 +482,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
       backgroundColor: Colors.transparent,
       content: Container(
         width: MediaQuery.of(context).size.width / 1.15,
-        height: widget.editing
-            ? MediaQuery.of(context).size.height / 3.5
-            : MediaQuery.of(context).size.height / 2.0,
+        height: MediaQuery.of(context).size.height / 2.0,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -525,75 +524,99 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                     const SizedBox(
                       height: 12,
                     ),
-                    widget.editing
-                        ? Container()
-                        : Text(
-                            'Adjust shift ent time if different to current:',
-                            style:
-                                TextStyle(color: kPrimaryColor, fontSize: 12),
-                          ),
-                    widget.editing
-                        ? Container()
-                        : Expanded(
-                            child: Container(),
-                          ),
-                    widget.editing
-                        ? Container()
-                        : GestureDetector(
-                            onTap: () async {
-                              TimeOfDay? newTime = await showTimePicker(
-                                context: context,
-                                initialTime: TimeOfDay(
-                                    hour: DateTime.now().hour,
-                                    minute: DateTime.now().minute),
-                                initialEntryMode: TimePickerEntryMode.dial,
+
+                    Text(
+                      widget.editing
+                          ? "Adjust worker removal time if different to current:"
+                          : 'Adjust shift end time if different to current:',
+                      style: TextStyle(color: kPrimaryColor, fontSize: 12),
+                    ),
+
+                    Expanded(
+                      child: Container(),
+                    ),
+
+                    GestureDetector(
+                      onTap: () async {
+                        // TimeOfDay? newTime = await showTimePicker(
+                        //   context: context,
+                        //   initialTime: TimeOfDay(
+                        //       hour: DateTime.now().hour,
+                        //       minute: DateTime.now().minute),
+                        //   initialEntryMode: TimePickerEntryMode.dial,
+                        // );
+                        DateTime? newTime;
+                        showCupertinoModalPopup(
+                            context: context,
+                            builder: (BuildContext builder) {
+                              return Container(
+                                color: Colors.white,
+                                height: MediaQuery.of(context).size.width,
+                                width: MediaQuery.of(context).size.width,
+                                child: CupertinoDatePicker(
+                                  //use24hFormat: true,
+                                  mode: CupertinoDatePickerMode.dateAndTime,
+                                  onDateTimeChanged: (value) async {
+                                    newTime = value;
+                                  },
+                                  initialDateTime: widget.editing
+                                      ? DateTime.now()
+                                      : widget.shiftItem.startDateObject
+                                          .add(Duration(hours: 3)),
+                                  minimumDate: widget.editing
+                                      ? widget.shiftItem.startDateObject
+                                      : widget.shiftItem.startDateObject
+                                          .add(Duration(hours: 3)),
+                                  maximumDate: widget.editing
+                                      ? DateTime.now()
+                                      : widget.shiftItem.startDateObject
+                                          .add(Duration(hours: 15)),
+                                ),
                               );
+                            }).then((value) {
+                          if (newTime != null) {
+                            var customSelectedStartTime = widget.shiftItem
+                                .makeTimeStringFromHourMinute(
+                                    newTime!.hour, newTime!.minute);
 
-                              if (newTime != null) {
-                                var customSelectedStartTime = widget.shiftItem
-                                    .makeTimeStringFromHourMinute(
-                                        newTime.hour, newTime.minute);
+                            setState(() {
+                              customTimeSelectedToSend =
+                                  customSelectedStartTime;
+                              // widget.shiftItem.endTime = customSelectedStartTime;
+                            });
+                          }
+                        });
+                      },
+                      child: InputView(
+                        isDisabled: true,
+                        showError: false,
+                        hintText: widget.editing
+                            ? "Worker removal time"
+                            : 'Shift End Time',
+                        onChange: (newValue) {},
+                        controller: TextEditingController(
+                            text: findEndTime().timeToShow),
+                        text: findEndTime().timeToShow,
+                        suffixIcon: Icons.expand_circle_down_outlined,
+                      ),
+                    ),
 
-                                setState(() {
-                                  customTimeSelectedToSend =
-                                      customSelectedStartTime;
-                                  // widget.shiftItem.endTime = customSelectedStartTime;
-                                });
-                              }
-                            },
-                            child: InputView(
-                              isDisabled: true,
-                              showError: false,
-                              hintText: 'Shift End Time',
-                              onChange: (newValue) {},
-                              controller: TextEditingController(
-                                  text: findEndTime().timeToShow),
-                              text: findEndTime().timeToShow,
-                              suffixIcon: Icons.expand_circle_down_outlined,
-                            ),
-                          ),
-                    widget.editing
-                        ? Container()
-                        : Expanded(
-                            child: Container(),
-                          ),
+                    Expanded(
+                      child: Container(),
+                    ),
 
-                    widget.editing
-                        ? Container()
-                        : Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              dataToDisplay(),
-                              style: TextStyle(
-                                  color: kPrimaryColor,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                    widget.editing
-                        ? Container()
-                        : Expanded(
-                            child: Container(),
-                          ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        dataToDisplay(),
+                        style: TextStyle(
+                            color: kPrimaryColor, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+
+                    Expanded(
+                      child: Container(),
+                    ),
                     Align(
                       alignment: Alignment.center,
                       child: Text(
@@ -650,28 +673,26 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
 
   String findEndTime() {
     var result = '';
-    if (widget.editing) {
-      result = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
-    } else {
-      result = widget.shiftItem.endTime!;
+    // if (widget.editing) {
+    //   result = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
+    // } else {
+    result = widget.shiftItem.endTime!;
 
-      if (customTimeSelectedToSend.isNotEmpty) {
-        return customTimeSelectedToSend;
-      }
-      var difference =
-          DateTime.now().difference(widget.shiftItem.endDateObject);
-
-      var minutesRemaining = difference.inMinutes;
-
-      if (minutesRemaining > -30 && minutesRemaining < 30) {
-      } else {
-        String endTime =
-            DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
-
-        result = endTime;
-      }
-      print('');
+    if (customTimeSelectedToSend.isNotEmpty) {
+      return customTimeSelectedToSend;
     }
+    var difference = DateTime.now().difference(widget.shiftItem.endDateObject);
+
+    var minutesRemaining = difference.inMinutes;
+
+    if (minutesRemaining > -30 && minutesRemaining < 30) {
+    } else {
+      String endTime = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
+
+      result = endTime;
+    }
+    print('');
+    // }
     return result;
   }
 

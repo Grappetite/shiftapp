@@ -2,11 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config/constants.dart';
-import '../model/shifts_model.dart';
 import 'login_service.dart';
 
 class ShiftService {
-  static Future<ShiftStartModel?> cancelShift(
+  static Future<bool?> cancelShift(
     int shiftId,
     String endTime,
   ) async {
@@ -26,13 +25,13 @@ class ShiftService {
 
       print(response.data);
 
-      var responseObject = ShiftStartModel.fromJson(response.data);
-
-      if (responseObject.data == null) {
-        return null;
-      }
-
-      return responseObject;
+      // var responseObject = ShiftStartModel.fromJson(response.data);
+      //
+      // if (responseObject.data == null) {
+      //   return null;
+      // }
+      //
+      return true;
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
     }

@@ -45,6 +45,15 @@ class _ShiftStartState extends State<ShiftStart> {
       (Timer timer) {
         setState(() {
           timeElasped = widget.selectedShift.timeElasped;
+
+          // if ((widget.selectedShift.displayScreen == 3 ||
+          //         widget.selectedShift.displayScreen == 1) &&
+          //     widget.selectedShift.displayScreenReady.toString() != "ended") {
+          //  if(widget.selectedShift.startDateObject.subtract(Duration(minutes: 30).))
+          //    {
+          //      widget.selectedShift.displayScreen == 2;
+          //    }
+          // }
         });
 
         print('');
@@ -163,6 +172,7 @@ class _ShiftStartState extends State<ShiftStart> {
                                     height: MediaQuery.of(context).size.width,
                                     width: MediaQuery.of(context).size.width,
                                     child: CupertinoDatePicker(
+                                      //use24hFormat: true,
                                       mode: CupertinoDatePickerMode.dateAndTime,
                                       onDateTimeChanged: (value) async {
                                         newTime = value;
@@ -261,7 +271,7 @@ class _ShiftStartState extends State<ShiftStart> {
                                             .toString()
                                             .timeToShow,
                                         startTime:
-                                            customSelectedStartTime.timeToShow,
+                                            newTime.toString().timeToShow,
                                       );
                                     });
 

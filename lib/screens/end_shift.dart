@@ -99,39 +99,41 @@ class _EndShiftViewState extends State<EndShiftView> {
         PopupMenuItem(
           value: 1,
           onTap: () async {
-            var result = await showOkCancelAlertDialog(
-              context: context,
-              title: 'Warning',
-              message: 'Are you sure you want to discard this shift?',
-              okLabel: 'YES',
-              cancelLabel: 'NO',
-            );
+            await Future.delayed(Duration(seconds: 1), () async {
+              var result = await showOkCancelAlertDialog(
+                context: context,
+                title: 'Warning',
+                message: 'Are you sure you want to discard this shift?',
+                okLabel: 'YES',
+                cancelLabel: 'NO',
+              );
 
-            if (result.index == 1) {
-              return;
-            }
+              if (result.index == 1) {
+                return;
+              }
 
-            String endTime =
-                DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now());
+              String endTime =
+                  DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now());
 
-            ShiftService.cancelShift(this.widget.execShiftId, endTime);
+              ShiftService.cancelShift(this.widget.execShiftId, endTime);
 
-            final prefs = await SharedPreferences.getInstance();
+              final prefs = await SharedPreferences.getInstance();
 
-            prefs.remove('shiftId');
+              prefs.remove('shiftId');
 
-            prefs.remove('selectedShiftName');
-            prefs.remove('selectedShiftEndTime');
-            prefs.remove('selectedShiftStartTime');
-            prefs.remove('username');
-            prefs.remove('password');
+              prefs.remove('selectedShiftName');
+              prefs.remove('selectedShiftEndTime');
+              prefs.remove('selectedShiftStartTime');
+              prefs.remove('username');
+              prefs.remove('password');
 
-            if (widget.autoOpen) {
-              Navigator.pop(context, true);
-            } else {
-              Navigator.pop(context, true);
-              Navigator.pop(context, true);
-            }
+              if (widget.autoOpen) {
+                Navigator.pop(context, true);
+              } else {
+                Navigator.pop(context, true);
+                Navigator.pop(context, true);
+              }
+            });
 
             /// widget.onLogout();
           },

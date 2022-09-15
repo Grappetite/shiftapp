@@ -142,7 +142,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       visible: showLogin,
                       child: InputView(
                         showError: false,
-                        hintText: 'Username',
+                        hintText: 'Email',
                         onChange: (newValue) {},
                         controller: controller,
                         text: '',

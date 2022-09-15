@@ -136,7 +136,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                         style: DefaultTextStyle.of(context).style,
                         children: <TextSpan>[
                           TextSpan(
-                            text: workerSelected,
+                            text: "$workerSelected/${widget.process.headCount}",
                             style: const TextStyle(
                                 color: kPrimaryColor,
                                 fontSize: 18,
@@ -368,6 +368,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                   isEditing: widget.isEditing,
                   shiftId: widget.selectedShift.id!,
                   workerTypeId: workerIdType,
+                  shift: widget.selectedShift,
                   tempWorkerAdded: (AddTempResponse tmp) {
                     this.widget.reloadData();
 
