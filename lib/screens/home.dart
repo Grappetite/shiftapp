@@ -7,6 +7,7 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/model/login_model.dart';
 import 'package:shiftapp/model/shifts_model.dart';
+import 'package:shiftapp/screens/end_shift_final_screen.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
 import '../config/constants.dart';
@@ -224,24 +225,45 @@ class _HomeMainViewState extends State<HomeMainView> {
     await EasyLoading.dismiss();
 
     var executeShiftId = this.widget.selectedShift.executedShiftId;
-
-    var response = await Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => EndShiftView(
-          autoOpen: true,
-          userId: const [],
-          efficiencyCalculation: const [],
-          shiftId: widget.selectedShift.id!,
-          processId: widget.processSelected.id!,
-          selectedShift: widget.selectedShift,
-          startedBefore: true,
-          process: widget.processSelected,
-          execShiftId: executeShiftId!,
+    var response;
+    if (this
+        .widget
+        .selectedShift
+        .endDateObject
+        .add(Duration(hours: 4))
+        .isBefore(DateTime.now())) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => EndShiftFinalScreen(
+            autoOpen: true,
+            startTime: widget.selectedShift.startTime!,
+            selectedShift: widget.selectedShift,
+            shiftId: widget.selectedShift.id!,
+            processId: widget.processSelected.id!,
+            endTime: widget.selectedShift.endTime!,
+            process: widget.processSelected,
+            executeShiftId: executeShiftId!,
+          ),
         ),
-      ),
-    );
-
+      );
+    } else {
+      response = await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => EndShiftView(
+            autoOpen: true,
+            userId: const [],
+            efficiencyCalculation: const [],
+            shiftId: widget.selectedShift.id!,
+            processId: widget.processSelected.id!,
+            selectedShift: widget.selectedShift,
+            startedBefore: true,
+            process: widget.processSelected,
+            execShiftId: executeShiftId!,
+          ),
+        ),
+      );
+    }
     if (response != null) {
       if (response == true) {
         widget.onLogout();

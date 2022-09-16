@@ -5,7 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 
 import '../config/constants.dart';
-import '../model/shifts_model.dart';
+import '../model/login_model.dart';
 import '../model/workers_model.dart';
 import '../services/workers_service.dart';
 import '../widgets/elevated_button.dart';
@@ -30,7 +30,7 @@ class SelectExistingWorkers extends StatefulWidget {
   final bool isEditing;
 
   final String processId;
-  final ShiftItem shift;
+  final Process process;
   SelectExistingWorkers({
     Key? key,
     required this.workers,
@@ -42,7 +42,7 @@ class SelectExistingWorkers extends StatefulWidget {
     required this.otherTypeTempWorkerAdded,
     required this.listName,
     required this.exShiftId,
-    required this.shift,
+    required this.process,
   }) : super(key: key);
 
   @override
@@ -126,7 +126,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
             // Column(
             //   children:  [
             Text(
-          widget.shift.name!,
+          widget.process.name!,
           style: TextStyle(
               color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
         ),

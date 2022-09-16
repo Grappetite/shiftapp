@@ -182,6 +182,7 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                       onPressed: () async {
                         //addTempWorkers
                         await EasyLoading.show(
+                          dismissOnTap: false,
                           status: 'loading...',
                           maskType: EasyLoadingMaskType.black,
                         );

@@ -99,119 +99,88 @@ class _StartShiftViewState extends State<StartShiftView> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            TimerTopWidget(
-                selectedShift: widget.selectedShift, timeElasped: timeElasped),
-            const SizedBox(
-              height: 16,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: ExplainerWidget(
-                iconName: 'construct',
-                title: 'Workers',
-                text1: text1(),
-                text2: '',
-                showWarning: true,
-                showIcon: true,
-                backgroundColor: lightGreenColor,
-                postIcon: Icons.check,
-                postIconColor: Colors.green,
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Column(
+            children: [
+              TimerTopWidget(
+                  selectedShift: widget.selectedShift,
+                  timeElasped: timeElasped),
+              const SizedBox(
+                height: 16,
               ),
-            ),
-            //
-            const SizedBox(
-              height: 16,
-            ),
-            ComingSoonContainer(
-              innerWidget: ExplainerWidget(
-                comingSoon: true,
-                iconName: 'construct',
-                title: 'PPE',
-                text1: '2/5 Planned PPE per Worker Type',
-                text2: '',
-                showWarning: true,
-                showIcon: true,
-                backgroundColor: lightRedColor,
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-            ),
-
-            SizedBox(
-              height: 8,
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
-              child: TextFormField(
-                decoration: const InputDecoration(
-                  hintText: 'Enter Comments',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20.0),
-                    ),
-                    borderSide: BorderSide(color: Colors.black38),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20.0),
-                    ),
-                    borderSide: BorderSide(color: Colors.black38),
-                  ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: ExplainerWidget(
+                  iconName: 'construct',
+                  title: 'Workers',
+                  text1: text1(),
+                  text2: '',
+                  showWarning: true,
+                  showIcon: true,
+                  backgroundColor: lightGreenColor,
+                  postIcon: Icons.check,
+                  postIconColor: Colors.green,
                 ),
-                minLines: 2,
-                maxLines: 3,
-                keyboardType: TextInputType.multiline,
-                controller: _controller,
               ),
-            ),
+              //
+              const SizedBox(
+                height: 16,
+              ),
+              ComingSoonContainer(
+                innerWidget: ExplainerWidget(
+                  comingSoon: true,
+                  iconName: 'construct',
+                  title: 'PPE',
+                  text1: '2/5 Planned PPE per Worker Type',
+                  text2: '',
+                  showWarning: true,
+                  showIcon: true,
+                  backgroundColor: lightRedColor,
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+              ),
 
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 1.7,
-              child: TextButton(
-                onPressed: () async {
-                  if (_controller.text.isEmpty && 1 == 2) {
-                    showAlertDialog(
-                      context: context,
-                      title: 'Error',
-                      message: 'Please add comment.',
-                      actions: [
-                        AlertDialogAction(
-                          label:
-                              MaterialLocalizations.of(context).okButtonLabel,
-                          key: OkCancelResult.ok,
-                        )
-                      ],
-                    );
-                    return;
-                  }
-                  await EasyLoading.show(
-                    status: 'loading...',
-                    maskType: EasyLoadingMaskType.black,
-                  );
+              SizedBox(
+                height: 8,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    hintText: 'Enter Comments',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20.0),
+                      ),
+                      borderSide: BorderSide(color: Colors.black38),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20.0),
+                      ),
+                      borderSide: BorderSide(color: Colors.black38),
+                    ),
+                  ),
+                  minLines: 2,
+                  maxLines: 3,
+                  keyboardType: TextInputType.multiline,
+                  controller: _controller,
+                ),
+              ),
 
-                  var result = await WorkersService.addShiftWorker(
-                      widget.shiftId,
-                      widget.processId,
-
-                      ///before at
-                      // widget.startTime,
-                      ///after
-                      DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()),
-                      widget.endTime,
-                      widget.userId,
-                      widget.efficiencyCalculation,
-                      _controller.text);
-
-                  await EasyLoading.dismiss();
-
-                  if (result != null) {
-                    if (result.status == 'error') {
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 1.7,
+                child: TextButton(
+                  onPressed: () async {
+                    if (_controller.text.isEmpty && 1 == 2) {
                       showAlertDialog(
                         context: context,
                         title: 'Error',
-                        message: result.message,
+                        message: 'Please add comment.',
                         actions: [
                           AlertDialogAction(
                             label:
@@ -220,56 +189,94 @@ class _StartShiftViewState extends State<StartShiftView> {
                           )
                         ],
                       );
-
                       return;
                     }
+                    await EasyLoading.show(
+                      status: 'loading...',
+                      maskType: EasyLoadingMaskType.black,
+                    );
 
-                    if (result.code! == 200) {
-                      final prefs = await SharedPreferences.getInstance();
-                      prefs.setInt('shiftId', widget.selectedShift.id!);
-                      prefs.setInt('processId', widget.processId);
+                    var result = await WorkersService.addShiftWorker(
+                        widget.shiftId,
+                        widget.processId,
 
-                      prefs.setString(
-                          'selectedShiftName', widget.selectedShift.name!);
+                        ///before at
+                        // widget.startTime,
+                        ///after
+                        DateFormat("yyyy-MM-dd hh:mm:ss")
+                            .format(DateTime.now()),
+                        widget.endTime,
+                        widget.userId,
+                        widget.efficiencyCalculation,
+                        _controller.text);
 
-                      prefs.setString('selectedShiftStartTime',
-                          widget.selectedShift.startTime!);
+                    await EasyLoading.dismiss();
 
-                      prefs.setString('selectedShiftEndTime',
-                          widget.selectedShift.endTime!);
+                    if (result != null) {
+                      if (result.status == 'error') {
+                        showAlertDialog(
+                          context: context,
+                          title: 'Error',
+                          message: result.message,
+                          actions: [
+                            AlertDialogAction(
+                              label: MaterialLocalizations.of(context)
+                                  .okButtonLabel,
+                              key: OkCancelResult.ok,
+                            )
+                          ],
+                        );
 
-                      prefs.setInt('selectedDisplayScreen',
-                          widget.selectedShift.displayScreen!);
+                        return;
+                      }
 
-                      prefs.setInt(
-                          'execute_shift_id', result.data!.executeShiftId!);
+                      if (result.code! == 200) {
+                        final prefs = await SharedPreferences.getInstance();
+                        prefs.setInt('shiftId', widget.selectedShift.id!);
+                        prefs.setInt('processId', widget.processId);
 
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => EndShiftView(
-                              userId: widget.userId,
-                              efficiencyCalculation:
-                                  widget.efficiencyCalculation,
-                              shiftId: widget.shiftId,
-                              processId: widget.processId,
-                              selectedShift: widget.selectedShift,
-                              process: widget.process,
-                              execShiftId: result.data!.executeShiftId!),
-                        ),
-                      );
+                        prefs.setString(
+                            'selectedShiftName', widget.selectedShift.name!);
+
+                        prefs.setString('selectedShiftStartTime',
+                            widget.selectedShift.startTime!);
+
+                        prefs.setString('selectedShiftEndTime',
+                            widget.selectedShift.endTime!);
+
+                        prefs.setInt('selectedDisplayScreen',
+                            widget.selectedShift.displayScreen!);
+
+                        prefs.setInt(
+                            'execute_shift_id', result.data!.executeShiftId!);
+
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (BuildContext context) => EndShiftView(
+                                userId: widget.userId,
+                                efficiencyCalculation:
+                                    widget.efficiencyCalculation,
+                                shiftId: widget.shiftId,
+                                processId: widget.processId,
+                                selectedShift: widget.selectedShift,
+                                process: widget.process,
+                                execShiftId: result.data!.executeShiftId!),
+                          ),
+                        );
+                      }
+                    } else {
+                      EasyLoading.showError('Could not load data');
                     }
-                  } else {
-                    EasyLoading.showError('Could not load data');
-                  }
-                },
-                child: Image.asset('assets/images/start_button.png'),
+                  },
+                  child: Image.asset('assets/images/start_button.png'),
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-          ],
+              const SizedBox(
+                height: 16,
+              ),
+            ],
+          ),
         ),
       ),
     );

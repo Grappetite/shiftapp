@@ -368,7 +368,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                   isEditing: widget.isEditing,
                   shiftId: widget.selectedShift.id!,
                   workerTypeId: workerIdType,
-                  shift: widget.selectedShift,
+                  process: widget.process,
                   tempWorkerAdded: (AddTempResponse tmp) {
                     this.widget.reloadData();
 

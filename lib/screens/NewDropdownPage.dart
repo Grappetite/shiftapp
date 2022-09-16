@@ -78,6 +78,7 @@ class _DropDownPageState extends State<DropDownPage> {
                   return;
                 }
                 await EasyLoading.show(
+                  
                   status: 'loading...',
                   maskType: EasyLoadingMaskType.black,
                 );

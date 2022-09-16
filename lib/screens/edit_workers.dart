@@ -58,39 +58,33 @@ class _EditWorkersState extends State<EditWorkers> {
   List<WorkerType> workerType = [];
 
   void loadWorkerTypes() async {
-
     //execute_shift_id
 
-    var result = await WorkersService.getWorkTypes(widget.shiftId.toString(),widget.processId.toString());
+    var result = await WorkersService.getWorkTypes(
+        widget.shiftId.toString(), widget.processId.toString());
 
-
-    if(result != null) {
+    if (result != null) {
       setState(() {
         workerType = result.data!;
       });
-      for(var currentItem in workerType){
-
-
+      for (var currentItem in workerType) {
         setState(() {
           listNames.add(currentItem.name!);
           listLists.add([]);
         });
-
-
       }
 
       await EasyLoading.dismiss();
-
-
     }
-   // workerType = result!.data!;
+    // workerType = result!.data!;
     setState(() {
-     // workerType = result.data!;
+      // workerType = result.data!;
     });
   }
 
   void loadWorkers() async {
     await EasyLoading.show(
+      dismissOnTap: false,
       status: 'Adding...',
       maskType: EasyLoadingMaskType.black,
     );
@@ -99,8 +93,6 @@ class _EditWorkersState extends State<EditWorkers> {
         widget.execShiftId, widget.processId);
 
     if (responseShift != null) {
-
-
       if (responseShift.data!.shiftWorker!.length == 0) {
         showCategories = true;
         loadWorkerTypes();
@@ -108,9 +100,6 @@ class _EditWorkersState extends State<EditWorkers> {
         return;
       }
       await EasyLoading.dismiss();
-
-
-
     } else {
       await EasyLoading.dismiss();
 
@@ -129,9 +118,8 @@ class _EditWorkersState extends State<EditWorkers> {
 
     List<ShiftWorker> shiftWorkers = [];
 
- //   responseShift!.data!.worker = responseShift.data!.shiftWorker!.where((e) => e.isAdded == false).toList();
-   // responseShift.data!.shiftWorker = responseShift.data!.shiftWorker!.where((e) => e.isAdded == true).toList();
-
+    //   responseShift!.data!.worker = responseShift.data!.shiftWorker!.where((e) => e.isAdded == false).toList();
+    // responseShift.data!.shiftWorker = responseShift.data!.shiftWorker!.where((e) => e.isAdded == true).toList();
 
     shiftWorkers.addAll(responseShift!.data!.worker!);
 

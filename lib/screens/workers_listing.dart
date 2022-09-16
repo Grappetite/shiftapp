@@ -59,35 +59,26 @@ class _WorkersListingState extends State<WorkersListing> {
 
   List<WorkerType> workerType = [];
 
-
   bool isLoader = true;
   void loadWorkerTypes() async {
-
     //execute_shift_id
 
-    var result = await WorkersService.getWorkTypes(widget.shiftId.toString(),widget.processId.toString());
+    var result = await WorkersService.getWorkTypes(
+        widget.shiftId.toString(), widget.processId.toString());
 
-
-    if(result != null) {
+    if (result != null) {
       setState(() {
         workerType = result.data!;
       });
-      for(var currentItem in workerType){
-
-
+      for (var currentItem in workerType) {
         setState(() {
           listNames.add(currentItem.name!);
           listLists.add([]);
         });
-
-
       }
 
       await EasyLoading.dismiss();
-
-
-    }
-    else {
+    } else {
       await EasyLoading.dismiss();
 
       showAlertDialog(
@@ -101,7 +92,6 @@ class _WorkersListingState extends State<WorkersListing> {
           )
         ],
       );
-
     }
     // workerType = result!.data!;
     setState(() {
@@ -109,18 +99,18 @@ class _WorkersListingState extends State<WorkersListing> {
     });
   }
 
-
   bool showCategories = false;
 
   void loadData() async {
     await EasyLoading.show(
+      dismissOnTap: false,
       status: 'loading...',
       maskType: EasyLoadingMaskType.black,
     );
     var responseShift =
         await WorkersService.getShiftWorkers(widget.shiftId, widget.processId);
 
-    if(responseShift == null){
+    if (responseShift == null) {
       await EasyLoading.dismiss();
       showAlertDialog(
         context: context,
@@ -135,14 +125,12 @@ class _WorkersListingState extends State<WorkersListing> {
       );
 
       return;
-
     }
 
     if (responseShift.data!.worker!.isEmpty) {
       showCategories = true;
       loadWorkerTypes();
       return;
-
     }
     List<ShiftWorker> shiftWorkers = [];
 
@@ -249,7 +237,6 @@ class _WorkersListingState extends State<WorkersListing> {
                 },
                 execShiftId: 0,
                 workerType: this.workerType,
-
               ),
             ),
             const SizedBox(

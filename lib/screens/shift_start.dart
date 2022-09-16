@@ -43,18 +43,22 @@ class _ShiftStartState extends State<ShiftStart> {
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
-        setState(() {
-          timeElasped = widget.selectedShift.timeElasped;
+        // setState(() {
+        // timeElasped = widget.selectedShift.timeElasped;
 
-          // if ((widget.selectedShift.displayScreen == 3 ||
-          //         widget.selectedShift.displayScreen == 1) &&
-          //     widget.selectedShift.displayScreenReady.toString() != "ended") {
-          //  if(widget.selectedShift.startDateObject.subtract(Duration(minutes: 30).))
-          //    {
-          //      widget.selectedShift.displayScreen == 2;
-          //    }
-          // }
-        });
+        if ((widget.selectedShift.displayScreen == 3 ||
+                widget.selectedShift.displayScreen == 1) &&
+            (widget.selectedShift.displayScreenReady.toString().toLowerCase() ==
+                "")) {
+          if (widget.selectedShift.startDateObject
+              .subtract(Duration(minutes: 30))
+              .isBefore(DateTime.now())) {
+            widget.selectedShift.displayScreen = 2;
+            setState(() {});
+            _timer.cancel();
+          }
+        }
+        // });
 
         print('');
       },
@@ -67,6 +71,7 @@ class _ShiftStartState extends State<ShiftStart> {
   @override
   void initState() {
     super.initState();
+    startTimer();
   }
 
   @override
