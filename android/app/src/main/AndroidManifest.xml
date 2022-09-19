@@ -2,7 +2,7 @@
     package="com.grappetite.shiftapp">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="shiftapp"
+        android:label="SHIFT"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

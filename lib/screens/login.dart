@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,11 +25,11 @@ class _LoginScreenState extends State<LoginScreen> {
   bool showLogin = true;
 
   TextEditingController controller = Environment().config.preset
-      ? TextEditingController(text: "mahboob+supervisor@grappetite.com")
+      ? TextEditingController(text: "morne.baatjies@takealot.com")
       : TextEditingController();
 
   TextEditingController passwordController = Environment().config.preset
-      ? TextEditingController(text: "Mahboob321")
+      ? TextEditingController(text: "shift123")
       : TextEditingController();
 
   String selectedString = "";
@@ -293,7 +295,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
 
                       process = response.data!.process!;
-
+                      prefs.setString("processesMahboob",
+                          jsonEncode(response.data!.process!));
                       setState(() {
                         showLogin = false;
                       });

@@ -4,17 +4,13 @@ class LoginResponse {
   Data? data;
   String? message;
 
-
   //this.status
-  LoginResponse({ this.token, this.data, this.message});
+  LoginResponse({this.token, this.data, this.message});
 
   LoginResponse.fromJson(Map<String, dynamic> json) {
-
     token = json['token'];
     data = json['data'] != null ? Data.fromJson(json['data']) : null;
     message = json['message'];
-
-
 
     print('');
 
@@ -51,10 +47,11 @@ class Data {
       });
     }
 
-    if(json.keys.contains('shiftStartDetails')) {
-      shiftDetails = json['shiftStartDetails'] != null ? ShiftStartDetails.fromJson(json['shiftStartDetails']) : null;
+    if (json.keys.contains('shiftStartDetails')) {
+      shiftDetails = json['shiftStartDetails'] != null
+          ? ShiftStartDetails.fromJson(json['shiftStartDetails'])
+          : null;
     }
-
   }
 
   Map<String, dynamic> toJson() {
@@ -78,11 +75,10 @@ class User {
   User({this.id, this.name, this.lastName, this.key});
 
   User.fromJson(Map<String, dynamic> json) {
-    id = json ['id'];
+    id = json['id'];
     name = json['name'];
     lastName = json['last_name'];
     key = "";
-
   }
 
   Map<String, dynamic> toJson() {
@@ -105,18 +101,16 @@ class Process {
   Process({this.id, this.name});
 
   Process.fromJson(Map<String, dynamic> json) {
-
-    if(json.keys.contains('process_id')) {
+    if (json.keys.contains('process_id')) {
       id = json['process_id'];
     } else {
       id = json['id'];
     }
 
-    name = json['processName'];
+    name = json['processName'] ?? json['name'];
     unit = json['unit'];
     baseline = json['baseline'];
-    headCount =  json['head_count'];
-
+    headCount = json['head_count'];
   }
 
   Map<String, dynamic> toJson() {
@@ -142,14 +136,14 @@ class ShiftStartDetails {
 
   ShiftStartDetails(
       {this.executeShiftId,
-        this.executeShiftStatus,
-        this.executeShiftStartTime,
-        this.executeShiftEndTime,
-        this.processId,
-        this.shiftId,
-        this.shiftName,
-        this.shiftStartTime,
-        this.shiftEndTime});
+      this.executeShiftStatus,
+      this.executeShiftStartTime,
+      this.executeShiftEndTime,
+      this.processId,
+      this.shiftId,
+      this.shiftName,
+      this.shiftStartTime,
+      this.shiftEndTime});
 
   ShiftStartDetails.fromJson(Map<String, dynamic> json) {
     executeShiftId = json['execute_shift_id'];
@@ -176,7 +170,6 @@ class ShiftStartDetails {
     data['shift_name'] = this.shiftName;
     data['shift_start_time'] = this.shiftStartTime;
     data['shift_end_time'] = this.shiftEndTime;
-
 
     return data;
   }

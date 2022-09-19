@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:app_popup_menu/app_popup_menu.dart';
@@ -12,6 +13,7 @@ import '../model/login_model.dart';
 import '../model/shifts_model.dart';
 import '../services/shift_service.dart';
 import '../services/workers_service.dart';
+import 'NewDropdownPage.dart';
 import 'edit_workers.dart';
 import 'end_shift_final_screen.dart';
 import 'inner_widgets/coming_soon_container.dart';
@@ -127,12 +129,25 @@ class _EndShiftViewState extends State<EndShiftView> {
               prefs.remove('username');
               prefs.remove('password');
 
-              if (widget.autoOpen) {
-                Navigator.pop(context, true);
-              } else {
-                Navigator.pop(context, true);
-                Navigator.pop(context, true);
-              }
+              // if (widget.autoOpen) {
+              //   Navigator.pop(context, true);
+              // } else {
+              //   Navigator.pop(context, true);
+              //   Navigator.pop(context, true);
+              // }
+              var process = <Process>[];
+              jsonDecode(prefs.getString("processesMahboob")!).forEach((v) {
+                process!.add(Process.fromJson(v));
+              });
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                      builder: (context) => //   Navigator.pop(context, true);
+                          DropDownPage(process: process)
+                      // HomeView(
+                      //     processSelected: widget.process,
+                      //     selectedShift: widget.selectedShift)
+                      ),
+                  (route) => false);
             });
 
             /// widget.onLogout();

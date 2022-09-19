@@ -49,8 +49,7 @@ class ShiftItem {
   }
 
   String get timeElasped {
-    var check1 = DateFormat("yyyy-MM-dd hh:mm:ss")
-        .parse(DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()))
+    var check1 = DateTime.now()
         // .toUtc()
         // .subtract(Duration(hours: 3))
         .difference(startDateObject);
