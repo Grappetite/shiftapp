@@ -152,8 +152,8 @@ class _DropDownState extends State<DropDown> {
                                   controller: ScrollController(
                                       initialScrollOffset: 0.0),
                                   child: ListView.builder(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
+                                    // physics:
+                                    //     const NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     itemCount: listToShow.length,
                                     itemBuilder:

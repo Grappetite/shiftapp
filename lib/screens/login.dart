@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiftapp/config/BaseConfig.dart';
 import 'package:shiftapp/screens/NewDropdownPage.dart';
 import 'package:shiftapp/screens/home.dart';
 import 'package:shiftapp/services/login_service.dart';
@@ -21,11 +22,13 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool showLogin = true;
 
-  TextEditingController controller =
-      TextEditingController(text: "mahboob+supervisor@grappetite.com");
+  TextEditingController controller = Environment().config.preset
+      ? TextEditingController(text: "mahboob+supervisor@grappetite.com")
+      : TextEditingController();
 
-  TextEditingController passwordController =
-      TextEditingController(text: "Mahboob321");
+  TextEditingController passwordController = Environment().config.preset
+      ? TextEditingController(text: "Mahboob321")
+      : TextEditingController();
 
   String selectedString = "";
 

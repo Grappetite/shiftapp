@@ -173,96 +173,215 @@ class _WorkItemViewState extends State<WorkItemView> {
                     height: 8,
                   ),
                   for (var currentItem in widget.listLists[i]) ...[
-                    UserItem(
-                      keyNo: currentItem.key != null ? currentItem.key! : '',
-                      personName:
-                          currentItem.firstName! + ' ' + currentItem.lastName!,
-                      initialSelected: currentItem.isSelected,
-                      picUrl: currentItem.picture,
-                      changedStatus: (bool newStatus) async {
-                        String dateString = widget.selectedShift.startTime!;
+                    widget.isEditing
+                        ? currentItem.isSelected
+                            ? UserItem(
+                                keyNo: currentItem.key != null
+                                    ? currentItem.key!
+                                    : '',
+                                personName: currentItem.firstName! +
+                                    ' ' +
+                                    currentItem.lastName!,
+                                initialSelected: currentItem.isSelected,
+                                picUrl: currentItem.picture,
+                                changedStatus: (bool newStatus) async {
+                                  String dateString =
+                                      widget.selectedShift.startTime!;
 
-                        ///previously
-                        // DateFormat("yyyy-MM-dd hh:mm:ss")
-                        //     .format(DateTime.now());
-                        ///end
-                        if (widget.isEditing && newStatus) {
-                          setState(() {
-                            currentItem.isSelected = newStatus;
-                          });
+                                  ///previously
+                                  // DateFormat("yyyy-MM-dd hh:mm:ss")
+                                  //     .format(DateTime.now());
+                                  ///end
+                                  if (widget.isEditing && newStatus) {
+                                    setState(() {
+                                      currentItem.isSelected = newStatus;
+                                    });
 
-                          await EasyLoading.show(
-                            status: 'Adding...',
-                            maskType: EasyLoadingMaskType.black,
-                          );
+                                    await EasyLoading.show(
+                                      status: 'Adding...',
+                                      maskType: EasyLoadingMaskType.black,
+                                    );
 
-                          var response = await WorkersService.addWorkers(
-                              widget.execShiftId,
-                              [currentItem.id!.toString()],
-                              [dateString],
-                              [],
-                              [currentItem.efficiencyCalculation.toString()]);
+                                    var response =
+                                        await WorkersService.addWorkers(
+                                            widget.execShiftId, [
+                                      currentItem.id!.toString()
+                                    ], [
+                                      dateString
+                                    ], [], [
+                                      currentItem.efficiencyCalculation
+                                          .toString()
+                                    ]);
 
-                          await EasyLoading.dismiss();
+                                    await EasyLoading.dismiss();
 
-                          if (response) {
-                          } else {
-                            EasyLoading.showError('Error');
-                          }
-                        } else if (widget.isEditing && !newStatus) {
-                          setState(() {
-                            currentItem.isSelected = currentItem.isSelected;
-                          });
-                          await showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) {
-                                return ConfirmTimeEnd(
-                                  shiftItem: this.widget.selectedShift,
-                                  editing: widget.isEditing,
+                                    if (response) {
+                                    } else {
+                                      EasyLoading.showError('Error');
+                                    }
+                                  } else if (widget.isEditing && !newStatus) {
+                                    setState(() {
+                                      currentItem.isSelected =
+                                          currentItem.isSelected;
+                                    });
+                                    await showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (BuildContext context) {
+                                          return ConfirmTimeEnd(
+                                            shiftItem:
+                                                this.widget.selectedShift,
+                                            editing: widget.isEditing,
+                                          );
+                                        }).then((value) async {
+                                      if (value != false) {
+                                        // dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
+                                        //     .format(DateTime.parse(value));
+                                        dateString = value;
+                                        setState(() {
+                                          currentItem.isSelected = newStatus;
+                                        });
+
+                                        /// end
+                                        await EasyLoading.show(
+                                          status: 'Removing...',
+                                          maskType: EasyLoadingMaskType.black,
+                                        );
+
+                                        var response =
+                                            await WorkersService.removeWorkers(
+                                                widget.execShiftId, [
+                                          currentItem.id!.toString()
+                                        ], [
+                                          dateString
+                                        ], [], [
+                                          currentItem.efficiencyCalculation
+                                              .toString()
+                                        ]);
+                                        widget.listLists[i].remove(currentItem);
+                                        setState(() {});
+                                        await EasyLoading.dismiss();
+
+                                        if (response) {
+                                        } else {
+                                          EasyLoading.showError('Error');
+                                        }
+                                      } else {
+                                        setState(() {
+                                          currentItem.isSelected =
+                                              currentItem.isSelected;
+                                        });
+                                      }
+                                    });
+                                  } else {
+                                    setState(() {
+                                      currentItem.isSelected = newStatus;
+                                    });
+                                  }
+                                },
+                              )
+                            : Container()
+                        : UserItem(
+                            keyNo:
+                                currentItem.key != null ? currentItem.key! : '',
+                            personName: currentItem.firstName! +
+                                ' ' +
+                                currentItem.lastName!,
+                            initialSelected: currentItem.isSelected,
+                            picUrl: currentItem.picture,
+                            changedStatus: (bool newStatus) async {
+                              String dateString =
+                                  widget.selectedShift.startTime!;
+
+                              ///previously
+                              // DateFormat("yyyy-MM-dd hh:mm:ss")
+                              //     .format(DateTime.now());
+                              ///end
+                              if (widget.isEditing && newStatus) {
+                                setState(() {
+                                  currentItem.isSelected = newStatus;
+                                });
+
+                                await EasyLoading.show(
+                                  status: 'Adding...',
+                                  maskType: EasyLoadingMaskType.black,
                                 );
-                              }).then((value) async {
-                            if (value != false) {
-                              // dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
-                              //     .format(DateTime.parse(value));
-                              dateString = value;
-                              setState(() {
-                                currentItem.isSelected = newStatus;
-                              });
 
-                              /// end
-                              await EasyLoading.show(
-                                status: 'Removing...',
-                                maskType: EasyLoadingMaskType.black,
-                              );
+                                var response = await WorkersService.addWorkers(
+                                    widget.execShiftId, [
+                                  currentItem.id!.toString()
+                                ], [
+                                  dateString
+                                ], [], [
+                                  currentItem.efficiencyCalculation.toString()
+                                ]);
 
-                              var response = await WorkersService.removeWorkers(
-                                  widget.execShiftId, [
-                                currentItem.id!.toString()
-                              ], [
-                                dateString
-                              ], [], [
-                                currentItem.efficiencyCalculation.toString()
-                              ]);
-                              await EasyLoading.dismiss();
+                                await EasyLoading.dismiss();
 
-                              if (response) {
+                                if (response) {
+                                } else {
+                                  EasyLoading.showError('Error');
+                                }
+                              } else if (widget.isEditing && !newStatus) {
+                                setState(() {
+                                  currentItem.isSelected =
+                                      currentItem.isSelected;
+                                });
+                                await showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (BuildContext context) {
+                                      return ConfirmTimeEnd(
+                                        shiftItem: this.widget.selectedShift,
+                                        editing: widget.isEditing,
+                                      );
+                                    }).then((value) async {
+                                  if (value != false) {
+                                    // dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
+                                    //     .format(DateTime.parse(value));
+                                    dateString = value;
+                                    setState(() {
+                                      currentItem.isSelected = newStatus;
+                                    });
+
+                                    /// end
+                                    await EasyLoading.show(
+                                      status: 'Removing...',
+                                      maskType: EasyLoadingMaskType.black,
+                                    );
+
+                                    var response =
+                                        await WorkersService.removeWorkers(
+                                            widget.execShiftId, [
+                                      currentItem.id!.toString()
+                                    ], [
+                                      dateString
+                                    ], [], [
+                                      currentItem.efficiencyCalculation
+                                          .toString()
+                                    ]);
+                                    widget.listLists[i].remove(currentItem);
+                                    setState(() {});
+                                    await EasyLoading.dismiss();
+
+                                    if (response) {
+                                    } else {
+                                      EasyLoading.showError('Error');
+                                    }
+                                  } else {
+                                    setState(() {
+                                      currentItem.isSelected =
+                                          currentItem.isSelected;
+                                    });
+                                  }
+                                });
                               } else {
-                                EasyLoading.showError('Error');
+                                setState(() {
+                                  currentItem.isSelected = newStatus;
+                                });
                               }
-                            } else {
-                              setState(() {
-                                currentItem.isSelected = currentItem.isSelected;
-                              });
-                            }
-                          });
-                        } else {
-                          setState(() {
-                            currentItem.isSelected = newStatus;
-                          });
-                        }
-                      },
-                    ),
+                            },
+                          ),
                     const SizedBox(
                       height: 24,
                     ),

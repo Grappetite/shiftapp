@@ -52,7 +52,8 @@ class _ShiftStartState extends State<ShiftStart> {
                 "")) {
           if (widget.selectedShift.startDateObject
               .subtract(Duration(minutes: 30))
-              .isBefore(DateTime.now())) {
+              .isBefore(DateFormat("yyyy-MM-dd hh:mm:ss").parse(
+                  DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now())))) {
             widget.selectedShift.displayScreen = 2;
             setState(() {});
             _timer.cancel();

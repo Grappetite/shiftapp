@@ -3,10 +3,16 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:shiftapp/screens/splash.dart';
 
+import 'config/BaseConfig.dart';
 import 'config/constants.dart';
 
 void main() {
   runApp(const MyApp());
+  const String? environment = String.fromEnvironment(
+    'ENVIRONMENT',
+    defaultValue: Environment.dev,
+  );
+  Environment().initConfig(environment);
   configLoading();
 }
 

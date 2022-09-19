@@ -49,14 +49,16 @@ class ShiftItem {
   }
 
   String get timeElasped {
-    var check1 = DateTime.now()
+    var check1 = DateFormat("yyyy-MM-dd hh:mm:ss")
+        .parse(DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()))
         // .toUtc()
         // .subtract(Duration(hours: 3))
         .difference(startDateObject);
 
     if (check1.inSeconds > 0) {
       // event already passed
-      var differance = DateTime.now()
+      var differance = DateFormat("yyyy-MM-dd hh:mm:ss")
+          .parse(DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()))
           // .toUtc()
           // .subtract(Duration(hours: 3))
           .difference(startDateObject);
