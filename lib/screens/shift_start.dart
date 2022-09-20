@@ -34,7 +34,7 @@ class _ShiftStartState extends State<ShiftStart> {
   bool showingWorkersListing = false;
 
   String timeElasped = '00:00';
-
+  var startTimeOriginal;
   late Timer _timer;
 
   void startTimer() {
@@ -163,12 +163,14 @@ class _ShiftStartState extends State<ShiftStart> {
                             //       minute: DateTime.now().minute),
                             //   initialEntryMode: TimePickerEntryMode.dial,
                             // );
-                            var maxtime =
-                                DateTime.parse(widget.selectedShift.startTime!)
-                                    .add(Duration(minutes: 4 * 60));
-                            var mintime =
-                                DateTime.parse(widget.selectedShift.startTime!)
-                                    .subtract(Duration(minutes: 30));
+                            if (startTimeOriginal == null) {
+                              startTimeOriginal =
+                                  widget.selectedShift.startTime!;
+                            }
+                            var maxtime = DateTime.parse(startTimeOriginal)
+                                .add(Duration(minutes: 4 * 60));
+                            var mintime = DateTime.parse(startTimeOriginal)
+                                .subtract(Duration(minutes: 30));
                             DateTime? newTime;
                             showCupertinoModalPopup(
                                 context: context,
@@ -177,16 +179,36 @@ class _ShiftStartState extends State<ShiftStart> {
                                     color: Colors.white,
                                     height: MediaQuery.of(context).size.width,
                                     width: MediaQuery.of(context).size.width,
-                                    child: CupertinoDatePicker(
-                                      //use24hFormat: true,
-                                      mode: CupertinoDatePickerMode.dateAndTime,
-                                      onDateTimeChanged: (value) async {
-                                        newTime = value;
-                                      },
-                                      initialDateTime:
-                                          widget.selectedShift.startDateObject,
-                                      minimumDate: mintime,
-                                      maximumDate: maxtime,
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                            flex: 1,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                  "Shift can be set 30 min before the start. You can edit this shift up till ${maxtime.toString().timeToShow}.",
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                    color: kPrimaryColor,
+                                                  )),
+                                            )),
+                                        Expanded(
+                                          flex: 4,
+                                          child: CupertinoDatePicker(
+                                            //use24hFormat: true,
+                                            mode: CupertinoDatePickerMode
+                                                .dateAndTime,
+                                            onDateTimeChanged: (value) async {
+                                              newTime = value;
+                                            },
+                                            initialDateTime: DateTime.now(),
+                                            minimumDate: mintime,
+                                            maximumDate: DateTime.now()
+                                                .add(Duration(minutes: 30)),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   );
                                 }).then((value) async {
@@ -194,13 +216,12 @@ class _ShiftStartState extends State<ShiftStart> {
                                 customSelectedStartTime = widget.selectedShift
                                     .makeTimeStringFromHourMinute(
                                         newTime!.hour, newTime!.minute);
-
                                 // DateTime tempStart =
                                 //     DateFormat("yyyy-MM-dd hh:mm:ss")
                                 //         .parse(customSelectedStartTime);
                                 DateTime tempStart =
                                     DateFormat("yyyy-MM-dd hh:mm:ss")
-                                        .parse(widget.selectedShift.startTime!);
+                                        .parse(startTimeOriginal);
                                 DateTime tempEnd =
                                     DateFormat("yyyy-MM-dd hh:mm:ss")
                                         .parse(widget.selectedShift.endTime!);
@@ -288,17 +309,29 @@ class _ShiftStartState extends State<ShiftStart> {
                                   setState(() {
                                     widget.selectedShift.startTime =
                                         customSelectedStartTime;
+                                    widget.selectedShift.endTime = widget
+                                        .selectedShift
+                                        .makeTimeStringFromHourMinute(
+                                            newTime!
+                                                .add(Duration(
+                                                    hours: differenceT))
+                                                .hour,
+                                            newTime!
+                                                .add(Duration(
+                                                    hours: differenceT))
+                                                .minute);
                                   });
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => WorkersListing(
-                                        shiftId: null,
-                                        processId: widget.processSelected.id!,
-                                        selectedShift: widget.selectedShift,
-                                        process: widget.processSelected,
-                                      ),
-                                    ),
-                                  );
+                                  // Navigator.of(context).push(
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => WorkersListing(
+                                  //       shiftId: null,
+                                  //       processId: widget.processSelected.id!,
+                                  //       selectedShift: widget.selectedShift,
+                                  //       process: widget.processSelected,
+                                  //     ),
+                                  //   ),
+                                  // );
+
                                 }
                               }
                             });
