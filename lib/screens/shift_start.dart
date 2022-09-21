@@ -187,7 +187,8 @@ class _ShiftStartState extends State<ShiftStart> {
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: Text(
-                                                  "Shift can be set 30 min before the start. You can edit this shift up till ${maxtime.toString().timeToShow}.",
+                                                  // You can edit this shift up till ${maxtime.toString().timeToShow}.
+                                                  "Shift time can only be re-set 30min in advance of the new time.",
                                                   textAlign: TextAlign.center,
                                                   style: const TextStyle(
                                                     color: kPrimaryColor,
