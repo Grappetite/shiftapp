@@ -88,10 +88,9 @@ class _DropDownState extends State<DropDown> {
                 return StatefulBuilder(
                   builder: (context, setState) {
                     return SimpleDialog(
-                      insetPadding: const EdgeInsets.symmetric(
-                          horizontal: 40.0, vertical: 80.0),
+                      insetPadding: const EdgeInsets.symmetric(vertical: 80.0),
                       contentPadding:
-                          const EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 12.0),
+                          const EdgeInsets.fromLTRB(24.0, 12.0, 5.0, 12.0),
                       title: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
@@ -146,19 +145,26 @@ class _DropDownState extends State<DropDown> {
                               )
                             : SizedBox(
                                 width: MediaQuery.of(context).size.width - 128,
+                                height:
+                                    MediaQuery.of(context).size.height - 128,
                                 child: Scrollbar(
                                   thumbVisibility: true,
                                   trackVisibility: true,
                                   controller: ScrollController(
                                       initialScrollOffset: 0.0),
-                                  child: ListView.builder(
+                                  child: ListView(children: [
+                                    // child: ListView.builder(
                                     // physics:
                                     //     const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: listToShow.length,
-                                    itemBuilder:
-                                        (BuildContext ctxt, int index) {
-                                      return Column(
+                                    // shrinkWrap: true,
+                                    // itemCount: listToShow.length,
+                                    // itemBuilder:
+                                    //     (BuildContext ctxt, int index) {
+                                    //   return
+                                    for (int index = 0;
+                                        index < listToShow.length;
+                                        index++)
+                                      Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.stretch,
                                         children: [
@@ -183,9 +189,10 @@ class _DropDownState extends State<DropDown> {
                                             color: Colors.grey[50],
                                           ),
                                         ],
-                                      );
-                                    },
-                                  ),
+                                      )
+                                  ]
+                                      // },
+                                      ),
                                 ),
                               ),
                       ],

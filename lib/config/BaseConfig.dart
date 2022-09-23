@@ -45,7 +45,7 @@ class LiveConfig implements BaseConfig {
   @override
   String get imageUrl => "https://takealot.grappetite.com/api/v1/";
   @override
-  String get staging => "Version:Shift-v1-200922(Live)";
+  String get staging => "Version:Shift-v2-230922(Live)";
   @override
   String get apiUrl => "https://takealot.grappetite.com/api/v1/";
   @override

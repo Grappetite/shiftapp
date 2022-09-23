@@ -120,233 +120,206 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title:
-            // Column(
-            //   children:  [
-            Text(
-          widget.process.name!,
-          style: TextStyle(
-              color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
-        ),
-        leading: GestureDetector(
-            onTap: () async {
-              if (workers.where((e) => e.isSelected).toList().length > 0) {
-                var result = await showOkCancelAlertDialog(
-                  context: context,
-                  title: 'Warning',
-                  message: 'Are you sure you want to discard this shift?',
-                  okLabel: 'YES',
-                  cancelLabel: 'NO',
-                );
-                print(result);
-              }
-            },
-            child: Icon(Icons.arrow_back)),
-        // SizedBox(
-        //   height: 4,
-        // ),
-        // Text(
-        //   'Receiving',
-        //   style: TextStyle(
-        //       color: Colors.white,
-        //       fontSize: 18,
-        //       fontWeight: FontWeight.w600),
-        // ),
-        // SizedBox(
-        //   height: 2,
-        // ),
-        // ],
-        // ),
-      ),
-      body: Align(
-        alignment: Alignment.center,
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.9,
-          height: MediaQuery.of(context).size.height * 0.75,
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.grey, width: 3),
+    return WillPopScope(
+      onWillPop: () async {
+        if (workers.where((e) => e.isSelected).toList().length > 0) {
+          var result = await showOkCancelAlertDialog(
+            context: context,
+            title: 'Warning',
+            message: "Are you sure you don't want to add workers?",
+            okLabel: 'YES',
+            cancelLabel: 'NO',
+          );
+          if (result == OkCancelResult.ok) {
+            Navigator.pop(context);
+
+            // return Future.value(false);
+          }
+          return Future.value(false);
+        } else {
+          return Future.value(true);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title:
+              // Column(
+              //   children:  [
+              Text(
+            widget.process.name!,
+            style: TextStyle(
+                color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      const Text(
-                        'SELECT EXISTING WORKERS',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: kPrimaryColor,
+          leading: GestureDetector(
+              onTap: () async {
+                if (workers.where((e) => e.isSelected).toList().length > 0) {
+                  var result = await showOkCancelAlertDialog(
+                    context: context,
+                    title: 'Warning',
+                    message: "Are you sure you don't want to add workers?",
+                    okLabel: 'YES',
+                    cancelLabel: 'NO',
+                  );
+                  if (result == OkCancelResult.ok) {
+                    Navigator.pop(context);
+                  }
+                } else {
+                  Navigator.pop(context);
+                }
+              },
+              child: Icon(Icons.arrow_back)),
+          // SizedBox(
+          //   height: 4,
+          // ),
+          // Text(
+          //   'Receiving',
+          //   style: TextStyle(
+          //       color: Colors.white,
+          //       fontSize: 18,
+          //       fontWeight: FontWeight.w600),
+          // ),
+          // SizedBox(
+          //   height: 2,
+          // ),
+          // ],
+          // ),
+        ),
+        body: Align(
+          alignment: Alignment.center,
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.9,
+            height: MediaQuery.of(context).size.height * 0.75,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.grey, width: 3),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        const SizedBox(
+                          height: 8,
                         ),
-                      ),
-                      Expanded(
-                        child: Container(),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.all(4.0),
-                          child: Icon(
-                            Icons.close,
+                        const Text(
+                          'SELECT EXISTING WORKERS',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
                             color: kPrimaryColor,
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey,
-                      ),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(8),
-                      ),
+                        Expanded(
+                          child: Container(),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.all(4.0),
+                            child: Icon(
+                              Icons.close,
+                              color: kPrimaryColor,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 8),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.search,
-                            color: kPrimaryColor,
-                          ),
-                          const SizedBox(
-                            width: 4,
-                          ),
-                          Expanded(
-                            child: TextFormField(
-                                controller: searchController,
-                                maxLines: 1,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                ),
-                                decoration: InputDecoration.collapsed(
-                                  hintText: 'Search',
-                                  hintStyle: TextStyle(
-                                    color: Colors.grey[500],
-                                    fontSize: 16,
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.grey,
+                        ),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(8),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 8),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.search,
+                              color: kPrimaryColor,
+                            ),
+                            const SizedBox(
+                              width: 4,
+                            ),
+                            Expanded(
+                              child: TextFormField(
+                                  controller: searchController,
+                                  maxLines: 1,
+                                  style: const TextStyle(
+                                    fontSize: 18,
                                   ),
-                                ),
-                                onChanged: (v) {
-                                  if (v.isEmpty) {
+                                  decoration: InputDecoration.collapsed(
+                                    hintText: 'Search',
+                                    hintStyle: TextStyle(
+                                      color: Colors.grey[500],
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  onChanged: (v) {
+                                    if (v.isEmpty) {
+                                      setState(() {
+                                        isSearching = true;
+                                      });
+
+                                      return;
+                                    }
+
+                                    filteredWorkers = workers
+                                        .where((e) =>
+                                            (e.firstName! + ' ' + e.lastName!)
+                                                .toLowerCase()
+                                                .contains(v.toLowerCase()))
+                                        .toList();
+
+                                    //filteredWorkers
                                     setState(() {
                                       isSearching = true;
                                     });
-
-                                    return;
-                                  }
-
-                                  filteredWorkers = workers
-                                      .where((e) =>
-                                          (e.firstName! + ' ' + e.lastName!)
-                                              .toLowerCase()
-                                              .contains(v.toLowerCase()))
-                                      .toList();
-
-                                  //filteredWorkers
-                                  setState(() {
-                                    isSearching = true;
-                                  });
-                                }),
-                          ),
-                        ],
+                                  }),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  PElevatedButton(
-                    text:
-                        'ADD SELECTED WORKERS (${(workers.where((e) => e.isSelected).toList().length)})',
-                    onPressed: () {
-                      for (var currentItem in workers) {
-                        if (currentItem.isSelected) {
-                          if (currentWorkTypeId != currentItem.workerTypeId) {
-                            widget.otherTypeTempWorkerAdded(currentItem);
-                          } else {
-                            widget.workers.add(currentItem);
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    PElevatedButton(
+                      text:
+                          'ADD SELECTED WORKERS (${(workers.where((e) => e.isSelected).toList().length)})',
+                      onPressed: () {
+                        for (var currentItem in workers) {
+                          if (currentItem.isSelected) {
+                            if (currentWorkTypeId != currentItem.workerTypeId) {
+                              widget.otherTypeTempWorkerAdded(currentItem);
+                            } else {
+                              widget.workers.add(currentItem);
+                            }
                           }
                         }
-                      }
 
-                      Navigator.pop(context, true);
-                    },
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  if (isSearching) ...[
-                    for (var currentItem in filteredWorkers) ...[
-                      UserItem(
-                        picUrl: currentItem.picture,
-                        personName: currentItem.firstName! +
-                            ' ' +
-                            currentItem.lastName!,
-                        keyNo: currentItem.key ?? '',
-                        initialSelected: currentItem.isSelected,
-                        disableRatio: widget.isEditing
-                            ? (currentItem.isSelected && !currentItem.newAdded)
-                            : false,
-                        changedStatus: (bool newStatus) {
-                          var find = workers
-                              .where((e) => e.userId == currentItem.userId)
-                              .toList();
-
-                          setState(() {
-                            currentItem.isSelected = newStatus;
-
-                            if (find.isNotEmpty) {
-                              setState(() {
-                                find.first.isSelected = newStatus;
-                              });
-                            } else {
-                              setState(() {
-                                workers.add(currentItem);
-                              });
-                            }
-                          });
-
-                          if (widget.isEditing) {
-                            if (newStatus) {
-                              if (currentItem.newRemove) {
-                              } else {
-                                currentItem.newAdded = true;
-                              }
-                            } else {
-                              if (currentItem.newAdded) {
-                              } else {
-                                currentItem.newRemove = true;
-                              }
-                            }
-                          }
-                        },
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                    ],
-                  ] else ...[
-                    for (var currentItem in workers) ...[
-                      if (currentItem.isSelected) ...[
+                        Navigator.pop(context, true);
+                      },
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    if (isSearching) ...[
+                      for (var currentItem in filteredWorkers) ...[
                         UserItem(
                           picUrl: currentItem.picture,
                           personName: currentItem.firstName! +
@@ -362,17 +335,20 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                             var find = workers
                                 .where((e) => e.userId == currentItem.userId)
                                 .toList();
-                            currentItem.isSelected = newStatus;
 
-                            if (find.isNotEmpty) {
-                              setState(() {
-                                find.first.isSelected = newStatus;
-                              });
-                            } else {
-                              setState(() {
-                                workers.add(currentItem);
-                              });
-                            }
+                            setState(() {
+                              currentItem.isSelected = newStatus;
+
+                              if (find.isNotEmpty) {
+                                setState(() {
+                                  find.first.isSelected = newStatus;
+                                });
+                              } else {
+                                setState(() {
+                                  workers.add(currentItem);
+                                });
+                              }
+                            });
 
                             if (widget.isEditing) {
                               if (newStatus) {
@@ -384,110 +360,165 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                 if (currentItem.newAdded) {
                                 } else {
                                   currentItem.newRemove = true;
-
-                                  print('');
                                 }
                               }
-                            } else {}
+                            }
                           },
                         ),
                         const SizedBox(
                           height: 12,
                         ),
                       ],
-                    ],
-                  ],
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  const Text(
-                    'Cannot find workers?',
-                    style: TextStyle(color: kPrimaryColor),
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      onSurface: kPrimaryColor,
-                      side: const BorderSide(
-                        width: 1,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.0),
-                      ),
-                    ),
-                    onPressed: () async {
-                      AddTempResponse? selected = await showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (BuildContext context) {
-                            return AddTempWorker(
-                              shiftId: this.widget.shiftId.toString(),
-                              processId: this.widget.processId,
-                              exId: this.widget.exShiftId,
-                            );
-                          });
-                      if (selected != null) {
-                        selected.data!.isSelected = true;
-                        selected.data!.isTemp = true;
-                        selected.data!.newAdded = true;
-                        if (!this.isSearching) {
-                          setState(() {
-                            this.workers.add(selected.data!);
-                          });
-                        } else {
-                          setState(() {
-                            this.workers.add(selected.data!);
-                          });
-                        }
+                    ] else ...[
+                      for (var currentItem in workers) ...[
+                        if (currentItem.isSelected) ...[
+                          UserItem(
+                            picUrl: currentItem.picture,
+                            personName: currentItem.firstName! +
+                                ' ' +
+                                currentItem.lastName!,
+                            keyNo: currentItem.key ?? '',
+                            initialSelected: currentItem.isSelected,
+                            disableRatio: widget.isEditing
+                                ? (currentItem.isSelected &&
+                                    !currentItem.newAdded)
+                                : false,
+                            changedStatus: (bool newStatus) {
+                              var find = workers
+                                  .where((e) => e.userId == currentItem.userId)
+                                  .toList();
+                              currentItem.isSelected = newStatus;
 
-                        if (this.isSearching) {
-                          this.searchController.text = '';
-                          setState(() {
-                            this.isSearching = true;
-                          });
-                        }
-                        String dateString =
-                            DateFormat("yyyy-MM-dd hh:mm:ss").format(
-                          DateTime.now(),
-                        );
+                              if (find.isNotEmpty) {
+                                setState(() {
+                                  find.first.isSelected = newStatus;
+                                });
+                              } else {
+                                setState(() {
+                                  workers.add(currentItem);
+                                });
+                              }
 
-                        var res = await WorkersService.addWorkers(
-                            widget.exShiftId,
-                            [selected.data!.id.toString()],
-                            [dateString],
-                            [this.widget.exShiftId.toString()],
-                            [selected.data!.efficiencyCalculation.toString()]);
+                              if (widget.isEditing) {
+                                if (newStatus) {
+                                  if (currentItem.newRemove) {
+                                  } else {
+                                    currentItem.newAdded = true;
+                                  }
+                                } else {
+                                  if (currentItem.newAdded) {
+                                  } else {
+                                    currentItem.newRemove = true;
 
-                        //  this.widget.tempWorkerAdded(selected);
-
-                        print('');
-                      }
-                    },
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Container(),
-                        ),
-                        const Icon(Icons.add),
-                        Expanded(
-                          child: Container(),
-                        ),
-                        const Text(
-                          'ADD TEMPORARY WORKER',
-                          style: TextStyle(fontSize: 16, color: kPrimaryColor),
-                        ),
-                        Expanded(
-                          child: Container(),
-                        ),
+                                    print('');
+                                  }
+                                }
+                              } else {}
+                            },
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                        ],
                       ],
+                    ],
+                    const SizedBox(
+                      height: 8,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                ],
+                    const Text(
+                      'Cannot find workers?',
+                      style: TextStyle(color: kPrimaryColor),
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        onSurface: kPrimaryColor,
+                        side: const BorderSide(
+                          width: 1,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                      ),
+                      onPressed: () async {
+                        AddTempResponse? selected = await showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return AddTempWorker(
+                                shiftId: this.widget.shiftId.toString(),
+                                processId: this.widget.processId,
+                                exId: this.widget.exShiftId,
+                              );
+                            });
+                        if (selected != null) {
+                          selected.data!.isSelected = true;
+                          selected.data!.isTemp = true;
+                          selected.data!.newAdded = true;
+                          if (!this.isSearching) {
+                            setState(() {
+                              this.workers.add(selected.data!);
+                            });
+                          } else {
+                            setState(() {
+                              this.workers.add(selected.data!);
+                            });
+                          }
+
+                          if (this.isSearching) {
+                            this.searchController.text = '';
+                            setState(() {
+                              this.isSearching = true;
+                            });
+                          }
+                          String dateString =
+                              DateFormat("yyyy-MM-dd hh:mm:ss").format(
+                            DateTime.now(),
+                          );
+
+                          var res = await WorkersService.addWorkers(
+                              widget.exShiftId, [
+                            selected.data!.id.toString()
+                          ], [
+                            dateString
+                          ], [
+                            this.widget.exShiftId.toString()
+                          ], [
+                            selected.data!.efficiencyCalculation.toString()
+                          ]);
+
+                          //  this.widget.tempWorkerAdded(selected);
+
+                          print('');
+                        }
+                      },
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(),
+                          ),
+                          const Icon(Icons.add),
+                          Expanded(
+                            child: Container(),
+                          ),
+                          const Text(
+                            'ADD TEMPORARY WORKER',
+                            style:
+                                TextStyle(fontSize: 16, color: kPrimaryColor),
+                          ),
+                          Expanded(
+                            child: Container(),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

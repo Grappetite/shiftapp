@@ -35,6 +35,7 @@ class _ShiftStartState extends State<ShiftStart> {
 
   String timeElasped = '00:00';
   var startTimeOriginal;
+  var endTimeOriginal;
   late Timer _timer;
 
   void startTimer() {
@@ -167,8 +168,16 @@ class _ShiftStartState extends State<ShiftStart> {
                               startTimeOriginal =
                                   widget.selectedShift.startTime!;
                             }
-                            var maxtime = DateTime.parse(startTimeOriginal)
-                                .add(Duration(minutes: 4 * 60));
+                            if (endTimeOriginal == null) {
+                              endTimeOriginal = widget.selectedShift.endTime!;
+                            }
+                            var maxtime = DateTime.parse(startTimeOriginal).add(
+                                Duration(
+                                    minutes: DateTime.parse(endTimeOriginal)
+                                            .difference(DateTime.parse(
+                                                startTimeOriginal))
+                                            .inHours *
+                                        60));
                             var mintime = DateTime.parse(startTimeOriginal)
                                 .subtract(Duration(minutes: 120));
                             DateTime? newTime;
