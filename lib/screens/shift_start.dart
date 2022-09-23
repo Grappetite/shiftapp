@@ -170,7 +170,7 @@ class _ShiftStartState extends State<ShiftStart> {
                             var maxtime = DateTime.parse(startTimeOriginal)
                                 .add(Duration(minutes: 4 * 60));
                             var mintime = DateTime.parse(startTimeOriginal)
-                                .subtract(Duration(minutes: 30));
+                                .subtract(Duration(minutes: 120));
                             DateTime? newTime;
                             showCupertinoModalPopup(
                                 context: context,
@@ -188,7 +188,7 @@ class _ShiftStartState extends State<ShiftStart> {
                                                   const EdgeInsets.all(8.0),
                                               child: Text(
                                                   // You can edit this shift up till ${maxtime.toString().timeToShow}.
-                                                  "Shift time can only be re-set 30min in advance of the new time.",
+                                                  "Shift time can only be re-set 2 hours in advance of the new time.",
                                                   textAlign: TextAlign.center,
                                                   style: const TextStyle(
                                                     color: kPrimaryColor,
@@ -205,8 +205,7 @@ class _ShiftStartState extends State<ShiftStart> {
                                             },
                                             initialDateTime: DateTime.now(),
                                             minimumDate: mintime,
-                                            maximumDate: DateTime.now()
-                                                .add(Duration(minutes: 30)),
+                                            maximumDate: maxtime,
                                           ),
                                         ),
                                       ],

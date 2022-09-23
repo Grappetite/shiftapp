@@ -288,7 +288,7 @@ class _HomeMainViewState extends State<HomeMainView> {
             prefs.remove('selectedShiftName');
             prefs.remove('selectedShiftEndTime');
             prefs.remove('selectedShiftStartTime');
-            prefs.remove('username');
+            // prefs.remove('username');
             prefs.remove('password');
             // var dyanc = await Navigator.pushReplacement(
             //   context,

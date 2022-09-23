@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,11 +23,11 @@ class _LoginScreenState extends State<LoginScreen> {
   bool showLogin = true;
 
   TextEditingController controller = Environment().config.preset
-      ? TextEditingController(text: "morne.baatjies@takealot.com")
+      ? TextEditingController(text: "evelyn.demink@takealot.com")
       : TextEditingController();
 
   TextEditingController passwordController = Environment().config.preset
-      ? TextEditingController(text: "shift123")
+      ? TextEditingController(text: "Evelyn123")
       : TextEditingController();
 
   String selectedString = "";
@@ -65,20 +63,25 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void loadDefaul() async {
     final prefs = await SharedPreferences.getInstance();
-
+    // await prefs.clear();
     int? shiftId = prefs.getInt('shiftId');
+    String? loginUserName = prefs.getString('username');
+    String? passString = prefs.getString('password');
+    if (prefs.getString('username') != null) {
+      controller.text = prefs.getString('username')!;
+    }
 
-    if (shiftId != null) {
+    if (shiftId != null && loginUserName != null && passString != null) {
       await EasyLoading.show(
         status: 'loading...',
         maskType: EasyLoadingMaskType.black,
       );
 
-      String loginUserName = prefs.getString('username')!;
-      String passString = prefs.getString('password')!;
+      // String? loginUserName = prefs.getString('username');
+      // String? passString = prefs.getString('password');
 
       LoginResponse? response =
-          await LoginService.login(loginUserName, passString);
+          await LoginService.login(loginUserName!, passString!);
 
       if (response == null) {
         await EasyLoading.dismiss();
@@ -86,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
         if (response.data!.shiftDetails == null) {
           await EasyLoading.dismiss();
 
-          prefs.remove('username');
+          // prefs.remove('username');
 
           prefs.remove('password');
 
@@ -106,7 +109,8 @@ class _LoginScreenState extends State<LoginScreen> {
             response.data!.shiftDetails!.executeShiftId;
 
         shiftObject.displayScreen = 2;
-
+        // prefs.setString(
+        //     "processesMahboob", jsonEncode(response.data!.process!));
         await EasyLoading.dismiss();
 
         Navigator.pushReplacement(
@@ -295,8 +299,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       }
 
                       process = response.data!.process!;
-                      prefs.setString("processesMahboob",
-                          jsonEncode(response.data!.process!));
+                      // prefs.setString("processesMahboob",
+                      //     jsonEncode(response.data!.process!));
                       setState(() {
                         showLogin = false;
                       });

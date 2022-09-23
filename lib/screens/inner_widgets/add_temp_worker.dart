@@ -129,7 +129,7 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                           Expanded(
                             child: InputView(
                               showError: false,
-                              hintText: 'Personal Key',
+                              hintText: 'Employee nr',
                               onChange: (newValue) {},
                               controller: personalNoController,
                               text: '',

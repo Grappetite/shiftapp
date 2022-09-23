@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
@@ -130,6 +131,20 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
           style: TextStyle(
               color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
         ),
+        leading: GestureDetector(
+            onTap: () async {
+              if (workers.where((e) => e.isSelected).toList().length > 0) {
+                var result = await showOkCancelAlertDialog(
+                  context: context,
+                  title: 'Warning',
+                  message: 'Are you sure you want to discard this shift?',
+                  okLabel: 'YES',
+                  cancelLabel: 'NO',
+                );
+                print(result);
+              }
+            },
+            child: Icon(Icons.arrow_back)),
         // SizedBox(
         //   height: 4,
         // ),
@@ -261,7 +276,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                   ),
                   PElevatedButton(
                     text:
-                        'ADD SELECTED WORKERS (${workers.where((e) => e.isSelected).toList().length})',
+                        'ADD SELECTED WORKERS (${(workers.where((e) => e.isSelected).toList().length)})',
                     onPressed: () {
                       for (var currentItem in workers) {
                         if (currentItem.isSelected) {
@@ -417,10 +432,15 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                         selected.data!.isSelected = true;
                         selected.data!.isTemp = true;
                         selected.data!.newAdded = true;
-
-                        setState(() {
-                          this.workers.add(selected.data!);
-                        });
+                        if (!this.isSearching) {
+                          setState(() {
+                            this.workers.add(selected.data!);
+                          });
+                        } else {
+                          setState(() {
+                            this.workers.add(selected.data!);
+                          });
+                        }
 
                         if (this.isSearching) {
                           this.searchController.text = '';
@@ -434,10 +454,10 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                         );
 
                         var res = await WorkersService.addWorkers(
-                            widget.shiftId,
+                            widget.exShiftId,
                             [selected.data!.id.toString()],
                             [dateString],
-                            [],
+                            [this.widget.exShiftId.toString()],
                             [selected.data!.efficiencyCalculation.toString()]);
 
                         //  this.widget.tempWorkerAdded(selected);

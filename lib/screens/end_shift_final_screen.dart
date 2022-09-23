@@ -394,7 +394,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                   prefs.remove('selectedShiftName');
                                   prefs.remove('selectedShiftEndTime');
                                   prefs.remove('selectedShiftStartTime');
-                                  prefs.remove('username');
+                                  // prefs.remove('username');
                                   prefs.remove('password');
                                   Get.offAll(LoginScreen());
                                   // if (widget.autoOpen) {

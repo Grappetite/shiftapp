@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shiftapp/config/BaseConfig.dart';
 
 import '../config/constants.dart';
 import 'login.dart';
@@ -30,14 +31,29 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: mainBackGroundColor,
-        child: Center(
-          child: Image(
-            image: const AssetImage('assets/images/logo.png'),
-            width: MediaQuery.of(context).size.width / 1.35,
+          decoration: BoxDecoration(
+              color: mainBackGroundColor,
+              image: DecorationImage(
+                  image: const AssetImage('assets/images/logo.png'),
+                  scale: 3.5)),
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                "${Environment().config.staging}",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w300),
+              ),
+            ),
+          )
+          // Image(
+          //   image: const AssetImage('assets/images/logo.png'),
+          //   width: MediaQuery.of(context).size.width / 1.35,
+          // ),
           ),
-        ),
-      ),
     );
   }
 }

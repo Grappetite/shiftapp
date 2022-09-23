@@ -2,6 +2,7 @@ abstract class BaseConfig {
   String get apiUrl;
   String get imageUrl;
   String get baseUrl;
+  String get staging;
   bool get preset;
 }
 
@@ -15,6 +16,8 @@ class DevConfig implements BaseConfig {
   @override
   String get apiUrl => "https://dev-shift.grappetite.com/api/v1/";
   @override
+  String get staging => "Version:Local";
+  @override
   bool get preset => true;
 }
 
@@ -27,6 +30,24 @@ class ProductionConfig implements BaseConfig {
 
   @override
   String get apiUrl => "https://dev-shift.grappetite.com/api/v1/";
+  @override
+  String get staging => "Version:Production";
+  @override
+  bool get preset => false;
+
+// String get mapKey => "AIzaSyDLtchj3AddQGK3mlMgqA6HKbLQlEkEa38";
+}
+
+class LiveConfig implements BaseConfig {
+  @override
+  String get baseUrl => "https://takealot.grappetite.com/api/v1/";
+
+  @override
+  String get imageUrl => "https://takealot.grappetite.com/api/v1/";
+  @override
+  String get staging => "Version:Shift-v1-200922(Live)";
+  @override
+  String get apiUrl => "https://takealot.grappetite.com/api/v1/";
   @override
   bool get preset => false;
 
@@ -45,6 +66,7 @@ class Environment {
 
   static const String dev = 'dev';
   static const String production = 'production';
+  static const String live = 'live';
 
   late BaseConfig config;
 
@@ -56,6 +78,8 @@ class Environment {
     switch (environment) {
       case Environment.production:
         return ProductionConfig();
+      case Environment.live:
+        return LiveConfig();
       default:
         return DevConfig();
     }

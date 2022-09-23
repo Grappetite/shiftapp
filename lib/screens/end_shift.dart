@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:app_popup_menu/app_popup_menu.dart';
@@ -8,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/screens/shift_start.dart';
+import 'package:shiftapp/services/login_service.dart';
 
 import '../model/login_model.dart';
 import '../model/shifts_model.dart';
@@ -118,7 +118,7 @@ class _EndShiftViewState extends State<EndShiftView> {
                   DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now());
 
               ShiftService.cancelShift(this.widget.execShiftId, endTime);
-
+              var process = await LoginService.getProcess();
               final prefs = await SharedPreferences.getInstance();
 
               prefs.remove('shiftId');
@@ -126,7 +126,7 @@ class _EndShiftViewState extends State<EndShiftView> {
               prefs.remove('selectedShiftName');
               prefs.remove('selectedShiftEndTime');
               prefs.remove('selectedShiftStartTime');
-              prefs.remove('username');
+              // prefs.remove('username');
               prefs.remove('password');
 
               // if (widget.autoOpen) {
@@ -135,14 +135,14 @@ class _EndShiftViewState extends State<EndShiftView> {
               //   Navigator.pop(context, true);
               //   Navigator.pop(context, true);
               // }
-              var process = <Process>[];
-              jsonDecode(prefs.getString("processesMahboob")!).forEach((v) {
-                process!.add(Process.fromJson(v));
-              });
+              // var process = <Process>[];
+              // jsonDecode(prefs.getString("processesMahboob")!).forEach((v) {
+              //   process!.add(Process.fromJson(v));
+              // });
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
                       builder: (context) => //   Navigator.pop(context, true);
-                          DropDownPage(process: process)
+                          DropDownPage(process: process!)
                       // HomeView(
                       //     processSelected: widget.process,
                       //     selectedShift: widget.selectedShift)

@@ -131,4 +131,36 @@ class LoginService {
       return Errors.returnResponse(e.response!);
     }
   }
+
+  static Future<List<Process>?> getProcess() async {
+    try {
+      var dio = Dio();
+      final prefs = await SharedPreferences.getInstance();
+
+      Response response = await dio.get(baseUrl + 'processList',
+          options: Options(
+            headers: {
+              authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+            },
+          ));
+
+      //handle 404
+
+      print(response.data);
+      var process = <Process>[];
+
+      response.data["data"]["process"].forEach((v) {
+        process!.add(Process.fromJson(v));
+      });
+      var responseObject = process;
+
+      if (responseObject == null) {
+        return null;
+      }
+
+      return responseObject;
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
+    }
+  }
 }

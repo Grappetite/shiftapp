@@ -1,7 +1,10 @@
 import 'dart:ui';
 
+import 'package:shiftapp/config/BaseConfig.dart';
+
 // const baseUrl = 'https://dev-shift.grappetite.com/api/v1/';
-const baseUrl = 'https://takealot.grappetite.com/api/v1/';
+var baseUrl = Environment().config.apiUrl;
+// const baseUrl = 'https://takealot.grappetite.com/api/v1/';
 //const baseUrl = 'https://shift.grappetite.com/api/v1/';
 //https://dev-shift.grappetite.com
 const authorization = "Authorization";

@@ -81,7 +81,7 @@ class WorkersService {
   }
 
   static Future<bool> addWorkers(
-      int shiftId,
+      int exshiftId,
       List<String> workerUserId,
       List<String> startTime,
       List<String> executeShiftId,
@@ -93,7 +93,7 @@ class WorkersService {
       Response response = await dio.post(
         baseUrl + 'shifts/addWorkers',
         data: {
-          'execute_shift_id': shiftId.toString(),
+          'execute_shift_id': exshiftId.toString(),
           'worker_user_id': workerUserId,
           'starttime': startTime,
           'efficiency_calculation': efficiencyCalculation,
