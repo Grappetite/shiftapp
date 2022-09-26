@@ -126,7 +126,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
           var result = await showOkCancelAlertDialog(
             context: context,
             title: 'Warning',
-            message: "Are you sure you don't want to add workers?",
+            message: "Selected workers will not be added! Are you sure?",
             okLabel: 'YES',
             cancelLabel: 'NO',
           );
@@ -157,7 +157,8 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                   var result = await showOkCancelAlertDialog(
                     context: context,
                     title: 'Warning',
-                    message: "Are you sure you don't want to add workers?",
+                    message:
+                        "Selected workers will not be added! Are you sure?",
                     okLabel: 'YES',
                     cancelLabel: 'NO',
                   );

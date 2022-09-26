@@ -161,6 +161,22 @@ class ShiftItem {
     return f.format(DateTime.now()) + hourString + ':' + minuteString + ':00';
   }
 
+  String makeTimeStringFromHourMinuteMahboob(
+      DateTime date, int hour, int minute) {
+    final f = DateFormat('yyyy-MM-dd ');
+
+    String hourString = hour.toString();
+    String minuteString = minute.toString();
+
+    if (hourString.length == 1) {
+      hourString = '0' + hourString;
+    }
+    if (minuteString.length == 1) {
+      minuteString = '0' + minuteString;
+    }
+    return f.format(date) + hourString + ':' + minuteString + ':00';
+  }
+
   int get showEndTimeHour {
     DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(endTime!);
     String date = DateFormat("hh a")

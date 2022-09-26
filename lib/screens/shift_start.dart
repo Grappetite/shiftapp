@@ -233,7 +233,7 @@ class _ShiftStartState extends State<ShiftStart> {
                                         .parse(startTimeOriginal);
                                 DateTime tempEnd =
                                     DateFormat("yyyy-MM-dd hh:mm:ss")
-                                        .parse(widget.selectedShift.endTime!);
+                                        .parse(endTimeOriginal);
                                 var differenceT =
                                     tempEnd.difference(tempStart).inHours;
 
@@ -320,7 +320,21 @@ class _ShiftStartState extends State<ShiftStart> {
                                         customSelectedStartTime;
                                     widget.selectedShift.endTime = widget
                                         .selectedShift
-                                        .makeTimeStringFromHourMinute(
+                                        .makeTimeStringFromHourMinuteMahboob(
+                                            DateTime(
+                                              newTime!
+                                                  .add(Duration(
+                                                      hours: differenceT))
+                                                  .year,
+                                              newTime!
+                                                  .add(Duration(
+                                                      hours: differenceT))
+                                                  .month,
+                                              newTime!
+                                                  .add(Duration(
+                                                      hours: differenceT))
+                                                  .day,
+                                            ),
                                             newTime!
                                                 .add(Duration(
                                                     hours: differenceT))

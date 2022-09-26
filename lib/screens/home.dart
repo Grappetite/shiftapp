@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/model/login_model.dart';
@@ -226,12 +227,10 @@ class _HomeMainViewState extends State<HomeMainView> {
 
     var executeShiftId = this.widget.selectedShift.executedShiftId;
     var response;
-    if (this
-        .widget
-        .selectedShift
-        .endDateObject
-        .add(Duration(hours: 4))
-        .isBefore(DateTime.now())) {
+    if (DateFormat("yyyy-MM-dd hh:mm:ss")
+        .parse(DateTime.now().toString())
+        .isAfter(
+            this.widget.selectedShift.endDateObject.add(Duration(hours: 4)))) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => EndShiftFinalScreen(
