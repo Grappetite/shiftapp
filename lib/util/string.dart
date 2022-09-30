@@ -18,7 +18,10 @@ extension StringExtension on String {
     DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(this);
     String date = DateFormat("hh:mm a").format(tempDate);
     if (tempDate.hour == 00 && date.contains("AM")) {
-      date = date.replaceAll("AM", "PM");
+      if (DateTime.now().day == tempDate.day &&
+          DateTime.now().month == tempDate.month) {
+        date = date.replaceAll("AM", "PM");
+      }
     }
     return date;
   }

@@ -146,7 +146,7 @@ class _DropDownState extends State<DropDown> {
                             : SizedBox(
                                 width: MediaQuery.of(context).size.width - 128,
                                 height:
-                                    MediaQuery.of(context).size.height - 128,
+                                    MediaQuery.of(context).size.height / 4.5,
                                 child: Scrollbar(
                                   thumbVisibility: true,
                                   trackVisibility: true,

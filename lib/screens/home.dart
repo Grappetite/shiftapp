@@ -314,6 +314,7 @@ class _HomeMainViewState extends State<HomeMainView> {
       ),
       color: kPrimaryColor,
     );
+    setState(() {});
     if (widget.sessionStarted) {
       moveToEndSession();
     }

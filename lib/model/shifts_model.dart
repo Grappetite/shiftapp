@@ -112,6 +112,9 @@ class ShiftItem {
   String get showStartTime {
     DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(startTime!);
     String date = DateFormat("hh:mm a").format(tempDate);
+    if (tempDate.hour == 00 && date.contains("AM")) {
+      date = date.replaceAll("AM", "PM");
+    }
     return date;
   }
 
