@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiftapp/model/login_model.dart';
 
 import '../config/constants.dart';
 import '../model/worker_type_model.dart';
@@ -40,6 +41,36 @@ class WorkersService {
 
       if (responseObject.data!.shiftWorker == null) {
         responseObject.data!.shiftWorker = [];
+      }
+
+      return responseObject;
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
+    }
+  }
+
+  static Future<List<Process>?> startedProcessList() async {
+    try {
+      var dio = Dio();
+      final prefs = await SharedPreferences.getInstance();
+
+      String url = baseUrl + "startedProcessList";
+      print('');
+
+      Response response = await dio.get(url,
+          options: Options(
+            headers: {
+              authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+            },
+          ));
+
+      print(response.data);
+
+      var responseObject = List<Process>.from(
+          response.data["data"].map((x) => Process.fromJson(x)));
+
+      if (responseObject.isEmpty) {
+        return null;
       }
 
       return responseObject;
@@ -97,6 +128,42 @@ class WorkersService {
           'worker_user_id': workerUserId,
           'starttime': startTime,
           'efficiency_calculation': efficiencyCalculation,
+        },
+        options: Options(
+          headers: {
+            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+          },
+        ),
+      );
+
+      print(response.data);
+
+      if (response.data['code'] == 200) {
+        return true;
+      }
+
+      return false;
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
+    }
+  }
+
+  static Future<bool> moveWorkers(
+      {required int exshiftId,
+      required String moveTime,
+      required String startedExecuteShiftId,
+      required int workerUserId}) async {
+    try {
+      var dio = Dio();
+      final prefs = await SharedPreferences.getInstance();
+
+      Response response = await dio.post(
+        baseUrl + 'moveWorker',
+        data: {
+          'execute_shift_id': exshiftId.toString(),
+          'worker_user_id': workerUserId,
+          'start_time': moveTime,
+          'started_execute_shift_id': startedExecuteShiftId,
         },
         options: Options(
           headers: {

@@ -93,12 +93,13 @@ class User {
 
 class Process {
   int? id;
+  int? startedExecutionShiftId;
   String? name;
   String? unit;
   String? baseline;
   String? headCount;
 
-  Process({this.id, this.name});
+  Process({this.id, this.name, this.startedExecutionShiftId});
 
   Process.fromJson(Map<String, dynamic> json) {
     if (json.keys.contains('process_id')) {
@@ -111,6 +112,7 @@ class Process {
     unit = json['unit'];
     baseline = json['baseline'];
     headCount = json['head_count'];
+    startedExecutionShiftId = json['started_execute_shift_id'];
   }
 
   Map<String, dynamic> toJson() {

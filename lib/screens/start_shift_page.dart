@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/screens/shift_start.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 import '../model/login_model.dart';
 import '../model/shifts_model.dart';
@@ -249,7 +251,11 @@ class _StartShiftViewState extends State<StartShiftView> {
 
                         prefs.setInt(
                             'execute_shift_id', result.data!.executeShiftId!);
-
+                        show(
+                            widget.selectedShift.endDateObject,
+                            result.data!.executeShiftId!,
+                            "End Shift",
+                            "Shift is about To End");
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -287,5 +293,47 @@ class _StartShiftViewState extends State<StartShiftView> {
       return '${widget.userId.length}/${widget.totalUsersCount} Workers';
     }
     return '${widget.userId.length}/${widget.process.headCount} Workers';
+  }
+
+  tz.TZDateTime _nextInstanceOfTenAM(String test) {
+    tz.TZDateTime now = tz.TZDateTime.parse(tz.local, test);
+    tz.TZDateTime scheduledDate =
+        tz.TZDateTime(tz.local, now.year, now.month, now.day, 10);
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.subtract(const Duration(minutes: 10));
+    }
+    return scheduledDate;
+  }
+
+  show(
+    DateTime chosen,
+    id,
+    title,
+    body,
+  ) async {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+    await flutterLocalNotificationsPlugin.cancel(id);
+
+    flutterLocalNotificationsPlugin.zonedSchedule(
+        id,
+        title,
+        body,
+        _nextInstanceOfTenAM(chosen.toString()),
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            'your other channel id',
+            'your other channel name',
+            'your other channel description',
+            importance: Importance.max,
+            priority: Priority.high,
+          ),
+          iOS: IOSNotificationDetails(),
+        ),
+        androidAllowWhileIdle: true,
+        payload: "End Shift",
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.time);
   }
 }

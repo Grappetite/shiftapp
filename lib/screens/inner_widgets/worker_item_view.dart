@@ -29,7 +29,7 @@ class WorkItemView extends StatefulWidget {
 
   final int? shiftId;
   final Process process;
-
+  List<Process>? processList;
   final int totalItems;
   List<String> listNames;
   List<List<ShiftWorker>> listLists;
@@ -47,7 +47,8 @@ class WorkItemView extends StatefulWidget {
       required this.process,
       required this.reloadData,
       required this.execShiftId,
-      this.workerType = const []})
+      this.workerType = const [],
+      this.processList})
       : super(key: key);
 
   @override
@@ -175,110 +176,132 @@ class _WorkItemViewState extends State<WorkItemView> {
                   for (var currentItem in widget.listLists[i]) ...[
                     widget.isEditing
                         ? currentItem.isSelected
-                            ? UserItem(
-                                keyNo: currentItem.key != null
-                                    ? currentItem.key!
-                                    : '',
-                                personName: currentItem.firstName! +
-                                    ' ' +
-                                    currentItem.lastName!,
-                                initialSelected: currentItem.isSelected,
-                                picUrl: currentItem.picture,
-                                changedStatus: (bool newStatus) async {
-                                  String dateString =
-                                      widget.selectedShift.startTime!;
-
-                                  ///previously
-                                  // DateFormat("yyyy-MM-dd hh:mm:ss")
-                                  //     .format(DateTime.now());
-                                  ///end
-                                  if (widget.isEditing && newStatus) {
-                                    setState(() {
-                                      currentItem.isSelected = newStatus;
-                                    });
-
-                                    await EasyLoading.show(
-                                      status: 'Adding...',
-                                      maskType: EasyLoadingMaskType.black,
-                                    );
-
-                                    var response =
-                                        await WorkersService.addWorkers(
-                                            widget.execShiftId, [
-                                      currentItem.id!.toString()
-                                    ], [
-                                      dateString
-                                    ], [], [
-                                      currentItem.efficiencyCalculation
-                                          .toString()
-                                    ]);
-
-                                    await EasyLoading.dismiss();
-
-                                    if (response) {
-                                    } else {
-                                      EasyLoading.showError('Error');
-                                    }
-                                  } else if (widget.isEditing && !newStatus) {
-                                    setState(() {
-                                      currentItem.isSelected =
-                                          currentItem.isSelected;
-                                    });
-                                    await showDialog(
-                                        context: context,
-                                        barrierDismissible: false,
-                                        builder: (BuildContext context) {
-                                          return ConfirmTimeEnd(
+                            ? GestureDetector(
+                                onTap: () async {
+                                  await showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (BuildContext context) {
+                                        return ConfirmTimeEnd(
                                             shiftItem:
                                                 this.widget.selectedShift,
                                             editing: widget.isEditing,
-                                          );
-                                        }).then((value) async {
-                                      if (value != false) {
-                                        // dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
-                                        //     .format(DateTime.parse(value));
-                                        dateString = value;
-                                        setState(() {
-                                          currentItem.isSelected = newStatus;
-                                        });
-
-                                        /// end
-                                        await EasyLoading.show(
-                                          status: 'Removing...',
-                                          maskType: EasyLoadingMaskType.black,
-                                        );
-
-                                        var response =
-                                            await WorkersService.removeWorkers(
-                                                widget.execShiftId, [
-                                          currentItem.id!.toString()
-                                        ], [
-                                          dateString
-                                        ], [], [
-                                          currentItem.efficiencyCalculation
-                                              .toString()
-                                        ]);
-                                        widget.listLists[i].remove(currentItem);
-                                        setState(() {});
-                                        await EasyLoading.dismiss();
-
-                                        if (response) {
-                                        } else {
-                                          EasyLoading.showError('Error');
-                                        }
-                                      } else {
-                                        setState(() {
-                                          currentItem.isSelected =
-                                              currentItem.isSelected;
-                                        });
-                                      }
-                                    });
-                                  } else {
-                                    setState(() {
-                                      currentItem.isSelected = newStatus;
-                                    });
-                                  }
+                                            moveWorker: true,
+                                            workerId: currentItem.id,
+                                            processList: widget.processList);
+                                      }).then((value) {
+                                    if (value) {
+                                      widget.listLists[i].remove(currentItem);
+                                      setState(() {});
+                                    }
+                                  });
                                 },
+                                child: UserItem(
+                                  keyNo: currentItem.key != null
+                                      ? currentItem.key!
+                                      : '',
+                                  personName: currentItem.firstName! +
+                                      ' ' +
+                                      currentItem.lastName!,
+                                  initialSelected: currentItem.isSelected,
+                                  picUrl: currentItem.picture,
+                                  changedStatus: (bool newStatus) async {
+                                    String dateString =
+                                        widget.selectedShift.startTime!;
+
+                                    ///previously
+                                    // DateFormat("yyyy-MM-dd hh:mm:ss")
+                                    //     .format(DateTime.now());
+                                    ///end
+                                    if (widget.isEditing && newStatus) {
+                                      setState(() {
+                                        currentItem.isSelected = newStatus;
+                                      });
+
+                                      await EasyLoading.show(
+                                        status: 'Adding...',
+                                        maskType: EasyLoadingMaskType.black,
+                                      );
+
+                                      var response =
+                                          await WorkersService.addWorkers(
+                                              widget.execShiftId, [
+                                        currentItem.id!.toString()
+                                      ], [
+                                        dateString
+                                      ], [], [
+                                        currentItem.efficiencyCalculation
+                                            .toString()
+                                      ]);
+
+                                      await EasyLoading.dismiss();
+
+                                      if (response) {
+                                      } else {
+                                        EasyLoading.showError('Error');
+                                      }
+                                    } else if (widget.isEditing && !newStatus) {
+                                      setState(() {
+                                        currentItem.isSelected =
+                                            currentItem.isSelected;
+                                      });
+                                      await showDialog(
+                                          context: context,
+                                          barrierDismissible: false,
+                                          builder: (BuildContext context) {
+                                            return ConfirmTimeEnd(
+                                              shiftItem:
+                                                  this.widget.selectedShift,
+                                              editing: widget.isEditing,
+                                            );
+                                          }).then((value) async {
+                                        if (value != false) {
+                                          // dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
+                                          //     .format(DateTime.parse(value));
+                                          dateString = value;
+                                          setState(() {
+                                            currentItem.isSelected = newStatus;
+                                          });
+
+                                          /// end
+                                          await EasyLoading.show(
+                                            status: 'Removing...',
+                                            maskType: EasyLoadingMaskType.black,
+                                          );
+
+                                          var response = await WorkersService
+                                              .removeWorkers(
+                                                  widget.execShiftId, [
+                                            currentItem.id!.toString()
+                                          ], [
+                                            dateString
+                                          ], [], [
+                                            currentItem.efficiencyCalculation
+                                                .toString()
+                                          ]);
+                                          widget.listLists[i]
+                                              .remove(currentItem);
+                                          setState(() {});
+                                          await EasyLoading.dismiss();
+
+                                          if (response) {
+                                          } else {
+                                            EasyLoading.showError('Error');
+                                          }
+                                        } else {
+                                          setState(() {
+                                            currentItem.isSelected =
+                                                currentItem.isSelected;
+                                          });
+                                        }
+                                      });
+                                    } else {
+                                      setState(() {
+                                        currentItem.isSelected = newStatus;
+                                      });
+                                    }
+                                  },
+                                ),
                               )
                             : UserItem(
                                 keyNo: currentItem.key != null

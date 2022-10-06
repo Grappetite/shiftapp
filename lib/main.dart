@@ -1,19 +1,82 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:shiftapp/screens/splash.dart';
+import 'package:timezone/data/latest_all.dart';
 
 import 'config/BaseConfig.dart';
 import 'config/constants.dart';
 
-void main() {
-  runApp(const MyApp());
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   const String? environment = String.fromEnvironment(
     'ENVIRONMENT',
     defaultValue: Environment.dev,
   );
   Environment().initConfig(environment);
   configLoading();
+  initializeTimeZones();
+  bool? result = await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          IOSFlutterLocalNotificationsPlugin>()
+      ?.requestPermissions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('ic_launcher');
+
+  /// Note: permissions aren't requested here just to demonstrate that can be
+  /// done later
+  IOSInitializationSettings initializationSettingsIOS =
+      IOSInitializationSettings(
+          requestAlertPermission: false,
+          requestBadgePermission: false,
+          requestSoundPermission: false,
+          onDidReceiveLocalNotification: (
+            int id,
+            String? title,
+            String? body,
+            String? payload,
+          ) async {
+            // String timezom =
+            //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
+            //
+            // AwesomeNotifications().createNotification(
+            //   content: NotificationContent(
+            //     id: 1,
+            //     channelKey: 'key1',
+            //     title: 'This is Notification title',
+            //     body: 'This is Body of Noti',
+            //     displayOnForeground: true,
+            //     displayOnBackground: true,
+            //   ),
+            //   schedule: NotificationInterval(
+            //       interval: 2, timeZone: timezom, repeats: false),
+            // );
+            // didReceiveLocalNotificationSubject.add(
+            //   ReceivedNotification(
+            //     id: id,
+            //     title: title,
+            //     body: body,
+            //     payload: payload,
+            //   ),
+            // );
+          });
+
+  InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+    iOS: initializationSettingsIOS,
+  );
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
+      onSelectNotification: (String? payload) async {
+    if (payload != null) {}
+  });
+  runApp(const MyApp());
 }
 
 void configLoading() {

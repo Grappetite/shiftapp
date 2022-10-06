@@ -51,6 +51,8 @@ dependencies:
   adaptive_dialog: ^1.8.0
   get: ^4.6.5
   date_time_picker: ^2.1.0
+  flutter_local_notifications: ^8.2.0
+  timezone: ^0.8.0
 
 
 dev_dependencies:

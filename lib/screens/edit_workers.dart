@@ -56,7 +56,7 @@ class _EditWorkersState extends State<EditWorkers> {
   bool showCategories = false;
 
   List<WorkerType> workerType = [];
-
+  List<Process>? processList;
   void loadWorkerTypes() async {
     //execute_shift_id
 
@@ -91,6 +91,8 @@ class _EditWorkersState extends State<EditWorkers> {
 
     var responseShift = await WorkersService.getShiftWorkers(
         widget.execShiftId, widget.processId);
+
+    processList = await WorkersService.startedProcessList();
 
     if (responseShift != null) {
       if (responseShift.data!.shiftWorker!.length == 0) {
@@ -188,6 +190,7 @@ class _EditWorkersState extends State<EditWorkers> {
             totalItems: widget.totalUsersCount,
             isEditing: true,
             process: this.widget.process,
+            processList: processList,
             reloadData: () {
               loadWorkers();
             },

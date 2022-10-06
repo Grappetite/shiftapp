@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:app_popup_menu/app_popup_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/constants.dart';
@@ -120,7 +121,10 @@ class _EndShiftViewState extends State<EndShiftView> {
               ShiftService.cancelShift(this.widget.execShiftId, endTime);
               var process = await LoginService.getProcess();
               final prefs = await SharedPreferences.getInstance();
-
+              FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+                  FlutterLocalNotificationsPlugin();
+              await flutterLocalNotificationsPlugin
+                  .cancel(prefs.getInt("execute_shift_id")!);
               prefs.remove('shiftId');
 
               prefs.remove('selectedShiftName');

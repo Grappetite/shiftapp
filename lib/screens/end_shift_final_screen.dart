@@ -16,6 +16,8 @@ import '../config/constants.dart';
 import '../model/login_model.dart';
 import '../model/shifts_model.dart';
 import '../services/shift_service.dart';
+import '../services/workers_service.dart';
+import '../widgets/drop_down.dart';
 import '../widgets/elevated_button.dart';
 import '../widgets/input_view.dart';
 import 'inner_widgets/alert_title_label.dart';
@@ -454,9 +456,16 @@ class KeypadDoneButton extends StatelessWidget {
 class ConfirmTimeEnd extends StatefulWidget {
   final ShiftItem shiftItem;
   final bool editing;
-
+  final bool moveWorker;
+  final List<Process>? processList;
+  final int? workerId;
   const ConfirmTimeEnd(
-      {Key? key, required this.shiftItem, this.editing = false})
+      {Key? key,
+      required this.shiftItem,
+      this.editing = false,
+      this.processList,
+      this.moveWorker = false,
+      this.workerId})
       : super(key: key);
 
   @override
@@ -474,7 +483,8 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
   }
 
   // TimeOfDay? newTime;
-
+  String selectedString = "";
+  int processIndexSelected = -1;
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -516,8 +526,11 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                           width: 8,
                         ),
                         AlertTitleLabel(
-                          title:
-                              widget.editing ? "Remove worker" : 'CLOSE SHIFT',
+                          title: widget.moveWorker
+                              ? "Send Worker"
+                              : widget.editing
+                                  ? "Remove worker"
+                                  : 'CLOSE SHIFT',
                         ),
                       ],
                     ),
@@ -526,15 +539,19 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                     ),
 
                     Text(
-                      widget.editing
-                          ? "Adjust worker removal time if different to current:"
-                          : 'Adjust shift end time if different to current:',
+                      widget.moveWorker
+                          ? ""
+                          : widget.editing
+                              ? "Adjust worker removal time if different to current:"
+                              : 'Adjust shift end time if different to current:',
                       style: TextStyle(color: kPrimaryColor, fontSize: 12),
                     ),
 
-                    Expanded(
-                      child: Container(),
-                    ),
+                    widget.moveWorker
+                        ? Container()
+                        : Expanded(
+                            child: Container(),
+                          ),
 
                     GestureDetector(
                       onTap: () async {
@@ -601,28 +618,63 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                       ),
                     ),
 
+                    widget.moveWorker
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              child: Text(
+                                "Select Process",
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                          )
+                        : Expanded(
+                            child: Container(),
+                          ),
+
+                    widget.moveWorker
+                        ? DropDown(
+                            labelText: 'Title',
+                            currentList: widget.processList!
+                                .map((e) => e.name!.trim())
+                                .toList(),
+                            showError: false,
+                            onChange: (newString) {
+                              setState(() {
+                                selectedString = newString;
+                              });
+
+                              processIndexSelected = widget.processList!
+                                  .map((e) => e.name!.trim())
+                                  .toList()
+                                  .indexOf(newString);
+
+                              //final List<String> cityNames = cities.map((city) => city.name).toList();
+                            },
+                            placeHolderText: 'Process',
+                            preSelected: selectedString,
+                          )
+                        : Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              dataToDisplay(),
+                              style: TextStyle(
+                                  color: kPrimaryColor,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ),
+
                     Expanded(
                       child: Container(),
                     ),
-
                     Align(
                       alignment: Alignment.center,
                       child: Text(
-                        dataToDisplay(),
-                        style: TextStyle(
-                            color: kPrimaryColor, fontWeight: FontWeight.w600),
-                      ),
-                    ),
-
-                    Expanded(
-                      child: Container(),
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        widget.editing
-                            ? "Are you sure you want to remove this worker?"
-                            : 'Are you sure you want to close this shift?',
+                        widget.moveWorker
+                            ? "Are you sure you want to move this worker?"
+                            : widget.editing
+                                ? "Are you sure you want to remove this worker?"
+                                : 'Are you sure you want to close this shift?',
                         textAlign: TextAlign.center,
                         style: TextStyle(color: kPrimaryColor),
                       ),
@@ -650,8 +702,42 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                         Expanded(
                           child: PElevatedButton(
                             onPressed: () async {
-                              String result = findEndTime();
-                              Navigator.pop(context, result);
+                              if (widget.moveWorker) {
+                                if (processIndexSelected != -1) {
+                                  await EasyLoading.show(
+                                    status: 'Moving...',
+                                    maskType: EasyLoadingMaskType.black,
+                                  );
+
+                                  var response =
+                                      await WorkersService.moveWorkers(
+                                          startedExecuteShiftId:
+                                              widget
+                                                  .processList![
+                                                      processIndexSelected]
+                                                  .startedExecutionShiftId
+                                                  .toString(),
+                                          moveTime: findEndTime(),
+                                          exshiftId:
+                                              widget
+                                                  .shiftItem.executedShiftId!
+                                                  .toInt(),
+                                          workerUserId:
+                                              widget.workerId!.toInt());
+                                  if (response) {
+                                    await EasyLoading.dismiss();
+                                    Navigator.pop(context, true);
+                                  } else {
+                                    await EasyLoading.dismiss();
+                                  }
+                                } else {
+                                  EasyLoading.showError(
+                                      'Please select process');
+                                }
+                              } else {
+                                String result = findEndTime();
+                                Navigator.pop(context, result);
+                              }
                             },
                             text: 'YES',
                           ),
