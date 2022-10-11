@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -79,10 +80,10 @@ class LoginService {
   static Future<LoginResponse?> login(String username, String password) async {
     try {
       var dio = Dio();
-
+      var fcmToken = await FirebaseMessaging.instance.getToken();
       Response response = await dio.post(
         baseUrl + 'login',
-        data: {'email': username, 'password': password},
+        data: {'email': username, 'password': password, 'fcmToken': fcmToken},
       );
 
       var responseObject = LoginResponse.fromJson(response.data);

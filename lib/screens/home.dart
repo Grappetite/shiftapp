@@ -1,4 +1,5 @@
 import 'package:app_popup_menu/app_popup_menu.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -12,6 +13,7 @@ import 'package:shiftapp/screens/end_shift_final_screen.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
 import '../config/constants.dart';
+import '../main.dart';
 import 'end_shift.dart';
 import 'login.dart';
 
@@ -40,6 +42,12 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     _controller = PersistentTabController(initialIndex: 0);
+
+    FirebaseMessaging.onMessage.listen(showFlutterNotification);
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('A new onMessageOpenedApp event was published!');
+    });
   }
 
   void goBack() {

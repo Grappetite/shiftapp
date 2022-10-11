@@ -174,7 +174,7 @@ class WorkersService {
 
       print(response.data);
 
-      if (response.data['code'] == 200) {
+      if (response.statusCode == 200) {
         return true;
       }
 

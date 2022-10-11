@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "336254182347",
+    "project_id": "shift-e7c9a",
+    "storage_bucket": "shift-e7c9a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:336254182347:android:f527c3de646cd67bd70c4e",
+        "android_client_info": {
+          "package_name": "com.grappetite.shiftapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "336254182347-aitj0d296iqgr2f3t23uoslgmdtkkorj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.grappetite.shiftapp",
+            "certificate_hash": "fc47f4c248c3c253e7ab6c54e2b7c1405dfd5ca1"
+          }
+        },
+        {
+          "client_id": "336254182347-iahbdttng7e0pt7kghmnfk6uig8v5vq6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL-lVdra2bUakibujqbYBraqztnxoOFEg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "336254182347-iahbdttng7e0pt7kghmnfk6uig8v5vq6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
