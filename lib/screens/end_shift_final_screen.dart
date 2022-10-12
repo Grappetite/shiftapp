@@ -457,7 +457,7 @@ class ConfirmTimeEnd extends StatefulWidget {
   final ShiftItem shiftItem;
   final bool editing;
   final bool moveWorker;
-  final List<Process>? processList;
+  final dynamic processList;
   final int? workerId;
   const ConfirmTimeEnd(
       {Key? key,
@@ -484,7 +484,9 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
 
   // TimeOfDay? newTime;
   String selectedString = "";
+  String selectedWorkerType = "";
   int processIndexSelected = -1;
+  int workerTypeIndexSelected = -1;
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -635,19 +637,25 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                     widget.moveWorker
                         ? DropDown(
                             labelText: 'Title',
-                            currentList: widget.processList!
-                                .map((e) => e.name!.trim())
+                            currentList: (widget.processList[0]! as List)
+                                .map((e) => e.name!.trim() as String)
                                 .toList(),
                             showError: false,
                             onChange: (newString) {
                               setState(() {
                                 selectedString = newString;
+                                workerTypeIndexSelected = -1;
+                                selectedWorkerType = "";
+                                processIndexSelected = -1;
                               });
 
-                              processIndexSelected = widget.processList!
-                                  .map((e) => e.name!.trim())
-                                  .toList()
-                                  .indexOf(newString);
+                              Future.delayed(Duration(milliseconds: 50), () {
+                                processIndexSelected = widget.processList[0]!
+                                    .map((e) => e.name!.trim())
+                                    .toList()
+                                    .indexOf(newString);
+                                setState(() {});
+                              });
 
                               //final List<String> cityNames = cities.map((city) => city.name).toList();
                             },
@@ -664,6 +672,53 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                             ),
                           ),
 
+                    Expanded(
+                      child: Container(),
+                    ),
+                    processIndexSelected != -1
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              child: Text(
+                                "Select Worker Type",
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                            ),
+                          )
+                        : Expanded(
+                            child: Container(),
+                          ),
+
+                    processIndexSelected != -1
+                        ? DropDown(
+                            labelText: 'Title',
+                            currentList:
+                                (widget.processList[1]! as List).map((e) {
+                              if (e.processId.toString() ==
+                                  widget.processList[0][processIndexSelected].id
+                                      .toString()) {
+                                return e.workerTypeName!.trim() as String;
+                              } else {
+                                return "";
+                              }
+                            }).toList(),
+                            showError: false,
+                            onChange: (newString) {
+                              setState(() {
+                                selectedWorkerType = newString;
+                              });
+
+                              workerTypeIndexSelected = widget.processList[1]!
+                                  .map((e) => e.workerTypeName!.trim())
+                                  .toList()
+                                  .indexOf(newString);
+
+                              //final List<String> cityNames = cities.map((city) => city.name).toList();
+                            },
+                            placeHolderText: 'Worker Type',
+                            preSelected: selectedWorkerType,
+                          )
+                        : Container(),
                     Expanded(
                       child: Container(),
                     ),
@@ -703,7 +758,8 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                           child: PElevatedButton(
                             onPressed: () async {
                               if (widget.moveWorker) {
-                                if (processIndexSelected != -1) {
+                                if (processIndexSelected != -1 &&
+                                    workerTypeIndexSelected != -1) {
                                   await EasyLoading.show(
                                     status: 'Moving...',
                                     maskType: EasyLoadingMaskType.black,
@@ -711,19 +767,22 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
 
                                   var response =
                                       await WorkersService.moveWorkers(
-                                          startedExecuteShiftId:
-                                              widget
-                                                  .processList![
-                                                      processIndexSelected]
-                                                  .startedExecutionShiftId
-                                                  .toString(),
+                                          startedExecuteShiftId: widget
+                                              .processList![0]
+                                                  [processIndexSelected]
+                                              .startedExecutionShiftId
+                                              .toString(),
                                           moveTime: findEndTime(),
-                                          exshiftId:
-                                              widget
-                                                  .shiftItem.executedShiftId!
-                                                  .toInt(),
+                                          exshiftId: widget
+                                              .shiftItem.executedShiftId!
+                                              .toInt(),
                                           workerUserId:
-                                              widget.workerId!.toInt());
+                                              widget.workerId!.toInt(),
+                                          workerTypeId: widget
+                                              .processList[1]
+                                                  [workerTypeIndexSelected]
+                                              .workerTypeId
+                                              .toInt());
                                   if (response) {
                                     await EasyLoading.dismiss();
                                     Navigator.pop(context, true);
@@ -731,8 +790,13 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                                     await EasyLoading.dismiss();
                                   }
                                 } else {
-                                  EasyLoading.showError(
-                                      'Please select process');
+                                  if (processIndexSelected == -1) {
+                                    EasyLoading.showError(
+                                        'Please select process');
+                                  } else {
+                                    EasyLoading.showError(
+                                        'Please select Worker Type');
+                                  }
                                 }
                               } else {
                                 String result = findEndTime();

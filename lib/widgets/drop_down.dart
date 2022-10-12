@@ -164,32 +164,35 @@ class _DropDownState extends State<DropDown> {
                                     for (int index = 0;
                                         index < listToShow.length;
                                         index++)
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.pop(context);
+                                      listToShow[index] != ""
+                                          ? Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    Navigator.pop(context);
 
-                                              selectedString =
-                                                  listToShow[index];
+                                                    selectedString =
+                                                        listToShow[index];
 
-                                              widget.onChange(selectedString);
-                                            },
-                                            child: Text(
-                                              listToShow[index],
-                                              style:
-                                                  const TextStyle(fontSize: 16),
-                                            ),
-                                          ),
-                                          Divider(
-                                            height: 12,
-                                            thickness: 1,
-                                            color: Colors.grey[50],
-                                          ),
-                                        ],
-                                      )
+                                                    widget.onChange(
+                                                        selectedString);
+                                                  },
+                                                  child: Text(
+                                                    listToShow[index],
+                                                    style: const TextStyle(
+                                                        fontSize: 16),
+                                                  ),
+                                                ),
+                                                Divider(
+                                                  height: 12,
+                                                  thickness: 1,
+                                                  color: Colors.grey[50],
+                                                ),
+                                              ],
+                                            )
+                                          : Container()
                                   ]
                                       // },
                                       ),

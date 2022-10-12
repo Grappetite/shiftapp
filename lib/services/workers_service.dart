@@ -49,7 +49,7 @@ class WorkersService {
     }
   }
 
-  static Future<List<Process>?> startedProcessList() async {
+  static Future<dynamic> startedProcessList() async {
     try {
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
@@ -65,10 +65,13 @@ class WorkersService {
           ));
 
       print(response.data);
-
-      var responseObject = List<Process>.from(
-          response.data["data"].map((x) => Process.fromJson(x)));
-
+      var responseObject = [];
+      responseObject.add(List<Process>.from(response.data["data"]
+              ["startedProcessList"]
+          .map((x) => Process.fromJson(x))));
+      responseObject.add(List<WorkerTypeList>.from(response.data["data"]
+              ["workerTypeList"]
+          .map((x) => WorkerTypeList.fromJson(x))));
       if (responseObject.isEmpty) {
         return null;
       }
@@ -152,7 +155,8 @@ class WorkersService {
       {required int exshiftId,
       required String moveTime,
       required String startedExecuteShiftId,
-      required int workerUserId}) async {
+      required int workerUserId,
+      required int workerTypeId}) async {
     try {
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
@@ -164,6 +168,7 @@ class WorkersService {
           'worker_user_id': workerUserId,
           'start_time': moveTime,
           'started_execute_shift_id': startedExecuteShiftId,
+          'worker_type_id': workerTypeId,
         },
         options: Options(
           headers: {

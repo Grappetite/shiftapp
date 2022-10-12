@@ -123,6 +123,30 @@ class Process {
   }
 }
 
+class WorkerTypeList {
+  WorkerTypeList({
+    this.processId,
+    this.workerTypeName,
+    this.workerTypeId,
+  });
+
+  int? processId;
+  String? workerTypeName;
+  int? workerTypeId;
+
+  factory WorkerTypeList.fromJson(Map<String, dynamic> json) => WorkerTypeList(
+        processId: json["process_id"],
+        workerTypeName: json["worker_type_name"],
+        workerTypeId: json["worker_type_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "process_id": processId,
+        "worker_type_name": workerTypeName,
+        "worker_type_id": workerTypeId,
+      };
+}
+
 class ShiftStartDetails {
   int? executeShiftId;
   String? executeShiftStatus;

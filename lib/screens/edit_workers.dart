@@ -56,7 +56,7 @@ class _EditWorkersState extends State<EditWorkers> {
   bool showCategories = false;
 
   List<WorkerType> workerType = [];
-  List<Process>? processList;
+  dynamic processList;
   void loadWorkerTypes() async {
     //execute_shift_id
 
