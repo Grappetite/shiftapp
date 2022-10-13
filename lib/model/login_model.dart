@@ -70,6 +70,7 @@ class User {
   int? id;
   String? name;
   String? lastName;
+  String? fullName;
   String? key;
 
   User({this.id, this.name, this.lastName, this.key});
@@ -78,6 +79,7 @@ class User {
     id = json['id'];
     name = json['name'];
     lastName = json['last_name'];
+    fullName = json['full_name'];
     key = "";
   }
 
@@ -98,8 +100,8 @@ class Process {
   String? unit;
   String? baseline;
   String? headCount;
-
-  Process({this.id, this.name, this.startedExecutionShiftId});
+  List<WorkerTypeList>? workerType;
+  Process({this.id, this.name, this.startedExecutionShiftId, this.workerType});
 
   Process.fromJson(Map<String, dynamic> json) {
     if (json.keys.contains('process_id')) {
@@ -113,6 +115,10 @@ class Process {
     baseline = json['baseline'];
     headCount = json['head_count'];
     startedExecutionShiftId = json['started_execute_shift_id'];
+    workerType = json["workerType"] == null
+        ? null
+        : List<WorkerTypeList>.from(
+            json["workerType"].map((x) => WorkerTypeList.fromJson(x)));
   }
 
   Map<String, dynamic> toJson() {
@@ -125,23 +131,19 @@ class Process {
 
 class WorkerTypeList {
   WorkerTypeList({
-    this.processId,
     this.workerTypeName,
     this.workerTypeId,
   });
 
-  int? processId;
   String? workerTypeName;
   int? workerTypeId;
 
   factory WorkerTypeList.fromJson(Map<String, dynamic> json) => WorkerTypeList(
-        processId: json["process_id"],
-        workerTypeName: json["worker_type_name"],
-        workerTypeId: json["worker_type_id"],
+        workerTypeName: json["name"],
+        workerTypeId: json["id"],
       );
 
   Map<String, dynamic> toJson() => {
-        "process_id": processId,
         "worker_type_name": workerTypeName,
         "worker_type_id": workerTypeId,
       };

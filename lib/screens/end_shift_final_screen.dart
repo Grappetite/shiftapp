@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/screens/login.dart';
 import 'package:shiftapp/screens/shift_start.dart';
+import 'package:shiftapp/services/login_service.dart';
 import 'package:shiftapp/util/string.dart';
 
 import '../config/constants.dart';
@@ -379,7 +380,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                   textController.text,
                                   answer,
                                 );
-
+                                await LoginService.logout();
                                 await EasyLoading.dismiss();
 
                                 if (check) {
@@ -398,6 +399,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                   prefs.remove('selectedShiftStartTime');
                                   // prefs.remove('username');
                                   prefs.remove('password');
+
                                   Get.offAll(LoginScreen());
                                   // if (widget.autoOpen) {
                                   //   Navigator.pop(context);
@@ -457,7 +459,7 @@ class ConfirmTimeEnd extends StatefulWidget {
   final ShiftItem shiftItem;
   final bool editing;
   final bool moveWorker;
-  final dynamic processList;
+  final List<Process>? processList;
   final int? workerId;
   const ConfirmTimeEnd(
       {Key? key,
@@ -637,7 +639,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                     widget.moveWorker
                         ? DropDown(
                             labelText: 'Title',
-                            currentList: (widget.processList[0]! as List)
+                            currentList: (widget.processList! as List)
                                 .map((e) => e.name!.trim() as String)
                                 .toList(),
                             showError: false,
@@ -650,7 +652,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                               });
 
                               Future.delayed(Duration(milliseconds: 50), () {
-                                processIndexSelected = widget.processList[0]!
+                                processIndexSelected = widget.processList!
                                     .map((e) => e.name!.trim())
                                     .toList()
                                     .indexOf(newString);
@@ -692,15 +694,11 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                     processIndexSelected != -1
                         ? DropDown(
                             labelText: 'Title',
-                            currentList:
-                                (widget.processList[1]! as List).map((e) {
-                              if (e.processId.toString() ==
-                                  widget.processList[0][processIndexSelected].id
-                                      .toString()) {
-                                return e.workerTypeName!.trim() as String;
-                              } else {
-                                return "";
-                              }
+                            currentList: (widget
+                                    .processList![processIndexSelected]
+                                    .workerType!)
+                                .map((e) {
+                              return e.workerTypeName!.trim();
                             }).toList(),
                             showError: false,
                             onChange: (newString) {
@@ -708,7 +706,9 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                                 selectedWorkerType = newString;
                               });
 
-                              workerTypeIndexSelected = widget.processList[1]!
+                              workerTypeIndexSelected = widget
+                                  .processList![processIndexSelected]
+                                  .workerType!
                                   .map((e) => e.workerTypeName!.trim())
                                   .toList()
                                   .indexOf(newString);
@@ -768,8 +768,8 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                                   var response =
                                       await WorkersService.moveWorkers(
                                           startedExecuteShiftId: widget
-                                              .processList![0]
-                                                  [processIndexSelected]
+                                              .processList![
+                                                  processIndexSelected]
                                               .startedExecutionShiftId
                                               .toString(),
                                           moveTime: findEndTime(),
@@ -779,10 +779,11 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                                           workerUserId:
                                               widget.workerId!.toInt(),
                                           workerTypeId: widget
-                                              .processList[1]
-                                                  [workerTypeIndexSelected]
-                                              .workerTypeId
-                                              .toInt());
+                                              .processList![
+                                                  processIndexSelected]
+                                              .workerType![
+                                                  workerTypeIndexSelected]
+                                              .workerTypeId!);
                                   if (response) {
                                     await EasyLoading.dismiss();
                                     Navigator.pop(context, true);

@@ -29,7 +29,7 @@ class WorkItemView extends StatefulWidget {
 
   final int? shiftId;
   final Process process;
-  dynamic? processList;
+  List<Process>? processList;
   final int totalItems;
   List<String> listNames;
   List<List<ShiftWorker>> listLists;

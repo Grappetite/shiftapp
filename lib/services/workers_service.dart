@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/model/login_model.dart';
@@ -64,14 +66,13 @@ class WorkersService {
             },
           ));
 
-      print(response.data);
-      var responseObject = [];
-      responseObject.add(List<Process>.from(response.data["data"]
-              ["startedProcessList"]
-          .map((x) => Process.fromJson(x))));
-      responseObject.add(List<WorkerTypeList>.from(response.data["data"]
-              ["workerTypeList"]
-          .map((x) => WorkerTypeList.fromJson(x))));
+      print(jsonEncode(response.data));
+      // var responseObject = [];
+      var responseObject = List<Process>.from(
+          response.data["data"].map((x) => Process.fromJson(x)));
+      // responseObject.add(List<WorkerTypeList>.from(response.data["data"]
+      //         ["workerTypeList"]
+      //     .map((x) => WorkerTypeList.fromJson(x))));
       if (responseObject.isEmpty) {
         return null;
       }

@@ -48,25 +48,32 @@ class Errors {
             response.data["message"].runtimeType.toString().toLowerCase() ==
                     "string"
                 ? response.data["message"]
-                : response.data["message"][0].toString());
+                : response.data["message"][0].toString(),
+            dismissOnTap: true,
+            duration: Duration(seconds: 2));
 
         break;
       case 401:
-        EasyLoading.showError(response.data["error"].toString());
+        EasyLoading.showError(response.data["error"].toString(),
+            dismissOnTap: true, duration: Duration(seconds: 2));
         break;
       case 409:
-        EasyLoading.showError(response.data["message"][0].toString());
+        EasyLoading.showError(response.data["message"][0].toString(),
+            dismissOnTap: true, duration: Duration(seconds: 2));
         // g.Get.offAllNamed(Routes.barberPortfolio);
         break;
       case 410:
-        EasyLoading.showError(response.data["message"][0].toString());
+        EasyLoading.showError(response.data["message"][0].toString(),
+            dismissOnTap: true, duration: Duration(seconds: 2));
         // g.Get.offAllNamed(Routes.selectBarber);
         break;
       case 404:
-        EasyLoading.showError(response.data["message"][0].toString());
+        EasyLoading.showError(response.data["message"][0].toString(),
+            dismissOnTap: true, duration: Duration(seconds: 2));
         break;
       case 403:
-        EasyLoading.showError(response.data["message"][0].toString());
+        EasyLoading.showError(response.data["message"][0].toString(),
+            dismissOnTap: true, duration: Duration(seconds: 2));
         throw UnauthorisedException(response.data.toString());
       case 500:
       default:
@@ -160,6 +167,24 @@ class LoginService {
       }
 
       return responseObject;
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
+    }
+  }
+
+  static logout() async {
+    try {
+      var dio = Dio();
+      final prefs = await SharedPreferences.getInstance();
+
+      Response response = await dio.get(baseUrl + 'logout',
+          options: Options(
+            headers: {
+              authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+            },
+          ));
+
+      return response;
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
     }

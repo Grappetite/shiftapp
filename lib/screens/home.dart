@@ -12,6 +12,7 @@ import 'package:shiftapp/screens/shift_start.dart';
 
 import '../config/constants.dart';
 import '../main.dart';
+import '../services/login_service.dart';
 import 'end_shift.dart';
 import 'login.dart';
 
@@ -295,6 +296,7 @@ class _HomeMainViewState extends State<HomeMainView> {
             prefs.remove('selectedShiftStartTime');
             // prefs.remove('username');
             prefs.remove('password');
+            await LoginService.logout();
             // var dyanc = await Navigator.pushReplacement(
             //   context,
             //   MaterialPageRoute(builder: (context) => const LoginScreen()),

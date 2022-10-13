@@ -17,6 +17,7 @@ import '../services/workers_service.dart';
 import 'NewDropdownPage.dart';
 import 'edit_workers.dart';
 import 'end_shift_final_screen.dart';
+import 'inner_widgets/HandOverShift.dart';
 import 'inner_widgets/coming_soon_container.dart';
 
 class EndShiftView extends StatefulWidget {
@@ -158,6 +159,96 @@ class _EndShiftViewState extends State<EndShiftView> {
           },
           child: const Text(
             'Discard Shift',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+        PopupMenuItem(
+          value: 2,
+          onTap: () async {
+            await Future.delayed(Duration(seconds: 1), () async {
+              var answer = await showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return HandOverShift(execShiftId: widget.execShiftId);
+                  }).then((value) async {
+                if (value) {
+                  var process = await LoginService.getProcess();
+                  final prefs = await SharedPreferences.getInstance();
+                  FlutterLocalNotificationsPlugin
+                      flutterLocalNotificationsPlugin =
+                      FlutterLocalNotificationsPlugin();
+                  await flutterLocalNotificationsPlugin
+                      .cancel(prefs.getInt("execute_shift_id")!);
+                  prefs.remove('shiftId');
+                  prefs.remove('selectedShiftName');
+                  prefs.remove('selectedShiftEndTime');
+                  prefs.remove('selectedShiftStartTime');
+                  // prefs.remove('username');
+                  prefs.remove('password');
+                  // if (widget.autoOpen) {
+                  //   Navigator.pop(context, true);
+                  // } else {
+                  //   Navigator.pop(context, true);
+                  //   Navigator.pop(context, true);
+                  // }
+                  // var process = <Process>[];
+                  // jsonDecode(prefs.getString("processesMahboob")!).forEach((v) {
+                  //   process!.add(Process.fromJson(v));
+                  // });
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                          builder:
+                              (context) => //   Navigator.pop(context, true);
+                                  DropDownPage(process: process!)
+                          // HomeView(
+                          //     processSelected: widget.process,
+                          //     selectedShift: widget.selectedShift)
+                          ),
+                      (route) => false);
+                }
+              });
+              // var process = await LoginService.getProcess();
+              // final prefs = await SharedPreferences.getInstance();
+              // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+              //     FlutterLocalNotificationsPlugin();
+              // await flutterLocalNotificationsPlugin
+              //     .cancel(prefs.getInt("execute_shift_id")!);
+              // prefs.remove('shiftId');
+              //
+              // prefs.remove('selectedShiftName');
+              // prefs.remove('selectedShiftEndTime');
+              // prefs.remove('selectedShiftStartTime');
+              // // prefs.remove('username');
+              // prefs.remove('password');
+              //
+              // // if (widget.autoOpen) {
+              // //   Navigator.pop(context, true);
+              // // } else {
+              // //   Navigator.pop(context, true);
+              // //   Navigator.pop(context, true);
+              // // }
+              // // var process = <Process>[];
+              // // jsonDecode(prefs.getString("processesMahboob")!).forEach((v) {
+              // //   process!.add(Process.fromJson(v));
+              // // });
+              // Navigator.of(context).pushAndRemoveUntil(
+              //     MaterialPageRoute(
+              //         builder: (context) => //   Navigator.pop(context, true);
+              //             DropDownPage(process: process!)
+              //         // HomeView(
+              //         //     processSelected: widget.process,
+              //         //     selectedShift: widget.selectedShift)
+              //         ),
+              //     (route) => false);
+            });
+
+            /// widget.onLogout();
+          },
+          child: const Text(
+            'Transfer Shift',
             style: TextStyle(
               color: Colors.white,
             ),

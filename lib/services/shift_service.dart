@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiftapp/model/login_model.dart';
 
 import '../config/constants.dart';
 import 'login_service.dart';
@@ -68,6 +69,56 @@ class ShiftService {
       return false;
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
+    }
+  }
+
+  static handOverShift({int? executionShiftId, int? userId}) async {
+    try {
+      var dio = Dio();
+      final prefs = await SharedPreferences.getInstance();
+
+      Response response = await dio.post(
+        baseUrl + 'handOverShift',
+        data: {"user_id": userId, "execute_shift_id": executionShiftId},
+        options: Options(
+          headers: {
+            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+          },
+        ),
+      );
+
+      print(response.data);
+
+      if (response.data['code'] == 200) {
+        return true;
+      }
+
+      return false;
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
+    }
+  }
+
+  static getOnlineUsers() async {
+    try {
+      var dio = Dio();
+      final prefs = await SharedPreferences.getInstance();
+
+      String url = baseUrl + "userLoginlist";
+      print('');
+
+      Response response = await dio.get(url,
+          options: Options(
+            headers: {
+              authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+            },
+          ));
+      return List<User>.from(
+          response.data["data"].map((x) => User.fromJson(x)));
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
+    } catch (e) {
+      print(e);
     }
   }
 }
