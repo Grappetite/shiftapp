@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/model/login_model.dart';
@@ -14,6 +15,7 @@ import '../config/constants.dart';
 import '../main.dart';
 import '../services/login_service.dart';
 import 'end_shift.dart';
+import 'end_shift_final_screen.dart';
 import 'login.dart';
 
 class HomeView extends StatefulWidget {
@@ -234,42 +236,42 @@ class _HomeMainViewState extends State<HomeMainView> {
 
     var executeShiftId = this.widget.selectedShift.executedShiftId;
     var response;
-    // if (DateFormat("yyyy-MM-dd hh:mm:ss")
-    //     .parse(DateTime.now().toString())
-    //     .isAfter(
-    //         this.widget.selectedShift.endDateObject.add(Duration(hours: 4)))) {
-    //   Navigator.of(context).pushReplacement(
-    //     MaterialPageRoute(
-    //       builder: (context) => EndShiftFinalScreen(
-    //         autoOpen: true,
-    //         startTime: widget.selectedShift.startTime!,
-    //         selectedShift: widget.selectedShift,
-    //         shiftId: widget.selectedShift.id!,
-    //         processId: widget.processSelected.id!,
-    //         endTime: widget.selectedShift.endTime!,
-    //         process: widget.processSelected,
-    //         executeShiftId: executeShiftId!,
-    //       ),
-    //     ),
-    //   );
-    // } else {
-    response = await Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => EndShiftView(
-          autoOpen: true,
-          userId: const [],
-          efficiencyCalculation: const [],
-          shiftId: widget.selectedShift.id!,
-          processId: widget.processSelected.id!,
-          selectedShift: widget.selectedShift,
-          startedBefore: true,
-          process: widget.processSelected,
-          execShiftId: executeShiftId!,
+    if (DateFormat("yyyy-MM-dd hh:mm:ss")
+        .parse(DateTime.now().toString())
+        .isAfter(
+            this.widget.selectedShift.endDateObject.add(Duration(hours: 4)))) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => EndShiftFinalScreen(
+            autoOpen: true,
+            startTime: widget.selectedShift.startTime!,
+            selectedShift: widget.selectedShift,
+            shiftId: widget.selectedShift.id!,
+            processId: widget.processSelected.id!,
+            endTime: widget.selectedShift.endTime!,
+            process: widget.processSelected,
+            executeShiftId: executeShiftId!,
+          ),
         ),
-      ),
-    );
-    // }
+      );
+    } else {
+      response = await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => EndShiftView(
+            autoOpen: true,
+            userId: const [],
+            efficiencyCalculation: const [],
+            shiftId: widget.selectedShift.id!,
+            processId: widget.processSelected.id!,
+            selectedShift: widget.selectedShift,
+            startedBefore: true,
+            process: widget.processSelected,
+            execShiftId: executeShiftId!,
+          ),
+        ),
+      );
+    }
     if (response != null) {
       if (response == true) {
         widget.onLogout();

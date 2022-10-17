@@ -44,87 +44,99 @@ class _DropDownPageState extends State<DropDownPage> {
                 const SizedBox(
                   height: 24,
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width / 1.21,
-                  child: const Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Please select Process',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width / 1.21,
-                  child: DropDown(
-                    labelText: 'Title',
-                    currentList: process!.map((e) => e.name!.trim()).toList(),
-                    showError: false,
-                    onChange: (newString) {
-                      setState(() {
-                        selectedString = newString;
-                      });
-
-                      processIndexSelected = process!
-                          .map((e) => e.name!.trim())
-                          .toList()
-                          .indexOf(newString);
-
-                      //final List<String> cityNames = cities.map((city) => city.name).toList();
-                    },
-                    placeHolderText: 'Process',
-                    preSelected: selectedString,
-                  ),
-                ),
-                Center(
-                  child: PElevatedButton(
-                    onPressed: () async {
-                      if (processIndexSelected == -1) {
-                        EasyLoading.showError('Please select a process');
-
-                        return;
-                      }
-                      await EasyLoading.show(
-                        status: 'loading...',
-                        maskType: EasyLoadingMaskType.black,
-                      );
-                      var processSelected = process![processIndexSelected];
-
-                      var shifts =
-                          await LoginService.getShifts(processSelected.id!);
-
-                      await EasyLoading.dismiss();
-
-                      //shifts!.data!.first.displayScreen = 3;
-
-                      if (shifts == null) {
-                        EasyLoading.showError('Could not load shifts');
-                      } else {
-                        if (shifts.data!.isNotEmpty) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => HomeView(
-                                selectedShift: shifts.data!.first,
-                                processSelected: processSelected,
-                              ),
+                process!.isEmpty
+                    ? Container(
+                        child: Center(child: Text("No process found")),
+                      )
+                    : SizedBox(
+                        width: MediaQuery.of(context).size.width / 1.21,
+                        child: const Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            'Please select Process',
+                            style: TextStyle(
+                              fontSize: 18,
                             ),
-                          );
-                        }
-                      }
-                      print("object");
+                          ),
+                        ),
+                      ),
+                process!.isEmpty
+                    ? Container()
+                    : const SizedBox(
+                        height: 24,
+                      ),
+                process!.isEmpty
+                    ? Container()
+                    : SizedBox(
+                        width: MediaQuery.of(context).size.width / 1.21,
+                        child: DropDown(
+                          labelText: 'Title',
+                          currentList:
+                              process!.map((e) => e.name!.trim()).toList(),
+                          showError: false,
+                          onChange: (newString) {
+                            setState(() {
+                              selectedString = newString;
+                            });
 
-                      //getShifts
-                      return;
-                    },
-                    text: 'NEXT',
-                  ),
-                )
+                            processIndexSelected = process!
+                                .map((e) => e.name!.trim())
+                                .toList()
+                                .indexOf(newString);
+
+                            //final List<String> cityNames = cities.map((city) => city.name).toList();
+                          },
+                          placeHolderText: 'Process',
+                          preSelected: selectedString,
+                        ),
+                      ),
+                process!.isEmpty
+                    ? Container()
+                    : Center(
+                        child: PElevatedButton(
+                          onPressed: () async {
+                            if (processIndexSelected == -1) {
+                              EasyLoading.showError('Please select a process');
+
+                              return;
+                            }
+                            await EasyLoading.show(
+                              status: 'loading...',
+                              maskType: EasyLoadingMaskType.black,
+                            );
+                            var processSelected =
+                                process![processIndexSelected];
+
+                            var shifts = await LoginService.getShifts(
+                                processSelected.id!);
+
+                            await EasyLoading.dismiss();
+
+                            //shifts!.data!.first.displayScreen = 3;
+
+                            if (shifts == null) {
+                              EasyLoading.showError('Could not load shifts');
+                            } else {
+                              if (shifts.data!.isNotEmpty) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) => HomeView(
+                                      selectedShift: shifts.data!.first,
+                                      processSelected: processSelected,
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
+                            print("object");
+
+                            //getShifts
+                            return;
+                          },
+                          text: 'NEXT',
+                        ),
+                      )
               ],
             ),
     );
