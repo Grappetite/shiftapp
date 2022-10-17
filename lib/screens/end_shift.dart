@@ -111,7 +111,6 @@ class _EndShiftViewState extends State<EndShiftView> {
                     return HandOverShift(execShiftId: widget.execShiftId);
                   }).then((value) async {
                 if (value) {
-                  var process = await LoginService.getProcess();
                   final prefs = await SharedPreferences.getInstance();
                   FlutterLocalNotificationsPlugin
                       flutterLocalNotificationsPlugin =
@@ -138,7 +137,7 @@ class _EndShiftViewState extends State<EndShiftView> {
                       MaterialPageRoute(
                           builder:
                               (context) => //   Navigator.pop(context, true);
-                                  DropDownPage(process: process!)
+                                  DropDownPage()
                           // HomeView(
                           //     processSelected: widget.process,
                           //     selectedShift: widget.selectedShift)
@@ -237,7 +236,7 @@ class _EndShiftViewState extends State<EndShiftView> {
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
                       builder: (context) => //   Navigator.pop(context, true);
-                          DropDownPage(process: process!)
+                          DropDownPage()
                       // HomeView(
                       //     processSelected: widget.process,
                       //     selectedShift: widget.selectedShift)

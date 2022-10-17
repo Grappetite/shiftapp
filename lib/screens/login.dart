@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool showInitText = true;
 
-  List<Process> process = [];
+  // List<Process> process = [];
 
   int processIndexSelected = -1;
 
@@ -96,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
           prefs.remove('shiftId');
           return;
         }
-        process = response.data!.process!;
+        // process = response.data!.process!;
 
         var shiftObject = ShiftItem(
           id: response.data!.shiftDetails!.shiftId!,
@@ -225,35 +225,35 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (processIndexSelected == -1) {
                         return;
                       }
-                      await EasyLoading.show(
-                        status: 'loading...',
-                        maskType: EasyLoadingMaskType.black,
-                      );
-                      var processSelected = process[processIndexSelected];
-
-                      var shifts =
-                          await LoginService.getShifts(processSelected.id!);
-
-                      await EasyLoading.dismiss();
-
-                      //shifts!.data!.first.displayScreen = 3;
-
-                      if (shifts == null) {
-                        EasyLoading.showError('Could not load shifts');
-                      } else {
-                        if (shifts.data!.isNotEmpty) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (BuildContext context) => HomeView(
-                                selectedShift: shifts.data!.first,
-                                processSelected: processSelected,
-                              ),
-                            ),
-                          );
-                        }
-                      }
-                      print("object");
+                      // await EasyLoading.show(
+                      //   status: 'loading...',
+                      //   maskType: EasyLoadingMaskType.black,
+                      // );
+                      // var processSelected = process[processIndexSelected];
+                      //
+                      // var shifts =
+                      //     await LoginService.getShifts(processSelected.id!);
+                      //
+                      // await EasyLoading.dismiss();
+                      //
+                      // //shifts!.data!.first.displayScreen = 3;
+                      //
+                      // if (shifts == null) {
+                      //   EasyLoading.showError('Could not load shifts');
+                      // } else {
+                      //   if (shifts.data!.isNotEmpty) {
+                      //     Navigator.pushReplacement(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //         builder: (BuildContext context) => HomeView(
+                      //           selectedShift: shifts.data!.first,
+                      //           processSelected: processSelected,
+                      //         ),
+                      //       ),
+                      //     );
+                      //   }
+                      // }
+                      // print("object");
 
                       //getShifts
                       return;
@@ -298,15 +298,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         return;
                       }
 
-                      process = response.data!.process!;
+                      // process = response.data!.process!;
                       // prefs.setString("processesMahboob",
                       //     jsonEncode(response.data!.process!));
                       setState(() {
                         showLogin = false;
                       });
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) =>
-                              DropDownPage(process: process)));
+                          builder: (context) => DropDownPage()));
                       return;
                     }
                     return;

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -124,7 +125,17 @@ class WorkersService {
     try {
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
-
+      for (int i = 1;
+          i <
+              [
+                workerUserId.length,
+                startTime.length,
+                executeShiftId.length,
+                efficiencyCalculation.length
+              ].reduce(max);
+          i++) {
+        startTime.add(startTime[0]);
+      }
       Response response = await dio.post(
         baseUrl + 'shifts/addWorkers',
         data: {
