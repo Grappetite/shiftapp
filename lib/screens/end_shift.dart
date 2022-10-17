@@ -297,186 +297,195 @@ class _EndShiftViewState extends State<EndShiftView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: GestureDetector(
-            onTap: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => StartedShifts()));
-            },
-            child: Icon(
-              Icons.arrow_back,
-              color: Colors.white,
-            )),
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Column(
-          children: [
-            Image.asset(
-              'assets/images/toplogo.png',
-              height: 20,
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Text(
-              widget.process.name!,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600),
-            ),
-            SizedBox(
-              height: 2,
-            ),
-          ],
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => StartedShifts()));
+        return Future.value(true);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: GestureDetector(
+              onTap: () {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => StartedShifts()));
+              },
+              child: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              )),
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          title: Column(
+            children: [
+              Image.asset(
+                'assets/images/toplogo.png',
+                height: 20,
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              Text(
+                widget.process.name!,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600),
+              ),
+              SizedBox(
+                height: 2,
+              ),
+            ],
+          ),
+          actions: [appMenu02],
         ),
-        actions: [appMenu02],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            TimerTopWidget(
-                selectedShift: widget.selectedShift, timeElasped: timeElasped),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: kPrimaryColor,
-                    width: 3,
-                  ),
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(
-                      24,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              TimerTopWidget(
+                  selectedShift: widget.selectedShift,
+                  timeElasped: timeElasped),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: kPrimaryColor,
+                      width: 3,
                     ),
-                  ),
-                ),
-                width: double.infinity,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      isTimeOver
-                          ? ('TIME OVER : $timeRemaining')
-                          : ('TIME REMAINING: $timeRemaining'),
-                      style: const TextStyle(
-                          color: kPrimaryColor,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            ComingSoonContainer(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              innerWidget: ExplainerWidget(
-                comingSoon: true,
-                iconName: 'construct',
-                title: 'SOP REQUIRED',
-                text1: '4 Workers require SOP Training',
-                text2: 'Tap to train now or swipe to ignore',
-                showWarning: true,
-              ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: ExplainerWidget(
-                iconName: 'filled-walk',
-                title: 'MANAGE WORKERS',
-                text1: widget.process.headCount != null
-                    ? '$numberSelected/${widget.process.headCount} Workers'
-                    : '$numberSelected/$totalUsersCount Workers',
-                text2: 'Tap to Add or remove',
-                showWarning: false,
-                onTap: () async {
-                  var response = await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => EditWorkers(
-                        startTime: widget.selectedShift.startTime!,
-                        processId: widget.processId,
-                        endTime: widget.selectedShift.endTime!,
-                        userId: [],
-                        efficiencyCalculation: [],
-                        shiftId: widget.shiftId,
-                        totalUsersCount: widget.userId.length,
-                        selectedShift: widget.selectedShift,
-                        process: widget.process,
-                        execShiftId: this.widget.execShiftId,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(
+                        24,
                       ),
                     ),
-                  );
-
-                  loadUsers();
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            ComingSoonContainer(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              innerWidget: ExplainerWidget(
-                comingSoon: true,
-                iconName: 'exclamation',
-                title: 'INCIDENTS',
-                text1: '5',
-                text2: 'Tap to train now or swipe to ignore',
-                showWarning: false,
-                text1_2: '01:50:00',
-              ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  flex: 26,
-                  child: Container(),
-                ),
-                Expanded(
-                  flex: 52,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => EndShiftFinalScreen(
-                            autoOpen: widget.autoOpen,
-                            startTime: widget.selectedShift.startTime!,
-                            selectedShift: widget.selectedShift,
-                            shiftId: widget.shiftId,
-                            processId: widget.processId,
-                            endTime: widget.selectedShift.endTime!,
-                            process: widget.process,
-                            executeShiftId: executeShiftId!,
-                          ),
-                        ),
-                      );
-                    },
-                    child: Image.asset('assets/images/end-shift.png'),
+                  ),
+                  width: double.infinity,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 16, horizontal: 16),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        isTimeOver
+                            ? ('TIME OVER : $timeRemaining')
+                            : ('TIME REMAINING: $timeRemaining'),
+                        style: const TextStyle(
+                            color: kPrimaryColor,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700),
+                      ),
+                    ),
                   ),
                 ),
-                Expanded(
-                  flex: 26,
-                  child: Container(),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              ComingSoonContainer(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                innerWidget: ExplainerWidget(
+                  comingSoon: true,
+                  iconName: 'construct',
+                  title: 'SOP REQUIRED',
+                  text1: '4 Workers require SOP Training',
+                  text2: 'Tap to train now or swipe to ignore',
+                  showWarning: true,
                 ),
-              ],
-            ),
-            const SizedBox(
-              height: 26,
-            )
-          ],
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: ExplainerWidget(
+                  iconName: 'filled-walk',
+                  title: 'MANAGE WORKERS',
+                  text1: widget.process.headCount != null
+                      ? '$numberSelected/${widget.process.headCount} Workers'
+                      : '$numberSelected/$totalUsersCount Workers',
+                  text2: 'Tap to Add or remove',
+                  showWarning: false,
+                  onTap: () async {
+                    var response = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => EditWorkers(
+                          startTime: widget.selectedShift.startTime!,
+                          processId: widget.processId,
+                          endTime: widget.selectedShift.endTime!,
+                          userId: [],
+                          efficiencyCalculation: [],
+                          shiftId: widget.shiftId,
+                          totalUsersCount: widget.userId.length,
+                          selectedShift: widget.selectedShift,
+                          process: widget.process,
+                          execShiftId: this.widget.execShiftId,
+                        ),
+                      ),
+                    );
+
+                    loadUsers();
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              ComingSoonContainer(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                innerWidget: ExplainerWidget(
+                  comingSoon: true,
+                  iconName: 'exclamation',
+                  title: 'INCIDENTS',
+                  text1: '5',
+                  text2: 'Tap to train now or swipe to ignore',
+                  showWarning: false,
+                  text1_2: '01:50:00',
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 26,
+                    child: Container(),
+                  ),
+                  Expanded(
+                    flex: 52,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => EndShiftFinalScreen(
+                              autoOpen: widget.autoOpen,
+                              startTime: widget.selectedShift.startTime!,
+                              selectedShift: widget.selectedShift,
+                              shiftId: widget.shiftId,
+                              processId: widget.processId,
+                              endTime: widget.selectedShift.endTime!,
+                              process: widget.process,
+                              executeShiftId: executeShiftId!,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Image.asset('assets/images/end-shift.png'),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 26,
+                    child: Container(),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 26,
+              )
+            ],
+          ),
         ),
       ),
     );
