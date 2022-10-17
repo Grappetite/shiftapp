@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
+import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/model/login_model.dart';
 
 import '../services/login_service.dart';
@@ -32,6 +34,17 @@ class _DropDownPageState extends State<DropDownPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: kPrimaryColor,
+          onPressed: () {
+            Get.back();
+          },
+        ),
+      ),
       body: process == null
           ? Container()
           : Column(

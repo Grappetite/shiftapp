@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/constants.dart';
+import 'package:shiftapp/screens/StartedShiftList.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 import 'package:shiftapp/services/login_service.dart';
 
@@ -14,7 +15,6 @@ import '../model/login_model.dart';
 import '../model/shifts_model.dart';
 import '../services/shift_service.dart';
 import '../services/workers_service.dart';
-import 'NewDropdownPage.dart';
 import 'edit_workers.dart';
 import 'end_shift_final_screen.dart';
 import 'inner_widgets/HandOverShift.dart';
@@ -137,7 +137,7 @@ class _EndShiftViewState extends State<EndShiftView> {
                       MaterialPageRoute(
                           builder:
                               (context) => //   Navigator.pop(context, true);
-                                  DropDownPage()
+                                  StartedShifts()
                           // HomeView(
                           //     processSelected: widget.process,
                           //     selectedShift: widget.selectedShift)
@@ -236,7 +236,7 @@ class _EndShiftViewState extends State<EndShiftView> {
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
                       builder: (context) => //   Navigator.pop(context, true);
-                          DropDownPage()
+                          StartedShifts()
                       // HomeView(
                       //     processSelected: widget.process,
                       //     selectedShift: widget.selectedShift)
@@ -299,7 +299,15 @@ class _EndShiftViewState extends State<EndShiftView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Container(),
+        leading: GestureDetector(
+            onTap: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => StartedShifts()));
+            },
+            child: Icon(
+              Icons.arrow_back,
+              color: Colors.white,
+            )),
         automaticallyImplyLeading: false,
         centerTitle: true,
         title: Column(

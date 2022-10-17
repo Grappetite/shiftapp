@@ -38,6 +38,35 @@ class ShiftService {
     }
   }
 
+  static Future<List<ShiftStartDetails>> startedShiftsList() async {
+    try {
+      var dio = Dio();
+      final prefs = await SharedPreferences.getInstance();
+
+      Response response = await dio.get(
+        baseUrl + 'startedShiftDetails',
+        options: Options(
+          headers: {
+            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+          },
+        ),
+      );
+
+      print(response.data);
+
+      // var responseObject = ShiftStartModel.fromJson(response.data);
+      //
+      // if (responseObject.data == null) {
+      //   return null;
+      // }
+      //
+      return List<ShiftStartDetails>.from(
+          response.data["data"].map((x) => ShiftStartDetails.fromJson(x)));
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
+    }
+  }
+
   static Future<bool> endShift(
       int shiftId, int processId, String unitsProduced, String endTime) async {
     try {

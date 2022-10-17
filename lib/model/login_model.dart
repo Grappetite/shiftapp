@@ -34,7 +34,7 @@ class LoginResponse {
 class Data {
   User? user;
   List<Process>? process;
-  ShiftStartDetails? shiftDetails;
+  List<ShiftStartDetails>? shiftDetails;
 
   Data({this.user, this.process});
 
@@ -49,7 +49,8 @@ class Data {
 
     if (json.keys.contains('shiftStartDetails')) {
       shiftDetails = json['shiftStartDetails'] != null
-          ? ShiftStartDetails.fromJson(json['shiftStartDetails'])
+          ? List<ShiftStartDetails>.from(json["shiftStartDetails"]
+              .map((x) => ShiftStartDetails.fromJson(x)))
           : null;
     }
   }
@@ -183,7 +184,7 @@ class ShiftStartDetails {
     shiftName = json['shift_name'];
     shiftStartTime = json['shift_start_time'];
     shiftEndTime = json['shift_end_time'];
-    process = Process.fromJson(json);
+    process = Process.fromJson(json["process"]);
     print('object');
   }
 

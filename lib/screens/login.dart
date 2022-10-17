@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/BaseConfig.dart';
-import 'package:shiftapp/screens/NewDropdownPage.dart';
-import 'package:shiftapp/screens/home.dart';
+import 'package:shiftapp/screens/StartedShiftList.dart';
 import 'package:shiftapp/services/login_service.dart';
 
 import '../config/constants.dart';
 import '../model/login_model.dart';
-import '../model/shifts_model.dart';
 import '../widgets/elevated_button.dart';
 import '../widgets/input_view.dart';
 
@@ -86,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (response == null) {
         await EasyLoading.dismiss();
       } else {
-        if (response.data!.shiftDetails == null) {
+        if (response.data!.shiftDetails!.isEmpty) {
           await EasyLoading.dismiss();
 
           // prefs.remove('username');
@@ -97,30 +95,39 @@ class _LoginScreenState extends State<LoginScreen> {
           return;
         }
         // process = response.data!.process!;
+        ///will go to the new page
 
-        var shiftObject = ShiftItem(
-          id: response.data!.shiftDetails!.shiftId!,
-          name: response.data!.shiftDetails!.shiftName!,
-          startTime: response.data!.shiftDetails!.executeShiftStartTime,
-          endTime: response.data!.shiftDetails!.executeShiftEndTime,
-        );
-
-        shiftObject.executedShiftId =
-            response.data!.shiftDetails!.executeShiftId;
-
-        shiftObject.displayScreen = 2;
-        // prefs.setString(
-        //     "processesMahboob", jsonEncode(response.data!.process!));
+        // var shiftObject = ShiftItem(
+        //   id: response.data!.shiftDetails!.shiftId!,
+        //   name: response.data!.shiftDetails!.shiftName!,
+        //   startTime: response.data!.shiftDetails!.executeShiftStartTime,
+        //   endTime: response.data!.shiftDetails!.executeShiftEndTime,
+        // );
+        //
+        // shiftObject.executedShiftId =
+        //     response.data!.shiftDetails!.executeShiftId;
+        //
+        // shiftObject.displayScreen = 2;
+        // // prefs.setString(
+        // //     "processesMahboob", jsonEncode(response.data!.process!));
+        // await EasyLoading.dismiss();
+        //
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (BuildContext context) => HomeView(
+        //       selectedShift: shiftObject,
+        //       processSelected: response.data!.shiftDetails!.process!,
+        //       sessionStarted: true,
+        //     ),
+        //   ),
+        // );
         await EasyLoading.dismiss();
 
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => HomeView(
-              selectedShift: shiftObject,
-              processSelected: response.data!.shiftDetails!.process!,
-              sessionStarted: true,
-            ),
+            builder: (BuildContext context) => StartedShifts(),
           ),
         );
       }
@@ -288,9 +295,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       prefs.setString('username', controller.text);
                       prefs.setString('password', passwordController.text);
 
-                      if (response.data!.shiftDetails != null) {
-                        prefs.setInt(
-                            'shiftId', response.data!.shiftDetails!.shiftId!);
+                      if (response.data!.shiftDetails!.isNotEmpty) {
+                        prefs.setInt('shiftId',
+                            response.data!.shiftDetails![0].shiftId!);
                         loadDefaul();
 
                         //prefs.reload();
@@ -305,7 +312,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         showLogin = false;
                       });
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => DropDownPage()));
+                          builder: (context) => StartedShifts()));
                       return;
                     }
                     return;
