@@ -84,16 +84,16 @@ class _LoginScreenState extends State<LoginScreen> {
       if (response == null) {
         await EasyLoading.dismiss();
       } else {
-        if (response.data!.shiftDetails!.isEmpty) {
-          await EasyLoading.dismiss();
-
-          // prefs.remove('username');
-
-          prefs.remove('password');
-
-          prefs.remove('shiftId');
-          return;
-        }
+        // if (response.data!.shiftDetails!.isEmpty) {
+        //   await EasyLoading.dismiss();
+        //
+        //   // prefs.remove('username');
+        //
+        //   prefs.remove('password');
+        //
+        //   prefs.remove('shiftId');
+        //   return;
+        // }
         // process = response.data!.process!;
         ///will go to the new page
 

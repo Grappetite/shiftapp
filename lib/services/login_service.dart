@@ -177,7 +177,7 @@ class LoginService {
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
 
-      Response response = await dio.get(baseUrl + 'logout',
+      Response response = await dio.post(baseUrl + 'logout',
           options: Options(
             headers: {
               authorization: 'Bearer ' + prefs.getString(tokenKey)!,
