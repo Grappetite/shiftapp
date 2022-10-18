@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,12 +33,13 @@ class EndShiftFinalScreen extends StatefulWidget {
 
   final String startTime;
   final String endTime;
+  double? expectedUnits;
 
   final ShiftItem selectedShift;
 
   final bool autoOpen;
 
-  const EndShiftFinalScreen(
+  EndShiftFinalScreen(
       {Key? key,
       required this.shiftId,
       required this.processId,
@@ -46,7 +48,8 @@ class EndShiftFinalScreen extends StatefulWidget {
       required this.selectedShift,
       required this.process,
       this.autoOpen = false,
-      required this.executeShiftId})
+      required this.executeShiftId,
+      this.expectedUnits})
       : super(key: key);
 
   @override
@@ -144,6 +147,32 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
     super.initState();
     setupFocusNode(doneButton);
     startTimer();
+    if (widget.expectedUnits == null) {
+      EasyLoading.show(
+        status: 'Please wait...',
+        maskType: EasyLoadingMaskType.black,
+      );
+      loadExpectedUnits();
+      EasyLoading.dismiss();
+    }
+  }
+
+  Future loadExpectedUnits() async {
+    widget.expectedUnits = 0;
+    var shiftWorkerList =
+        await WorkersService.getAllShiftWorkersList(widget.executeShiftId!);
+    log("${double.parse(widget.process.baseline!)}");
+    for (var calculation in shiftWorkerList!.data!) {
+      log(calculation.name! +
+          " ${((calculation.actualTimeloggedout!.difference(calculation.actualTimeloggedin!).inMinutes) / 60) * (double.parse(widget.process.baseline!))}");
+      widget.expectedUnits = widget.expectedUnits! +
+          (((calculation.actualTimeloggedout!
+                      .difference(calculation.actualTimeloggedin!)
+                      .inMinutes) /
+                  60) *
+              (double.parse(widget.process.baseline!)));
+    }
+    setState(() {});
   }
 
   @override
@@ -250,6 +279,41 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                       const SizedBox(
                         height: 8,
                       ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      //   child: ExplainerWidget(
+                      //     iconName: 'construct',
+                      //     title:
+                      //         'Expected ${widget.process.unit} Produced By Now',
+                      //     text1: "${widget.expectedUnits!.toStringAsFixed(0)}",
+                      //     text2: '',
+                      //     showWarning: false,
+                      //     onTap: () async {
+                      //       // var response = await Navigator.push(
+                      //       //   context,
+                      //       //   MaterialPageRoute(
+                      //       //     builder: (BuildContext context) => EditWorkers(
+                      //       //       startTime: widget.selectedShift.startTime!,
+                      //       //       processId: widget.processId,
+                      //       //       endTime: widget.selectedShift.endTime!,
+                      //       //       userId: [],
+                      //       //       efficiencyCalculation: [],
+                      //       //       shiftId: widget.shiftId,
+                      //       //       totalUsersCount: widget.userId.length,
+                      //       //       selectedShift: widget.selectedShift,
+                      //       //       process: widget.process,
+                      //       //       execShiftId: this.widget.execShiftId,
+                      //       //     ),
+                      //       //   ),
+                      //       // );
+                      //       //
+                      //       // loadUsers();
+                      //     },
+                      //   ),
+                      // ),
+                      // const SizedBox(
+                      //   height: 8,
+                      // ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         child: Container(
@@ -281,7 +345,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                       width: 8,
                                     ),
                                     Text(
-                                      '${widget.process.unit} Processed',
+                                      '${widget.process.unit} Processed(Est : ${widget.expectedUnits!.toStringAsFixed(0)}):',
                                       style: TextStyle(
                                           color: kPrimaryColor,
                                           fontSize: 18,
@@ -461,6 +525,7 @@ class ConfirmTimeEnd extends StatefulWidget {
   final bool moveWorker;
   final List<Process>? processList;
   final int? workerId;
+
   const ConfirmTimeEnd(
       {Key? key,
       required this.shiftItem,
@@ -489,6 +554,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
   String selectedWorkerType = "";
   int processIndexSelected = -1;
   int workerTypeIndexSelected = -1;
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(

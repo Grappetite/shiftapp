@@ -295,7 +295,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       prefs.setString('username', controller.text);
                       prefs.setString('password', passwordController.text);
 
-                      if (response.data!.shiftDetails!.isNotEmpty) {
+                      if (response.data!.shiftDetails != null) {
                         prefs.setInt('shiftId',
                             response.data!.shiftDetails![0].shiftId!);
                         loadDefaul();

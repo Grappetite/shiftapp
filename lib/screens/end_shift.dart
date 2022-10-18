@@ -63,6 +63,9 @@ class _EndShiftViewState extends State<EndShiftView> {
   String timeRemaining = '00:00';
 
   var isTimeOver = false;
+  double expectedUnits = 0;
+
+  var stopper = false;
 
   void startTimer() {
     const oneSec = Duration(seconds: 1);
@@ -80,9 +83,37 @@ class _EndShiftViewState extends State<EndShiftView> {
 
         setState(() {
           timeElasped = widget.selectedShift.timeElasped;
+          if (int.parse(timeElasped.split(":")[1].toString()) % 30 == 0 &&
+              stopper == false) {
+            stopper = true;
+            loadExpectedUnits();
+          } else if (int.parse(timeElasped.split(":")[1].toString()) % 30 !=
+                  0 &&
+              stopper == true) {
+            stopper = false;
+          }
+
+          ///My Algorithm
+          // if (WorkersService.prefs!.getString(widget.execShiftId.toString()) !=
+          //     null) {
+          //   ///worker*((baseline)/2)
+          //   expectedEffeicency =
+          //       WorkersService.prefs!.getString(widget.execShiftId.toString())!;
+          //   WorkersService.prefs!.setString(
+          //       widget.execShiftId.toString(),
+          //       (double.parse(expectedEffeicency) +
+          //               (numberSelected *
+          //                   ((double.parse(widget.process.baseline!) / 2))))
+          //           .toString());
+          //   expectedEffeicency =
+          //       WorkersService.prefs!.getString(widget.execShiftId.toString())!;
+          // } else {
+          //   WorkersService.prefs!
+          //       .setString(widget.execShiftId.toString(), 0.toString());
+          // }
         });
 
-        print('');
+        // print(WorkersService.prefs!.getString(widget.execShiftId.toString())!);
       },
     );
   }
@@ -90,12 +121,12 @@ class _EndShiftViewState extends State<EndShiftView> {
   void loadShiftId() async {
     this.executeShiftId = widget.execShiftId;
     loadUsers();
+    loadExpectedUnits();
   }
 
   @override
   void initState() {
     super.initState();
-
     loadShiftId();
 
     appMenu02 = AppPopupMenu<int>(
@@ -447,6 +478,37 @@ class _EndShiftViewState extends State<EndShiftView> {
               const SizedBox(
                 height: 16,
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: ExplainerWidget(
+                  iconName: 'construct',
+                  title: 'Expected ${widget.process.unit} Produced By Now',
+                  text1: "${expectedUnits.toStringAsFixed(0)}",
+                  text2: '',
+                  showWarning: false,
+                  onTap: () async {
+                    // var response = await Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (BuildContext context) => EditWorkers(
+                    //       startTime: widget.selectedShift.startTime!,
+                    //       processId: widget.processId,
+                    //       endTime: widget.selectedShift.endTime!,
+                    //       userId: [],
+                    //       efficiencyCalculation: [],
+                    //       shiftId: widget.shiftId,
+                    //       totalUsersCount: widget.userId.length,
+                    //       selectedShift: widget.selectedShift,
+                    //       process: widget.process,
+                    //       execShiftId: this.widget.execShiftId,
+                    //     ),
+                    //   ),
+                    // );
+                    //
+                    // loadUsers();
+                  },
+                ),
+              ),
               Row(
                 children: [
                   Expanded(
@@ -468,6 +530,7 @@ class _EndShiftViewState extends State<EndShiftView> {
                               endTime: widget.selectedShift.endTime!,
                               process: widget.process,
                               executeShiftId: executeShiftId!,
+                              expectedUnits: expectedUnits,
                             ),
                           ),
                         );
@@ -489,6 +552,29 @@ class _EndShiftViewState extends State<EndShiftView> {
         ),
       ),
     );
+  }
+
+  void loadExpectedUnits() async {
+    expectedUnits = 0;
+    var shiftWorkerList =
+        await WorkersService.getAllShiftWorkersList(executeShiftId!);
+    for (var calculation in shiftWorkerList!.data!) {
+      expectedUnits = expectedUnits +
+          ((((calculation.actualTimeloggedout!
+                              .difference(calculation.actualTimeloggedin!)
+                              .inMinutes) >=
+                          300
+                      ? (calculation.actualTimeloggedout!
+                              .difference(calculation.actualTimeloggedin!)
+                              .inMinutes -
+                          60)
+                      : calculation.actualTimeloggedout!
+                          .difference(calculation.actualTimeloggedin!)
+                          .inMinutes) /
+                  60) *
+              (double.parse(widget.process.baseline!)));
+    }
+    setState(() {});
   }
 }
 

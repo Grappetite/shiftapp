@@ -11,11 +11,13 @@ import '../model/workers_model.dart';
 import 'login_service.dart';
 
 class WorkersService {
+  static SharedPreferences? prefs;
+
   static Future<WorkersListing?> getShiftWorkers(
       int? shiftId, int processId) async {
     try {
       var dio = Dio();
-      final prefs = await SharedPreferences.getInstance();
+      prefs = await SharedPreferences.getInstance();
 
       String url = baseUrl + "newWorkerList/" + processId.toString();
       if (shiftId != null) {
@@ -30,7 +32,7 @@ class WorkersService {
       Response response = await dio.get(url,
           options: Options(
             headers: {
-              authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+              authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
             },
           ));
 
@@ -52,10 +54,38 @@ class WorkersService {
     }
   }
 
+  static Future<ShiftWorkerList?> getAllShiftWorkersList(int? shiftId) async {
+    try {
+      var dio = Dio();
+      prefs = await SharedPreferences.getInstance();
+
+      String url = baseUrl + "startedShiftWorkerList/" + shiftId.toString();
+
+      Response response = await dio.get(url,
+          options: Options(
+            headers: {
+              authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
+            },
+          ));
+
+      print(response.data);
+
+      var responseObject = ShiftWorkerList.fromJson(response.data);
+
+      if (responseObject.data == null) {
+        return null;
+      }
+
+      return responseObject;
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
+    }
+  }
+
   static Future<dynamic> startedProcessList() async {
     try {
       var dio = Dio();
-      final prefs = await SharedPreferences.getInstance();
+      prefs = await SharedPreferences.getInstance();
 
       String url = baseUrl + "startedProcessList";
       print('');
@@ -63,7 +93,7 @@ class WorkersService {
       Response response = await dio.get(url,
           options: Options(
             headers: {
-              authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+              authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
             },
           ));
 
@@ -89,7 +119,7 @@ class WorkersService {
     //{{shift_url}I/searchWorker/2
     try {
       var dio = Dio();
-      final prefs = await SharedPreferences.getInstance();
+      prefs = await SharedPreferences.getInstance();
       String url = baseUrl +
           'searchWorker/' +
           searchId +
@@ -99,7 +129,7 @@ class WorkersService {
         url,
         options: Options(
           headers: {
-            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+            authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
           },
         ),
       );
@@ -124,7 +154,7 @@ class WorkersService {
       List<String> efficiencyCalculation) async {
     try {
       var dio = Dio();
-      final prefs = await SharedPreferences.getInstance();
+      prefs = await SharedPreferences.getInstance();
       for (int i = 1;
           i <
               [
@@ -146,7 +176,7 @@ class WorkersService {
         },
         options: Options(
           headers: {
-            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+            authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
           },
         ),
       );
@@ -171,7 +201,7 @@ class WorkersService {
       required int workerTypeId}) async {
     try {
       var dio = Dio();
-      final prefs = await SharedPreferences.getInstance();
+      prefs = await SharedPreferences.getInstance();
 
       Response response = await dio.post(
         baseUrl + 'moveWorker',
@@ -184,7 +214,7 @@ class WorkersService {
         },
         options: Options(
           headers: {
-            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+            authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
           },
         ),
       );
@@ -209,9 +239,9 @@ class WorkersService {
       List<String> efficiencyCalculation) async {
     try {
       var dio = Dio();
-      final prefs = await SharedPreferences.getInstance();
+      prefs = await SharedPreferences.getInstance();
 
-      var token = prefs.getString(tokenKey)!;
+      var token = prefs!.getString(tokenKey)!;
 
       Response response = await dio.post(
         baseUrl + 'shifts/removeWorkers',
@@ -223,7 +253,7 @@ class WorkersService {
         },
         options: Options(
           headers: {
-            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+            authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
           },
         ),
       );
@@ -250,7 +280,7 @@ class WorkersService {
       String comment) async {
     try {
       var dio = Dio();
-      final prefs = await SharedPreferences.getInstance();
+      prefs = await SharedPreferences.getInstance();
 
       Response response = await dio.post(
         baseUrl + 'addShiftWorker',
@@ -265,7 +295,7 @@ class WorkersService {
         },
         options: Options(
           headers: {
-            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+            authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
           },
         ),
       );
@@ -296,11 +326,11 @@ class WorkersService {
       String shiftId, String processId) async {
     try {
       var dio = Dio();
-      final prefs = await SharedPreferences.getInstance();
+      prefs = await SharedPreferences.getInstance();
       Response response = await dio.get(baseUrl + 'workerType/' + processId,
           options: Options(
             headers: {
-              authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+              authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
             },
           ));
 
@@ -331,7 +361,7 @@ class WorkersService {
       String startTime) async {
     try {
       var dio = Dio();
-      final prefs = await SharedPreferences.getInstance();
+      prefs = await SharedPreferences.getInstance();
 
       // ,
       Response response = await dio.post(
@@ -346,7 +376,7 @@ class WorkersService {
         },
         options: Options(
           headers: {
-            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+            authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
           },
         ),
       );
@@ -361,7 +391,7 @@ class WorkersService {
       //     final prefs = await SharedPreferences.getInstance();
       //   responseObject.data!.user!.lastName;
 
-      // prefs.setString(tokenKey, responseObject.token!);
+      // prefs!.setString(tokenKey, responseObject.token!);
 
       return responseObject;
     } on DioError catch (e) {

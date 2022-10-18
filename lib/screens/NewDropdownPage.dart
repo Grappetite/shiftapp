@@ -27,7 +27,7 @@ class _DropDownPageState extends State<DropDownPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getprocess();
+    getProcess();
   }
 
   @override
@@ -155,7 +155,7 @@ class _DropDownPageState extends State<DropDownPage> {
     );
   }
 
-  void getprocess() async {
+  void getProcess() async {
     await EasyLoading.show(
       status: 'loading...',
       maskType: EasyLoadingMaskType.black,
