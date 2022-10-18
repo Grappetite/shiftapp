@@ -11,13 +11,11 @@ import '../model/workers_model.dart';
 import 'login_service.dart';
 
 class WorkersService {
-  static SharedPreferences? prefs;
-
   static Future<WorkersListing?> getShiftWorkers(
       int? shiftId, int processId) async {
     try {
       var dio = Dio();
-      prefs = await SharedPreferences.getInstance();
+      final prefs = await SharedPreferences.getInstance();
 
       String url = baseUrl + "newWorkerList/" + processId.toString();
       if (shiftId != null) {
@@ -57,7 +55,7 @@ class WorkersService {
   static Future<ShiftWorkerList?> getAllShiftWorkersList(int? shiftId) async {
     try {
       var dio = Dio();
-      prefs = await SharedPreferences.getInstance();
+      final prefs = await SharedPreferences.getInstance();
 
       String url = baseUrl + "startedShiftWorkerList/" + shiftId.toString();
 
@@ -85,7 +83,7 @@ class WorkersService {
   static Future<dynamic> startedProcessList() async {
     try {
       var dio = Dio();
-      prefs = await SharedPreferences.getInstance();
+      final prefs = await SharedPreferences.getInstance();
 
       String url = baseUrl + "startedProcessList";
       print('');
@@ -119,7 +117,7 @@ class WorkersService {
     //{{shift_url}I/searchWorker/2
     try {
       var dio = Dio();
-      prefs = await SharedPreferences.getInstance();
+      final prefs = await SharedPreferences.getInstance();
       String url = baseUrl +
           'searchWorker/' +
           searchId +
@@ -154,7 +152,7 @@ class WorkersService {
       List<String> efficiencyCalculation) async {
     try {
       var dio = Dio();
-      prefs = await SharedPreferences.getInstance();
+      final prefs = await SharedPreferences.getInstance();
       for (int i = 1;
           i <
               [
@@ -201,7 +199,7 @@ class WorkersService {
       required int workerTypeId}) async {
     try {
       var dio = Dio();
-      prefs = await SharedPreferences.getInstance();
+      final prefs = await SharedPreferences.getInstance();
 
       Response response = await dio.post(
         baseUrl + 'moveWorker',
@@ -239,7 +237,7 @@ class WorkersService {
       List<String> efficiencyCalculation) async {
     try {
       var dio = Dio();
-      prefs = await SharedPreferences.getInstance();
+      final prefs = await SharedPreferences.getInstance();
 
       var token = prefs!.getString(tokenKey)!;
 
@@ -280,7 +278,7 @@ class WorkersService {
       String comment) async {
     try {
       var dio = Dio();
-      prefs = await SharedPreferences.getInstance();
+      final prefs = await SharedPreferences.getInstance();
 
       Response response = await dio.post(
         baseUrl + 'addShiftWorker',
@@ -326,7 +324,7 @@ class WorkersService {
       String shiftId, String processId) async {
     try {
       var dio = Dio();
-      prefs = await SharedPreferences.getInstance();
+      final prefs = await SharedPreferences.getInstance();
       Response response = await dio.get(baseUrl + 'workerType/' + processId,
           options: Options(
             headers: {
@@ -361,7 +359,7 @@ class WorkersService {
       String startTime) async {
     try {
       var dio = Dio();
-      prefs = await SharedPreferences.getInstance();
+      final prefs = await SharedPreferences.getInstance();
 
       // ,
       Response response = await dio.post(

@@ -22,6 +22,7 @@ import '../services/workers_service.dart';
 import '../widgets/drop_down.dart';
 import '../widgets/elevated_button.dart';
 import '../widgets/input_view.dart';
+import 'StartedShiftList.dart';
 import 'inner_widgets/alert_title_label.dart';
 
 class EndShiftFinalScreen extends StatefulWidget {
@@ -177,320 +178,338 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Column(
-          children: [
-            Image.asset(
-              'assets/images/toplogo.png',
-              height: 20,
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Text(
-              widget.process.name!,
-              style: const TextStyle(
+    return WillPopScope(
+        onWillPop: () async {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => StartedShifts()));
+          return Future.value(true);
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            leading: GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => StartedShifts()));
+                },
+                child: Icon(
+                  Icons.arrow_back,
                   color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600),
-            ),
-            SizedBox(
-              height: 2,
-            ),
-          ],
-        ),
-      ),
-      body: Column(
-        children: [
-          TimerTopWidget(
-              selectedShift: widget.selectedShift, timeElasped: timeElasped),
-          Expanded(
-            child: Padding(
-              padding:
-                  const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 16),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.grey, width: 3),
+                )),
+            centerTitle: true,
+            title: Column(
+              children: [
+                Image.asset(
+                  'assets/images/toplogo.png',
+                  height: 20,
                 ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  widget.process.name!,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600),
+                ),
+                SizedBox(
+                  height: 2,
+                ),
+              ],
+            ),
+          ),
+          body: Column(
+            children: [
+              TimerTopWidget(
+                  selectedShift: widget.selectedShift,
+                  timeElasped: timeElasped),
+              Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      Row(
-                        children: const [
-                          Icon(
-                            Icons.check_circle_outline,
-                            color: kPrimaryColor,
+                  padding: const EdgeInsets.only(
+                      left: 8, right: 8, top: 8, bottom: 16),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Colors.grey, width: 3),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const SizedBox(
+                            height: 8,
                           ),
-                          Text(
-                            'END SHIFT: SHIFT SUMMARY',
-                            style: TextStyle(
+                          Row(
+                            children: const [
+                              Icon(
+                                Icons.check_circle_outline,
                                 color: kPrimaryColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700),
+                              ),
+                              Text(
+                                'END SHIFT: SHIFT SUMMARY',
+                                style: TextStyle(
+                                    color: kPrimaryColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w700),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: lightRedColor,
+                                  width: 3,
+                                ),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(
+                                    24,
+                                  ),
+                                ),
+                              ),
+                              width: double.infinity,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 16, horizontal: 16),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    isTimeOver
+                                        ? ('TIME OVER : $timeRemaining')
+                                        : ('TIME REMAINING: $timeRemaining'),
+                                    style: const TextStyle(
+                                        color: Colors.red,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w700),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          // Padding(
+                          //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          //   child: ExplainerWidget(
+                          //     iconName: 'construct',
+                          //     title:
+                          //         'Expected ${widget.process.unit} Produced By Now',
+                          //     text1: "${widget.expectedUnits!.toStringAsFixed(0)}",
+                          //     text2: '',
+                          //     showWarning: false,
+                          //     onTap: () async {
+                          //       // var response = await Navigator.push(
+                          //       //   context,
+                          //       //   MaterialPageRoute(
+                          //       //     builder: (BuildContext context) => EditWorkers(
+                          //       //       startTime: widget.selectedShift.startTime!,
+                          //       //       processId: widget.processId,
+                          //       //       endTime: widget.selectedShift.endTime!,
+                          //       //       userId: [],
+                          //       //       efficiencyCalculation: [],
+                          //       //       shiftId: widget.shiftId,
+                          //       //       totalUsersCount: widget.userId.length,
+                          //       //       selectedShift: widget.selectedShift,
+                          //       //       process: widget.process,
+                          //       //       execShiftId: this.widget.execShiftId,
+                          //       //     ),
+                          //       //   ),
+                          //       // );
+                          //       //
+                          //       // loadUsers();
+                          //     },
+                          //   ),
+                          // ),
+                          // const SizedBox(
+                          //   height: 8,
+                          // ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: kPrimaryColor,
+                                  width: 1,
+                                ),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(
+                                    24,
+                                  ),
+                                ),
+                              ),
+                              width: double.infinity,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 16, horizontal: 16),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.handyman,
+                                          color: kPrimaryColor,
+                                        ),
+                                        SizedBox(
+                                          width: 8,
+                                        ),
+                                        Text(
+                                          '${widget.process.unit} Processed(Est : ${widget.expectedUnits!.toStringAsFixed(0)}):',
+                                          style: TextStyle(
+                                              color: kPrimaryColor,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Container(),
+                                        ),
+                                        Expanded(
+                                          child: TextField(
+                                            controller: textController,
+                                            textAlign: TextAlign.center,
+                                            focusNode: doneButton,
+                                            keyboardType: TextInputType.number,
+                                            inputFormatters: [
+                                              FilteringTextInputFormatter
+                                                  .digitsOnly
+                                            ], // Only numbers can be entered
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Container(),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Text(
+                                      '${widget.process.unit} Processed',
+                                      style: const TextStyle(
+                                          color: kPrimaryColor, fontSize: 16),
+                                    ),
+                                    const SizedBox(
+                                      height: 6,
+                                    ),
+                                    const Text(
+                                      'Enter the volume above',
+                                      style: TextStyle(
+                                        color: kPrimaryColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(),
+                          ),
+                          PElevatedButton(
+                            onPressed: () async {
+                              if (textController.text.isEmpty) {
+                                showAlertDialog(
+                                  context: context,
+                                  title: 'Error',
+                                  message:
+                                      'Please write down the ${widget.process.unit} Processed',
+                                  actions: [
+                                    AlertDialogAction(
+                                      label: MaterialLocalizations.of(context)
+                                          .okButtonLabel,
+                                      key: OkCancelResult.ok,
+                                    )
+                                  ],
+                                );
+
+                                print('');
+
+                                return;
+                              } else {
+                                var answer = await showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (BuildContext context) {
+                                      return ConfirmTimeEnd(
+                                        shiftItem: this.widget.selectedShift,
+                                      );
+                                    });
+
+                                if (answer != null) {
+                                  if (answer != false) {
+                                    // return;
+
+                                    await EasyLoading.show(
+                                      status: 'Adding...',
+                                      maskType: EasyLoadingMaskType.black,
+                                    );
+
+                                    var check = await ShiftService.endShift(
+                                      widget.executeShiftId,
+                                      widget.processId,
+                                      textController.text,
+                                      answer,
+                                    );
+                                    await LoginService.logout();
+                                    await EasyLoading.dismiss();
+
+                                    if (check) {
+                                      await EasyLoading.showSuccess(
+                                        'Closed shift successfully',
+                                        duration: const Duration(seconds: 2),
+                                      );
+
+                                      final prefs =
+                                          await SharedPreferences.getInstance();
+
+                                      prefs.remove('shiftId');
+
+                                      prefs.remove('selectedShiftName');
+                                      prefs.remove('selectedShiftEndTime');
+                                      prefs.remove('selectedShiftStartTime');
+                                      // prefs.remove('username');
+                                      prefs.remove('password');
+
+                                      Get.offAll(LoginScreen());
+                                      // if (widget.autoOpen) {
+                                      //   Navigator.pop(context);
+                                      //   Navigator.pop(context, true);
+                                      // } else {
+                                      //   Navigator.pop(context);
+                                      //   Navigator.pop(context, true);
+                                      //   Navigator.pop(context, true);
+                                      // }
+                                    } else {
+                                      EasyLoading.showError('Error');
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            text: 'CLOSE SHIFT',
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: lightRedColor,
-                              width: 3,
-                            ),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(
-                                24,
-                              ),
-                            ),
-                          ),
-                          width: double.infinity,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 16, horizontal: 16),
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                isTimeOver
-                                    ? ('TIME OVER : $timeRemaining')
-                                    : ('TIME REMAINING: $timeRemaining'),
-                                style: const TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      //   child: ExplainerWidget(
-                      //     iconName: 'construct',
-                      //     title:
-                      //         'Expected ${widget.process.unit} Produced By Now',
-                      //     text1: "${widget.expectedUnits!.toStringAsFixed(0)}",
-                      //     text2: '',
-                      //     showWarning: false,
-                      //     onTap: () async {
-                      //       // var response = await Navigator.push(
-                      //       //   context,
-                      //       //   MaterialPageRoute(
-                      //       //     builder: (BuildContext context) => EditWorkers(
-                      //       //       startTime: widget.selectedShift.startTime!,
-                      //       //       processId: widget.processId,
-                      //       //       endTime: widget.selectedShift.endTime!,
-                      //       //       userId: [],
-                      //       //       efficiencyCalculation: [],
-                      //       //       shiftId: widget.shiftId,
-                      //       //       totalUsersCount: widget.userId.length,
-                      //       //       selectedShift: widget.selectedShift,
-                      //       //       process: widget.process,
-                      //       //       execShiftId: this.widget.execShiftId,
-                      //       //     ),
-                      //       //   ),
-                      //       // );
-                      //       //
-                      //       // loadUsers();
-                      //     },
-                      //   ),
-                      // ),
-                      // const SizedBox(
-                      //   height: 8,
-                      // ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: kPrimaryColor,
-                              width: 1,
-                            ),
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(
-                                24,
-                              ),
-                            ),
-                          ),
-                          width: double.infinity,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 16, horizontal: 16),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.handyman,
-                                      color: kPrimaryColor,
-                                    ),
-                                    SizedBox(
-                                      width: 8,
-                                    ),
-                                    Text(
-                                      '${widget.process.unit} Processed(Est : ${widget.expectedUnits!.toStringAsFixed(0)}):',
-                                      style: TextStyle(
-                                          color: kPrimaryColor,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Container(),
-                                    ),
-                                    Expanded(
-                                      child: TextField(
-                                        controller: textController,
-                                        textAlign: TextAlign.center,
-                                        focusNode: doneButton,
-                                        keyboardType: TextInputType.number,
-                                        inputFormatters: [
-                                          FilteringTextInputFormatter.digitsOnly
-                                        ], // Only numbers can be entered
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Container(),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  '${widget.process.unit} Processed',
-                                  style: const TextStyle(
-                                      color: kPrimaryColor, fontSize: 16),
-                                ),
-                                const SizedBox(
-                                  height: 6,
-                                ),
-                                const Text(
-                                  'Enter the volume above',
-                                  style: TextStyle(
-                                    color: kPrimaryColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(),
-                      ),
-                      PElevatedButton(
-                        onPressed: () async {
-                          if (textController.text.isEmpty) {
-                            showAlertDialog(
-                              context: context,
-                              title: 'Error',
-                              message:
-                                  'Please write down the ${widget.process.unit} Processed',
-                              actions: [
-                                AlertDialogAction(
-                                  label: MaterialLocalizations.of(context)
-                                      .okButtonLabel,
-                                  key: OkCancelResult.ok,
-                                )
-                              ],
-                            );
-
-                            print('');
-
-                            return;
-                          } else {
-                            var answer = await showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (BuildContext context) {
-                                  return ConfirmTimeEnd(
-                                    shiftItem: this.widget.selectedShift,
-                                  );
-                                });
-
-                            if (answer != null) {
-                              if (answer != false) {
-                                // return;
-
-                                await EasyLoading.show(
-                                  status: 'Adding...',
-                                  maskType: EasyLoadingMaskType.black,
-                                );
-
-                                var check = await ShiftService.endShift(
-                                  widget.executeShiftId,
-                                  widget.processId,
-                                  textController.text,
-                                  answer,
-                                );
-                                await LoginService.logout();
-                                await EasyLoading.dismiss();
-
-                                if (check) {
-                                  await EasyLoading.showSuccess(
-                                    'Closed shift successfully',
-                                    duration: const Duration(seconds: 2),
-                                  );
-
-                                  final prefs =
-                                      await SharedPreferences.getInstance();
-
-                                  prefs.remove('shiftId');
-
-                                  prefs.remove('selectedShiftName');
-                                  prefs.remove('selectedShiftEndTime');
-                                  prefs.remove('selectedShiftStartTime');
-                                  // prefs.remove('username');
-                                  prefs.remove('password');
-
-                                  Get.offAll(LoginScreen());
-                                  // if (widget.autoOpen) {
-                                  //   Navigator.pop(context);
-                                  //   Navigator.pop(context, true);
-                                  // } else {
-                                  //   Navigator.pop(context);
-                                  //   Navigator.pop(context, true);
-                                  //   Navigator.pop(context, true);
-                                  // }
-                                } else {
-                                  EasyLoading.showError('Error');
-                                }
-                              }
-                            }
-                          }
-                        },
-                        text: 'CLOSE SHIFT',
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
-    );
+        ));
   }
 }
 
