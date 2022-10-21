@@ -355,11 +355,11 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                         selected.data!.newAdded = true;
                         if (!this.isSearching) {
                           setState(() {
-                            this.workers.add(selected.data!);
+                            this.workers.insert(0, selected.data!);
                           });
                         } else {
                           setState(() {
-                            this.workers.add(selected.data!);
+                            this.workers.insert(0, selected.data!);
                           });
                         }
 
@@ -373,14 +373,18 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                             DateFormat("yyyy-MM-dd hh:mm:ss").format(
                           DateTime.now(),
                         );
-
-                        var res = await WorkersService.addWorkers(
-                            widget.exShiftId,
-                            [selected.data!.id.toString()],
-                            [dateString],
-                            [this.widget.exShiftId.toString()],
-                            [selected.data!.efficiencyCalculation.toString()]);
-
+                        if (widget.exShiftId != 0) {
+                          var res = await WorkersService.addWorkers(
+                              widget.exShiftId, [
+                            selected.data!.id.toString()
+                          ], [
+                            dateString
+                          ], [
+                            this.widget.exShiftId.toString()
+                          ], [
+                            selected.data!.efficiencyCalculation.toString()
+                          ]);
+                        }
                         //  this.widget.tempWorkerAdded(selected);
 
                         print('');

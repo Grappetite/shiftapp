@@ -103,8 +103,6 @@ class _EditWorkersState extends State<EditWorkers> {
       }
       await EasyLoading.dismiss();
     } else {
-      await EasyLoading.dismiss();
-
       showAlertDialog(
         context: context,
         title: 'Error',
@@ -116,6 +114,14 @@ class _EditWorkersState extends State<EditWorkers> {
           )
         ],
       );
+    }
+    var result = await WorkersService.getWorkTypes(
+        widget.shiftId.toString(), widget.processId.toString());
+    if (result != null) {
+      workerType = result.data!;
+      for (var currentItem in workerType) {
+        listNames.add(currentItem.name!);
+      }
     }
 
     List<ShiftWorker> shiftWorkers = [];
@@ -133,11 +139,11 @@ class _EditWorkersState extends State<EditWorkers> {
       shiftWorkers.add(currentItem);
     }
 
-    var seen = <String>{};
+    // var seen = <String>{};
 
-    shiftWorkers.where((student) => seen.add(student.workerType!)).toList();
-
-    listNames = seen.toList();
+    // shiftWorkers.where((student) => seen.add(student.workerType!)).toList();
+    //
+    // listNames = seen.toList();
 
     for (var currentItem in listNames) {
       var response =
@@ -146,6 +152,7 @@ class _EditWorkersState extends State<EditWorkers> {
         listLists.add(response);
       });
     }
+    await EasyLoading.dismiss();
   }
 
   @override

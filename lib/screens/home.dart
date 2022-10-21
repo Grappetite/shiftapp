@@ -14,6 +14,7 @@ import 'package:shiftapp/screens/shift_start.dart';
 import '../config/constants.dart';
 import '../main.dart';
 import '../services/login_service.dart';
+import '../services/shift_service.dart';
 import 'end_shift.dart';
 import 'end_shift_final_screen.dart';
 import 'login.dart';
@@ -327,9 +328,13 @@ class _HomeMainViewState extends State<HomeMainView> {
     setState(() {});
     if (widget.sessionStarted) {
       moveToEndSession();
+    } else {
+      getEffeciency();
     }
   }
 
+  var yesterdayEfficiency;
+  var bestEfficiency;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -361,10 +366,24 @@ class _HomeMainViewState extends State<HomeMainView> {
       body: ShiftStart(
         selectedShift: widget.selectedShift,
         processSelected: widget.processSelected,
+        yesterdayEfficiency: yesterdayEfficiency,
+        bestEfficiency: bestEfficiency,
         popBack: () {
           widget.onLogout.call();
         },
       ),
     );
+  }
+
+  void getEffeciency() async {
+    await EasyLoading.show(
+      status: 'loading...',
+      maskType: EasyLoadingMaskType.black,
+    );
+    var response = await ShiftService.getEffeciency(widget.processSelected.id);
+    yesterdayEfficiency = response["yestEfficiency"];
+    bestEfficiency = response["maxVale"];
+    setState(() {});
+    await EasyLoading.dismiss();
   }
 }

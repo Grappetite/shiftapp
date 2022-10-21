@@ -638,6 +638,7 @@ class _WorkItemViewState extends State<WorkItemView> {
 
   Row makeMemberTitleHeader(
       String title, context, List<ShiftWorker> workers, int index) {
+    print(title);
     return Row(
       children: [
         Text(

@@ -101,7 +101,7 @@ class LoginService {
       responseObject.data!.user!.lastName;
 
       prefs.setString(tokenKey, responseObject.token!);
-
+      print(prefs.getString(tokenKey));
       return responseObject;
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
@@ -183,6 +183,25 @@ class LoginService {
               authorization: 'Bearer ' + prefs.getString(tokenKey)!,
             },
           ));
+
+      return response;
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
+    }
+  }
+
+  static updateFcm() async {
+    try {
+      var dio = Dio();
+      final prefs = await SharedPreferences.getInstance();
+      var fcmToken = await FirebaseMessaging.instance.getToken();
+      Response response = await dio.patch(baseUrl + 'updateToken',
+          options: Options(
+            headers: {
+              authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+            },
+          ),
+          data: {'fcmToken': fcmToken});
 
       return response;
     } on DioError catch (e) {

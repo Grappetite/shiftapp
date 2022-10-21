@@ -150,4 +150,26 @@ class ShiftService {
       print(e);
     }
   }
+
+  static getEffeciency(int? id) async {
+    try {
+      var dio = Dio();
+      final prefs = await SharedPreferences.getInstance();
+
+      String url = baseUrl + "efficiency/$id";
+      print('');
+
+      Response response = await dio.get(url,
+          options: Options(
+            headers: {
+              authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+            },
+          ));
+      return response.data['data'];
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
+    } catch (e) {
+      print(e);
+    }
+  }
 }

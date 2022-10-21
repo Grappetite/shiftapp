@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shiftapp/model/login_model.dart';
+import 'package:shiftapp/services/login_service.dart';
 import 'package:shiftapp/services/shift_service.dart';
 
 import '../config/constants.dart';
@@ -204,7 +205,7 @@ class _StartedShiftsState extends State<StartedShifts> {
       status: 'Getting Shifts...',
       maskType: EasyLoadingMaskType.black,
     );
-
+    // await LoginService.updateFcm();
     shiftsList = await ShiftService.startedShiftsList();
     setState(() {});
     await EasyLoading.dismiss();
