@@ -205,7 +205,7 @@ class _StartedShiftsState extends State<StartedShifts> {
       status: 'Getting Shifts...',
       maskType: EasyLoadingMaskType.black,
     );
-    // await LoginService.updateFcm();
+    await LoginService.updateFcm();
     shiftsList = await ShiftService.startedShiftsList();
     setState(() {});
     await EasyLoading.dismiss();

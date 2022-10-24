@@ -92,7 +92,7 @@ class _EditWorkersState extends State<EditWorkers> {
     var responseShift = await WorkersService.getShiftWorkers(
         widget.execShiftId, widget.processId);
 
-    processList = await WorkersService.startedProcessList();
+    processList = await WorkersService.startedProcessList(widget.processId);
 
     if (responseShift != null) {
       if (responseShift.data!.shiftWorker!.length == 0) {

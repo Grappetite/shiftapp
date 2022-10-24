@@ -80,12 +80,12 @@ class WorkersService {
     }
   }
 
-  static Future<dynamic> startedProcessList() async {
+  static Future<dynamic> startedProcessList(processId) async {
     try {
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
 
-      String url = baseUrl + "startedProcessList";
+      String url = baseUrl + "startedProcessList/$processId";
       print('');
 
       Response response = await dio.get(url,

@@ -722,33 +722,44 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                           ),
 
                     widget.moveWorker
-                        ? DropDown(
-                            labelText: 'Title',
-                            currentList: (widget.processList! as List)
-                                .map((e) => e.name!.trim() as String)
-                                .toList(),
-                            showError: false,
-                            onChange: (newString) {
-                              setState(() {
-                                selectedString = newString;
-                                workerTypeIndexSelected = -1;
-                                selectedWorkerType = "";
-                                processIndexSelected = -1;
-                              });
+                        ? widget.processList!.isNotEmpty
+                            ? DropDown(
+                                labelText: 'Title',
+                                currentList: (widget.processList! as List)
+                                    .map((e) => e.name!.trim() as String)
+                                    .toList(),
+                                showError: false,
+                                onChange: (newString) {
+                                  setState(() {
+                                    selectedString = newString;
+                                    workerTypeIndexSelected = -1;
+                                    selectedWorkerType = "";
+                                    processIndexSelected = -1;
+                                  });
 
-                              Future.delayed(Duration(milliseconds: 50), () {
-                                processIndexSelected = widget.processList!
-                                    .map((e) => e.name!.trim())
-                                    .toList()
-                                    .indexOf(newString);
-                                setState(() {});
-                              });
+                                  Future.delayed(Duration(milliseconds: 50),
+                                      () {
+                                    processIndexSelected = widget.processList!
+                                        .map((e) => e.name!.trim())
+                                        .toList()
+                                        .indexOf(newString);
+                                    setState(() {});
+                                  });
 
-                              //final List<String> cityNames = cities.map((city) => city.name).toList();
-                            },
-                            placeHolderText: 'Process',
-                            preSelected: selectedString,
-                          )
+                                  //final List<String> cityNames = cities.map((city) => city.name).toList();
+                                },
+                                placeHolderText: 'Process',
+                                preSelected: selectedString,
+                              )
+                            : Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Sorry! You can not move the worker, there is no shift running at the moment",
+                                  style: TextStyle(
+                                      color: kPrimaryColor,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              )
                         : Align(
                             alignment: Alignment.center,
                             child: Text(

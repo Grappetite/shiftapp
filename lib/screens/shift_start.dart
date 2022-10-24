@@ -430,6 +430,11 @@ class _ShiftStartState extends State<ShiftStart> {
                         ),
                       ),
                     ],
+                    Divider(
+                      height: 10,
+                      color: kPrimaryColor,
+                      thickness: 1,
+                    ),
                     widget.bestEfficiency != null &&
                             widget.yesterdayEfficiency != null
                         ? Row(
@@ -438,36 +443,41 @@ class _ShiftStartState extends State<ShiftStart> {
                                   child: Column(
                                 children: [
                                   Text(
-                                    "Best Shift",
+                                    "Best Shift:",
                                     style: TextStyle(
                                         color: kPrimaryColor,
-                                        fontSize: 16,
+                                        fontSize: 20,
                                         fontWeight: FontWeight.w600),
                                   ),
                                   Text(
-                                    widget.bestEfficiency,
+                                    widget.bestEfficiency + "%",
                                     style: TextStyle(
                                         color: kPrimaryColor,
-                                        fontSize: 16,
+                                        fontSize: 20,
                                         fontWeight: FontWeight.w600),
                                   )
                                 ],
                               )),
+                              Container(
+                                color: kPrimaryColor,
+                                height: 80,
+                                width: 5,
+                              ),
                               Expanded(
                                   child: Column(
                                 children: [
                                   Text(
-                                    "Yesterday\'s Shift",
+                                    "Last Shift",
                                     style: TextStyle(
                                         color: kPrimaryColor,
-                                        fontSize: 16,
+                                        fontSize: 20,
                                         fontWeight: FontWeight.w600),
                                   ),
                                   Text(
-                                    widget.yesterdayEfficiency,
+                                    widget.yesterdayEfficiency + "%",
                                     style: TextStyle(
                                         color: kPrimaryColor,
-                                        fontSize: 16,
+                                        fontSize: 20,
                                         fontWeight: FontWeight.w600),
                                   )
                                 ],
@@ -482,7 +492,7 @@ class _ShiftStartState extends State<ShiftStart> {
           ),
         ),
         Expanded(
-          flex: 44,
+          flex: 30,
           child: TextButton(
             onPressed: () async {
               if (widget.selectedShift.displayScreen! == 1 ||
@@ -522,50 +532,50 @@ class _ShiftStartState extends State<ShiftStart> {
         //   ),
         // ),
         ///Dawid Location
-        widget.bestEfficiency != null && widget.yesterdayEfficiency != null
-            ? Row(
-                children: [
-                  Expanded(
-                      child: Column(
-                    children: [
-                      Text(
-                        "Best Shift",
-                        style: TextStyle(
-                            color: kPrimaryColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      Text(
-                        widget.bestEfficiency,
-                        style: TextStyle(
-                            color: kPrimaryColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600),
-                      )
-                    ],
-                  )),
-                  Expanded(
-                      child: Column(
-                    children: [
-                      Text(
-                        "Yesterday\'s Shift",
-                        style: TextStyle(
-                            color: kPrimaryColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600),
-                      ),
-                      Text(
-                        widget.yesterdayEfficiency,
-                        style: TextStyle(
-                            color: kPrimaryColor,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600),
-                      )
-                    ],
-                  )),
-                ],
-              )
-            : Container(),
+        // widget.bestEfficiency != null && widget.yesterdayEfficiency != null
+        //     ? Row(
+        //         children: [
+        //           Expanded(
+        //               child: Column(
+        //             children: [
+        //               Text(
+        //                 "Best Shift",
+        //                 style: TextStyle(
+        //                     color: kPrimaryColor,
+        //                     fontSize: 16,
+        //                     fontWeight: FontWeight.w600),
+        //               ),
+        //               Text(
+        //                 widget.bestEfficiency,
+        //                 style: TextStyle(
+        //                     color: kPrimaryColor,
+        //                     fontSize: 16,
+        //                     fontWeight: FontWeight.w600),
+        //               )
+        //             ],
+        //           )),
+        //           Expanded(
+        //               child: Column(
+        //             children: [
+        //               Text(
+        //                 "Yesterday\'s Shift",
+        //                 style: TextStyle(
+        //                     color: kPrimaryColor,
+        //                     fontSize: 16,
+        //                     fontWeight: FontWeight.w600),
+        //               ),
+        //               Text(
+        //                 widget.yesterdayEfficiency,
+        //                 style: TextStyle(
+        //                     color: kPrimaryColor,
+        //                     fontSize: 16,
+        //                     fontWeight: FontWeight.w600),
+        //               )
+        //             ],
+        //           )),
+        //         ],
+        //       )
+        //     : Container(),
         const SizedBox(
           height: 16,
         ),

@@ -201,7 +201,7 @@ class LoginService {
               authorization: 'Bearer ' + prefs.getString(tokenKey)!,
             },
           ),
-          data: {'fcmToken': fcmToken});
+          data: {'token': fcmToken});
 
       return response;
     } on DioError catch (e) {
