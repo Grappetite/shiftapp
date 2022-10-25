@@ -147,7 +147,7 @@ class _StartedShiftsState extends State<StartedShifts> {
                                               height: 9,
                                             ),
                                             Text(
-                                              "End at: " +
+                                              "Scheduled End Time: " +
                                                   DateFormat('HH:mm dd-mm-yyyy')
                                                       .format(DateTime.parse(
                                                           shiftsList![index]
