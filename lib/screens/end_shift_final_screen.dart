@@ -8,10 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shiftapp/screens/login.dart';
 import 'package:shiftapp/screens/shift_start.dart';
-import 'package:shiftapp/services/login_service.dart';
 import 'package:shiftapp/util/string.dart';
 
 import '../config/constants.dart';
@@ -463,7 +460,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                       textController.text,
                                       answer,
                                     );
-                                    await LoginService.logout();
+                                    // await LoginService.logout();
                                     await EasyLoading.dismiss();
 
                                     if (check) {
@@ -472,18 +469,18 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                         duration: const Duration(seconds: 2),
                                       );
 
-                                      final prefs =
-                                          await SharedPreferences.getInstance();
+                                      // final prefs =
+                                      //     await SharedPreferences.getInstance();
 
-                                      prefs.remove('shiftId');
-
-                                      prefs.remove('selectedShiftName');
-                                      prefs.remove('selectedShiftEndTime');
-                                      prefs.remove('selectedShiftStartTime');
+                                      // prefs.remove('shiftId');
+                                      //
+                                      // prefs.remove('selectedShiftName');
+                                      // prefs.remove('selectedShiftEndTime');
+                                      // prefs.remove('selectedShiftStartTime');
                                       // prefs.remove('username');
-                                      prefs.remove('password');
+                                      // prefs.remove('password');
 
-                                      Get.offAll(LoginScreen());
+                                      Get.offAll(StartedShifts());
                                       // if (widget.autoOpen) {
                                       //   Navigator.pop(context);
                                       //   Navigator.pop(context, true);

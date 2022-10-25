@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shiftapp/config/BaseConfig.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../config/constants.dart';
+import '../services/login_service.dart';
 import 'login.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -19,12 +23,39 @@ class _SplashScreenState extends State<SplashScreen> {
     loadToNextView();
   }
 
+  Future<void> _launchInBrowser(Uri url) async {
+    try {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      Clipboard.setData(new ClipboardData(
+          text:
+              "https://install.appcenter.ms/users/mahboob-grappetite.com/apps/shift-android/distribution_groups/public"));
+      EasyLoading.showError(
+          "Can not launch the url, but it's copied to your clipboard",
+          dismissOnTap: true,
+          duration: Duration(seconds: 2));
+    }
+  }
+
   void loadToNextView() async {
-    await Future.delayed(const Duration(seconds: 1), () {});
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginScreen()),
-    );
+    var data = await LoginService.checkVersion();
+    if (data["data"]["name"] == Environment().config.version) {
+      await Future.delayed(const Duration(seconds: 1), () {});
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+      );
+    } else {
+      EasyLoading.showError(
+              "Please update the Version. Will redirect you to the browser in 5 seconds",
+              dismissOnTap: true,
+              duration: Duration(seconds: 2))
+          .then((value) async {
+        await Future.delayed(const Duration(seconds: 4), () {});
+        _launchInBrowser(Uri.parse(
+            "https://install.appcenter.ms/users/mahboob-grappetite.com/apps/shift-android/distribution_groups/public"));
+      });
+    }
   }
 
   @override

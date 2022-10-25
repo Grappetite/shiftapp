@@ -178,25 +178,27 @@ class _WorkItemViewState extends State<WorkItemView> {
                         ? currentItem.isSelected
                             ? GestureDetector(
                                 onTap: () async {
-                                  this.widget.selectedShift!.executedShiftId =
-                                      widget.execShiftId;
-                                  await showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (BuildContext context) {
-                                        return ConfirmTimeEnd(
-                                            shiftItem:
-                                                this.widget.selectedShift!,
-                                            editing: widget.isEditing,
-                                            moveWorker: true,
-                                            workerId: currentItem.id,
-                                            processList: widget.processList);
-                                      }).then((value) {
-                                    if (value) {
-                                      widget.listLists[i].remove(currentItem);
-                                      setState(() {});
-                                    }
-                                  });
+                                  if (widget.isEditing) {
+                                    this.widget.selectedShift!.executedShiftId =
+                                        widget.execShiftId;
+                                    await showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (BuildContext context) {
+                                          return ConfirmTimeEnd(
+                                              shiftItem:
+                                                  this.widget.selectedShift!,
+                                              editing: widget.isEditing,
+                                              moveWorker: true,
+                                              workerId: currentItem.id,
+                                              processList: widget.processList);
+                                        }).then((value) {
+                                      if (value) {
+                                        widget.listLists[i].remove(currentItem);
+                                        setState(() {});
+                                      }
+                                    });
+                                  }
                                 },
                                 child: UserItem(
                                   keyNo: currentItem.key != null
@@ -307,25 +309,27 @@ class _WorkItemViewState extends State<WorkItemView> {
                               )
                             : GestureDetector(
                                 onTap: () async {
-                                  this.widget.selectedShift!.executedShiftId =
-                                      widget.execShiftId;
-                                  await showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      builder: (BuildContext context) {
-                                        return ConfirmTimeEnd(
-                                            shiftItem:
-                                                this.widget.selectedShift!,
-                                            editing: widget.isEditing,
-                                            moveWorker: true,
-                                            workerId: currentItem.id,
-                                            processList: widget.processList);
-                                      }).then((value) {
-                                    if (value) {
-                                      widget.listLists[i].remove(currentItem);
-                                      setState(() {});
-                                    }
-                                  });
+                                  if (widget.isEditing) {
+                                    this.widget.selectedShift!.executedShiftId =
+                                        widget.execShiftId;
+                                    await showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (BuildContext context) {
+                                          return ConfirmTimeEnd(
+                                              shiftItem:
+                                                  this.widget.selectedShift!,
+                                              editing: widget.isEditing,
+                                              moveWorker: true,
+                                              workerId: currentItem.id,
+                                              processList: widget.processList);
+                                        }).then((value) {
+                                      if (value) {
+                                        widget.listLists[i].remove(currentItem);
+                                        setState(() {});
+                                      }
+                                    });
+                                  }
                                 },
                                 child: UserItem(
                                   keyNo: currentItem.key != null
@@ -436,24 +440,26 @@ class _WorkItemViewState extends State<WorkItemView> {
                               )
                         : GestureDetector(
                             onTap: () async {
-                              this.widget.selectedShift!.executedShiftId =
-                                  widget.execShiftId;
-                              await showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (BuildContext context) {
-                                    return ConfirmTimeEnd(
-                                        shiftItem: this.widget.selectedShift!,
-                                        editing: widget.isEditing,
-                                        moveWorker: true,
-                                        workerId: currentItem.id,
-                                        processList: widget.processList);
-                                  }).then((value) {
-                                if (value) {
-                                  widget.listLists[i].remove(currentItem);
-                                  setState(() {});
-                                }
-                              });
+                              if (widget.isEditing) {
+                                this.widget.selectedShift!.executedShiftId =
+                                    widget.execShiftId;
+                                await showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (BuildContext context) {
+                                      return ConfirmTimeEnd(
+                                          shiftItem: this.widget.selectedShift!,
+                                          editing: widget.isEditing,
+                                          moveWorker: true,
+                                          workerId: currentItem.id,
+                                          processList: widget.processList);
+                                    }).then((value) {
+                                  if (value) {
+                                    widget.listLists[i].remove(currentItem);
+                                    setState(() {});
+                                  }
+                                });
+                              }
                             },
                             child: UserItem(
                               keyNo: currentItem.key != null

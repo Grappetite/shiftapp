@@ -2,9 +2,15 @@ import 'package:intl/intl.dart';
 
 abstract class BaseConfig {
   String get apiUrl;
+
   String get imageUrl;
+
   String get baseUrl;
+
   String get staging;
+
+  String get version;
+
   bool get preset;
 }
 
@@ -13,12 +19,17 @@ class DevConfig implements BaseConfig {
   String get baseUrl => "https://dev-shift.grappetite.com/api/v1/";
 
   @override
+  String get version => "V.1";
+
+  @override
   String get imageUrl => "https://dev-shift.grappetite.com/api/v1/public";
 
   @override
   String get apiUrl => "https://dev-shift.grappetite.com/api/v1/";
+
   @override
   String get staging => "Version:Local";
+
   @override
   bool get preset => true;
 }
@@ -28,12 +39,17 @@ class ProductionConfig implements BaseConfig {
   String get baseUrl => "https://dev-shift.grappetite.com/api/v1/";
 
   @override
+  String get version => "V.1";
+
+  @override
   String get imageUrl => "https://dev-shift.grappetite.com/api/v1/";
 
   @override
   String get apiUrl => "https://dev-shift.grappetite.com/api/v1/";
+
   @override
   String get staging => "Version:Production";
+
   @override
   bool get preset => false;
 
@@ -45,12 +61,18 @@ class LiveConfig implements BaseConfig {
   String get baseUrl => "https://takealot.grappetite.com/api/v1/";
 
   @override
+  String get version => "V.1";
+
+  @override
   String get imageUrl => "https://takealot.grappetite.com/api/v1/";
+
   @override
   String get staging =>
       "Version:Shift-v1-${DateFormat("yyyy-MM-dd hh:mm:ss").parse(DateTime.now().toString())}(Live)";
+
   @override
   String get apiUrl => "https://takealot.grappetite.com/api/v1/";
+
   @override
   bool get preset => false;
 

@@ -208,4 +208,18 @@ class LoginService {
       return Errors.returnResponse(e.response!);
     }
   }
+
+  static checkVersion() async {
+    try {
+      var dio = Dio();
+      Response response = await dio.get(
+        baseUrl + 'appVersion',
+      );
+      if (response.statusCode == 200) {
+        return response.data;
+      }
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
+    }
+  }
 }
