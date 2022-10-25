@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:intl/intl.dart';
 import 'package:shiftapp/model/login_model.dart';
 import 'package:shiftapp/services/login_service.dart';
 import 'package:shiftapp/services/shift_service.dart';
@@ -131,8 +132,10 @@ class _StartedShiftsState extends State<StartedShifts> {
                                             ),
                                             Text(
                                               "Started at: " +
-                                                  shiftsList![index]
-                                                      .executeShiftStartTime
+                                                  DateFormat('HH:mm dd-mm-yyyy')
+                                                      .format(DateTime.parse(
+                                                          shiftsList![index]
+                                                              .executeShiftStartTime!))
                                                       .toString(),
                                               style: const TextStyle(
                                                 color: kPrimaryColor,
@@ -145,8 +148,10 @@ class _StartedShiftsState extends State<StartedShifts> {
                                             ),
                                             Text(
                                               "End at: " +
-                                                  shiftsList![index]
-                                                      .executeShiftEndTime
+                                                  DateFormat('HH:mm dd-mm-yyyy')
+                                                      .format(DateTime.parse(
+                                                          shiftsList![index]
+                                                              .executeShiftEndTime!))
                                                       .toString(),
                                               style: const TextStyle(
                                                 color: kPrimaryColor,

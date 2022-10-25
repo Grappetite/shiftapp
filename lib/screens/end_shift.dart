@@ -164,6 +164,7 @@ class _EndShiftViewState extends State<EndShiftView> {
                   // jsonDecode(prefs.getString("processesMahboob")!).forEach((v) {
                   //   process!.add(Process.fromJson(v));
                   // });
+                  await Future.delayed(Duration(seconds: 1));
                   Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(
                           builder:
@@ -482,8 +483,9 @@ class _EndShiftViewState extends State<EndShiftView> {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: ExplainerWidget(
                   iconName: 'construct',
-                  title: 'Expected ${widget.process.unit} Produced By Now',
-                  text1: "${expectedUnits.toStringAsFixed(0)}",
+                  title: 'Expected ${widget.process.unit}'.toUpperCase(),
+                  text1:
+                      "Expected ${widget.process.unit} Produced By Now: ${expectedUnits.toStringAsFixed(0)}",
                   text2: '',
                   showWarning: false,
                   onTap: () async {
@@ -740,8 +742,8 @@ class ExplainerWidget extends StatelessWidget {
                           Text(
                             text1,
                             style: TextStyle(
-                              color: comingSoon ? Colors.grey : kPrimaryColor,
-                            ),
+                                color: comingSoon ? Colors.grey : kPrimaryColor,
+                                fontWeight: FontWeight.bold),
                           ),
                         ],
                         if (text2.isNotEmpty) ...[
