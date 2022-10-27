@@ -49,7 +49,8 @@ class InputView extends StatelessWidget {
   final bool isSecure;
 
   InputView(
-      {Key? key, required this.text,
+      {Key? key,
+      required this.text,
       required this.controller,
       this.isDisabled = false,
       this.keyboardType = TextInputType.text,
@@ -71,13 +72,14 @@ class InputView extends StatelessWidget {
       this.isCardDate = false,
       this.isSecure = false,
       this.suffixIcon,
-      this.suffixIconTapped, this.customHeight = 0}) : super(key: key);
+      this.suffixIconTapped,
+      this.customHeight = 0})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          padding ? EdgeInsets.symmetric(horizontal: 8) : EdgeInsets.zero,
+      padding: padding ? EdgeInsets.symmetric(horizontal: 8) : EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -119,10 +121,8 @@ class InputView extends StatelessWidget {
                 ),
               ],
             ),
-          ]
-          else if(customHeight == 0 ) ... [
+          ] else if (customHeight == 0) ...[
             TextFormField(
-
                 enabled: !isDisabled,
                 controller: controller,
                 obscureText: isSecure,
@@ -134,14 +134,16 @@ class InputView extends StatelessWidget {
                     ? TextCapitalization.words
                     : TextCapitalization.none,
                 focusNode: (keyboardType == TextInputType.number ||
-                    keyboardType == TextInputType.phone)
+                        keyboardType == TextInputType.phone)
                     ? doneButtonFocusNode!
                     : null,
                 inputFormatters: inputFormatters(),
                 decoration: InputDecoration(
                   counterText: '',
                   labelText: hintText,
-                  labelStyle: const TextStyle(color: Colors.grey , ),
+                  labelStyle: const TextStyle(
+                    color: Colors.grey,
+                  ),
                   suffixIcon: makeSuffixIcon(),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
@@ -152,12 +154,10 @@ class InputView extends StatelessWidget {
                   focusColor: Colors.grey,
                 ),
                 onChanged: onChange),
-          ]
-          else ...[
+          ] else ...[
             SizedBox(
               height: 50,
               child: TextFormField(
-
                   enabled: !isDisabled,
                   controller: controller,
                   obscureText: isSecure,
@@ -176,7 +176,9 @@ class InputView extends StatelessWidget {
                   decoration: InputDecoration(
                     counterText: '',
                     labelText: hintText,
-                    labelStyle: const TextStyle(color: Colors.grey , ),
+                    labelStyle: const TextStyle(
+                      color: Colors.grey,
+                    ),
                     suffixIcon: makeSuffixIcon(),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
@@ -188,7 +190,6 @@ class InputView extends StatelessWidget {
                   ),
                   onChanged: onChange),
             ),
-
           ],
         ],
       ),

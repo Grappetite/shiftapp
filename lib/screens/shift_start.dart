@@ -619,31 +619,41 @@ class TimerTopWidget extends StatelessWidget {
           bottomRight: Radius.circular(10.0),
         ),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            '${selectedShift.name} : ${selectedShift.showDate}',
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w700,
+      child: FittedBox(
+        fit: BoxFit.fitWidth,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              '${selectedShift.name} :',
+              style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w700,
+                  overflow: TextOverflow.ellipsis),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4),
-            child: Text(
-              "•",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+            Text(
+              ' ${selectedShift.showDate}',
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
             ),
-          ),
-          Text(
-            'Elapsed :  ${timeElasped}',
-            style: TextStyle(
-              color: Colors.black,
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 4),
+              child: Text(
+                "•",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+              ),
             ),
-          ),
-        ],
+            Text(
+              'Elapsed :  ${timeElasped}',
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

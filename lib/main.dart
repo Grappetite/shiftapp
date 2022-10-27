@@ -72,6 +72,7 @@ void showFlutterNotification(RemoteMessage message) {
         'your other channel description',
         importance: Importance.max,
         priority: Priority.high,
+        styleInformation: BigTextStyleInformation(''),
       ),
       iOS: IOSNotificationDetails(),
     ),
@@ -186,7 +187,14 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: MaterialColor(0xFF0E577F, primaryMap),
       ),
-      builder: EasyLoading.init(),
+      builder: EasyLoading.init(builder: (context, child) {
+        child = MediaQuery(
+          child: child!,
+          data: MediaQuery.of(context).copyWith(textScaleFactor: 1),
+        );
+        return child;
+      }),
+      // EasyLoading.init(),
       home: const SplashScreen(),
     );
   }
