@@ -147,7 +147,7 @@ class _EndShiftViewState extends State<EndShiftView> {
                       flutterLocalNotificationsPlugin =
                       FlutterLocalNotificationsPlugin();
                   await flutterLocalNotificationsPlugin
-                      .cancel(prefs.getInt("execute_shift_id")!);
+                      .cancel(widget.execShiftId);
                   prefs.remove('shiftId');
                   prefs.remove('selectedShiftName');
                   prefs.remove('selectedShiftEndTime');
@@ -182,7 +182,7 @@ class _EndShiftViewState extends State<EndShiftView> {
               // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
               //     FlutterLocalNotificationsPlugin();
               // await flutterLocalNotificationsPlugin
-              //     .cancel(prefs.getInt("execute_shift_id")!);
+              //     .cancel(widget.execShiftId);
               // prefs.remove('shiftId');
               //
               // prefs.remove('selectedShiftName');
@@ -245,8 +245,7 @@ class _EndShiftViewState extends State<EndShiftView> {
               final prefs = await SharedPreferences.getInstance();
               FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
                   FlutterLocalNotificationsPlugin();
-              await flutterLocalNotificationsPlugin
-                  .cancel(prefs.getInt("execute_shift_id")!);
+              await flutterLocalNotificationsPlugin.cancel(widget.execShiftId);
               prefs.remove('shiftId');
 
               prefs.remove('selectedShiftName');
@@ -418,8 +417,8 @@ class _EndShiftViewState extends State<EndShiftView> {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 innerWidget: ExplainerWidget(
                   comingSoon: true,
-                  iconName: 'construct',
-                  title: 'SOP REQUIRED',
+                  iconName: 'SopTraining',
+                  title: 'SOP TRAINING',
                   text1: '4 Workers require SOP Training',
                   text2: 'Tap to train now or swipe to ignore',
                   showWarning: true,
@@ -484,9 +483,9 @@ class _EndShiftViewState extends State<EndShiftView> {
                 child: ExplainerWidget(
                   iconName: 'construct',
                   title: 'Expected ${widget.process.unit}'.toUpperCase(),
-                  text1:
+                  text2:
                       "Expected ${widget.process.unit} Produced By Now: ${expectedUnits.toStringAsFixed(0)}",
-                  text2: '',
+                  text1: '',
                   showWarning: false,
                   onTap: () async {
                     // var response = await Navigator.push(
@@ -532,7 +531,7 @@ class _EndShiftViewState extends State<EndShiftView> {
                               endTime: widget.selectedShift.endTime!,
                               process: widget.process,
                               executeShiftId: executeShiftId!,
-                              expectedUnits: expectedUnits,
+                              // expectedUnits: expectedUnits,
                             ),
                           ),
                         );
@@ -739,12 +738,16 @@ class ExplainerWidget extends StatelessWidget {
                             ],
                           ),
                         ] else ...[
-                          Text(
-                            text1,
-                            style: TextStyle(
-                                color: comingSoon ? Colors.grey : kPrimaryColor,
-                                fontWeight: FontWeight.bold),
-                          ),
+                          text1.isNotEmpty
+                              ? Text(
+                                  text1,
+                                  style: TextStyle(
+                                      color: comingSoon
+                                          ? Colors.grey
+                                          : kPrimaryColor,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              : Container(),
                         ],
                         if (text2.isNotEmpty) ...[
                           if (text1_2.isNotEmpty) ...[

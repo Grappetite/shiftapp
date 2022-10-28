@@ -1,3 +1,5 @@
+import 'package:shiftapp/model/shifts_model.dart';
+
 class LoginResponse {
   //int? status;
   String? token;
@@ -160,7 +162,7 @@ class ShiftStartDetails {
   String? shiftName;
   String? shiftStartTime;
   String? shiftEndTime;
-
+  ShiftItem? shiftItem;
   Process? process;
 
   ShiftStartDetails(
@@ -171,6 +173,7 @@ class ShiftStartDetails {
       this.processId,
       this.shiftId,
       this.shiftName,
+      this.shiftItem,
       this.shiftStartTime,
       this.shiftEndTime});
 
@@ -185,6 +188,8 @@ class ShiftStartDetails {
     shiftStartTime = json['shift_start_time'];
     shiftEndTime = json['shift_end_time'];
     process = Process.fromJson(json["process"]);
+    shiftItem =
+        json["shift"] != null ? ShiftItem.fromJson(json["shift"]) : null;
     print('object');
   }
 

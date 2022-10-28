@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,6 +19,7 @@ import '../widgets/drop_down.dart';
 import '../widgets/elevated_button.dart';
 import '../widgets/input_view.dart';
 import 'StartedShiftList.dart';
+import 'end_shift.dart';
 import 'inner_widgets/alert_title_label.dart';
 
 class EndShiftFinalScreen extends StatefulWidget {
@@ -31,24 +31,22 @@ class EndShiftFinalScreen extends StatefulWidget {
 
   final String startTime;
   final String endTime;
-  double? expectedUnits;
 
   final ShiftItem selectedShift;
 
   final bool autoOpen;
 
-  EndShiftFinalScreen(
-      {Key? key,
-      required this.shiftId,
-      required this.processId,
-      required this.startTime,
-      required this.endTime,
-      required this.selectedShift,
-      required this.process,
-      this.autoOpen = false,
-      required this.executeShiftId,
-      this.expectedUnits})
-      : super(key: key);
+  EndShiftFinalScreen({
+    Key? key,
+    required this.shiftId,
+    required this.processId,
+    required this.startTime,
+    required this.endTime,
+    required this.selectedShift,
+    required this.process,
+    this.autoOpen = false,
+    required this.executeShiftId,
+  }) : super(key: key);
 
   @override
   State<EndShiftFinalScreen> createState() => _EndShiftFinalScreenState();
@@ -145,48 +143,74 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
     super.initState();
     setupFocusNode(doneButton);
     startTimer();
-    if (widget.expectedUnits == null) {
-      EasyLoading.show(
-        status: 'Please wait...',
-        maskType: EasyLoadingMaskType.black,
-      );
-      loadExpectedUnits();
-      EasyLoading.dismiss();
-    }
+    // if (widget.expectedUnits == null) {
+    //   EasyLoading.show(
+    //     status: 'Please wait...',
+    //     maskType: EasyLoadingMaskType.black,
+    //   );
+    //   loadExpectedUnits();
+    //   EasyLoading.dismiss();
+    // }
   }
 
-  Future loadExpectedUnits() async {
-    widget.expectedUnits = 0;
-    var shiftWorkerList =
-        await WorkersService.getAllShiftWorkersList(widget.executeShiftId!);
-    log("${double.parse(widget.process.baseline!)}");
-    for (var calculation in shiftWorkerList!.data!) {
-      log(calculation.name! +
-          " ${((calculation.actualTimeloggedout!.difference(calculation.actualTimeloggedin!).inMinutes) / 60) * (double.parse(widget.process.baseline!))}");
-      widget.expectedUnits = widget.expectedUnits! +
-          (((calculation.actualTimeloggedout!
-                      .difference(calculation.actualTimeloggedin!)
-                      .inMinutes) /
-                  60) *
-              (double.parse(widget.process.baseline!)));
-    }
-    setState(() {});
-  }
+  // Future loadExpectedUnits() async {
+  //   widget.expectedUnits = 0;
+  //   var shiftWorkerList =
+  //       await WorkersService.getAllShiftWorkersList(widget.executeShiftId!);
+  //   log("${double.parse(widget.process.baseline!)}");
+  //   for (var calculation in shiftWorkerList!.data!) {
+  //     log(calculation.name! +
+  //         " ${((calculation.actualTimeloggedout!.difference(calculation.actualTimeloggedin!).inMinutes) / 60) * (double.parse(widget.process.baseline!))}");
+  //     widget.expectedUnits = widget.expectedUnits! +
+  //         (((calculation.actualTimeloggedout!
+  //                     .difference(calculation.actualTimeloggedin!)
+  //                     .inMinutes) /
+  //                 60) *
+  //             (double.parse(widget.process.baseline!)));
+  //   }
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => StartedShifts()));
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EndShiftView(
+                  autoOpen: true,
+                  userId: const [],
+                  efficiencyCalculation: const [],
+                  shiftId: widget.selectedShift.id!,
+                  processId: widget.processId!,
+                  selectedShift: widget.selectedShift,
+                  startedBefore: true,
+                  process: widget.process,
+                  execShiftId: widget.executeShiftId!,
+                ),
+              ));
           return Future.value(true);
         },
         child: Scaffold(
           appBar: AppBar(
             leading: GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacement(context,
-                      MaterialPageRoute(builder: (context) => StartedShifts()));
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EndShiftView(
+                          autoOpen: true,
+                          userId: const [],
+                          efficiencyCalculation: const [],
+                          shiftId: widget.selectedShift.id!,
+                          processId: widget.processId!,
+                          selectedShift: widget.selectedShift,
+                          startedBefore: true,
+                          process: widget.process,
+                          execShiftId: widget.executeShiftId!,
+                        ),
+                      ));
                 },
                 child: Icon(
                   Icons.arrow_back,
@@ -359,8 +383,9 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                         SizedBox(
                                           width: 8,
                                         ),
+                                        //(Est : ${widget.expectedUnits!.toStringAsFixed(0)})
                                         Text(
-                                          '${widget.process.unit} Processed(Est : ${widget.expectedUnits!.toStringAsFixed(0)}):',
+                                          '${widget.process.unit} Processed:',
                                           style: TextStyle(
                                               color: kPrimaryColor,
                                               fontSize: 18,

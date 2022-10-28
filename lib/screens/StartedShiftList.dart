@@ -74,7 +74,8 @@ class _StartedShiftsState extends State<StartedShifts> {
                                     onTap: () {
                                       var shiftObject = ShiftItem(
                                         id: shiftsList![index].shiftId!,
-                                        name: shiftsList![index].process!.name!,
+                                        name:
+                                            shiftsList![index].shiftItem!.name,
                                         startTime: shiftsList![index]
                                             .executeShiftStartTime,
                                         endTime: shiftsList![index]
@@ -132,7 +133,7 @@ class _StartedShiftsState extends State<StartedShifts> {
                                             ),
                                             Text(
                                               "Started at: " +
-                                                  DateFormat('HH:mm dd-mm-yyyy')
+                                                  DateFormat('HH:mm dd-MM-yyyy')
                                                       .format(DateTime.parse(
                                                           shiftsList![index]
                                                               .executeShiftStartTime!))
@@ -148,7 +149,7 @@ class _StartedShiftsState extends State<StartedShifts> {
                                             ),
                                             Text(
                                               "Scheduled End Time: " +
-                                                  DateFormat('HH:mm dd-mm-yyyy')
+                                                  DateFormat('HH:mm dd-MM-yyyy')
                                                       .format(DateTime.parse(
                                                           shiftsList![index]
                                                               .executeShiftEndTime!))

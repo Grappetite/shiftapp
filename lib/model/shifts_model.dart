@@ -224,7 +224,7 @@ class ShiftItem {
     result = endTime!.replaceRange(0, 10, date);
     endTime = result;
 
-    displayScreen = int.parse(json['display_screen']);
+    displayScreen = int.parse(json['display_screen'] ?? 2.toString());
     if (displayScreen == 1) {
       displayScreen = 2;
     }
