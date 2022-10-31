@@ -486,6 +486,7 @@ class _EndShiftViewState extends State<EndShiftView> {
                   text2:
                       "Expected ${widget.process.unit} Produced By Now: ${expectedUnits.toStringAsFixed(0)}",
                   text1: '',
+                  backgroundColor: lightBlueColor,
                   showWarning: false,
                   onTap: () async {
                     // var response = await Navigator.push(

@@ -334,6 +334,6 @@ class _StartShiftViewState extends State<StartShiftView> {
         payload: "End Shift",
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
-        matchDateTimeComponents: DateTimeComponents.time);
+        matchDateTimeComponents: DateTimeComponents.dateAndTime);
   }
 }

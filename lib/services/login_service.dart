@@ -6,6 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../config/constants.dart';
+import '../main.dart';
 import '../model/login_model.dart';
 import '../model/shifts_model.dart';
 
@@ -99,7 +100,10 @@ class LoginService {
 
       final prefs = await SharedPreferences.getInstance();
       responseObject.data!.user!.lastName;
-
+      if (prefs.getString("allNotification") == null) {
+        flutterLocalNotificationsPlugin.cancelAll();
+        prefs.setString("allNotification", "done");
+      }
       prefs.setString(tokenKey, responseObject.token!);
       print(prefs.getString(tokenKey));
       return responseObject;
