@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
@@ -251,11 +252,35 @@ class _StartShiftViewState extends State<StartShiftView> {
 
                         prefs.setInt(
                             'execute_shift_id', result.data!.executeShiftId!);
-                        show(
-                            widget.selectedShift.endDateObject,
+                        if (prefs.getStringList(
+                                result.data!.executeShiftId!.toString()) ==
+                            null) {
+                          List<String> test = [];
+                          var rng = Random();
+                          for (var i = 1; i <= 25; i++) {
+                            test.add(rng.nextInt(100000).toString());
+                            await show(
+                                widget.selectedShift.endDateObject
+                                    // DateTime.now()
+                                    .add(Duration(hours: i)),
+                                int.parse(
+                                    result.data!.executeShiftId!.toString() +
+                                        test[i - 1].toString()),
+                                "Did you forget to end your shift?",
+                                "Your scheduled shift ended.  If you've completed today's work please end your shift.");
+                          }
+                          prefs.setStringList(
+                              result.data!.executeShiftId!.toString(), test);
+                        }
+
+                        await show(
+                            widget.selectedShift.endDateObject
+                                .subtract(Duration(minutes: 10)),
+                            // DateTime.now().add(Duration(minutes: 1)),
                             result.data!.executeShiftId!,
-                            "End Shift",
-                            "Shift is about To End");
+                            "Don't forget to end your shift!",
+                            "Your shift is about to end, don't forget to register today's work.");
+
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -295,13 +320,19 @@ class _StartShiftViewState extends State<StartShiftView> {
     return '${widget.userId.length}/${widget.process.headCount} Workers';
   }
 
-  tz.TZDateTime _nextInstanceOfTenAM(String test) {
-    tz.TZDateTime now = tz.TZDateTime.parse(tz.local, test);
-    tz.TZDateTime scheduledDate =
-        tz.TZDateTime(tz.local, now.year, now.month, now.day, 10);
-    if (scheduledDate.isBefore(now)) {
-      scheduledDate = scheduledDate.subtract(const Duration(minutes: 10));
-    }
+  tz.TZDateTime _nextInstanceOfNotification(String test) {
+    tz.TZDateTime now =
+        tz.TZDateTime.parse(tz.getLocation("Africa/Johannesburg"), test + "Z");
+    tz.TZDateTime scheduledDate = tz.TZDateTime(
+        tz.getLocation("Africa/Johannesburg"),
+        now.year,
+        now.month,
+        now.day,
+        now.hour - 2,
+        now.minute);
+    // if (scheduledDate.isBefore(now)) {
+    //   scheduledDate = scheduledDate.subtract(const Duration(minutes: 10));
+    // }
     return scheduledDate;
   }
 
@@ -319,7 +350,7 @@ class _StartShiftViewState extends State<StartShiftView> {
         id,
         title,
         body,
-        _nextInstanceOfTenAM(chosen.toString()),
+        _nextInstanceOfNotification(chosen.toString()),
         NotificationDetails(
           android: AndroidNotificationDetails(
             'your other channel id',

@@ -5,8 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 import 'package:shiftapp/util/string.dart';
 
@@ -493,7 +495,24 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                         'Closed shift successfully',
                                         duration: const Duration(seconds: 2),
                                       );
-
+                                      final prefs =
+                                          await SharedPreferences.getInstance();
+                                      List<String> test = prefs.getStringList(
+                                          widget.executeShiftId.toString())!;
+                                      FlutterLocalNotificationsPlugin
+                                          flutterLocalNotificationsPlugin =
+                                          FlutterLocalNotificationsPlugin();
+                                      await flutterLocalNotificationsPlugin
+                                          .cancel(widget.executeShiftId);
+                                      for (var ids in test) {
+                                        await flutterLocalNotificationsPlugin
+                                            .cancel(int.parse(widget
+                                                    .executeShiftId
+                                                    .toString() +
+                                                ids.toString()));
+                                      }
+                                      prefs.remove(
+                                          widget.executeShiftId.toString());
                                       // final prefs =
                                       //     await SharedPreferences.getInstance();
 

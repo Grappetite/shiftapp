@@ -148,6 +148,15 @@ class _EndShiftViewState extends State<EndShiftView> {
                       FlutterLocalNotificationsPlugin();
                   await flutterLocalNotificationsPlugin
                       .cancel(widget.execShiftId);
+
+                  List<String> test =
+                      prefs.getStringList(widget.execShiftId.toString())!;
+                  for (var ids in test) {
+                    await flutterLocalNotificationsPlugin.cancel(int.parse(
+                        widget.execShiftId.toString() + ids.toString()));
+                  }
+                  prefs.remove(widget.execShiftId.toString());
+
                   prefs.remove('shiftId');
                   prefs.remove('selectedShiftName');
                   prefs.remove('selectedShiftEndTime');
@@ -246,7 +255,14 @@ class _EndShiftViewState extends State<EndShiftView> {
               FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
                   FlutterLocalNotificationsPlugin();
               await flutterLocalNotificationsPlugin.cancel(widget.execShiftId);
+              List<String> test =
+                  prefs.getStringList(widget.execShiftId.toString())!;
+              for (var ids in test) {
+                await flutterLocalNotificationsPlugin.cancel(
+                    int.parse(widget.execShiftId.toString() + ids.toString()));
+              }
               prefs.remove('shiftId');
+              prefs.remove(widget.execShiftId.toString());
 
               prefs.remove('selectedShiftName');
               prefs.remove('selectedShiftEndTime');
