@@ -69,7 +69,7 @@ class Errors {
         // g.Get.offAllNamed(Routes.selectBarber);
         break;
       case 404:
-        EasyLoading.showError(response.data["message"][0].toString(),
+        EasyLoading.showError(response.data["message"].toString(),
             dismissOnTap: true, duration: Duration(seconds: 2));
         break;
       case 403:

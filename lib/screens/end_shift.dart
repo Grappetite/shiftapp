@@ -80,7 +80,6 @@ class _EndShiftViewState extends State<EndShiftView> {
         } else {
           timeRemaining = widget.selectedShift.timeRemaining;
         }
-
         setState(() {
           timeElasped = widget.selectedShift.timeElasped;
           if (int.parse(timeElasped.split(":")[1].toString()) % 30 == 0 &&

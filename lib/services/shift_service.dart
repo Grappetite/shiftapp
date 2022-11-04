@@ -67,7 +67,7 @@ class ShiftService {
     }
   }
 
-  static Future<bool> endShift(
+  static Future endShift(
       int shiftId, int processId, String unitsProduced, String endTime) async {
     try {
       var dio = Dio();
@@ -92,7 +92,7 @@ class ShiftService {
       print(response.data);
 
       if (response.data['code'] == 200) {
-        return true;
+        return response.data["data"];
       }
 
       return false;

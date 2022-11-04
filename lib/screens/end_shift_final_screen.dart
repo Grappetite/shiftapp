@@ -20,7 +20,7 @@ import '../services/workers_service.dart';
 import '../widgets/drop_down.dart';
 import '../widgets/elevated_button.dart';
 import '../widgets/input_view.dart';
-import 'StartedShiftList.dart';
+import 'EffeciencyView.dart';
 import 'end_shift.dart';
 import 'inner_widgets/alert_title_label.dart';
 
@@ -490,10 +490,10 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                     // await LoginService.logout();
                                     await EasyLoading.dismiss();
 
-                                    if (check) {
+                                    if (check != false) {
                                       await EasyLoading.showSuccess(
                                         'Closed shift successfully',
-                                        duration: const Duration(seconds: 2),
+                                        duration: const Duration(seconds: 1),
                                       );
                                       final prefs =
                                           await SharedPreferences.getInstance();
@@ -523,8 +523,11 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                       // prefs.remove('selectedShiftStartTime');
                                       // prefs.remove('username');
                                       // prefs.remove('password');
-
-                                      Get.offAll(StartedShifts());
+                                      Get.offAll(EffeciencyView(
+                                        process: widget.process,
+                                        effeciency: check,
+                                      ));
+                                      // Get.offAll(StartedShifts());
                                       // if (widget.autoOpen) {
                                       //   Navigator.pop(context);
                                       //   Navigator.pop(context, true);
@@ -717,7 +720,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                                   maximumDate: widget.editing
                                       ? DateTime.now()
                                       : widget.shiftItem.startDateObject
-                                          .add(Duration(hours: 15)),
+                                          .add(Duration(hours: 16)),
                                 ),
                               );
                             }).then((value) {
@@ -727,8 +730,18 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                                     newTime!.hour, newTime!.minute);
 
                             setState(() {
-                              customTimeSelectedToSend =
-                                  customSelectedStartTime;
+                              widget.moveWorker
+                                  ? customTimeSelectedToSend =
+                                      customSelectedStartTime
+                                  : widget.editing
+                                      ? customTimeSelectedToSend =
+                                          customSelectedStartTime
+                                      : customTimeSelectedToSend = newTime
+                                              .toString()
+                                              .split(" ")[0] +
+                                          " " +
+                                          customSelectedStartTime.split(" ")[1];
+
                               // widget.shiftItem.endTime = customSelectedStartTime;
                             });
                           }
@@ -804,7 +817,20 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                         : Align(
                             alignment: Alignment.center,
                             child: Text(
-                              dataToDisplay(),
+                              widget.moveWorker
+                                  ? dataToDisplay()
+                                  : widget.editing
+                                      ? dataToDisplay()
+                                      : customTimeSelectedToSend
+                                              .split(" ")[0]
+                                              .isNotEmpty
+                                          ? customTimeSelectedToSend
+                                              .split(" ")[0]
+                                          : widget.shiftItem.endDateObject
+                                              .toString()
+                                              .split(
+                                                  " ")[0], // dataToDisplay(),
+
                               style: TextStyle(
                                   color: kPrimaryColor,
                                   fontWeight: FontWeight.w600),

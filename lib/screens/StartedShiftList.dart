@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/model/login_model.dart';
 import 'package:shiftapp/services/login_service.dart';
 import 'package:shiftapp/services/shift_service.dart';
@@ -10,6 +12,7 @@ import '../model/shifts_model.dart';
 import '../widgets/elevated_button.dart';
 import 'NewDropdownPage.dart';
 import 'home.dart';
+import 'login.dart';
 
 class StartedShifts extends StatefulWidget {
   StartedShifts({
@@ -199,6 +202,29 @@ class _StartedShiftsState extends State<StartedShifts> {
                     onPressed: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => DropDownPage()));
+                    },
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  PElevatedButton(
+                    text: 'LOGOUT',
+                    onPressed: () async {
+                      final prefs = await SharedPreferences.getInstance();
+
+                      prefs.remove('shiftId');
+
+                      prefs.remove('selectedShiftName');
+                      prefs.remove('selectedShiftEndTime');
+                      prefs.remove('selectedShiftStartTime');
+                      // prefs.remove('username');
+                      prefs.remove('password');
+                      await LoginService.logout();
+                      // var dyanc = await Navigator.pushReplacement(
+                      //   context,
+                      //   MaterialPageRoute(builder: (context) => const LoginScreen()),
+                      // );
+                      Get.offAll(LoginScreen());
                     },
                   ),
                 ]),

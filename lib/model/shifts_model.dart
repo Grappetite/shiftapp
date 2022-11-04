@@ -12,7 +12,7 @@ class ShiftsResponse {
 
     message = json['message'];
     if (json['data'] != null) {
-      data = <ShiftItem>[];
+      data = [];
       data!.add(ShiftItem.fromJson(json['data']));
     }
   }
@@ -93,7 +93,7 @@ class ShiftItem {
 
       check1 = endDateObject.difference(DateTime.now());
 
-      return 'Over ' + _printDuration(check1);
+      return 'Over ' + "-" + _printDuration(check1).replaceAll("-", "");
     }
 
     return '';
