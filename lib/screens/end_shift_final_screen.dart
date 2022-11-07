@@ -487,6 +487,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                       textController.text,
                                       answer,
                                     );
+                                    _timer.cancel();
                                     // await LoginService.logout();
                                     await EasyLoading.dismiss();
 
