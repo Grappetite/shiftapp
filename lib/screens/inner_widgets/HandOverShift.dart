@@ -32,7 +32,7 @@ class _HandOverShiftState extends State<HandOverShift> {
         backgroundColor: Colors.transparent,
         content: Container(
           width: MediaQuery.of(context).size.width / 1.15,
-          height: MediaQuery.of(context).size.height / 4.0,
+          height: MediaQuery.of(context).size.height / 3.5,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
@@ -41,7 +41,7 @@ class _HandOverShiftState extends State<HandOverShift> {
           child: response != null
               ? Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 15),
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

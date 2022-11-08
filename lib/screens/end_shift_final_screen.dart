@@ -498,36 +498,40 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                       );
                                       final prefs =
                                           await SharedPreferences.getInstance();
-                                      List<String> test = prefs.getStringList(
-                                          widget.executeShiftId.toString())!;
+
                                       FlutterLocalNotificationsPlugin
                                           flutterLocalNotificationsPlugin =
                                           FlutterLocalNotificationsPlugin();
                                       await flutterLocalNotificationsPlugin
                                           .cancel(widget.executeShiftId);
-                                      for (var ids in test) {
-                                        await flutterLocalNotificationsPlugin
-                                            .cancel(int.parse(widget
-                                                    .executeShiftId
-                                                    .toString() +
-                                                ids.toString()));
-                                      }
-                                      prefs.remove(
-                                          widget.executeShiftId.toString());
-                                      // final prefs =
-                                      //     await SharedPreferences.getInstance();
+                                      try {
+                                        List<String> test = prefs.getStringList(
+                                            widget.executeShiftId.toString())!;
+                                        for (var ids in test) {
+                                          await flutterLocalNotificationsPlugin
+                                              .cancel(int.parse(widget
+                                                      .executeShiftId
+                                                      .toString() +
+                                                  ids.toString()));
+                                        }
+                                      } finally {
+                                        prefs.remove(
+                                            widget.executeShiftId.toString());
+                                        // final prefs =
+                                        //     await SharedPreferences.getInstance();
 
-                                      // prefs.remove('shiftId');
-                                      //
-                                      // prefs.remove('selectedShiftName');
-                                      // prefs.remove('selectedShiftEndTime');
-                                      // prefs.remove('selectedShiftStartTime');
-                                      // prefs.remove('username');
-                                      // prefs.remove('password');
-                                      Get.offAll(EffeciencyView(
-                                        process: widget.process,
-                                        effeciency: check,
-                                      ));
+                                        // prefs.remove('shiftId');
+                                        //
+                                        // prefs.remove('selectedShiftName');
+                                        // prefs.remove('selectedShiftEndTime');
+                                        // prefs.remove('selectedShiftStartTime');
+                                        // prefs.remove('username');
+                                        // prefs.remove('password');
+                                        Get.offAll(EffeciencyView(
+                                          process: widget.process,
+                                          effeciency: check,
+                                        ));
+                                      }
                                       // Get.offAll(StartedShifts());
                                       // if (widget.autoOpen) {
                                       //   Navigator.pop(context);

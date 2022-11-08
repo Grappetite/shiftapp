@@ -148,41 +148,45 @@ class _EndShiftViewState extends State<EndShiftView> {
                   await flutterLocalNotificationsPlugin
                       .cancel(widget.execShiftId);
 
-                  List<String> test =
-                      prefs.getStringList(widget.execShiftId.toString())!;
-                  for (var ids in test) {
-                    await flutterLocalNotificationsPlugin.cancel(int.parse(
-                        widget.execShiftId.toString() + ids.toString()));
-                  }
-                  prefs.remove(widget.execShiftId.toString());
+                  try {
+                    List<String> test =
+                        prefs.getStringList(widget.execShiftId.toString())!;
+                    for (var ids in test) {
+                      await flutterLocalNotificationsPlugin.cancel(int.parse(
+                          widget.execShiftId.toString() + ids.toString()));
+                    }
+                  } finally {
+                    prefs.remove(widget.execShiftId.toString());
 
-                  prefs.remove('shiftId');
-                  prefs.remove('selectedShiftName');
-                  prefs.remove('selectedShiftEndTime');
-                  prefs.remove('selectedShiftStartTime');
-                  // prefs.remove('username');
-                  prefs.remove('password');
-                  // if (widget.autoOpen) {
-                  //   Navigator.pop(context, true);
-                  // } else {
-                  //   Navigator.pop(context, true);
-                  //   Navigator.pop(context, true);
-                  // }
-                  // var process = <Process>[];
-                  // jsonDecode(prefs.getString("processesMahboob")!).forEach((v) {
-                  //   process!.add(Process.fromJson(v));
-                  // });
-                  await Future.delayed(Duration(seconds: 1));
-                  Navigator.of(context).pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder:
-                              (context) => //   Navigator.pop(context, true);
-                                  StartedShifts()
-                          // HomeView(
-                          //     processSelected: widget.process,
-                          //     selectedShift: widget.selectedShift)
-                          ),
-                      (route) => false);
+                    prefs.remove('shiftId');
+                    prefs.remove('selectedShiftName');
+                    prefs.remove('selectedShiftEndTime');
+                    prefs.remove('selectedShiftStartTime');
+                    // prefs.remove('username');
+                    prefs.remove('password');
+                    // if (widget.autoOpen) {
+                    //   Navigator.pop(context, true);
+                    // } else {
+                    //   Navigator.pop(context, true);
+                    //   Navigator.pop(context, true);
+                    // }
+                    // var process = <Process>[];
+                    // jsonDecode(prefs.getString("processesMahboob")!).forEach((v) {
+                    //   process!.add(Process.fromJson(v));
+                    // });
+                    _timer.cancel();
+                    await Future.delayed(Duration(seconds: 1));
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder:
+                                (context) => //   Navigator.pop(context, true);
+                                    StartedShifts()
+                            // HomeView(
+                            //     processSelected: widget.process,
+                            //     selectedShift: widget.selectedShift)
+                            ),
+                        (route) => false);
+                  }
                 }
               });
               // var process = await LoginService.getProcess();
@@ -254,40 +258,45 @@ class _EndShiftViewState extends State<EndShiftView> {
               FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
                   FlutterLocalNotificationsPlugin();
               await flutterLocalNotificationsPlugin.cancel(widget.execShiftId);
-              List<String> test =
-                  prefs.getStringList(widget.execShiftId.toString())!;
-              for (var ids in test) {
-                await flutterLocalNotificationsPlugin.cancel(
-                    int.parse(widget.execShiftId.toString() + ids.toString()));
+              try {
+                List<String> test =
+                    prefs.getStringList(widget.execShiftId.toString())!;
+                for (var ids in test) {
+                  await flutterLocalNotificationsPlugin.cancel(int.parse(
+                      widget.execShiftId.toString() + ids.toString()));
+                }
+              } finally {
+                prefs.remove('shiftId');
+                prefs.remove(widget.execShiftId.toString());
+
+                prefs.remove('selectedShiftName');
+                prefs.remove('selectedShiftEndTime');
+                prefs.remove('selectedShiftStartTime');
+                // prefs.remove('username');
+                prefs.remove('password');
+
+                // if (widget.autoOpen) {
+                //   Navigator.pop(context, true);
+                // } else {
+                //   Navigator.pop(context, true);
+                //   Navigator.pop(context, true);
+                // }
+                // var process = <Process>[];
+                // jsonDecode(prefs.getString("processesMahboob")!).forEach((v) {
+                //   process!.add(Process.fromJson(v));
+                // });
+                _timer.cancel();
+                await Future.delayed(Duration(seconds: 1));
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (context) => //   Navigator.pop(context, true);
+                            StartedShifts()
+                        // HomeView(
+                        //     processSelected: widget.process,
+                        //     selectedShift: widget.selectedShift)
+                        ),
+                    (route) => false);
               }
-              prefs.remove('shiftId');
-              prefs.remove(widget.execShiftId.toString());
-
-              prefs.remove('selectedShiftName');
-              prefs.remove('selectedShiftEndTime');
-              prefs.remove('selectedShiftStartTime');
-              // prefs.remove('username');
-              prefs.remove('password');
-
-              // if (widget.autoOpen) {
-              //   Navigator.pop(context, true);
-              // } else {
-              //   Navigator.pop(context, true);
-              //   Navigator.pop(context, true);
-              // }
-              // var process = <Process>[];
-              // jsonDecode(prefs.getString("processesMahboob")!).forEach((v) {
-              //   process!.add(Process.fromJson(v));
-              // });
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (context) => //   Navigator.pop(context, true);
-                          StartedShifts()
-                      // HomeView(
-                      //     processSelected: widget.process,
-                      //     selectedShift: widget.selectedShift)
-                      ),
-                  (route) => false);
             });
 
             /// widget.onLogout();
@@ -345,6 +354,7 @@ class _EndShiftViewState extends State<EndShiftView> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        _timer.cancel();
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => StartedShifts()));
         return Future.value(true);
@@ -353,6 +363,7 @@ class _EndShiftViewState extends State<EndShiftView> {
         appBar: AppBar(
           leading: GestureDetector(
               onTap: () {
+                _timer.cancel();
                 Navigator.pushReplacement(context,
                     MaterialPageRoute(builder: (context) => StartedShifts()));
               },

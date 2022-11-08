@@ -353,7 +353,7 @@ class _HomeMainViewState extends State<HomeMainView> {
               widget.processSelected.name!,
               style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 17,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600),
             ),
             const SizedBox(

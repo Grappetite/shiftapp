@@ -77,6 +77,9 @@ class Errors {
             dismissOnTap: true, duration: Duration(seconds: 2));
         throw UnauthorisedException(response.data.toString());
       case 500:
+        EasyLoading.showError(response.data,
+            dismissOnTap: true, duration: Duration(seconds: 2));
+        break;
       default:
         throw FetchDataException(
             'Error occurred while Communication with Server with StatusCode : ${response.statusCode}');
