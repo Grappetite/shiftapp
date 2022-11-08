@@ -189,7 +189,7 @@ class _ShiftStartState extends State<ShiftStart> {
                                         60));
                             var mintime = DateTime.parse(startTimeOriginal)
                                 .subtract(Duration(minutes: 120));
-                            DateTime? newTime;
+                            DateTime? newTime = DateTime.now();
                             showCupertinoModalPopup(
                                 context: context,
                                 builder: (BuildContext builder) {
