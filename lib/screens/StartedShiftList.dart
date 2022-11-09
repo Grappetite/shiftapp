@@ -62,15 +62,26 @@ class _StartedShiftsState extends State<StartedShifts> {
                   ),
                   Expanded(
                     child: shiftsList != null
-                        ? shiftsList!.isEmpty
-                            ? Container(
-                                child: Center(
-                                  child: Text("No Shift Started"),
-                                ),
-                              )
-                            : ListView.separated(
+                        ?
+                        // shiftsList!.isEmpty
+                        //         ? Container(
+                        //             child: Center(
+                        //               child: Text("No Shift Started"),
+                        //             ),
+                        //           )
+                        //         :
+                        RefreshIndicator(
+                            child: ListView.separated(
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
+                                  if (shiftsList!.isEmpty) {
+                                    return Container(
+                                      height: 450,
+                                      child: Center(
+                                        child: Text("No Shift Started"),
+                                      ),
+                                    );
+                                  }
                                   return GestureDetector(
                                     onTap: () {
                                       var shiftObject = ShiftItem(
@@ -189,7 +200,11 @@ class _StartedShiftsState extends State<StartedShifts> {
                                     ),
                                   );
                                 },
-                                itemCount: shiftsList!.length)
+                                itemCount: shiftsList!.isEmpty
+                                    ? 1
+                                    : shiftsList!.length),
+                            onRefresh: getShiftsList,
+                          )
                         : Container(),
                   ),
                   const SizedBox(
@@ -222,7 +237,7 @@ class _StartedShiftsState extends State<StartedShifts> {
         ));
   }
 
-  void getShiftsList() async {
+  Future getShiftsList() async {
     await EasyLoading.show(
       status: 'Getting Shifts...',
       maskType: EasyLoadingMaskType.black,
