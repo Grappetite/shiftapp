@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:app_popup_menu/app_popup_menu.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/constants.dart';
@@ -11,6 +10,7 @@ import 'package:shiftapp/screens/StartedShiftList.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 import 'package:shiftapp/services/login_service.dart';
 
+import '../main.dart';
 import '../model/login_model.dart';
 import '../model/shifts_model.dart';
 import '../services/shift_service.dart';
@@ -123,9 +123,9 @@ class _EndShiftViewState extends State<EndShiftView> {
                   }).then((value) async {
                 if (value) {
                   final prefs = await SharedPreferences.getInstance();
-                  FlutterLocalNotificationsPlugin
-                      flutterLocalNotificationsPlugin =
-                      FlutterLocalNotificationsPlugin();
+                  // FlutterLocalNotificationsPlugin
+                  //     flutterLocalNotificationsPlugin =
+                  //     FlutterLocalNotificationsPlugin();
                   await flutterLocalNotificationsPlugin
                       .cancel(widget.execShiftId);
 
@@ -182,8 +182,8 @@ class _EndShiftViewState extends State<EndShiftView> {
               ShiftService.cancelShift(this.widget.execShiftId, endTime);
               var process = await LoginService.getProcess();
               final prefs = await SharedPreferences.getInstance();
-              FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-                  FlutterLocalNotificationsPlugin();
+              // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+              //     FlutterLocalNotificationsPlugin();
               await flutterLocalNotificationsPlugin.cancel(widget.execShiftId);
               try {
                 List<String> test =

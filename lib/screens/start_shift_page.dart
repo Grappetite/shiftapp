@@ -10,6 +10,7 @@ import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 import 'package:timezone/timezone.dart' as tz;
 
+import '../main.dart';
 import '../model/login_model.dart';
 import '../model/shifts_model.dart';
 import '../services/workers_service.dart';
@@ -330,8 +331,8 @@ class _StartShiftViewState extends State<StartShiftView> {
     title,
     body,
   ) async {
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
+    // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    //     FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin.cancel(id);
 
     flutterLocalNotificationsPlugin.zonedSchedule(
