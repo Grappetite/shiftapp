@@ -93,26 +93,7 @@ class _EndShiftViewState extends State<EndShiftView> {
           }
 
           ///My Algorithm
-          // if (WorkersService.prefs!.getString(widget.execShiftId.toString()) !=
-          //     null) {
-          //   ///worker*((baseline)/2)
-          //   expectedEffeicency =
-          //       WorkersService.prefs!.getString(widget.execShiftId.toString())!;
-          //   WorkersService.prefs!.setString(
-          //       widget.execShiftId.toString(),
-          //       (double.parse(expectedEffeicency) +
-          //               (numberSelected *
-          //                   ((double.parse(widget.process.baseline!) / 2))))
-          //           .toString());
-          //   expectedEffeicency =
-          //       WorkersService.prefs!.getString(widget.execShiftId.toString())!;
-          // } else {
-          //   WorkersService.prefs!
-          //       .setString(widget.execShiftId.toString(), 0.toString());
-          // }
         });
-
-        // print(WorkersService.prefs!.getString(widget.execShiftId.toString())!);
       },
     );
   }
@@ -158,73 +139,19 @@ class _EndShiftViewState extends State<EndShiftView> {
                   } finally {
                     prefs.remove(widget.execShiftId.toString());
 
-                    // prefs.remove('shiftId');
                     prefs.remove('selectedShiftName');
                     prefs.remove('selectedShiftEndTime');
                     prefs.remove('selectedShiftStartTime');
-                    // prefs.remove('username');
-                    // prefs.remove('password');
-                    // if (widget.autoOpen) {
-                    //   Navigator.pop(context, true);
-                    // } else {
-                    //   Navigator.pop(context, true);
-                    //   Navigator.pop(context, true);
-                    // }
-                    // var process = <Process>[];
-                    // jsonDecode(prefs.getString("processesMahboob")!).forEach((v) {
-                    //   process!.add(Process.fromJson(v));
-                    // });
                     _timer.cancel();
                     await Future.delayed(Duration(seconds: 1));
                     Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
-                            builder:
-                                (context) => //   Navigator.pop(context, true);
-                                    StartedShifts()
-                            // HomeView(
-                            //     processSelected: widget.process,
-                            //     selectedShift: widget.selectedShift)
-                            ),
+                            builder: (context) => StartedShifts()),
                         (route) => false);
                   }
                 }
               });
-              // var process = await LoginService.getProcess();
-              // final prefs = await SharedPreferences.getInstance();
-              // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-              //     FlutterLocalNotificationsPlugin();
-              // await flutterLocalNotificationsPlugin
-              //     .cancel(widget.execShiftId);
-              // prefs.remove('shiftId');
-              //
-              // prefs.remove('selectedShiftName');
-              // prefs.remove('selectedShiftEndTime');
-              // prefs.remove('selectedShiftStartTime');
-              // // prefs.remove('username');
-              // prefs.remove('password');
-              //
-              // // if (widget.autoOpen) {
-              // //   Navigator.pop(context, true);
-              // // } else {
-              // //   Navigator.pop(context, true);
-              // //   Navigator.pop(context, true);
-              // // }
-              // // var process = <Process>[];
-              // // jsonDecode(prefs.getString("processesMahboob")!).forEach((v) {
-              // //   process!.add(Process.fromJson(v));
-              // // });
-              // Navigator.of(context).pushAndRemoveUntil(
-              //     MaterialPageRoute(
-              //         builder: (context) => //   Navigator.pop(context, true);
-              //             DropDownPage(process: process!)
-              //         // HomeView(
-              //         //     processSelected: widget.process,
-              //         //     selectedShift: widget.selectedShift)
-              //         ),
-              //     (route) => false);
             });
-
-            /// widget.onLogout();
           },
           child: const Text(
             'Transfer Shift',
@@ -266,40 +193,17 @@ class _EndShiftViewState extends State<EndShiftView> {
                       widget.execShiftId.toString() + ids.toString()));
                 }
               } finally {
-                // prefs.remove('shiftId');
-                // prefs.remove(widget.execShiftId.toString());
-
                 prefs.remove('selectedShiftName');
                 prefs.remove('selectedShiftEndTime');
                 prefs.remove('selectedShiftStartTime');
-                // prefs.remove('username');
-                // prefs.remove('password');
 
-                // if (widget.autoOpen) {
-                //   Navigator.pop(context, true);
-                // } else {
-                //   Navigator.pop(context, true);
-                //   Navigator.pop(context, true);
-                // }
-                // var process = <Process>[];
-                // jsonDecode(prefs.getString("processesMahboob")!).forEach((v) {
-                //   process!.add(Process.fromJson(v));
-                // });
                 _timer.cancel();
                 await Future.delayed(Duration(seconds: 1));
                 Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (context) => //   Navigator.pop(context, true);
-                            StartedShifts()
-                        // HomeView(
-                        //     processSelected: widget.process,
-                        //     selectedShift: widget.selectedShift)
-                        ),
+                    MaterialPageRoute(builder: (context) => StartedShifts()),
                     (route) => false);
               }
             });
-
-            /// widget.onLogout();
           },
           child: const Text(
             'Discard Shift',
@@ -514,27 +418,7 @@ class _EndShiftViewState extends State<EndShiftView> {
                   text1: '',
                   backgroundColor: lightBlueColor,
                   showWarning: false,
-                  onTap: () async {
-                    // var response = await Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (BuildContext context) => EditWorkers(
-                    //       startTime: widget.selectedShift.startTime!,
-                    //       processId: widget.processId,
-                    //       endTime: widget.selectedShift.endTime!,
-                    //       userId: [],
-                    //       efficiencyCalculation: [],
-                    //       shiftId: widget.shiftId,
-                    //       totalUsersCount: widget.userId.length,
-                    //       selectedShift: widget.selectedShift,
-                    //       process: widget.process,
-                    //       execShiftId: this.widget.execShiftId,
-                    //     ),
-                    //   ),
-                    // );
-                    //
-                    // loadUsers();
-                  },
+                  onTap: () async {},
                 ),
               ),
               Row(
@@ -558,7 +442,6 @@ class _EndShiftViewState extends State<EndShiftView> {
                               endTime: widget.selectedShift.endTime!,
                               process: widget.process,
                               executeShiftId: executeShiftId!,
-                              // expectedUnits: expectedUnits,
                             ),
                           ),
                         );

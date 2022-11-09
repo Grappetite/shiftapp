@@ -17,8 +17,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await setupFlutterNotifications();
   showFlutterNotification(message);
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
+
   print('Handling a background message ${message.messageId}');
 }
 
@@ -30,9 +29,9 @@ Future<void> setupFlutterNotifications() async {
     return;
   }
   channel = AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
-    'This channel is used for important notifications.', // description
+    'high_importance_channel',
+    'High Importance Notifications',
+    'This channel is used for important notifications.',
     importance: Importance.high,
   );
 
@@ -86,7 +85,6 @@ FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // Set the background messaging handler early on, as a named top-level function
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   const String? environment = String.fromEnvironment(
     'ENVIRONMENT',
@@ -121,31 +119,7 @@ Future<void> main() async {
             String? title,
             String? body,
             String? payload,
-          ) async {
-            // String timezom =
-            //     await AwesomeNotifications().getLocalTimeZoneIdentifier();
-            //
-            // AwesomeNotifications().createNotification(
-            //   content: NotificationContent(
-            //     id: 1,
-            //     channelKey: 'key1',
-            //     title: 'This is Notification title',
-            //     body: 'This is Body of Noti',
-            //     displayOnForeground: true,
-            //     displayOnBackground: true,
-            //   ),
-            //   schedule: NotificationInterval(
-            //       interval: 2, timeZone: timezom, repeats: false),
-            // );
-            // didReceiveLocalNotificationSubject.add(
-            //   ReceivedNotification(
-            //     id: id,
-            //     title: title,
-            //     body: body,
-            //     payload: payload,
-            //   ),
-            // );
-          });
+          ) async {});
 
   InitializationSettings initializationSettings = InitializationSettings(
     android: initializationSettingsAndroid,
@@ -172,13 +146,11 @@ void configLoading() {
     ..maskColor = Colors.blue.withOpacity(0.5)
     ..userInteractions = false
     ..dismissOnTap = false;
-  //..customAnimation = CustomAnimation();
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -194,8 +166,7 @@ class MyApp extends StatelessWidget {
         );
         return child;
       }),
-      // EasyLoading.init(),
       home: const SplashScreen(),
     );
   }
-} //
+}

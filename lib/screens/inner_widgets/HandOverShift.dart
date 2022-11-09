@@ -74,8 +74,6 @@ class _HandOverShiftState extends State<HandOverShift> {
                                 .indexOf(newString);
                             setState(() {});
                           });
-
-                          //final List<String> cityNames = cities.map((city) => city.name).toList();
                         },
                         placeHolderText: 'Select User',
                         preSelected: selectedString,
@@ -109,7 +107,6 @@ class _HandOverShiftState extends State<HandOverShift> {
                           Expanded(
                             child: PElevatedButton(
                               onPressed: () async {
-                                // if (widget.moveWorker) {
                                 if (processIndexSelected != -1) {
                                   await EasyLoading.show(
                                     status: 'Moving...',
@@ -132,10 +129,6 @@ class _HandOverShiftState extends State<HandOverShift> {
                                 } else {
                                   EasyLoading.showError('Please select User');
                                 }
-                                // } else {
-                                //   String result = findEndTime();
-                                //   Navigator.pop(context, result);
-                                // }
                               },
                               text: 'YES',
                             ),

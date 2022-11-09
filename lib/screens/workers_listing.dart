@@ -61,8 +61,6 @@ class _WorkersListingState extends State<WorkersListing> {
 
   bool isLoader = true;
   void loadWorkerTypes() async {
-    //execute_shift_id
-
     var result = await WorkersService.getWorkTypes(
         widget.shiftId.toString(), widget.processId.toString());
 
@@ -93,10 +91,7 @@ class _WorkersListingState extends State<WorkersListing> {
         ],
       );
     }
-    // workerType = result!.data!;
-    setState(() {
-      // workerType = result.data!;
-    });
+    setState(() {});
   }
 
   bool showCategories = false;
@@ -174,7 +169,6 @@ class _WorkersListingState extends State<WorkersListing> {
   @override
   void initState() {
     super.initState();
-    //startTimer();
 
     loadData();
   }

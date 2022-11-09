@@ -23,60 +23,34 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController controller = Environment().config.preset
       ? TextEditingController(text: "mahboob+supervisor@grappetite.com")
       : TextEditingController();
-
   TextEditingController passwordController = Environment().config.preset
       ? TextEditingController(text: "Mahboob321")
       : TextEditingController();
-
   String selectedString = "";
-
   bool showInitText = true;
-
-  // List<Process> process = [];
-
   int processIndexSelected = -1;
 
   @override
   void initState() {
     super.initState();
 
-    //controller.text = 'sidra+supervisor@grappetite.com';
-
-    // controller.text = 'asfa+s@grappetite.com';
-    // controller.text = 'asfa+supervisor@grappetite.com';
     pwd:
-    // controller.text = 'tauqeer+supervisor@grappetite.com';
-
-    //
-
-    //
-
-    //passwordController.text = 'sidragrap';
-    /// passwordController.text = 'isqvqx';
-    //   passwordController.text = 'oznytw';
-    //   passwordController.text = 'Tauqeer123';
-
     loadDefaul();
   }
 
   void loadDefaul() async {
     final prefs = await SharedPreferences.getInstance();
-    // await prefs.clear();
     int? shiftId = prefs.getInt('shiftId');
     String? loginUserName = prefs.getString('username');
     String? passString = prefs.getString('password');
     if (prefs.getString('username') != null) {
       controller.text = prefs.getString('username')!;
     }
-    // shiftId != null &&
     if (loginUserName != null && passString != null) {
       await EasyLoading.show(
         status: 'loading...',
         maskType: EasyLoadingMaskType.black,
       );
-
-      // String? loginUserName = prefs.getString('username');
-      // String? passString = prefs.getString('password');
 
       LoginResponse? response =
           await LoginService.login(loginUserName!, passString!);
@@ -84,44 +58,8 @@ class _LoginScreenState extends State<LoginScreen> {
       if (response == null) {
         await EasyLoading.dismiss();
       } else {
-        // if (response.data!.shiftDetails!.isEmpty) {
-        //   await EasyLoading.dismiss();
-        //
-        //   // prefs.remove('username');
-        //
-        //   prefs.remove('password');
-        //
-        //   prefs.remove('shiftId');
-        //   return;
-        // }
-        // process = response.data!.process!;
         ///will go to the new page
 
-        // var shiftObject = ShiftItem(
-        //   id: response.data!.shiftDetails!.shiftId!,
-        //   name: response.data!.shiftDetails!.shiftName!,
-        //   startTime: response.data!.shiftDetails!.executeShiftStartTime,
-        //   endTime: response.data!.shiftDetails!.executeShiftEndTime,
-        // );
-        //
-        // shiftObject.executedShiftId =
-        //     response.data!.shiftDetails!.executeShiftId;
-        //
-        // shiftObject.displayScreen = 2;
-        // // prefs.setString(
-        // //     "processesMahboob", jsonEncode(response.data!.process!));
-        // await EasyLoading.dismiss();
-        //
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (BuildContext context) => HomeView(
-        //       selectedShift: shiftObject,
-        //       processSelected: response.data!.shiftDetails!.process!,
-        //       sessionStarted: true,
-        //     ),
-        //   ),
-        // );
         await EasyLoading.dismiss();
 
         Navigator.pushReplacement(
@@ -181,44 +119,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         isSecure: true,
                       ),
                     ),
-                    // Visibility(
-                    //   visible: !showLogin,
-                    //   child: const Align(
-                    //     alignment: Alignment.topLeft,
-                    //     child: Text(
-                    //       'Please select Process',
-                    //       style: TextStyle(
-                    //         fontSize: 18,
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    // const SizedBox(
-                    //   height: 24,
-                    // ),
-                    // Visibility(
-                    //   visible: !showLogin,
-                    //   child: DropDown(
-                    //     labelText: 'Title',
-                    //     currentList:
-                    //         process.map((e) => e.name!.trim()).toList(),
-                    //     showError: false,
-                    //     onChange: (newString) {
-                    //       setState(() {
-                    //         selectedString = newString;
-                    //       });
-                    //
-                    //       processIndexSelected = process
-                    //           .map((e) => e.name!.trim())
-                    //           .toList()
-                    //           .indexOf(newString);
-                    //
-                    //       //final List<String> cityNames = cities.map((city) => city.name).toList();
-                    //     },
-                    //     placeHolderText: 'Process',
-                    //     preSelected: selectedString,
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
@@ -232,37 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (processIndexSelected == -1) {
                         return;
                       }
-                      // await EasyLoading.show(
-                      //   status: 'loading...',
-                      //   maskType: EasyLoadingMaskType.black,
-                      // );
-                      // var processSelected = process[processIndexSelected];
-                      //
-                      // var shifts =
-                      //     await LoginService.getShifts(processSelected.id!);
-                      //
-                      // await EasyLoading.dismiss();
-                      //
-                      // //shifts!.data!.first.displayScreen = 3;
-                      //
-                      // if (shifts == null) {
-                      //   EasyLoading.showError('Could not load shifts');
-                      // } else {
-                      //   if (shifts.data!.isNotEmpty) {
-                      //     Navigator.pushReplacement(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //         builder: (BuildContext context) => HomeView(
-                      //           selectedShift: shifts.data!.first,
-                      //           processSelected: processSelected,
-                      //         ),
-                      //       ),
-                      //     );
-                      //   }
-                      // }
-                      // print("object");
 
-                      //getShifts
                       return;
                     }
                     if (controller.text.isEmpty) {
@@ -300,14 +170,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             response.data!.shiftDetails![0].shiftId!);
                         loadDefaul();
 
-                        //prefs.reload();
-
                         return;
                       }
 
-                      // process = response.data!.process!;
-                      // prefs.setString("processesMahboob",
-                      //     jsonEncode(response.data!.process!));
                       setState(() {
                         showLogin = false;
                       });

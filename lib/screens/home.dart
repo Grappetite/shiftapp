@@ -67,16 +67,7 @@ class _HomeViewState extends State<HomeView> {
               selectedShift: widget.selectedShift,
               processSelected: widget.processSelected,
               sessionStarted: widget.sessionStarted,
-              onLogout: () async {
-                // var dyanc = await Navigator.pushReplacement(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => const LoginScreen()),
-                // );
-
-                // if (dyanc != null) {
-                //   if (dyanc == true) {}
-                // }
-              },
+              onLogout: () async {},
             ),
             Container(
               child: const Center(
@@ -109,7 +100,6 @@ class _HomeViewState extends State<HomeView> {
                       ],
                     ),
                   ),
-                  // text: "Home",
                 ),
                 Tab(
                   child: Padding(
@@ -121,87 +111,13 @@ class _HomeViewState extends State<HomeView> {
                       ],
                     ),
                   ),
-                  // text: "SOP",
                 ),
               ]),
         ),
       ),
     );
     ;
-    //   PersistentTabView(
-    //   context,
-    //   controller: _controller,
-    //   screens: _buildScreens(),
-    //   items: _navBarsItems(),
-    //   confineInSafeArea: true,
-    //   backgroundColor: kPrimaryColor,
-    //   handleAndroidBackButtonPress: true,
-    //   resizeToAvoidBottomInset: true,
-    //   stateManagement: true,
-    //   hideNavigationBarWhenKeyboardShows: true,
-    //   decoration: NavBarDecoration(
-    //     borderRadius: BorderRadius.circular(10.0),
-    //     colorBehindNavBar: Colors.white,
-    //   ),
-    //   popAllScreensOnTapOfSelectedTab: true,
-    //   popActionScreens: PopActionScreensType.all,
-    //   itemAnimationProperties: const ItemAnimationProperties(
-    //     duration: Duration(milliseconds: 200),
-    //     curve: Curves.ease,
-    //   ),
-    //   screenTransitionAnimation: const ScreenTransitionAnimation(
-    //     // Screen transition animation on change of selected tab.
-    //     animateTabTransition: true,
-    //     curve: Curves.ease,
-    //     duration: Duration(milliseconds: 200),
-    //   ),
-    //   navBarStyle:
-    //       NavBarStyle.style3, // Choose the nav bar style with this property.
-    // );
   }
-
-  // List<Widget> _buildScreens() {
-  //   return [
-  //     HomeMainView(
-  //       selectedShift: widget.selectedShift,
-  //       processSelected: widget.processSelected,
-  //       sessionStarted: widget.sessionStarted,
-  //       onLogout: () async {
-  //         // var dyanc = await Navigator.pushReplacement(
-  //         //   context,
-  //         //   MaterialPageRoute(builder: (context) => const LoginScreen()),
-  //         // );
-  //
-  //         // if (dyanc != null) {
-  //         //   if (dyanc == true) {}
-  //         // }
-  //       },
-  //     ),
-  //     Container(
-  //       child: const Center(
-  //         child: Text('SOPs are not available right now'),
-  //       ),
-  //       color: Colors.white,
-  //     )
-  //   ];
-  // }
-
-  // List<PersistentBottomNavBarItem> _navBarsItems() {
-  //   return [
-  //     PersistentBottomNavBarItem(
-  //       icon: const Icon(CupertinoIcons.clock),
-  //       title: ("SHIFTS"),
-  //       activeColorPrimary: Colors.white,
-  //       inactiveColorPrimary: Colors.grey.shade500,
-  //     ),
-  //     PersistentBottomNavBarItem(
-  //       icon: const Icon(CupertinoIcons.settings),
-  //       title: ("SOP"),
-  //       activeColorPrimary: Colors.white,
-  //       inactiveColorPrimary: Colors.grey.shade500,
-  //     ),
-  //   ];
-  // }
 }
 
 class HomeMainView extends StatefulWidget {
@@ -292,18 +208,10 @@ class _HomeMainViewState extends State<HomeMainView> {
           onTap: () async {
             final prefs = await SharedPreferences.getInstance();
 
-            // prefs.remove('shiftId');
-
             prefs.remove('selectedShiftName');
             prefs.remove('selectedShiftEndTime');
             prefs.remove('selectedShiftStartTime');
-            // prefs.remove('username');
-            // prefs.remove('password');
             await LoginService.logout();
-            // var dyanc = await Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(builder: (context) => const LoginScreen()),
-            // );
             Get.offAll(LoginScreen());
           },
           child: const Text(

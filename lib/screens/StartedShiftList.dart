@@ -54,8 +54,6 @@ class _StartedShiftsState extends State<StartedShifts> {
                   Text(
                     "Select Started Shift",
                     style: const TextStyle(
-                      // color: kPrimaryColor,
-                      // fontWeight: FontWeight.w600,
                       fontSize: 20,
                     ),
                   ),
@@ -107,7 +105,7 @@ class _StartedShiftsState extends State<StartedShifts> {
                                         borderRadius: BorderRadius.circular(16),
                                         boxShadow: [
                                           BoxShadow(
-                                              color: lightGreenColor, //edited
+                                              color: lightGreenColor,
                                               spreadRadius: 4,
                                               blurRadius: 1),
                                         ],
@@ -211,19 +209,11 @@ class _StartedShiftsState extends State<StartedShifts> {
                     text: 'LOGOUT',
                     onPressed: () async {
                       final prefs = await SharedPreferences.getInstance();
-
-                      // prefs.remove('shiftId');
-
                       prefs.remove('selectedShiftName');
                       prefs.remove('selectedShiftEndTime');
                       prefs.remove('selectedShiftStartTime');
-                      // prefs.remove('username');
                       prefs.remove('password');
                       await LoginService.logout();
-                      // var dyanc = await Navigator.pushReplacement(
-                      //   context,
-                      //   MaterialPageRoute(builder: (context) => const LoginScreen()),
-                      // );
                       Get.offAll(LoginScreen());
                     },
                   ),

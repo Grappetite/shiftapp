@@ -41,8 +41,6 @@ class _AddTempWorkerState extends State<AddTempWorker> {
   String selectedWorkerTypeID = '';
 
   void loadWorkerTypes() async {
-    //execute_shift_id
-
     var result = await WorkersService.getWorkTypes(
         this.widget.shiftId, widget.processId);
     workerType = result!.data!;
@@ -180,7 +178,6 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                     ),
                     PElevatedButton(
                       onPressed: () async {
-                        //addTempWorkers
                         await EasyLoading.show(
                           dismissOnTap: false,
                           status: 'loading...',

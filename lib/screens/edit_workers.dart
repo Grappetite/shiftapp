@@ -58,8 +58,6 @@ class _EditWorkersState extends State<EditWorkers> {
   List<WorkerType> workerType = [];
   dynamic processList;
   void loadWorkerTypes() async {
-    //execute_shift_id
-
     var result = await WorkersService.getWorkTypes(
         widget.shiftId.toString(), widget.processId.toString());
 
@@ -76,10 +74,7 @@ class _EditWorkersState extends State<EditWorkers> {
 
       await EasyLoading.dismiss();
     }
-    // workerType = result!.data!;
-    setState(() {
-      // workerType = result.data!;
-    });
+    setState(() {});
   }
 
   void loadWorkers() async {
@@ -126,9 +121,6 @@ class _EditWorkersState extends State<EditWorkers> {
 
     List<ShiftWorker> shiftWorkers = [];
 
-    //   responseShift!.data!.worker = responseShift.data!.shiftWorker!.where((e) => e.isAdded == false).toList();
-    // responseShift.data!.shiftWorker = responseShift.data!.shiftWorker!.where((e) => e.isAdded == true).toList();
-
     shiftWorkers.addAll(responseShift!.data!.worker!);
 
     workersSelected = responseShift.data!.shiftWorker!.length;
@@ -138,13 +130,6 @@ class _EditWorkersState extends State<EditWorkers> {
 
       shiftWorkers.add(currentItem);
     }
-
-    // var seen = <String>{};
-
-    // shiftWorkers.where((student) => seen.add(student.workerType!)).toList();
-    //
-    // listNames = seen.toList();
-
     for (var currentItem in listNames) {
       var response =
           shiftWorkers.where((e) => e.workerType == currentItem).toList();

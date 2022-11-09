@@ -61,12 +61,10 @@ class Errors {
       case 409:
         EasyLoading.showError(response.data["message"][0].toString(),
             dismissOnTap: true, duration: Duration(seconds: 2));
-        // g.Get.offAllNamed(Routes.barberPortfolio);
         break;
       case 410:
         EasyLoading.showError(response.data["message"][0].toString(),
             dismissOnTap: true, duration: Duration(seconds: 2));
-        // g.Get.offAllNamed(Routes.selectBarber);
         break;
       case 404:
         EasyLoading.showError(response.data["message"].toString(),
@@ -128,8 +126,6 @@ class LoginService {
                 },
               ));
 
-      //handle 404
-
       print(response.data);
 
       var responseObject = ShiftsResponse.fromJson(response.data);
@@ -158,8 +154,6 @@ class LoginService {
               authorization: 'Bearer ' + prefs.getString(tokenKey)!,
             },
           ));
-
-      //handle 404
 
       print(response.data);
       var process = <Process>[];

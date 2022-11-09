@@ -2,11 +2,7 @@ import 'dart:ui';
 
 import 'package:shiftapp/config/BaseConfig.dart';
 
-// const baseUrl = 'https://dev-shift.grappetite.com/api/v1/';
 var baseUrl = Environment().config.apiUrl;
-// const baseUrl = 'https://takealot.grappetite.com/api/v1/';
-//const baseUrl = 'https://shift.grappetite.com/api/v1/';
-//https://dev-shift.grappetite.com
 const authorization = "Authorization";
 
 const tokenKey = "tokenKey";
@@ -24,10 +20,6 @@ const lightGreenColor = Color.fromRGBO(212, 237, 218, 1);
 
 const lightRedColor = Color.fromRGBO(237, 212, 215, 1);
 
-//, ,
-
-//rgba(94, 193, 220, 0.25)
-
 Map<int, Color> primaryMap = {
   50: const Color.fromRGBO(38, 86, 125, 0.1),
   100: const Color.fromRGBO(38, 86, 125, 0.2),
@@ -40,5 +32,3 @@ Map<int, Color> primaryMap = {
   800: const Color.fromRGBO(38, 86, 125, 0.9),
   900: const Color.fromRGBO(38, 86, 125, 1.0),
 };
-
-//38, 86, 125, 1.0

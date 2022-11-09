@@ -46,9 +46,6 @@ class _ShiftStartState extends State<ShiftStart> {
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
-        // setState(() {
-        // timeElasped = widget.selectedShift.timeElasped;
-
         if ((widget.selectedShift.displayScreen == 3 ||
                 widget.selectedShift.displayScreen == 1) &&
             (widget.selectedShift.displayScreenReady.toString().toLowerCase() ==
@@ -69,7 +66,6 @@ class _ShiftStartState extends State<ShiftStart> {
             _timer.cancel();
           }
         }
-        // });
 
         print('');
       },
@@ -166,13 +162,6 @@ class _ShiftStartState extends State<ShiftStart> {
                     ] else ...[
                       GestureDetector(
                           onTap: () async {
-                            // final TimeOfDay? newTime = await showTimePicker(
-                            //   context: context,
-                            //   initialTime: TimeOfDay(
-                            //       hour: DateTime.now().hour,
-                            //       minute: DateTime.now().minute),
-                            //   initialEntryMode: TimePickerEntryMode.dial,
-                            // );
                             if (startTimeOriginal == null) {
                               startTimeOriginal =
                                   widget.selectedShift.startTime!;
@@ -205,7 +194,6 @@ class _ShiftStartState extends State<ShiftStart> {
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: Text(
-                                                  // You can edit this shift up till ${maxtime.toString().timeToShow}.
                                                   "Shift time can only be re-set 2 hours in advance of the new time.",
                                                   textAlign: TextAlign.center,
                                                   style: const TextStyle(
@@ -215,7 +203,6 @@ class _ShiftStartState extends State<ShiftStart> {
                                         Expanded(
                                           flex: 4,
                                           child: CupertinoDatePicker(
-                                            //use24hFormat: true,
                                             mode: CupertinoDatePickerMode
                                                 .dateAndTime,
                                             onDateTimeChanged: (value) async {
@@ -234,9 +221,6 @@ class _ShiftStartState extends State<ShiftStart> {
                                 customSelectedStartTime = widget.selectedShift
                                     .makeTimeStringFromHourMinute(
                                         newTime!.hour, newTime!.minute);
-                                // DateTime tempStart =
-                                //     DateFormat("yyyy-MM-dd hh:mm:ss")
-                                //         .parse(customSelectedStartTime);
                                 DateTime tempStart =
                                     DateFormat("yyyy-MM-dd hh:mm:ss")
                                         .parse(startTimeOriginal);
@@ -246,50 +230,8 @@ class _ShiftStartState extends State<ShiftStart> {
                                 var differenceT =
                                     tempEnd.difference(tempStart).inHours;
 
-                                // if (differenceT < 0) {
-                                //   showAlertDialog(
-                                //     context: context,
-                                //     title: 'Error',
-                                //     message: 'Invalid time selected',
-                                //     actions: [
-                                //       AlertDialogAction(
-                                //         label: MaterialLocalizations.of(context)
-                                //             .okButtonLabel,
-                                //         key: OkCancelResult.ok,
-                                //       )
-                                //     ],
-                                //   );
-                                //
-                                //   return;
-                                // }
                                 String endDate = '';
 
-                                // if (differenceT <
-                                //     widget.selectedShift.endDateObject
-                                //         .difference(widget
-                                //             .selectedShift.startDateObject)
-                                //         .inHours) {
-                                //   int hoursToAdd = widget
-                                //           .selectedShift.endDateObject
-                                //           .difference(widget
-                                //               .selectedShift.startDateObject)
-                                //           .inHours -
-                                //       differenceT;
-                                //   print(hoursToAdd);
-                                //
-                                //   String date =
-                                //       DateFormat("yyyy-MM-dd HH:mm:ss").format(
-                                //     widget.selectedShift.endDateObject.add(
-                                //       (Duration(hours: hoursToAdd)),
-                                //     ),
-                                //   );
-                                //   endDate = date;
-                                //
-                                //   tempEnd = DateFormat("yyyy-MM-dd hh:mm:ss")
-                                //       .parse(date);
-                                //
-                                //   print('object');
-                                // }
                                 print('object');
 
                                 bool? selected = await showDialog(
@@ -353,17 +295,6 @@ class _ShiftStartState extends State<ShiftStart> {
                                                     hours: differenceT))
                                                 .minute);
                                   });
-                                  // Navigator.of(context).push(
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => WorkersListing(
-                                  //       shiftId: null,
-                                  //       processId: widget.processSelected.id!,
-                                  //       selectedShift: widget.selectedShift,
-                                  //       process: widget.processSelected,
-                                  //     ),
-                                  //   ),
-                                  // );
-
                                 }
                               }
                             });
@@ -424,7 +355,7 @@ class _ShiftStartState extends State<ShiftStart> {
                               context: context,
                               barrierDismissible: false,
                               builder: (BuildContext context) {
-                                return Container(); //ChangeShiftTime();
+                                return Container();
                               });
 
                           if (selected != null) {
@@ -523,71 +454,13 @@ class _ShiftStartState extends State<ShiftStart> {
                   this.widget.popBack.call();
                 }
               }
-              //
             },
             child: Image.asset(imageName()),
           ),
         ),
-        // Expanded(
-        //   flex: 20,
-        //   child: Center(
-        //     child: PElevatedButton(
-        //       onPressed: () {},
-        //       text: 'VIEW PREVIOUS SHIFT',
-        //       backGroundColor: Colors.grey,
-        //     ),
-        //   ),
-        // ),
-        ///Dawid Location
-        // widget.bestEfficiency != null && widget.yesterdayEfficiency != null
-        //     ? Row(
-        //         children: [
-        //           Expanded(
-        //               child: Column(
-        //             children: [
-        //               Text(
-        //                 "Best Shift",
-        //                 style: TextStyle(
-        //                     color: kPrimaryColor,
-        //                     fontSize: 16,
-        //                     fontWeight: FontWeight.w600),
-        //               ),
-        //               Text(
-        //                 widget.bestEfficiency,
-        //                 style: TextStyle(
-        //                     color: kPrimaryColor,
-        //                     fontSize: 16,
-        //                     fontWeight: FontWeight.w600),
-        //               )
-        //             ],
-        //           )),
-        //           Expanded(
-        //               child: Column(
-        //             children: [
-        //               Text(
-        //                 "Yesterday\'s Shift",
-        //                 style: TextStyle(
-        //                     color: kPrimaryColor,
-        //                     fontSize: 16,
-        //                     fontWeight: FontWeight.w600),
-        //               ),
-        //               Text(
-        //                 widget.yesterdayEfficiency,
-        //                 style: TextStyle(
-        //                     color: kPrimaryColor,
-        //                     fontSize: 16,
-        //                     fontWeight: FontWeight.w600),
-        //               )
-        //             ],
-        //           )),
-        //         ],
-        //       )
-        //     : Container(),
         const SizedBox(
           height: 16,
         ),
-
-//#5EC1DC40
       ],
     );
   }

@@ -57,13 +57,6 @@ class EffeciencyView extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Text(
-                  //   'Closed shift successfully',
-                  //   style: const TextStyle(
-                  //       color: mainBackGroundColor,
-                  //       fontSize: 25,
-                  //       fontWeight: FontWeight.w600),
-                  // ),
                   Container(
                     height: MediaQuery.of(context).size.height / 5,
                     decoration: BoxDecoration(
@@ -75,7 +68,6 @@ class EffeciencyView extends StatelessWidget {
                       ),
                     ),
                     child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
@@ -86,9 +78,7 @@ class EffeciencyView extends StatelessWidget {
                               ),
                               borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(15),
-                                // bottomLeft: Radius.circular(16),
                                 topRight: Radius.circular(15),
-                                // bottomRight: Radius.circular(16),
                               ),
                             ),
                             child: Row(
@@ -146,17 +136,6 @@ class EffeciencyView extends StatelessWidget {
                             ),
                           ),
                         ),
-                        // SizedBox(
-                        //   height: 30,
-                        // ),
-                        // Divider(
-                        //   height: 10,
-                        //   color: kPrimaryColor,
-                        //   thickness: 1,
-                        // ),
-                        // SizedBox(
-                        //   height: 30,
-                        // ),
                         Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -185,22 +164,6 @@ class EffeciencyView extends StatelessWidget {
                     text: 'Back to Started Shifts',
                     onPressed: () async {
                       Get.offAll(StartedShifts());
-
-                      // final prefs = await SharedPreferences.getInstance();
-                      //
-                      // prefs.remove('shiftId');
-                      //
-                      // prefs.remove('selectedShiftName');
-                      // prefs.remove('selectedShiftEndTime');
-                      // prefs.remove('selectedShiftStartTime');
-                      // // prefs.remove('username');
-                      // prefs.remove('password');
-                      // await LoginService.logout();
-                      // // var dyanc = await Navigator.pushReplacement(
-                      // //   context,
-                      // //   MaterialPageRoute(builder: (context) => const LoginScreen()),
-                      // // );
-                      // Get.offAll(LoginScreen());
                     },
                   ),
                 ],

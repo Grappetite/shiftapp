@@ -25,13 +25,6 @@ class ShiftService {
       );
 
       print(response.data);
-
-      // var responseObject = ShiftStartModel.fromJson(response.data);
-      //
-      // if (responseObject.data == null) {
-      //   return null;
-      // }
-      //
       return true;
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
@@ -53,13 +46,6 @@ class ShiftService {
       );
 
       print(response.data);
-
-      // var responseObject = ShiftStartModel.fromJson(response.data);
-      //
-      // if (responseObject.data == null) {
-      //   return null;
-      // }
-      //
       return List<ShiftStartDetails>.from(
           response.data["data"].map((x) => ShiftStartDetails.fromJson(x)));
     } on DioError catch (e) {

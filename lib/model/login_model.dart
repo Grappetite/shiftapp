@@ -1,22 +1,16 @@
 import 'package:shiftapp/model/shifts_model.dart';
 
 class LoginResponse {
-  //int? status;
   String? token;
   Data? data;
   String? message;
 
-  //this.status
   LoginResponse({this.token, this.data, this.message});
 
   LoginResponse.fromJson(Map<String, dynamic> json) {
     token = json['token'];
     data = json['data'] != null ? Data.fromJson(json['data']) : null;
     message = json['message'];
-
-    print('');
-
-    /**/
   }
 
   Map<String, dynamic> toJson() {

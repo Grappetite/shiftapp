@@ -1,7 +1,6 @@
 import 'package:intl/intl.dart';
 
 class ShiftsResponse {
-  //int? status;
   String? message;
   List<ShiftItem>? data;
 
@@ -49,54 +48,22 @@ class ShiftItem {
   }
 
   String get timeElasped {
-    var check1 = DateTime.now()
-        // .toUtc()
-        // .subtract(Duration(hours: 3))
-        .difference(startDateObject);
+    var check1 = DateTime.now().difference(startDateObject);
 
     if (check1.inSeconds > 0) {
-      // event already passed
-      var differance = DateFormat("yyyy-MM-dd hh:mm:ss")
-          .parse(DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()))
-          // .toUtc()
-          // .subtract(Duration(hours: 3))
-          .difference(startDateObject);
-
-      int sec = differance.inSeconds;
-
-      int hoursdone = check1.inHours;
-      int minutes = check1.inMinutes - (hoursdone * 60);
-
-      int remainingSeconds = check1.inHours * 60 * 60;
       return _printDuration(check1);
-    } else {}
-
+    }
     return '';
   }
 
   String get timeRemaining {
     var check1 = endDateObject.difference(DateTime.now());
-
     if (check1.inSeconds > 0) {
-      // event already passed
-      var differance = endDateObject.difference(DateTime.now());
-
-      int sec = differance.inSeconds;
-
-      int hoursdone = check1.inHours;
-      int minutes = check1.inMinutes - (hoursdone * 60);
-
-      int remainingSeconds = check1.inHours * 60 * 60;
       return _printDuration(check1);
     } else {
-      var differance = endDateObject.difference(DateTime.now());
-
       check1 = endDateObject.difference(DateTime.now());
-
       return 'Over ' + "-" + _printDuration(check1).replaceAll("-", "");
     }
-
-    return '';
   }
 
   DateTime get startDateObject {
@@ -119,7 +86,6 @@ class ShiftItem {
   }
 
   String get showDate {
-    //2022/12/01
     DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(startTime!);
     String date = DateFormat("yyyy/MM/dd").format(tempDate);
     return date;
@@ -151,10 +117,8 @@ class ShiftItem {
 
   String makeTimeStringFromHourMinute(int hour, int minute) {
     final f = DateFormat('yyyy-MM-dd ');
-
     String hourString = hour.toString();
     String minuteString = minute.toString();
-
     if (hourString.length == 1) {
       hourString = '0' + hourString;
     }
@@ -167,10 +131,8 @@ class ShiftItem {
   String makeTimeStringFromHourMinuteMahboob(
       DateTime date, int hour, int minute) {
     final f = DateFormat('yyyy-MM-dd ');
-
     String hourString = hour.toString();
     String minuteString = minute.toString();
-
     if (hourString.length == 1) {
       hourString = '0' + hourString;
     }
@@ -212,24 +174,16 @@ class ShiftItem {
     startTime = json['start_time'];
     displayScreenMessage = json['display_screen_message'];
     displayScreenReady = json['display_screen_already'];
-
     String date = DateFormat("yyyy-MM-dd").format(DateTime.now());
-
     var result = startTime!.replaceRange(0, 10, date);
-
     startTime = result;
-
     endTime = json['end_time'];
-
     result = endTime!.replaceRange(0, 10, date);
     endTime = result;
-
     displayScreen = int.parse(json['display_screen'] ?? 2.toString());
     if (displayScreen == 1) {
       displayScreen = 2;
     }
-    // //displayScreen = 3;
-    // displayScreen = 2;
   }
 
   Map<String, dynamic> toJson() {

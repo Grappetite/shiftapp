@@ -31,7 +31,6 @@ extension StringExtension on String {
     var year = tmpString.substring(0, 2);
     var month = tmpString.substring(2, 4);
     var date = tmpString.substring(4, 6);
-    //20/10/1990
     if (int.parse(year) > 0 && int.parse(year) < 22) {
       year = '20' + year;
     } else {
@@ -45,7 +44,6 @@ extension StringExtension on String {
     var year = tmpString.substring(0, 2);
     var month = tmpString.substring(2, 4);
     var date = tmpString.substring(4, 6);
-    //20/10/1990
     if (int.parse(year) > 0 && int.parse(year) < 21) {
       year = '20' + year;
     } else {

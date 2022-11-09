@@ -27,20 +27,12 @@ class pictureWithHeading extends StatelessWidget {
           border: Border.all(
             color: kPrimaryColor,
           ),
-          // boxShadow: [
-          //   BoxShadow(
-          //       color: kPrimaryColor, //edited
-          //       spreadRadius: 4,
-          //       blurRadius: 1),
-          // ],
         ),
         child: Row(
           children: [
             Expanded(
               flex: 1,
               child: Container(
-                // width: 150,
-                // height: 150,
                 decoration: BoxDecoration(
                     color: kPrimaryColor,
                     borderRadius: BorderRadius.circular(10),

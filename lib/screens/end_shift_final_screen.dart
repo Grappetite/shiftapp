@@ -123,55 +123,14 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
     }
   }
 
-  void setupFocusNode(FocusNode node) {
-    // node.addListener(
-    //   () {
-    //     bool hasFocus = node.hasFocus;
-    //     if (hasFocus) {
-    //       if (Platform.isIOS) {
-    //         showDoneButtonOverlay(context);
-    //       }
-    //     } else {
-    //       if (Platform.isIOS) {
-    //         removeDoneButtonOverlay();
-    //       }
-    //     }
-    //   },
-    // );
-  }
+  void setupFocusNode(FocusNode node) {}
 
   @override
   void initState() {
     super.initState();
     setupFocusNode(doneButton);
     startTimer();
-    // if (widget.expectedUnits == null) {
-    //   EasyLoading.show(
-    //     status: 'Please wait...',
-    //     maskType: EasyLoadingMaskType.black,
-    //   );
-    //   loadExpectedUnits();
-    //   EasyLoading.dismiss();
-    // }
   }
-
-  // Future loadExpectedUnits() async {
-  //   widget.expectedUnits = 0;
-  //   var shiftWorkerList =
-  //       await WorkersService.getAllShiftWorkersList(widget.executeShiftId!);
-  //   log("${double.parse(widget.process.baseline!)}");
-  //   for (var calculation in shiftWorkerList!.data!) {
-  //     log(calculation.name! +
-  //         " ${((calculation.actualTimeloggedout!.difference(calculation.actualTimeloggedin!).inMinutes) / 60) * (double.parse(widget.process.baseline!))}");
-  //     widget.expectedUnits = widget.expectedUnits! +
-  //         (((calculation.actualTimeloggedout!
-  //                     .difference(calculation.actualTimeloggedin!)
-  //                     .inMinutes) /
-  //                 60) *
-  //             (double.parse(widget.process.baseline!)));
-  //   }
-  //   setState(() {});
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -319,41 +278,6 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                           const SizedBox(
                             height: 8,
                           ),
-                          // Padding(
-                          //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          //   child: ExplainerWidget(
-                          //     iconName: 'construct',
-                          //     title:
-                          //         'Expected ${widget.process.unit} Produced By Now',
-                          //     text1: "${widget.expectedUnits!.toStringAsFixed(0)}",
-                          //     text2: '',
-                          //     showWarning: false,
-                          //     onTap: () async {
-                          //       // var response = await Navigator.push(
-                          //       //   context,
-                          //       //   MaterialPageRoute(
-                          //       //     builder: (BuildContext context) => EditWorkers(
-                          //       //       startTime: widget.selectedShift.startTime!,
-                          //       //       processId: widget.processId,
-                          //       //       endTime: widget.selectedShift.endTime!,
-                          //       //       userId: [],
-                          //       //       efficiencyCalculation: [],
-                          //       //       shiftId: widget.shiftId,
-                          //       //       totalUsersCount: widget.userId.length,
-                          //       //       selectedShift: widget.selectedShift,
-                          //       //       process: widget.process,
-                          //       //       execShiftId: this.widget.execShiftId,
-                          //       //     ),
-                          //       //   ),
-                          //       // );
-                          //       //
-                          //       // loadUsers();
-                          //     },
-                          //   ),
-                          // ),
-                          // const SizedBox(
-                          //   height: 8,
-                          // ),
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8),
                             child: Container(
@@ -385,7 +309,6 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                         SizedBox(
                                           width: 8,
                                         ),
-                                        //(Est : ${widget.expectedUnits!.toStringAsFixed(0)})
                                         Text(
                                           '${widget.process.unit} Processed:',
                                           style: TextStyle(
@@ -409,7 +332,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                             inputFormatters: [
                                               FilteringTextInputFormatter
                                                   .digitsOnly
-                                            ], // Only numbers can be entered
+                                            ],
                                           ),
                                         ),
                                         Expanded(
@@ -474,8 +397,6 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
 
                                 if (answer != null) {
                                   if (answer != false) {
-                                    // return;
-
                                     await EasyLoading.show(
                                       status: 'Adding...',
                                       maskType: EasyLoadingMaskType.black,
@@ -488,7 +409,6 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                       answer,
                                     );
                                     _timer.cancel();
-                                    // await LoginService.logout();
                                     await EasyLoading.dismiss();
 
                                     if (check != false) {
@@ -517,30 +437,12 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                       } finally {
                                         prefs.remove(
                                             widget.executeShiftId.toString());
-                                        // final prefs =
-                                        //     await SharedPreferences.getInstance();
 
-                                        // prefs.remove('shiftId');
-                                        //
-                                        // prefs.remove('selectedShiftName');
-                                        // prefs.remove('selectedShiftEndTime');
-                                        // prefs.remove('selectedShiftStartTime');
-                                        // prefs.remove('username');
-                                        // prefs.remove('password');
                                         Get.offAll(EffeciencyView(
                                           process: widget.process,
                                           effeciency: check,
                                         ));
                                       }
-                                      // Get.offAll(StartedShifts());
-                                      // if (widget.autoOpen) {
-                                      //   Navigator.pop(context);
-                                      //   Navigator.pop(context, true);
-                                      // } else {
-                                      //   Navigator.pop(context);
-                                      //   Navigator.pop(context, true);
-                                      //   Navigator.pop(context, true);
-                                      // }
                                     } else {
                                       EasyLoading.showError('Error');
                                     }
@@ -617,7 +519,6 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
     super.initState();
   }
 
-  // TimeOfDay? newTime;
   String selectedString = "";
   String selectedWorkerType = "";
   int processIndexSelected = -1;
@@ -675,7 +576,6 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                     const SizedBox(
                       height: 12,
                     ),
-
                     Text(
                       widget.moveWorker
                           ? ""
@@ -684,22 +584,13 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                               : 'Adjust shift end time if different to current:',
                       style: TextStyle(color: kPrimaryColor, fontSize: 12),
                     ),
-
                     widget.moveWorker
                         ? Container()
                         : Expanded(
                             child: Container(),
                           ),
-
                     GestureDetector(
                       onTap: () async {
-                        // TimeOfDay? newTime = await showTimePicker(
-                        //   context: context,
-                        //   initialTime: TimeOfDay(
-                        //       hour: DateTime.now().hour,
-                        //       minute: DateTime.now().minute),
-                        //   initialEntryMode: TimePickerEntryMode.dial,
-                        // );
                         DateTime? newTime;
                         showCupertinoModalPopup(
                             context: context,
@@ -709,7 +600,6 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                                 height: MediaQuery.of(context).size.width,
                                 width: MediaQuery.of(context).size.width,
                                 child: CupertinoDatePicker(
-                                  //use24hFormat: true,
                                   mode: CupertinoDatePickerMode.dateAndTime,
                                   onDateTimeChanged: (value) async {
                                     newTime = value;
@@ -746,8 +636,6 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                                               .split(" ")[0] +
                                           " " +
                                           customSelectedStartTime.split(" ")[1];
-
-                              // widget.shiftItem.endTime = customSelectedStartTime;
                             });
                           }
                         });
@@ -765,7 +653,6 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                         suffixIcon: Icons.expand_circle_down_outlined,
                       ),
                     ),
-
                     widget.moveWorker
                         ? Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -779,7 +666,6 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                         : Expanded(
                             child: Container(),
                           ),
-
                     widget.moveWorker
                         ? widget.processList!.isNotEmpty
                             ? DropDown(
@@ -804,8 +690,6 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                                         .indexOf(newString);
                                     setState(() {});
                                   });
-
-                                  //final List<String> cityNames = cities.map((city) => city.name).toList();
                                 },
                                 placeHolderText: 'Process',
                                 preSelected: selectedString,
@@ -833,15 +717,12 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                                               .split(" ")[0]
                                           : widget.shiftItem.endDateObject
                                               .toString()
-                                              .split(
-                                                  " ")[0], // dataToDisplay(),
-
+                                              .split(" ")[0],
                               style: TextStyle(
                                   color: kPrimaryColor,
                                   fontWeight: FontWeight.w600),
                             ),
                           ),
-
                     Expanded(
                       child: Container(),
                     ),
@@ -858,7 +739,6 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                         : Expanded(
                             child: Container(),
                           ),
-
                     processIndexSelected != -1
                         ? DropDown(
                             labelText: 'Title',
@@ -880,8 +760,6 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                                   .map((e) => e.workerTypeName!.trim())
                                   .toList()
                                   .indexOf(newString);
-
-                              //final List<String> cityNames = cities.map((city) => city.name).toList();
                             },
                             placeHolderText: 'Worker Type',
                             preSelected: selectedWorkerType,
@@ -902,8 +780,6 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                         style: TextStyle(color: kPrimaryColor),
                       ),
                     ),
-
-                    //
                     Expanded(
                       child: Container(),
                     ),
@@ -992,9 +868,6 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
 
   String findEndTime() {
     var result = '';
-    // if (widget.editing) {
-    //   result = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
-    // } else {
     result = widget.shiftItem.endTime!;
 
     if (customTimeSelectedToSend.isNotEmpty) {
@@ -1011,7 +884,6 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
       result = endTime;
     }
     print('');
-    // }
     return result;
   }
 

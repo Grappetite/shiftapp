@@ -68,13 +68,11 @@ class _StartShiftViewState extends State<StartShiftView> {
   @override
   void initState() {
     super.initState();
-    //startTimer();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //8171999927660000
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         centerTitle: true,
@@ -127,7 +125,6 @@ class _StartShiftViewState extends State<StartShiftView> {
                   postIconColor: Colors.green,
                 ),
               ),
-              //
               const SizedBox(
                 height: 16,
               ),
@@ -144,7 +141,6 @@ class _StartShiftViewState extends State<StartShiftView> {
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 8),
               ),
-
               SizedBox(
                 height: 8,
               ),
@@ -173,7 +169,6 @@ class _StartShiftViewState extends State<StartShiftView> {
                   controller: _controller,
                 ),
               ),
-
               SizedBox(
                 width: MediaQuery.of(context).size.width / 1.7,
                 child: TextButton(
@@ -206,8 +201,6 @@ class _StartShiftViewState extends State<StartShiftView> {
                         widget.startTime,
 
                         ///after
-                        // DateFormat("yyyy-MM-dd hh:mm:ss")
-                        //     .format(DateTime.now()),
                         widget.endTime,
                         widget.userId,
                         widget.efficiencyCalculation,
@@ -261,7 +254,6 @@ class _StartShiftViewState extends State<StartShiftView> {
                             test.add(rng.nextInt(100000).toString());
                             await show(
                                 widget.selectedShift.endDateObject
-                                    // DateTime.now()
                                     .add(Duration(hours: i)),
                                 int.parse(
                                     result.data!.executeShiftId!.toString() +
@@ -276,7 +268,6 @@ class _StartShiftViewState extends State<StartShiftView> {
                         await show(
                             widget.selectedShift.endDateObject
                                 .subtract(Duration(minutes: 10)),
-                            // DateTime.now().add(Duration(minutes: 1)),
                             result.data!.executeShiftId!,
                             "Don't forget to end your shift!",
                             "Your shift is about to end, don't forget to register today's work.");
@@ -330,9 +321,6 @@ class _StartShiftViewState extends State<StartShiftView> {
         now.day,
         now.hour - 2,
         now.minute);
-    // if (scheduledDate.isBefore(now)) {
-    //   scheduledDate = scheduledDate.subtract(const Duration(minutes: 10));
-    // }
     return scheduledDate;
   }
 

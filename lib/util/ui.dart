@@ -2,23 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
-// import 'package:fluttertoast/fluttertoast.dart';
-
 import '../config/constants.dart';
 
 class UIUtitilies {
-  // static void showToast(String message, {int toastSeconds = 5}) {
-  //   Fluttertoast.showToast(
-  //     msg: message,
-  //     toastLength: Toast.LENGTH_SHORT,
-  //     gravity: ToastGravity.BOTTOM,
-  //     timeInSecForIosWeb: toastSeconds,
-  //     backgroundColor: Colors.grey,
-  //     textColor: Colors.white,
-  //     fontSize: 12.0,
-  //   );
-  // }
-
   static void showConfirmationDialog(BuildContext context,
       {String? title,
       String? description,
@@ -202,7 +188,6 @@ class UIUtitilies {
     );
   }
 
-  //static Future<dynamic> showMessageDialogDisableBackBtn(BuildContext context,
   static Future<void> showErrorDialogDisableBackBtn(BuildContext context,
       String errorMessage, VoidCallback firstButtonClicked,
       {String? buttonText}) async {

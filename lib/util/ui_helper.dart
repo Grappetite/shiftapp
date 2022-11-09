@@ -24,7 +24,6 @@ class UIHelper {
                 style:
                     TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
               ),
-              // Expanded(child: SizedBox()),
               Text(
                 count,
                 style: TextStyle(

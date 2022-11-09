@@ -153,14 +153,6 @@ class _DropDownState extends State<DropDown> {
                                   controller: ScrollController(
                                       initialScrollOffset: 0.0),
                                   child: ListView(children: [
-                                    // child: ListView.builder(
-                                    // physics:
-                                    //     const NeverScrollableScrollPhysics(),
-                                    // shrinkWrap: true,
-                                    // itemCount: listToShow.length,
-                                    // itemBuilder:
-                                    //     (BuildContext ctxt, int index) {
-                                    //   return
                                     for (int index = 0;
                                         index < listToShow.length;
                                         index++)
@@ -193,9 +185,7 @@ class _DropDownState extends State<DropDown> {
                                               ],
                                             )
                                           : Container()
-                                  ]
-                                      // },
-                                      ),
+                                  ]),
                                 ),
                               ),
                       ],

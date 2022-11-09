@@ -18,8 +18,6 @@ class SelectExistingWorkers extends StatefulWidget {
 
   int? workerTypeId;
 
-  //final WorkerType? tempWorkType;
-
   final Function(AddTempResponse) tempWorkerAdded;
   final Function(ShiftWorker) otherTypeTempWorkerAdded;
 
@@ -132,8 +130,6 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
           );
           if (result == OkCancelResult.ok) {
             Navigator.pop(context);
-
-            // return Future.value(false);
           }
           return Future.value(false);
         } else {
@@ -143,10 +139,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title:
-              // Column(
-              //   children:  [
-              Text(
+          title: Text(
             widget.process.name!,
             style: TextStyle(
                 color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
@@ -170,21 +163,6 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                 }
               },
               child: Icon(Icons.arrow_back)),
-          // SizedBox(
-          //   height: 4,
-          // ),
-          // Text(
-          //   'Receiving',
-          //   style: TextStyle(
-          //       color: Colors.white,
-          //       fontSize: 18,
-          //       fontWeight: FontWeight.w600),
-          // ),
-          // SizedBox(
-          //   height: 2,
-          // ),
-          // ],
-          // ),
         ),
         body: Align(
           alignment: Alignment.center,
@@ -285,7 +263,6 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                               .contains(v.toLowerCase()))
                                       .toList();
 
-                                  //filteredWorkers
                                   setState(() {
                                     isSearching = true;
                                   });
@@ -318,9 +295,6 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                   const SizedBox(
                     height: 12,
                   ),
-                  // const SizedBox(
-                  //   height: 8,
-                  // ),
                   const Text(
                     'Cannot find workers?',
                     style: TextStyle(color: kPrimaryColor),
@@ -385,7 +359,6 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                             selected.data!.efficiencyCalculation.toString()
                           ]);
                         }
-                        //  this.widget.tempWorkerAdded(selected);
 
                         print('');
                       }

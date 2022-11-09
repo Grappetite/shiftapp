@@ -52,8 +52,6 @@ class ProductionConfig implements BaseConfig {
 
   @override
   bool get preset => false;
-
-// String get mapKey => "AIzaSyDLtchj3AddQGK3mlMgqA6HKbLQlEkEa38";
 }
 
 class LiveConfig implements BaseConfig {
@@ -75,10 +73,7 @@ class LiveConfig implements BaseConfig {
 
   @override
   bool get preset => false;
-
-// String get mapKey => "AIzaSyDLtchj3AddQGK3mlMgqA6HKbLQlEkEa38";
 }
-//flutter run --dart-define=ENVIRONMENT=dev
 
 class Environment {
   factory Environment() {

@@ -96,8 +96,6 @@ class _DropDownPageState extends State<DropDownPage> {
                                 .map((e) => e.name!.trim())
                                 .toList()
                                 .indexOf(newString);
-
-                            //final List<String> cityNames = cities.map((city) => city.name).toList();
                           },
                           placeHolderText: 'Process',
                           preSelected: selectedString,
@@ -119,14 +117,9 @@ class _DropDownPageState extends State<DropDownPage> {
                             );
                             var processSelected =
                                 process![processIndexSelected];
-
                             var shifts = await LoginService.getShifts(
                                 processSelected.id!);
-
                             await EasyLoading.dismiss();
-
-                            //shifts!.data!.first.displayScreen = 3;
-
                             if (shifts == null) {
                               EasyLoading.showError('Could not load shifts');
                             } else {
@@ -143,8 +136,6 @@ class _DropDownPageState extends State<DropDownPage> {
                               }
                             }
                             print("object");
-
-                            //getShifts
                             return;
                           },
                           text: 'NEXT',

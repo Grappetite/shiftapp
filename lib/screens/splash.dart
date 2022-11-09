@@ -79,12 +79,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     fontWeight: FontWeight.w300),
               ),
             ),
-          )
-          // Image(
-          //   image: const AssetImage('assets/images/logo.png'),
-          //   width: MediaQuery.of(context).size.width / 1.35,
-          // ),
-          ),
+          )),
     );
   }
 }

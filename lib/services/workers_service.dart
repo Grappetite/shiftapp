@@ -96,12 +96,8 @@ class WorkersService {
           ));
 
       print(jsonEncode(response.data));
-      // var responseObject = [];
       var responseObject = List<Process>.from(
           response.data["data"].map((x) => Process.fromJson(x)));
-      // responseObject.add(List<WorkerTypeList>.from(response.data["data"]
-      //         ["workerTypeList"]
-      //     .map((x) => WorkerTypeList.fromJson(x))));
       if (responseObject.isEmpty) {
         return null;
       }
@@ -114,7 +110,6 @@ class WorkersService {
 
   static Future<WorkersListing?> searchWorkers(String searchId,
       {int? executionid}) async {
-    //{{shift_url}I/searchWorker/2
     try {
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
@@ -306,8 +301,6 @@ class WorkersService {
 
       return responseObject;
     } on DioError catch (e) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx and is also not 304.
       if (e.response != null) {
         if (e.response!.data != null) {
           return AddWorkersResponse.fromJson(e.response!.data!, error: true);
@@ -361,7 +354,6 @@ class WorkersService {
       var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
 
-      // ,
       Response response = await dio.post(
         baseUrl + 'workers',
         data: {
@@ -386,10 +378,6 @@ class WorkersService {
       if (responseObject.data == null) {
         return null;
       }
-      //     final prefs = await SharedPreferences.getInstance();
-      //   responseObject.data!.user!.lastName;
-
-      // prefs!.setString(tokenKey, responseObject.token!);
 
       return responseObject;
     } on DioError catch (e) {

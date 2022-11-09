@@ -229,10 +229,6 @@ class AddWorkerData {
   }
 }
 
-// To parse this JSON data, do
-//
-//     final formdata = formdataFromJson(jsonString);
-
 class ShiftWorkerList {
   ShiftWorkerList({
     this.code,
