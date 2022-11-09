@@ -158,12 +158,12 @@ class _EndShiftViewState extends State<EndShiftView> {
                   } finally {
                     prefs.remove(widget.execShiftId.toString());
 
-                    prefs.remove('shiftId');
+                    // prefs.remove('shiftId');
                     prefs.remove('selectedShiftName');
                     prefs.remove('selectedShiftEndTime');
                     prefs.remove('selectedShiftStartTime');
                     // prefs.remove('username');
-                    prefs.remove('password');
+                    // prefs.remove('password');
                     // if (widget.autoOpen) {
                     //   Navigator.pop(context, true);
                     // } else {
@@ -266,14 +266,14 @@ class _EndShiftViewState extends State<EndShiftView> {
                       widget.execShiftId.toString() + ids.toString()));
                 }
               } finally {
-                prefs.remove('shiftId');
-                prefs.remove(widget.execShiftId.toString());
+                // prefs.remove('shiftId');
+                // prefs.remove(widget.execShiftId.toString());
 
                 prefs.remove('selectedShiftName');
                 prefs.remove('selectedShiftEndTime');
                 prefs.remove('selectedShiftStartTime');
                 // prefs.remove('username');
-                prefs.remove('password');
+                // prefs.remove('password');
 
                 // if (widget.autoOpen) {
                 //   Navigator.pop(context, true);

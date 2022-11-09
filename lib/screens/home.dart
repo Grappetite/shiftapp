@@ -292,13 +292,13 @@ class _HomeMainViewState extends State<HomeMainView> {
           onTap: () async {
             final prefs = await SharedPreferences.getInstance();
 
-            prefs.remove('shiftId');
+            // prefs.remove('shiftId');
 
             prefs.remove('selectedShiftName');
             prefs.remove('selectedShiftEndTime');
             prefs.remove('selectedShiftStartTime');
             // prefs.remove('username');
-            prefs.remove('password');
+            // prefs.remove('password');
             await LoginService.logout();
             // var dyanc = await Navigator.pushReplacement(
             //   context,

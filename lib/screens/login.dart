@@ -68,8 +68,8 @@ class _LoginScreenState extends State<LoginScreen> {
     if (prefs.getString('username') != null) {
       controller.text = prefs.getString('username')!;
     }
-
-    if (shiftId != null && loginUserName != null && passString != null) {
+    // shiftId != null &&
+    if (loginUserName != null && passString != null) {
       await EasyLoading.show(
         status: 'loading...',
         maskType: EasyLoadingMaskType.black,

@@ -212,7 +212,7 @@ class _StartedShiftsState extends State<StartedShifts> {
                     onPressed: () async {
                       final prefs = await SharedPreferences.getInstance();
 
-                      prefs.remove('shiftId');
+                      // prefs.remove('shiftId');
 
                       prefs.remove('selectedShiftName');
                       prefs.remove('selectedShiftEndTime');
