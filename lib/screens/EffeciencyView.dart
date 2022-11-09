@@ -123,7 +123,13 @@ class EffeciencyView extends StatelessWidget {
                                             fontWeight: FontWeight.w600),
                                       ),
                                       Text(
-                                        effeciency["maxVale"] + "%",
+                                        (double.parse(effeciency["maxVale"]) >
+                                                    double.parse(effeciency[
+                                                        "currentEfficiency"])
+                                                ? effeciency["maxVale"]
+                                                : effeciency[
+                                                    "currentEfficiency"]) +
+                                            "%",
                                         style: TextStyle(
                                             color: kPrimaryColor,
                                             fontSize: 20,
