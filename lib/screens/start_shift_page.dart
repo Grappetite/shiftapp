@@ -314,14 +314,15 @@ class _StartShiftViewState extends State<StartShiftView> {
 
   tz.TZDateTime _nextInstanceOfNotification(String test) {
     tz.TZDateTime now =
-        tz.TZDateTime.parse(tz.getLocation("Africa/Johannesburg"), test + "Z");
+        tz.TZDateTime.parse(tz.getLocation("Africa/Johannesburg"), test);
     tz.TZDateTime scheduledDate = tz.TZDateTime(
         tz.getLocation("Africa/Johannesburg"),
         now.year,
         now.month,
         now.day,
-        now.hour - 2,
+        now.hour,
         now.minute);
+    print("Notification Scheduled Date : " + "$scheduledDate");
     return scheduledDate;
   }
 
@@ -334,7 +335,9 @@ class _StartShiftViewState extends State<StartShiftView> {
     // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     //     FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin.cancel(id);
-
+    print(await flutterLocalNotificationsPlugin
+        .getNotificationAppLaunchDetails()
+        .toString());
     flutterLocalNotificationsPlugin.zonedSchedule(
         id,
         title,
