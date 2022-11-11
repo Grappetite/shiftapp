@@ -52,7 +52,7 @@ class _StartedShiftsState extends State<StartedShifts> {
                     height: 24,
                   ),
                   Text(
-                    "Select Started Shift",
+                    "Select Open Shift",
                     style: const TextStyle(
                       fontSize: 20,
                     ),
@@ -66,7 +66,7 @@ class _StartedShiftsState extends State<StartedShifts> {
                         // shiftsList!.isEmpty
                         //         ? Container(
                         //             child: Center(
-                        //               child: Text("No Shift Started"),
+                        //               child: Text("No Shift Open"),
                         //             ),
                         //           )
                         //         :
@@ -78,7 +78,7 @@ class _StartedShiftsState extends State<StartedShifts> {
                                     return Container(
                                       height: 450,
                                       child: Center(
-                                        child: Text("No Shift Started"),
+                                        child: Text("No Shift Open"),
                                       ),
                                     );
                                   }

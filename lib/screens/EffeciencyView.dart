@@ -167,7 +167,7 @@ class EffeciencyView extends StatelessWidget {
                     ),
                   ),
                   PElevatedButton(
-                    text: 'Back to Started Shifts',
+                    text: 'Back To Open Shifts',
                     onPressed: () async {
                       Get.offAll(StartedShifts());
                     },
