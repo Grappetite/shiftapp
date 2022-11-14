@@ -202,6 +202,8 @@ class _DropDownState extends State<DropDown> {
                 child: (selectedString.isEmpty && widget.preSelected!.isEmpty)
                     ? Text(
                         widget.placeHolderText,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.grey[500],
@@ -211,6 +213,8 @@ class _DropDownState extends State<DropDown> {
                         selectedString.isEmpty
                             ? widget.preSelected!
                             : selectedString,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 16,
                         ),
