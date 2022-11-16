@@ -31,7 +31,7 @@ Future<void> setupFlutterNotifications() async {
   channel = AndroidNotificationChannel(
     'high_importance_channel',
     'High Importance Notifications',
-    'This channel is used for important notifications.',
+    // 'This channel is used for important notifications.',
     importance: Importance.high,
   );
 
@@ -68,12 +68,12 @@ void showFlutterNotification(RemoteMessage message) {
       android: AndroidNotificationDetails(
         'your other channel id',
         'your other channel name',
-        'your other channel description',
+        channelDescription: 'your other channel description',
         importance: Importance.max,
         priority: Priority.high,
         styleInformation: BigTextStyleInformation(''),
       ),
-      iOS: IOSNotificationDetails(),
+      iOS: DarwinNotificationDetails(),
     ),
   );
 }
@@ -109,8 +109,8 @@ Future<void> main() async {
 
   /// Note: permissions aren't requested here just to demonstrate that can be
   /// done later
-  IOSInitializationSettings initializationSettingsIOS =
-      IOSInitializationSettings(
+  DarwinInitializationSettings initializationSettingsIOS =
+      DarwinInitializationSettings(
           requestAlertPermission: false,
           requestBadgePermission: false,
           requestSoundPermission: false,
@@ -125,10 +125,12 @@ Future<void> main() async {
     android: initializationSettingsAndroid,
     iOS: initializationSettingsIOS,
   );
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onSelectNotification: (String? payload) async {
-    if (payload != null) {}
-  });
+  await flutterLocalNotificationsPlugin.initialize(
+    initializationSettings,
+    // DidReceiveBackgroundNotificationResponseCallback: (String? payload) async {
+    // if (payload != null) {}
+    // }
+  );
   runApp(const MyApp());
 }
 

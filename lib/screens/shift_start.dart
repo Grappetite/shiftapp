@@ -228,7 +228,7 @@ class _ShiftStartState extends State<ShiftStart> {
                                     DateFormat("yyyy-MM-dd hh:mm:ss")
                                         .parse(endTimeOriginal);
                                 var differenceT =
-                                    tempEnd.difference(tempStart).inHours;
+                                    tempEnd.difference(tempStart).inMinutes;
 
                                 String endDate = '';
 
@@ -254,7 +254,7 @@ class _ShiftStartState extends State<ShiftStart> {
                                         date: widget
                                             .selectedShift.showStartDateOnly,
                                         endTime: newTime!
-                                            .add(Duration(hours: differenceT))
+                                            .add(Duration(minutes: differenceT))
                                             .toString()
                                             .timeToShow,
                                         startTime:
@@ -275,24 +275,24 @@ class _ShiftStartState extends State<ShiftStart> {
                                             DateTime(
                                               newTime!
                                                   .add(Duration(
-                                                      hours: differenceT))
+                                                      minutes: differenceT))
                                                   .year,
                                               newTime!
                                                   .add(Duration(
-                                                      hours: differenceT))
+                                                      minutes: differenceT))
                                                   .month,
                                               newTime!
                                                   .add(Duration(
-                                                      hours: differenceT))
+                                                      minutes: differenceT))
                                                   .day,
                                             ),
                                             newTime!
                                                 .add(Duration(
-                                                    hours: differenceT))
+                                                    minutes: differenceT))
                                                 .hour,
                                             newTime!
                                                 .add(Duration(
-                                                    hours: differenceT))
+                                                    minutes: differenceT))
                                                 .minute);
                                   });
                                 }

@@ -529,338 +529,354 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
     return AlertDialog(
       insetPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
       backgroundColor: Colors.transparent,
-      content: Container(
-        width: MediaQuery.of(context).size.width / 1.15,
-        height: MediaQuery.of(context).size.height / 2.0,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.grey, width: 3),
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 8, top: 4),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: SizedBox(
-                  height: 15,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.access_alarm,
-                          color: kPrimaryColor,
-                        ),
-                        SizedBox(
-                          width: 8,
-                        ),
-                        AlertTitleLabel(
-                          title: widget.moveWorker
-                              ? "Move worker"
-                              : widget.editing
-                                  ? "Remove worker"
-                                  : 'CLOSE SHIFT',
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    Text(
-                      widget.moveWorker
-                          ? ""
-                          : widget.editing
-                              ? "Adjust worker removal time if different to current:"
-                              : 'Adjust shift end time if different to current:',
-                      style: TextStyle(color: kPrimaryColor, fontSize: 12),
-                    ),
-                    widget.moveWorker
-                        ? Container()
-                        : Expanded(
-                            child: Container(),
-                          ),
-                    GestureDetector(
-                      onTap: () async {
-                        DateTime? newTime;
-                        showCupertinoModalPopup(
-                            context: context,
-                            builder: (BuildContext builder) {
-                              return Container(
-                                color: Colors.white,
-                                height: MediaQuery.of(context).size.width,
-                                width: MediaQuery.of(context).size.width,
-                                child: CupertinoDatePicker(
-                                  mode: CupertinoDatePickerMode.dateAndTime,
-                                  onDateTimeChanged: (value) async {
-                                    newTime = value;
-                                  },
-                                  initialDateTime: widget.editing
-                                      ? DateTime.now()
-                                      : widget.shiftItem.startDateObject
-                                          .add(Duration(hours: 3)),
-                                  minimumDate: widget.editing
-                                      ? widget.shiftItem.startDateObject
-                                      : widget.shiftItem.startDateObject
-                                          .add(Duration(hours: 3)),
-                                  maximumDate: widget.editing
-                                      ? DateTime.now()
-                                      : widget.shiftItem.startDateObject
-                                          .add(Duration(hours: 16)),
-                                ),
-                              );
-                            }).then((value) {
-                          if (newTime != null) {
-                            var customSelectedStartTime = widget.shiftItem
-                                .makeTimeStringFromHourMinute(
-                                    newTime!.hour, newTime!.minute);
-
-                            setState(() {
-                              widget.moveWorker
-                                  ? customTimeSelectedToSend =
-                                      customSelectedStartTime
-                                  : widget.editing
-                                      ? customTimeSelectedToSend =
-                                          customSelectedStartTime
-                                      : customTimeSelectedToSend = newTime
-                                              .toString()
-                                              .split(" ")[0] +
-                                          " " +
-                                          customSelectedStartTime.split(" ")[1];
-                            });
-                          }
-                        });
-                      },
-                      child: InputView(
-                        isDisabled: true,
-                        showError: false,
-                        hintText: widget.editing
-                            ? "Worker removal time"
-                            : 'Shift End Time',
-                        onChange: (newValue) {},
-                        controller: TextEditingController(
-                            text: findEndTime().timeToShow),
-                        text: findEndTime().timeToShow,
-                        suffixIcon: Icons.expand_circle_down_outlined,
+      content: ConstrainedBox(
+        constraints: BoxConstraints(
+            maxHeight: double.infinity,
+            minHeight: 200,
+            maxWidth: 500,
+            minWidth: 200),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.grey, width: 3),
+          ),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.access_alarm,
+                        color: kPrimaryColor,
                       ),
-                    ),
-                    widget.moveWorker
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              child: Text(
-                                "Select Process",
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            ),
-                          )
-                        : Expanded(
-                            child: Container(),
-                          ),
-                    widget.moveWorker
-                        ? widget.processList!.isNotEmpty
-                            ? DropDown(
-                                labelText: 'Title',
-                                currentList: (widget.processList! as List)
-                                    .map((e) => e.name!.trim() as String)
-                                    .toList(),
-                                showError: false,
-                                onChange: (newString) {
-                                  setState(() {
-                                    selectedString = newString;
-                                    workerTypeIndexSelected = -1;
-                                    selectedWorkerType = "";
-                                    processIndexSelected = -1;
-                                  });
-
-                                  Future.delayed(Duration(milliseconds: 50),
-                                      () {
-                                    processIndexSelected = widget.processList!
-                                        .map((e) => e.name!.trim())
-                                        .toList()
-                                        .indexOf(newString);
-                                    setState(() {});
-                                  });
-                                },
-                                placeHolderText: 'Process',
-                                preSelected: selectedString,
-                              )
-                            : Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "Sorry! You can not move the worker, there is no shift running at the moment",
-                                  style: TextStyle(
-                                      color: kPrimaryColor,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              )
-                        : Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              widget.moveWorker
-                                  ? dataToDisplay()
-                                  : widget.editing
-                                      ? dataToDisplay()
-                                      : customTimeSelectedToSend
-                                              .split(" ")[0]
-                                              .isNotEmpty
-                                          ? customTimeSelectedToSend
-                                              .split(" ")[0]
-                                          : widget.shiftItem.endDateObject
-                                              .toString()
-                                              .split(" ")[0],
-                              style: TextStyle(
-                                  color: kPrimaryColor,
-                                  fontWeight: FontWeight.w600),
-                            ),
-                          ),
-                    Expanded(
-                      child: Container(),
-                    ),
-                    processIndexSelected != -1
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              child: Text(
-                                "Select Worker Type",
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            ),
-                          )
-                        : Expanded(
-                            child: Container(),
-                          ),
-                    processIndexSelected != -1
-                        ? DropDown(
-                            labelText: 'Title',
-                            currentList: (widget
-                                    .processList![processIndexSelected]
-                                    .workerType!)
-                                .map((e) {
-                              return e.workerTypeName!.trim();
-                            }).toList(),
-                            showError: false,
-                            onChange: (newString) {
-                              setState(() {
-                                selectedWorkerType = newString;
-                              });
-
-                              workerTypeIndexSelected = widget
-                                  .processList![processIndexSelected]
-                                  .workerType!
-                                  .map((e) => e.workerTypeName!.trim())
-                                  .toList()
-                                  .indexOf(newString);
-                            },
-                            placeHolderText: 'Worker Type',
-                            preSelected: selectedWorkerType,
-                          )
-                        : Container(),
-                    Expanded(
-                      child: Container(),
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        widget.moveWorker
-                            ? "Are you sure you want to move this worker?"
+                      SizedBox(
+                        width: 8,
+                      ),
+                      AlertTitleLabel(
+                        title: widget.moveWorker
+                            ? "Move worker"
                             : widget.editing
-                                ? "Are you sure you want to remove this worker?"
-                                : 'Are you sure you want to close this shift?',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: kPrimaryColor),
+                                ? "Remove worker"
+                                : 'CLOSE SHIFT',
                       ),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Text(
+                    widget.moveWorker
+                        ? ""
+                        : widget.editing
+                            ? "Adjust worker removal time if different to current:"
+                            : 'Adjust shift end time if different to current:',
+                    style: TextStyle(color: kPrimaryColor, fontSize: 12),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  // widget.moveWorker
+                  //     ? Container()
+                  //     : Expanded(
+                  //         child: Container(),
+                  //       ),
+                  GestureDetector(
+                    onTap: () async {
+                      DateTime? newTime;
+                      showCupertinoModalPopup(
+                          context: context,
+                          builder: (BuildContext builder) {
+                            return Container(
+                              color: Colors.white,
+                              height: MediaQuery.of(context).size.width,
+                              width: MediaQuery.of(context).size.width,
+                              child: CupertinoDatePicker(
+                                mode: CupertinoDatePickerMode.dateAndTime,
+                                onDateTimeChanged: (value) async {
+                                  newTime = value;
+                                },
+                                initialDateTime: widget.editing
+                                    ? DateTime.now()
+                                    : widget.shiftItem.startDateObject
+                                        .add(Duration(hours: 3)),
+                                minimumDate: widget.editing
+                                    ? widget.shiftItem.startDateObject
+                                    : widget.shiftItem.startDateObject
+                                        .add(Duration(hours: 3)),
+                                maximumDate: widget.editing
+                                    ? DateTime.now()
+                                    : widget.shiftItem.startDateObject
+                                        .add(Duration(hours: 16)),
+                              ),
+                            );
+                          }).then((value) {
+                        if (newTime != null) {
+                          var customSelectedStartTime = widget.shiftItem
+                              .makeTimeStringFromHourMinute(
+                                  newTime!.hour, newTime!.minute);
+
+                          setState(() {
+                            widget.moveWorker
+                                ? customTimeSelectedToSend =
+                                    customSelectedStartTime
+                                : widget.editing
+                                    ? customTimeSelectedToSend =
+                                        customSelectedStartTime
+                                    : customTimeSelectedToSend = newTime
+                                            .toString()
+                                            .split(" ")[0] +
+                                        " " +
+                                        customSelectedStartTime.split(" ")[1];
+                          });
+                        }
+                      });
+                    },
+                    child: InputView(
+                      isDisabled: true,
+                      showError: false,
+                      hintText: widget.editing
+                          ? "Worker removal time"
+                          : 'Shift End Time',
+                      onChange: (newValue) {},
+                      controller:
+                          TextEditingController(text: findEndTime().timeToShow),
+                      text: findEndTime().timeToShow,
+                      suffixIcon: Icons.expand_circle_down_outlined,
                     ),
-                    Expanded(
-                      child: Container(),
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: PElevatedButton(
-                            onPressed: () async {
-                              Navigator.pop(context, false);
-                            },
-                            text: 'NO',
-                            backGroundColor: Colors.white,
-                            textColor: kPrimaryColor,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+
+                  widget.moveWorker
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            child: Text(
+                              "Select Process",
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                        )
+                      :
+                      // Expanded(
+                      //         child:
+                      Container(),
+                  // ),
+                  SizedBox(
+                    height: 10,
+                  ),
+
+                  widget.moveWorker
+                      ? widget.processList!.isNotEmpty
+                          ? DropDown(
+                              labelText: 'Title',
+                              currentList: (widget.processList! as List)
+                                  .map((e) => e.name!.trim() as String)
+                                  .toList(),
+                              showError: false,
+                              onChange: (newString) {
+                                setState(() {
+                                  selectedString = newString;
+                                  workerTypeIndexSelected = -1;
+                                  selectedWorkerType = "";
+                                  processIndexSelected = -1;
+                                });
+
+                                Future.delayed(Duration(milliseconds: 50), () {
+                                  processIndexSelected = widget.processList!
+                                      .map((e) => e.name!.trim())
+                                      .toList()
+                                      .indexOf(newString);
+                                  setState(() {});
+                                });
+                              },
+                              placeHolderText: 'Process',
+                              preSelected: selectedString,
+                            )
+                          : Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Sorry! You can not move the worker, there is no shift running at the moment",
+                                style: TextStyle(
+                                    color: kPrimaryColor,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            )
+                      : Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            widget.moveWorker
+                                ? dataToDisplay()
+                                : widget.editing
+                                    ? dataToDisplay()
+                                    : customTimeSelectedToSend
+                                            .split(" ")[0]
+                                            .isNotEmpty
+                                        ? customTimeSelectedToSend.split(" ")[0]
+                                        : widget.shiftItem.endDateObject
+                                            .toString()
+                                            .split(" ")[0],
+                            style: TextStyle(
+                                color: kPrimaryColor,
+                                fontWeight: FontWeight.w600),
                           ),
                         ),
-                        SizedBox(
-                          width: 12,
-                        ),
-                        Expanded(
-                          child: PElevatedButton(
-                            onPressed: () async {
-                              if (widget.moveWorker) {
-                                if (processIndexSelected != -1 &&
-                                    workerTypeIndexSelected != -1) {
-                                  await EasyLoading.show(
-                                    status: 'Moving...',
-                                    maskType: EasyLoadingMaskType.black,
-                                  );
+                  // Expanded(
+                  //   child: Container(),
+                  // ),
+                  SizedBox(
+                    height: 10,
+                  ),
 
-                                  var response =
-                                      await WorkersService.moveWorkers(
-                                          startedExecuteShiftId: widget
-                                              .processList![
-                                                  processIndexSelected]
-                                              .startedExecutionShiftId
-                                              .toString(),
-                                          moveTime: findEndTime(),
-                                          exshiftId: widget
-                                              .shiftItem.executedShiftId!
-                                              .toInt(),
-                                          workerUserId:
-                                              widget.workerId!.toInt(),
-                                          workerTypeId: widget
-                                              .processList![
-                                                  processIndexSelected]
-                                              .workerType![
-                                                  workerTypeIndexSelected]
-                                              .workerTypeId!);
-                                  if (response) {
-                                    await EasyLoading.dismiss();
-                                    Navigator.pop(context, true);
-                                  } else {
-                                    await EasyLoading.dismiss();
-                                  }
+                  processIndexSelected != -1
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            child: Text(
+                              "Select Worker Type",
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ),
+                        )
+                      :
+                      // Expanded(
+                      //         child:
+                      Container(),
+                  // ),
+                  SizedBox(
+                    height: 10,
+                  ),
+
+                  processIndexSelected != -1
+                      ? DropDown(
+                          labelText: 'Title',
+                          currentList: (widget
+                                  .processList![processIndexSelected]
+                                  .workerType!)
+                              .map((e) {
+                            return e.workerTypeName!.trim();
+                          }).toList(),
+                          showError: false,
+                          onChange: (newString) {
+                            setState(() {
+                              selectedWorkerType = newString;
+                            });
+
+                            workerTypeIndexSelected = widget
+                                .processList![processIndexSelected].workerType!
+                                .map((e) => e.workerTypeName!.trim())
+                                .toList()
+                                .indexOf(newString);
+                          },
+                          placeHolderText: 'Worker Type',
+                          preSelected: selectedWorkerType,
+                        )
+                      : Container(),
+                  // Expanded(
+                  //   child:
+                  // Container(),
+                  // ),
+                  SizedBox(
+                    height: 10,
+                  ),
+
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      widget.moveWorker
+                          ? "Are you sure you want to move this worker?"
+                          : widget.editing
+                              ? "Are you sure you want to remove this worker?"
+                              : 'Are you sure you want to close this shift?',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: kPrimaryColor),
+                    ),
+                  ),
+                  // Expanded(
+                  //   child:
+                  // Container(),
+                  // ),
+                  SizedBox(
+                    height: 10,
+                  ),
+
+                  Row(
+                    children: [
+                      Expanded(
+                        child: PElevatedButton(
+                          onPressed: () async {
+                            Navigator.pop(context, false);
+                          },
+                          text: 'NO',
+                          backGroundColor: Colors.white,
+                          textColor: kPrimaryColor,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 12,
+                      ),
+                      Expanded(
+                        child: PElevatedButton(
+                          onPressed: () async {
+                            if (widget.moveWorker) {
+                              if (processIndexSelected != -1 &&
+                                  workerTypeIndexSelected != -1) {
+                                await EasyLoading.show(
+                                  status: 'Moving...',
+                                  maskType: EasyLoadingMaskType.black,
+                                );
+
+                                var response = await WorkersService.moveWorkers(
+                                    startedExecuteShiftId: widget
+                                        .processList![processIndexSelected]
+                                        .startedExecutionShiftId
+                                        .toString(),
+                                    moveTime: findEndTime(),
+                                    exshiftId: widget.shiftItem.executedShiftId!
+                                        .toInt(),
+                                    workerUserId: widget.workerId!.toInt(),
+                                    workerTypeId: widget
+                                        .processList![processIndexSelected]
+                                        .workerType![workerTypeIndexSelected]
+                                        .workerTypeId!);
+                                if (response) {
+                                  await EasyLoading.dismiss();
+                                  Navigator.pop(context, true);
                                 } else {
-                                  if (processIndexSelected == -1) {
-                                    EasyLoading.showError(
-                                        'Please select process');
-                                  } else {
-                                    EasyLoading.showError(
-                                        'Please select Worker Type');
-                                  }
+                                  await EasyLoading.dismiss();
                                 }
                               } else {
-                                String result = findEndTime();
-                                Navigator.pop(context, result);
+                                if (processIndexSelected == -1) {
+                                  EasyLoading.showError(
+                                      'Please select process');
+                                } else {
+                                  EasyLoading.showError(
+                                      'Please select Worker Type');
+                                }
                               }
-                            },
-                            text: 'YES',
-                          ),
+                            } else {
+                              String result = findEndTime();
+                              Navigator.pop(context, result);
+                            }
+                          },
+                          text: 'YES',
                         ),
-                      ],
-                    ),
-                    Expanded(
-                      child: Container(),
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                  // Expanded(
+                  //   child: Container(),
+                  // ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

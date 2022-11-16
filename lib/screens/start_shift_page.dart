@@ -347,11 +347,11 @@ class _StartShiftViewState extends State<StartShiftView> {
           android: AndroidNotificationDetails(
             'your other channel id',
             'your other channel name',
-            'your other channel description',
+            channelDescription: 'your other channel description',
             importance: Importance.max,
             priority: Priority.high,
           ),
-          iOS: IOSNotificationDetails(),
+          iOS: DarwinNotificationDetails(),
         ),
         androidAllowWhileIdle: true,
         payload: "End Shift",
