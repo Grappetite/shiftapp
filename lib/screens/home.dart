@@ -201,10 +201,10 @@ class _HomeMainViewState extends State<HomeMainView> {
           value: 1,
           onTap: () async {
             final prefs = await SharedPreferences.getInstance();
-
             prefs.remove('selectedShiftName');
             prefs.remove('selectedShiftEndTime');
             prefs.remove('selectedShiftStartTime');
+            prefs.remove('password');
             await LoginService.logout();
             Get.offAll(LoginScreen());
           },

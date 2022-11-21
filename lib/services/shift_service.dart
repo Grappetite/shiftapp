@@ -11,7 +11,11 @@ class ShiftService {
     String endTime,
   ) async {
     try {
-      var dio = Dio();
+      var dio = Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: 350 * 1000, // 60 seconds
+          receiveTimeout: 350 * 1000 // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
 
       Response response = await dio.post(
@@ -33,7 +37,11 @@ class ShiftService {
 
   static Future<List<ShiftStartDetails>> startedShiftsList() async {
     try {
-      var dio = Dio();
+      var dio = Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: 350 * 1000, // 60 seconds
+          receiveTimeout: 350 * 1000 // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
 
       Response response = await dio.get(
@@ -56,7 +64,11 @@ class ShiftService {
   static Future endShift(
       int shiftId, int processId, String unitsProduced, String endTime) async {
     try {
-      var dio = Dio();
+      var dio = Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: 350 * 1000, // 60 seconds
+          receiveTimeout: 350 * 1000 // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
 
       Response response = await dio.post(
@@ -89,7 +101,11 @@ class ShiftService {
 
   static handOverShift({int? executionShiftId, int? userId}) async {
     try {
-      var dio = Dio();
+      var dio = Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: 350 * 1000, // 60 seconds
+          receiveTimeout: 350 * 1000 // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
 
       Response response = await dio.post(
@@ -116,7 +132,11 @@ class ShiftService {
 
   static getOnlineUsers() async {
     try {
-      var dio = Dio();
+      var dio = Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: 350 * 1000, // 60 seconds
+          receiveTimeout: 350 * 1000 // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
 
       String url = baseUrl + "userLoginlist";
@@ -139,7 +159,11 @@ class ShiftService {
 
   static getEffeciency(int? id) async {
     try {
-      var dio = Dio();
+      var dio = Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: 350 * 1000, // 60 seconds
+          receiveTimeout: 350 * 1000 // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
 
       String url = baseUrl + "efficiency/$id";

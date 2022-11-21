@@ -34,7 +34,6 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
 
-    pwd:
     loadDefaul();
   }
 

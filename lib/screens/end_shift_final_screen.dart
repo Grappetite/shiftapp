@@ -893,12 +893,12 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
 
     var minutesRemaining = difference.inMinutes;
 
-    if (minutesRemaining > -30 && minutesRemaining < 30) {
-    } else {
-      String endTime = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
-
-      result = endTime;
-    }
+    // if (minutesRemaining > -30 && minutesRemaining < 30) {
+    // } else {
+    //   String endTime = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
+    //
+    //   result = endTime;
+    // }
     print('');
     return result;
   }

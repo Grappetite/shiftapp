@@ -88,7 +88,11 @@ class Errors {
 class LoginService {
   static Future<LoginResponse?> login(String username, String password) async {
     try {
-      var dio = Dio();
+      var dio = Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: 350 * 1000, // 60 seconds
+          receiveTimeout: 350 * 1000 // 60 seconds
+          ));
       var fcmToken = await FirebaseMessaging.instance.getToken();
       Response response = await dio.post(
         baseUrl + 'login',
@@ -115,7 +119,11 @@ class LoginService {
 
   static Future<ShiftsResponse?> getShifts(int processId) async {
     try {
-      var dio = Dio();
+      var dio = Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: 350 * 1000, // 60 seconds
+          receiveTimeout: 350 * 1000 // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
 
       Response response =
@@ -145,7 +153,11 @@ class LoginService {
 
   static Future<List<Process>?> getProcess() async {
     try {
-      var dio = Dio();
+      var dio = Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: 350 * 1000, // 60 seconds
+          receiveTimeout: 350 * 1000 // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
 
       Response response = await dio.get(baseUrl + 'processList',
@@ -175,7 +187,11 @@ class LoginService {
 
   static logout() async {
     try {
-      var dio = Dio();
+      var dio = Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: 350 * 1000, // 60 seconds
+          receiveTimeout: 350 * 1000 // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
 
       Response response = await dio.post(baseUrl + 'logout',
@@ -193,7 +209,11 @@ class LoginService {
 
   static updateFcm() async {
     try {
-      var dio = Dio();
+      var dio = Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: 350 * 1000, // 60 seconds
+          receiveTimeout: 350 * 1000 // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
       var fcmToken = await FirebaseMessaging.instance.getToken();
       Response response = await dio.patch(baseUrl + 'updateToken',
@@ -212,7 +232,11 @@ class LoginService {
 
   static checkVersion() async {
     try {
-      var dio = Dio();
+      var dio = Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: 350 * 1000, // 60 seconds
+          receiveTimeout: 350 * 1000 // 60 seconds
+          ));
       Response response = await dio.get(
         baseUrl + 'appVersion',
       );

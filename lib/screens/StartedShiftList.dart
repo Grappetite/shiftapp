@@ -112,11 +112,32 @@ class _StartedShiftsState extends State<StartedShifts> {
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: lightGreenColor,
+                                        color: DateFormat('dd-MM-yyyy')
+                                                .format(DateTime.parse(
+                                                    shiftsList![index]
+                                                        .executeShiftStartTime!))
+                                                .toString()
+                                                .contains(
+                                                    DateFormat('dd-MM-yyyy')
+                                                        .format(DateTime.now())
+                                                        .toString())
+                                            ? lightGreenColor
+                                            : lightRedColor,
                                         borderRadius: BorderRadius.circular(16),
                                         boxShadow: [
                                           BoxShadow(
-                                              color: lightGreenColor,
+                                              color: DateFormat('dd-MM-yyyy')
+                                                      .format(DateTime.parse(
+                                                          shiftsList![index]
+                                                              .executeShiftStartTime!))
+                                                      .toString()
+                                                      .contains(DateFormat(
+                                                              'dd-MM-yyyy')
+                                                          .format(
+                                                              DateTime.now())
+                                                          .toString())
+                                                  ? lightGreenColor
+                                                  : lightRedColor,
                                               spreadRadius: 4,
                                               blurRadius: 1),
                                         ],
@@ -144,12 +165,25 @@ class _StartedShiftsState extends State<StartedShifts> {
                                               height: 9,
                                             ),
                                             Text(
+                                              // DateFormat('dd-MM-yyyy')
+                                              //         .format(DateTime.parse(
+                                              //             shiftsList![index]
+                                              //                 .executeShiftStartTime!))
+                                              //         .toString()
+                                              //         .contains(DateFormat(
+                                              //                 'dd-MM-yyyy')
+                                              //             .format(
+                                              //                 DateTime.now())
+                                              //             .toString())
+                                              //     ?
                                               "Started at: " +
                                                   DateFormat('HH:mm dd-MM-yyyy')
                                                       .format(DateTime.parse(
                                                           shiftsList![index]
                                                               .executeShiftStartTime!))
-                                                      .toString(),
+                                                      .toString()
+                                              // : "OverDue"
+                                              ,
                                               style: const TextStyle(
                                                 color: kPrimaryColor,
                                                 fontWeight: FontWeight.w600,
@@ -177,9 +211,20 @@ class _StartedShiftsState extends State<StartedShifts> {
                                             ),
                                             Text(
                                               "Status : " +
-                                                  shiftsList![index]
-                                                      .executeShiftStatus
-                                                      .toString(),
+                                                  (DateFormat('dd-MM-yyyy')
+                                                          .format(DateTime.parse(
+                                                              shiftsList![index]
+                                                                  .executeShiftStartTime!))
+                                                          .toString()
+                                                          .contains(DateFormat(
+                                                                  'dd-MM-yyyy')
+                                                              .format(DateTime
+                                                                  .now())
+                                                              .toString())
+                                                      ? shiftsList![index]
+                                                          .executeShiftStatus
+                                                          .toString()
+                                                      : "Overdue"),
                                               style: const TextStyle(
                                                 color: kPrimaryColor,
                                                 fontWeight: FontWeight.w600,
