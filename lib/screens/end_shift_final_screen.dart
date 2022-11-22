@@ -643,9 +643,15 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                           ? "Worker removal time"
                           : 'Shift End Time',
                       onChange: (newValue) {},
-                      controller:
-                          TextEditingController(text: findEndTime().timeToShow),
-                      text: findEndTime().timeToShow,
+                      controller: TextEditingController(
+                          text: DateTime.now()
+                                  .isBefore(widget.shiftItem.endDateObject)
+                              ? DateTime.now().toString().timeToShow
+                              : findEndTime().timeToShow),
+                      text: DateTime.now()
+                              .isBefore(widget.shiftItem.endDateObject)
+                          ? DateTime.now().toString().timeToShow
+                          : findEndTime().timeToShow,
                       suffixIcon: Icons.expand_circle_down_outlined,
                     ),
                   ),

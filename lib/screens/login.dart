@@ -21,10 +21,10 @@ class _LoginScreenState extends State<LoginScreen> {
   bool showLogin = true;
 
   TextEditingController controller = Environment().config.preset
-      ? TextEditingController(text: "dawid+supervisor@gmail.com")
+      ? TextEditingController(text: "mahboob+supervisor@grappetite.com")
       : TextEditingController();
   TextEditingController passwordController = Environment().config.preset
-      ? TextEditingController(text: "shift123")
+      ? TextEditingController(text: "Mahboob321")
       : TextEditingController();
   String selectedString = "";
   bool showInitText = true;
