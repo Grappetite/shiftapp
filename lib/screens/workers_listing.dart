@@ -122,11 +122,12 @@ class _WorkersListingState extends State<WorkersListing> {
       return;
     }
 
-    if (responseShift.data!.worker!.isEmpty) {
-      showCategories = true;
-      loadWorkerTypes();
-      return;
-    }
+    // if (responseShift.data!.worker!.isEmpty) {
+    //   showCategories = true;
+    //   loadWorkerTypes();
+    //   return;
+    // }
+    setState(() {});
     List<ShiftWorker> shiftWorkers = [];
 
     shiftWorkers.addAll(responseShift.data!.worker!);
@@ -158,7 +159,36 @@ class _WorkersListingState extends State<WorkersListing> {
         listLists.add(response);
       });
     }
+    var result = await WorkersService.getWorkTypes(
+        widget.shiftId.toString(), widget.processId.toString());
 
+    if (result != null) {
+      setState(() {
+        workerType = result.data!;
+      });
+      for (var currentItem in workerType) {
+        setState(() {
+          listNames.add(currentItem.name!);
+          listLists.add([]);
+        });
+      }
+      // await EasyLoading.dismiss();
+    } else {
+      // await EasyLoading.dismiss();
+
+      showAlertDialog(
+        context: context,
+        title: 'Error',
+        message: 'Error while loading data',
+        actions: [
+          AlertDialogAction(
+            label: MaterialLocalizations.of(context).okButtonLabel,
+            key: OkCancelResult.ok,
+          )
+        ],
+      );
+    }
+    listNames = listNames.toSet().toList();
     setState(() {
       isLoader = false;
     });

@@ -28,8 +28,13 @@ class _SplashScreenState extends State<SplashScreen> {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     } catch (e) {
       Clipboard.setData(new ClipboardData(
-          text:
-              "https://install.appcenter.ms/users/mahboob-grappetite.com/apps/shift-android/distribution_groups/public"));
+          text: Environment()
+                  .config
+                  .staging
+                  .toLowerCase()
+                  .contains("Production".toLowerCase())
+              ? "https://install.appcenter.ms/users/mahboob-grappetite.com/apps/shift-android/distribution_groups/dev"
+              : "https://install.appcenter.ms/users/mahboob-grappetite.com/apps/shift-android/distribution_groups/public"));
       EasyLoading.showError(
           "Can not launch the url, but it's copied to your clipboard",
           dismissOnTap: true,
@@ -52,8 +57,13 @@ class _SplashScreenState extends State<SplashScreen> {
               duration: Duration(seconds: 2))
           .then((value) async {
         await Future.delayed(const Duration(seconds: 4), () {});
-        _launchInBrowser(Uri.parse(
-            "https://install.appcenter.ms/users/mahboob-grappetite.com/apps/shift-android/distribution_groups/public"));
+        _launchInBrowser(Uri.parse(Environment()
+                .config
+                .staging
+                .toLowerCase()
+                .contains("Production".toLowerCase())
+            ? "https://install.appcenter.ms/users/mahboob-grappetite.com/apps/shift-android/distribution_groups/dev"
+            : "https://install.appcenter.ms/users/mahboob-grappetite.com/apps/shift-android/distribution_groups/public"));
       });
     }
   }

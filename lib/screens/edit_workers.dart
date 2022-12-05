@@ -125,6 +125,13 @@ class _EditWorkersState extends State<EditWorkers> {
 
     workersSelected = responseShift.data!.shiftWorker!.length;
 
+    for (int i = 0; i < shiftWorkers.length; i++) {
+      for (var workingWorker in responseShift.data!.shiftWorker!) {
+        if (shiftWorkers[i].userId == workingWorker.userId) {
+          shiftWorkers.remove(shiftWorkers[i]);
+        }
+      }
+    }
     for (var currentItem in responseShift.data!.shiftWorker!) {
       currentItem.isSelected = true;
 

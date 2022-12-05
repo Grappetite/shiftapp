@@ -767,7 +767,6 @@ class _WorkItemViewState extends State<WorkItemView> {
                       .add(currentObject.efficiencyCalculation!.toString());
                 }
               }
-
               setState(() {
                 widget.listLists[index] = workers;
               });
@@ -797,6 +796,24 @@ class _WorkItemViewState extends State<WorkItemView> {
               }
               print('');
             } else {
+              for (int i = 0; i < widget.listLists.length; i++) {
+                if (i != index) {
+                  for (var worker in workers) {
+                    // if () {
+                    var ind = widget.listLists[i].indexWhere((element) {
+                      if (element.userId == worker.userId) {
+                        return true;
+                      } else {
+                        return false;
+                      }
+                    });
+                    if (ind >= 0) {
+                      widget.listLists[i].removeAt(ind);
+                    }
+                    // }
+                  }
+                }
+              }
               setState(() {
                 widget.listLists[index] = workers;
               });
