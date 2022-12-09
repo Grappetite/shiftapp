@@ -8,11 +8,23 @@ class ShiftsResponse {
 
   ShiftsResponse.fromJson(Map<String, dynamic> json) {
     print(json);
+    print(json['data'].first["shifts"]);
 
     message = json['message'];
     if (json['data'] != null) {
       data = [];
-      data!.add(ShiftItem.fromJson(json['data']));
+      data!.addAll(
+        List<ShiftItem>.from(
+            json['data'].first["shifts"].map((x) => ShiftItem.fromJson(x)))
+          ..sort((a, b) => a.startDateObject.compareTo(b.startDateObject)),
+      );
+      data!.removeWhere((element) {
+        if (element.started!) {
+          return true;
+        } else {
+          return false;
+        }
+      });
     }
   }
 
@@ -36,6 +48,11 @@ class ShiftItem {
   String? displayScreenReady;
 
   int? executedShiftId;
+  int? patternId;
+  int? breakTime;
+  int? shiftMinutes;
+  String? shiftDuration;
+  bool? started;
 
   bool shiftStartTimeCustomized = false;
   bool shiftEndTimeCustomized = false;
@@ -166,7 +183,17 @@ class ShiftItem {
     return date;
   }
 
-  ShiftItem({this.id, this.name, this.startTime, this.endTime});
+  ShiftItem({
+    this.id,
+    this.name,
+    this.startTime,
+    this.endTime,
+    this.patternId,
+    this.breakTime,
+    this.shiftMinutes,
+    this.shiftDuration,
+    this.started,
+  });
 
   ShiftItem.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -175,15 +202,24 @@ class ShiftItem {
     displayScreenMessage = json['display_screen_message'];
     displayScreenReady = json['display_screen_already'];
     String date = DateFormat("yyyy-MM-dd").format(DateTime.now());
+
     var result = startTime!.replaceRange(0, 10, date);
     startTime = result;
     endTime = json['end_time'];
-    result = endTime!.replaceRange(0, 10, date);
+    String nextDate = DateFormat("yyyy-MM-dd")
+        .format(startDateObject.add(Duration(minutes: json["shift_minutes"])));
+    result = endTime!.replaceRange(0, 10, nextDate);
     endTime = result;
     displayScreen = int.parse(json['display_screen'] ?? 2.toString());
     if (displayScreen == 1) {
       displayScreen = 2;
     }
+    patternId = json["pattern_id"] == null ? null : json["pattern_id"];
+    breakTime = json["break_time"] == null ? null : json["break_time"];
+    shiftMinutes = json["shift_minutes"] == null ? null : json["shift_minutes"];
+    shiftDuration =
+        json["shift_duration"] == null ? null : json["shift_duration"];
+    started = json["started"] == null ? true : json["started"];
   }
 
   Map<String, dynamic> toJson() {

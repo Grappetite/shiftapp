@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/model/login_model.dart';
+import 'package:shiftapp/model/shifts_model.dart';
 
 import '../services/login_service.dart';
 import '../widgets/drop_down.dart';
@@ -20,7 +22,8 @@ class DropDownPage extends StatefulWidget {
 
 class _DropDownPageState extends State<DropDownPage> {
   List<Process>? process;
-
+  List<ShiftItem>? shiftList = [];
+  ShiftItem? selectedShift;
   String selectedString = "";
   int processIndexSelected = -1;
   @override
@@ -90,8 +93,8 @@ class _DropDownPageState extends State<DropDownPage> {
                           onChange: (newString) {
                             setState(() {
                               selectedString = newString;
+                              shiftList = [];
                             });
-
                             processIndexSelected = process!
                                 .map((e) => e.name!.trim())
                                 .toList()
@@ -99,6 +102,144 @@ class _DropDownPageState extends State<DropDownPage> {
                           },
                           placeHolderText: 'Process',
                           preSelected: selectedString,
+                        ),
+                      ),
+                shiftList!.isEmpty
+                    ? Container()
+                    : Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListView.separated(
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    shiftList!.forEach((element) {
+                                      if (element.id == shiftList![index].id) {
+                                        shiftList![index].started =
+                                            !shiftList![index].started!;
+                                        if (shiftList![index].started!) {
+                                          selectedShift = shiftList![index];
+                                        } else {
+                                          selectedShift = null;
+                                        }
+                                      } else {
+                                        element.started = false;
+                                      }
+                                    });
+                                    setState(() {});
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: shiftList![index].started!
+                                          ? lightGreenColor
+                                          : lightBlueColor,
+                                      borderRadius: BorderRadius.circular(16),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: shiftList![index].started!
+                                                ? lightGreenColor
+                                                : lightBlueColor,
+                                            spreadRadius: 4,
+                                            blurRadius: 1),
+                                      ],
+                                    ),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(4.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const SizedBox(
+                                                height: 9,
+                                              ),
+                                              Text(
+                                                shiftList![index]!.name!,
+                                                style: const TextStyle(
+                                                  color: kPrimaryColor,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 26,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 9,
+                                              ),
+                                              Text(
+                                                // DateFormat('dd-MM-yyyy')
+                                                //         .format(DateTime.parse(
+                                                //             shiftsList![index]
+                                                //                 .startTime!))
+                                                //         .toString()
+                                                //         .contains(DateFormat(
+                                                //                 'dd-MM-yyyy')
+                                                //             .format(
+                                                //                 DateTime.now())
+                                                //             .toString())
+                                                //     ?
+                                                "Scheduled Start Time: " +
+                                                    DateFormat(
+                                                            'HH:mm dd-MM-yyyy')
+                                                        .format(DateTime.parse(
+                                                            shiftList![index]
+                                                                .startTime!))
+                                                        .toString()
+                                                // : "OverDue"
+                                                ,
+                                                style: const TextStyle(
+                                                  color: kPrimaryColor,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 9,
+                                              ),
+                                              Text(
+                                                "Scheduled End Time: " +
+                                                    DateFormat(
+                                                            'HH:mm dd-MM-yyyy')
+                                                        .format(DateTime.parse(
+                                                            shiftList![index]
+                                                                .endTime!))
+                                                        .toString(),
+                                                style: const TextStyle(
+                                                  color: kPrimaryColor,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 9,
+                                              ),
+                                            ],
+                                          ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color:
+                                                    !shiftList![index].started!
+                                                        ? Colors.white
+                                                        : lightBlueColor),
+                                            height: 20,
+                                            width: 20,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return Container(
+                                  height: 10,
+                                );
+                              },
+                              itemCount: shiftList!.length),
                         ),
                       ),
                 process!.isEmpty
@@ -124,15 +265,65 @@ class _DropDownPageState extends State<DropDownPage> {
                               EasyLoading.showError('Could not load shifts');
                             } else {
                               if (shifts.data!.isNotEmpty) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) => HomeView(
-                                      selectedShift: shifts.data!.first,
-                                      processSelected: processSelected,
+                                if (shifts.data!.length == 1) {
+                                  if (!shifts.data!.first.started!) {
+                                    if (DateTime.now().isAfter(shifts
+                                        .data!.first!.startDateObject
+                                        .subtract(Duration(hours: 2)))) {
+                                      if (DateTime.now().isBefore(
+                                          shifts.data!.first!.endDateObject)) {
+                                        shifts.data!.first!.displayScreen = 2;
+                                      } else {
+                                        shifts.data!.first!.displayScreen = 3;
+                                      }
+                                    } else {
+                                      shifts.data!.first!.displayScreen = 3;
+                                    }
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            HomeView(
+                                          selectedShift: shifts.data!.first,
+                                          processSelected: processSelected,
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    EasyLoading.showError(
+                                        'Shift already started by another supervisor');
+                                  }
+                                } else if (shiftList!.isEmpty) {
+                                  shiftList = shifts.data;
+                                  setState(() {});
+                                } else if (selectedShift != null) {
+                                  if (DateTime.now().isAfter(selectedShift!
+                                      .startDateObject
+                                      .subtract(Duration(hours: 2)))) {
+                                    if (DateTime.now().isBefore(
+                                        selectedShift!.endDateObject)) {
+                                      selectedShift!.displayScreen = 2;
+                                    } else {
+                                      selectedShift!.displayScreen = 3;
+                                    }
+                                  } else {
+                                    selectedShift!.displayScreen = 3;
+                                  }
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          HomeView(
+                                        selectedShift: selectedShift!,
+                                        processSelected: processSelected,
+                                      ),
                                     ),
-                                  ),
-                                );
+                                  );
+                                } else {
+                                  EasyLoading.showError('Please select shift');
+                                }
                               }
                             }
                             print("object");

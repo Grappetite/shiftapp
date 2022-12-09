@@ -282,7 +282,8 @@ class _HomeMainViewState extends State<HomeMainView> {
       status: 'loading...',
       maskType: EasyLoadingMaskType.black,
     );
-    var response = await ShiftService.getEffeciency(widget.processSelected.id);
+    var response = await ShiftService.getEffeciency(
+        widget.processSelected.id, widget.selectedShift.id);
     yesterdayEfficiency = response["yestEfficiency"];
     bestEfficiency = response["maxVale"];
     setState(() {});

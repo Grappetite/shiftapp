@@ -148,6 +148,9 @@ class LoginService {
       return responseObject;
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
+    } catch (e) {
+      print(e.toString());
+      return null;
     }
   }
 

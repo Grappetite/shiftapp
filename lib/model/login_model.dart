@@ -97,8 +97,18 @@ class Process {
   String? unit;
   String? baseline;
   String? headCount;
+  String? exec_start_time;
+  String? exec_end_time;
+  String? shiftName;
   List<WorkerTypeList>? workerType;
-  Process({this.id, this.name, this.startedExecutionShiftId, this.workerType});
+  Process(
+      {this.id,
+      this.name,
+      this.startedExecutionShiftId,
+      this.workerType,
+      this.shiftName,
+      this.exec_end_time,
+      this.exec_start_time});
 
   Process.fromJson(Map<String, dynamic> json) {
     if (json.keys.contains('process_id')) {
@@ -106,7 +116,9 @@ class Process {
     } else {
       id = json['id'];
     }
-
+    exec_start_time = json["exec_start_time"];
+    exec_end_time = json["exec_end_time"];
+    shiftName = json["shift_name"];
     name = json['processName'] ?? json['name'];
     unit = json['unit'];
     baseline = json['baseline'];

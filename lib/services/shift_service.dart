@@ -35,13 +35,9 @@ class ShiftService {
     }
   }
 
-  static Future<List<ShiftStartDetails>> startedShiftsList() async {
+  static Future<List<ShiftStartDetails>?> startedShiftsList() async {
     try {
-      var dio = Dio(BaseOptions(
-          receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
-          ));
+      var dio = Dio();
       final prefs = await SharedPreferences.getInstance();
 
       Response response = await dio.get(
@@ -58,6 +54,8 @@ class ShiftService {
           response.data["data"].map((x) => ShiftStartDetails.fromJson(x)));
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -157,7 +155,7 @@ class ShiftService {
     }
   }
 
-  static getEffeciency(int? id) async {
+  static getEffeciency(int? id, int? shiftId) async {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
@@ -166,7 +164,7 @@ class ShiftService {
           ));
       final prefs = await SharedPreferences.getInstance();
 
-      String url = baseUrl + "efficiency/$id";
+      String url = baseUrl + "efficiency/$id/$shiftId";
       print('');
 
       Response response = await dio.get(url,

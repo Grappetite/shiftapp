@@ -682,9 +682,9 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                       ? widget.processList!.isNotEmpty
                           ? DropDown(
                               labelText: 'Title',
-                              currentList: (widget.processList! as List)
-                                  .map((e) => e.name!.trim() as String)
-                                  .toList(),
+                              currentList: (widget.processList! as List).map((e) =>
+                                  // : ${DateFormat('HH:mm dd-MM-yyyy').format(DateTime.parse(e.exec_start_time))} - ${DateFormat('HH:mm dd-MM-yyyy').format(DateTime.parse(e.exec_end_time))}
+                                  "${e.name!.trim()} (${e.shiftName})").toList(),
                               showError: false,
                               onChange: (newString) {
                                 setState(() {
@@ -890,7 +890,11 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
 
   String findEndTime() {
     var result = '';
-    result = widget.shiftItem.endTime!;
+    result = DateTime.now().isBefore(widget.shiftItem.endDateObject)
+        ? DateFormat("yyyy-MM-dd hh:mm:ss")
+            .parse(DateTime.now().toString())
+            .toString()
+        : widget.shiftItem.endTime!;
 
     if (customTimeSelectedToSend.isNotEmpty) {
       return customTimeSelectedToSend;
