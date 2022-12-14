@@ -21,6 +21,8 @@ class ShiftsResponse {
       data!.removeWhere((element) {
         if (element.started!) {
           return true;
+        } else if (DateTime.now().isAfter(element.endDateObject!)) {
+          return true;
         } else {
           return false;
         }

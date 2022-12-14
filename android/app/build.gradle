@@ -1,3 +1,4 @@
+import java.text.SimpleDateFormat
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -50,6 +51,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        setProperty("archivesBaseName", "Shift_${getFileNameByDate()}_${flutterVersionCode}")
     }
 
     buildTypes {
@@ -68,4 +70,8 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation platform('com.google.firebase:firebase-bom:30.4.1')
+}
+
+static def getFileNameByDate() {
+    return new SimpleDateFormat("MMM_dd_yyyy_01", Locale.getDefault()).format(Calendar.getInstance().getTime())
 }
