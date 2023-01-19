@@ -67,7 +67,7 @@ class Errors {
             dismissOnTap: true, duration: Duration(seconds: 2));
         break;
       case 404:
-        EasyLoading.showError(response.data["message"].toString(),
+        EasyLoading.showError(response.data!["message"].toString(),
             dismissOnTap: true, duration: Duration(seconds: 2));
         break;
       case 403:

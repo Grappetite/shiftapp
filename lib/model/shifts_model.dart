@@ -106,7 +106,7 @@ class ShiftItem {
 
   String get showDate {
     DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(startTime!);
-    String date = DateFormat("yyyy/MM/dd").format(tempDate);
+    String date = DateFormat("yyyy-MM-dd").format(tempDate);
     return date;
   }
 

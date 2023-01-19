@@ -96,6 +96,7 @@ class Process {
   String? name;
   String? unit;
   String? baseline;
+  String? type;
   String? headCount;
   String? exec_start_time;
   String? exec_end_time;
@@ -106,6 +107,7 @@ class Process {
       this.name,
       this.startedExecutionShiftId,
       this.workerType,
+      this.type,
       this.shiftName,
       this.exec_end_time,
       this.exec_start_time});
@@ -121,6 +123,7 @@ class Process {
     shiftName = json["shift_name"];
     name = json['processName'] ?? json['name'];
     unit = json['unit'];
+    type = json['type'];
     baseline = json['baseline'];
     headCount = json['head_count'];
     startedExecutionShiftId = json['started_execute_shift_id'];

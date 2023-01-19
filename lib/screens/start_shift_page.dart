@@ -343,8 +343,6 @@ class _StartShiftViewState extends State<StartShiftView> {
     title,
     body,
   ) async {
-    // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    //     FlutterLocalNotificationsPlugin();
     await flutterLocalNotificationsPlugin.cancel(id);
     print(await flutterLocalNotificationsPlugin
         .getNotificationAppLaunchDetails()

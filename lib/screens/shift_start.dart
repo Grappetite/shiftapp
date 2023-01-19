@@ -38,39 +38,6 @@ class _ShiftStartState extends State<ShiftStart> {
   String timeElasped = '00:00';
   var startTimeOriginal;
   var endTimeOriginal;
-  late Timer _timer;
-
-  void startTimer() {
-    const oneSec = Duration(seconds: 1);
-
-    _timer = Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        // if ((widget.selectedShift.displayScreen == 3 ||
-        //         widget.selectedShift.displayScreen == 1) &&
-        //     (widget.selectedShift.displayScreenReady.toString().toLowerCase() ==
-        //         "")) {
-        //   print(widget.selectedShift.endDateObject.isAfter(DateTime.now()));
-        //   print(widget.selectedShift.startDateObject
-        //       .subtract(Duration(minutes: 30))
-        //       .isBefore(DateFormat("yyyy-MM-dd hh:mm:ss").parse(
-        //           DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now()))));
-        //   if (widget.selectedShift.startDateObject
-        //           .subtract(Duration(minutes: 30))
-        //           .isBefore(DateFormat("yyyy-MM-dd hh:mm:ss").parse(
-        //               DateFormat("yyyy-MM-dd hh:mm:ss")
-        //                   .format(DateTime.now()))) &&
-        //       widget.selectedShift.endDateObject.isAfter(DateTime.now())) {
-        //     widget.selectedShift.displayScreen = 2;
-        //     setState(() {});
-        //     _timer.cancel();
-        //   }
-        // }
-
-        print('');
-      },
-    );
-  }
 
   String customSelectedStartTime = '';
   String customSelectedEndTime = '';
@@ -78,7 +45,6 @@ class _ShiftStartState extends State<ShiftStart> {
   @override
   void initState() {
     super.initState();
-    startTimer();
   }
 
   @override
@@ -112,15 +78,16 @@ class _ShiftStartState extends State<ShiftStart> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Text(
-                      widget.selectedShift.displayScreen == 2
-                          ? 'CURRENT SHIFT'
-                          : 'NEXT SHIFT:',
-                      style: TextStyle(
-                          color: kPrimaryColor,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600),
-                    ),
+                    if (widget.processSelected.type != "training")
+                      Text(
+                        widget.selectedShift.displayScreen == 2
+                            ? 'CURRENT SHIFT'
+                            : 'NEXT SHIFT:',
+                        style: TextStyle(
+                            color: kPrimaryColor,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600),
+                      ),
                     if (widget.selectedShift.displayScreen! == 1 ||
                         widget.selectedShift.displayScreen == 3) ...[
                       const Text(
@@ -130,25 +97,26 @@ class _ShiftStartState extends State<ShiftStart> {
                             fontSize: 16,
                             fontWeight: FontWeight.w600),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Next Shift available at ',
-                            style: TextStyle(
-                                color: kPrimaryColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
-                          ),
-                          Text(
-                            buildShowStartTime(),
-                            style: const TextStyle(
-                                color: kPrimaryColor,
-                                fontSize: 21,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ],
-                      ),
+                      if (widget.processSelected.type != "training")
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              'Next Shift available at ',
+                              style: TextStyle(
+                                  color: kPrimaryColor,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            Text(
+                              buildShowStartTime(),
+                              style: const TextStyle(
+                                  color: kPrimaryColor,
+                                  fontSize: 21,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ],
+                        ),
                       if (widget.selectedShift.displayScreenMessage !=
                           null) ...[
                         Text(
@@ -368,11 +336,12 @@ class _ShiftStartState extends State<ShiftStart> {
                         ),
                       ),
                     ],
-                    Divider(
-                      height: 10,
-                      color: kPrimaryColor,
-                      thickness: 1,
-                    ),
+                    if (widget.processSelected.type != "training")
+                      Divider(
+                        height: 10,
+                        color: kPrimaryColor,
+                        thickness: 1,
+                      ),
                     widget.bestEfficiency != null &&
                             widget.yesterdayEfficiency != null
                         ? Row(

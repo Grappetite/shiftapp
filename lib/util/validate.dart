@@ -175,7 +175,7 @@ class ValidatorsHelper {
       return checkEmpty ? this.requiredMessage : '';
     }
 
-    bool tmp = address.contains(RegExp(r'[<>^]')); //|:.
+    bool tmp = address.contains(RegExp(r'[<>^]'));
 
     if (tmp) {
       return '$invalid $fieldName';

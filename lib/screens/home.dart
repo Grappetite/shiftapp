@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/model/login_model.dart';
 import 'package:shiftapp/model/shifts_model.dart';
+import 'package:shiftapp/screens/SopView.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
 import '../config/constants.dart';
@@ -52,7 +53,10 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
+    return widget.processSelected.type=="training"? SopView(
+      processSelected: widget.processSelected,
+      selectedShift: widget.selectedShift,
+    ):DefaultTabController(
       length: 2,
       child: Scaffold(
         body: TabBarView(
@@ -63,12 +67,10 @@ class _HomeViewState extends State<HomeView> {
               sessionStarted: widget.sessionStarted,
               onLogout: () async {},
             ),
-            Container(
-              child: const Center(
-                child: Text('SOPs are not available right now'),
-              ),
-              color: Colors.white,
-            )
+            SopView(
+              processSelected: widget.processSelected,
+              selectedShift: widget.selectedShift,
+            ),
           ],
         ),
         bottomNavigationBar: Container(
@@ -194,7 +196,6 @@ class _HomeMainViewState extends State<HomeMainView> {
   late AppPopupMenu<int> appMenu02;
   @override
   void initState() {
-    super.initState();
     appMenu02 = AppPopupMenu<int>(
       menuItems: [
         PopupMenuItem(
@@ -231,8 +232,9 @@ class _HomeMainViewState extends State<HomeMainView> {
     if (widget.sessionStarted) {
       moveToEndSession();
     } else {
-      getEffeciency();
+      if (widget.processSelected.type != "training") getEffeciency();
     }
+    super.initState();
   }
 
   var yesterdayEfficiency;
@@ -286,7 +288,7 @@ class _HomeMainViewState extends State<HomeMainView> {
         widget.processSelected.id, widget.selectedShift.id);
     yesterdayEfficiency = response["yestEfficiency"];
     bestEfficiency = response["maxVale"];
-    setState(() {});
+    if (mounted) setState(() {});
     await EasyLoading.dismiss();
   }
 }

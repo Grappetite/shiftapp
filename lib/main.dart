@@ -1,6 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -31,11 +30,9 @@ Future<void> setupFlutterNotifications() async {
   channel = AndroidNotificationChannel(
     'high_importance_channel',
     'High Importance Notifications',
-    // 'This channel is used for important notifications.',
     importance: Importance.high,
   );
 
-  // flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   /// Create an Android Notification Channel.
   ///
@@ -127,9 +124,6 @@ Future<void> main() async {
   );
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
-    // DidReceiveBackgroundNotificationResponseCallback: (String? payload) async {
-    // if (payload != null) {}
-    // }
   );
   runApp(const MyApp());
 }

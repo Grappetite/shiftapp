@@ -63,13 +63,6 @@ class _StartedShiftsState extends State<StartedShifts> {
                   Expanded(
                     child: shiftsList != null
                         ?
-                        // shiftsList!.isEmpty
-                        //         ? Container(
-                        //             child: Center(
-                        //               child: Text("No Shift Open"),
-                        //             ),
-                        //           )
-                        //         :
                         RefreshIndicator(
                             child: ListView.separated(
                                 shrinkWrap: true,
@@ -165,24 +158,12 @@ class _StartedShiftsState extends State<StartedShifts> {
                                               height: 9,
                                             ),
                                             Text(
-                                              // DateFormat('dd-MM-yyyy')
-                                              //         .format(DateTime.parse(
-                                              //             shiftsList![index]
-                                              //                 .executeShiftStartTime!))
-                                              //         .toString()
-                                              //         .contains(DateFormat(
-                                              //                 'dd-MM-yyyy')
-                                              //             .format(
-                                              //                 DateTime.now())
-                                              //             .toString())
-                                              //     ?
                                               "Started at: " +
                                                   DateFormat('HH:mm dd-MM-yyyy')
                                                       .format(DateTime.parse(
                                                           shiftsList![index]
                                                               .executeShiftStartTime!))
                                                       .toString()
-                                              // : "OverDue"
                                               ,
                                               style: const TextStyle(
                                                 color: kPrimaryColor,

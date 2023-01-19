@@ -122,11 +122,6 @@ class _WorkersListingState extends State<WorkersListing> {
       return;
     }
 
-    // if (responseShift.data!.worker!.isEmpty) {
-    //   showCategories = true;
-    //   loadWorkerTypes();
-    //   return;
-    // }
     setState(() {});
     List<ShiftWorker> shiftWorkers = [];
 

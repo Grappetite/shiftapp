@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/constants.dart';
+import 'package:shiftapp/model/sop_model.dart';
+import 'package:shiftapp/screens/SopView.dart';
 import 'package:shiftapp/screens/StartedShiftList.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 import 'package:shiftapp/services/login_service.dart';
@@ -92,7 +94,6 @@ class _EndShiftViewState extends State<EndShiftView> {
             stopper = false;
           }
 
-          ///My Algorithm
         });
       },
     );
@@ -123,9 +124,6 @@ class _EndShiftViewState extends State<EndShiftView> {
                   }).then((value) async {
                 if (value) {
                   final prefs = await SharedPreferences.getInstance();
-                  // FlutterLocalNotificationsPlugin
-                  //     flutterLocalNotificationsPlugin =
-                  //     FlutterLocalNotificationsPlugin();
                   await flutterLocalNotificationsPlugin
                       .cancel(widget.execShiftId);
 
@@ -182,8 +180,6 @@ class _EndShiftViewState extends State<EndShiftView> {
               ShiftService.cancelShift(this.widget.execShiftId, endTime);
               var process = await LoginService.getProcess();
               final prefs = await SharedPreferences.getInstance();
-              // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-              //     FlutterLocalNotificationsPlugin();
               await flutterLocalNotificationsPlugin.cancel(widget.execShiftId);
               try {
                 List<String> test =
@@ -227,6 +223,8 @@ class _EndShiftViewState extends State<EndShiftView> {
 
     startTimer();
   }
+
+  SopModel? sopData;
 
   void loadUsers() async {
     var responseShift =
@@ -343,15 +341,25 @@ class _EndShiftViewState extends State<EndShiftView> {
               const SizedBox(
                 height: 16,
               ),
-              ComingSoonContainer(
+              Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                innerWidget: ExplainerWidget(
-                  comingSoon: true,
+                child: ExplainerWidget(
                   iconName: 'SopTraining',
                   title: 'SOP TRAINING',
-                  text1: '4 Workers require SOP Training',
-                  text2: 'Tap to train now or swipe to ignore',
-                  showWarning: true,
+                  text1: sopCount != null
+                      ? '${sopCount} Workers require SOP Training'
+                      : "",
+                  text2: sopCount != null ? 'Tap to train now' : "",
+                  onTap: () async {
+                    await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => SopView(
+                                processSelected: widget.process,
+                                selectedShift: widget.selectedShift,
+                                executionShiftId: executeShiftId)));
+                    loadShiftId();
+                  },
                 ),
               ),
               const SizedBox(
@@ -385,8 +393,7 @@ class _EndShiftViewState extends State<EndShiftView> {
                         ),
                       ),
                     );
-
-                    loadUsers();
+                    loadShiftId();
                   },
                 ),
               ),
@@ -465,10 +472,12 @@ class _EndShiftViewState extends State<EndShiftView> {
     );
   }
 
+  var sopCount;
   void loadExpectedUnits() async {
     expectedUnits = 0;
     var shiftWorkerList =
         await WorkersService.getAllShiftWorkersList(executeShiftId!);
+    sopCount = shiftWorkerList!.sopCount;
     for (var calculation in shiftWorkerList!.data!) {
       expectedUnits = expectedUnits +
           ((((calculation.actualTimeloggedout!

@@ -279,7 +279,24 @@ class _DropDownPageState extends State<DropDownPage> {
                                     } else {
                                       shifts.data!.first!.displayScreen = 3;
                                     }
-
+                                    if (processSelected.type == "training") {
+                                      shifts.data = [];
+                                      shifts.data!.add(ShiftItem(
+                                          id: 0,
+                                          name: "Training",
+                                          startTime: DateTime.now()
+                                              .add(Duration(hours: 3))
+                                              .toString(),
+                                          endTime: DateTime.now()
+                                              .add(Duration(hours: 3))
+                                              .toString(),
+                                          patternId: 0,
+                                          breakTime: 60,
+                                          shiftMinutes: 3600,
+                                          shiftDuration: "Always",
+                                          started: true));
+                                      shifts.data!.first!.displayScreen = 3;
+                                    }
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -295,8 +312,37 @@ class _DropDownPageState extends State<DropDownPage> {
                                         'Shift already started by another supervisor');
                                   }
                                 } else if (shiftList!.isEmpty) {
-                                  shiftList = shifts.data;
-                                  setState(() {});
+                                  if (processSelected.type == "training") {
+                                    shifts.data = [];
+                                    shifts.data!.add(ShiftItem(
+                                        id: 0,
+                                        name: "Training",
+                                        startTime: DateTime.now()
+                                            .add(Duration(hours: 3))
+                                            .toString(),
+                                        endTime: DateTime.now()
+                                            .add(Duration(hours: 3))
+                                            .toString(),
+                                        patternId: 0,
+                                        breakTime: 60,
+                                        shiftMinutes: 3600,
+                                        shiftDuration: "Always",
+                                        started: true));
+                                    shifts.data!.first!.displayScreen = 3;
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) =>
+                                            HomeView(
+                                          selectedShift: shifts.data!.first,
+                                          processSelected: processSelected,
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    shiftList = shifts.data;
+                                    setState(() {});
+                                  }
                                 } else if (selectedShift != null) {
                                   if (DateTime.now().isAfter(selectedShift!
                                       .startDateObject

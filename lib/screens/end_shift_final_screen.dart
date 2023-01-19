@@ -144,11 +144,11 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                   userId: const [],
                   efficiencyCalculation: const [],
                   shiftId: widget.selectedShift.id!,
-                  processId: widget.processId!,
+                  processId: widget.processId,
                   selectedShift: widget.selectedShift,
                   startedBefore: true,
                   process: widget.process,
-                  execShiftId: widget.executeShiftId!,
+                  execShiftId: widget.executeShiftId,
                 ),
               ));
           return Future.value(true);
@@ -165,11 +165,11 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                           userId: const [],
                           efficiencyCalculation: const [],
                           shiftId: widget.selectedShift.id!,
-                          processId: widget.processId!,
+                          processId: widget.processId,
                           selectedShift: widget.selectedShift,
                           startedBefore: true,
                           process: widget.process,
-                          execShiftId: widget.executeShiftId!,
+                          execShiftId: widget.executeShiftId,
                         ),
                       ));
                 },
@@ -696,7 +696,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
 
                                 Future.delayed(Duration(milliseconds: 50), () {
                                   processIndexSelected = widget.processList!
-                                      .map((e) => e.name!.trim())
+                                      .map((e) => "${e.name!.trim()} (${e.shiftName})")
                                       .toList()
                                       .indexOf(newString);
                                   setState(() {});

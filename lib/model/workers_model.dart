@@ -1,3 +1,5 @@
+import 'package:painter/painter.dart';
+
 class WorkersListing {
   int? code;
   String? status;
@@ -105,6 +107,7 @@ class ShiftWorker {
 
   bool newAdded = false;
   bool newRemove = false;
+  final PainterController painterController = PainterController();
 
   ShiftWorker(
       {this.id,
@@ -234,18 +237,21 @@ class ShiftWorkerList {
     this.code,
     this.status,
     this.data,
+    this.sopCount,
     this.message,
   });
 
   int? code;
   String? status;
   List<Datum>? data;
+  int? sopCount;
   String? message;
 
   factory ShiftWorkerList.fromJson(Map<String, dynamic> json) =>
       ShiftWorkerList(
         code: json["code"] == null ? null : json["code"],
         status: json["status"] == null ? null : json["status"],
+        sopCount: json["sopCount"] == null ? null : json["sopCount"],
         data: json["data"] == null
             ? null
             : List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),

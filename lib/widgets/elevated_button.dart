@@ -8,28 +8,36 @@ class PElevatedButton extends StatelessWidget {
 
   final Color? backGroundColor;
   final Color textColor;
+  final bool? shrink;
+  final TextStyle? style;
 
   PElevatedButton({
     required this.text,
     required this.onPressed,
     this.isApiInProgress = false,
     this.backGroundColor,
+    this.style,
+    this.shrink = false,
     this.textColor = Colors.white,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: MediaQuery.of(context).size.width / 1.35,
+      width:
+          shrink! ? double.infinity : MediaQuery.of(context).size.width / 1.35,
       child: ElevatedButton(
         onPressed: isApiInProgress ? () {} : onPressed,
         style: ButtonStyle(
-          backgroundColor: backGroundColor != null ? MaterialStateProperty.all(backGroundColor!) : MaterialStateProperty.all(kPrimaryColor),
+          backgroundColor: backGroundColor != null
+              ? MaterialStateProperty.all(backGroundColor!)
+              : MaterialStateProperty.all(kPrimaryColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0 , ),
-              side: BorderSide(color: kPrimaryColor , width: 1)
-            ),
+                borderRadius: BorderRadius.circular(
+                  16.0,
+                ),
+                side: BorderSide(color: kPrimaryColor, width: 1)),
           ),
         ),
         child: isApiInProgress
@@ -48,9 +56,11 @@ class PElevatedButton extends StatelessWidget {
                   ),
                 ],
               )
-            : Text(text , style: TextStyle(color: textColor),),
+            : Text(
+                text,
+                style: style != null ? style : TextStyle(color: textColor),
+              ),
       ),
     );
   }
 }
-
