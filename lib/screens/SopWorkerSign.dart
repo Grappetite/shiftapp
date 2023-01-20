@@ -168,250 +168,252 @@ class _SopWorkerSignState extends State<SopWorkerSign> {
                               .painterController.drawColor = Colors.black;
                           widget.workerListToTrain![pagePosition]
                               .painterController.thickness = 5;
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.all(4), // Border width
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        shape: BoxShape.circle),
-                                    child: ClipOval(
-                                      child: SizedBox.fromSize(
-                                        size: const Size.fromRadius(
-                                            24), // Image radius
-                                        child: Image.network(
-                                            widget
-                                                .workerListToTrain![
-                                                    pagePosition]
-                                                .picture,
-                                            fit: BoxFit.cover),
+                          return SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(4), // Border width
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          shape: BoxShape.circle),
+                                      child: ClipOval(
+                                        child: SizedBox.fromSize(
+                                          size: const Size.fromRadius(
+                                              24), // Image radius
+                                          child: Image.network(
+                                              widget
+                                                  .workerListToTrain![
+                                                      pagePosition]
+                                                  .picture,
+                                              fit: BoxFit.cover),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "${widget.workerListToTrain![pagePosition].firstName} ${widget.workerListToTrain![pagePosition].lastName}",
-                                        style: const TextStyle(
-                                          color: kPrimaryColor,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                      Text(
-                                        "${widget.workerListToTrain![pagePosition].key}",
-                                        style: const TextStyle(
-                                          color: kPrimaryColor,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                      Text(
-                                        "${widget.workerListToTrain![pagePosition].workerType}",
-                                        style: const TextStyle(
-                                          color: kPrimaryColor,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Expanded(
-                                    child: Column(
+                                    Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Container(
-                                          padding: EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                            border: Border.all(
-                                                color: Color(0xFF0E577F),
-                                                width: 1),
+                                        Text(
+                                          "${widget.workerListToTrain![pagePosition].firstName} ${widget.workerListToTrain![pagePosition].lastName}",
+                                          style: const TextStyle(
+                                            color: kPrimaryColor,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 16,
                                           ),
-                                          child: Text(
-                                              "WORKER ${pagePosition + 1} of ${widget.workerListToTrain!.length}"),
                                         ),
-                                        Container(
-                                          padding: EdgeInsets.all(5),
-                                          child: PElevatedButton(
-                                              shrink: true,
-                                              onPressed: () async {
-                                                pageController.nextPage(
-                                                  duration:
-                                                      Duration(seconds: 1),
-                                                  curve: Curves
-                                                      .fastLinearToSlowEaseIn,
-                                                );
-                                                if (pagePosition ==
-                                                    widget.workerListToTrain!
-                                                            .length -
-                                                        1) {
-                                                  Navigator.pop(context);
-                                                  Navigator.pop(context);
-                                                  Navigator.pop(context);
-                                                  Navigator.pop(context);
-                                                }
-                                                // Navigator.of(context)
-                                                //     .push(MaterialPageRoute(
-                                                //         builder: (context) => SopsList(
-                                                //               processSelected:
-                                                //                   widget.processSelected,
-                                                //               selectedShift:
-                                                //                   widget.selectedShift,
-                                                //             )));
-                                              },
-                                              text: 'SKIP',
-                                              style: TextStyle(fontSize: 15)),
+                                        Text(
+                                          "${widget.workerListToTrain![pagePosition].key}",
+                                          style: const TextStyle(
+                                            color: kPrimaryColor,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        Text(
+                                          "${widget.workerListToTrain![pagePosition].workerType}",
+                                          style: const TextStyle(
+                                            color: kPrimaryColor,
+                                            fontSize: 14,
+                                          ),
                                         ),
                                       ],
                                     ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.all(5),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              border: Border.all(
+                                                  color: Color(0xFF0E577F),
+                                                  width: 1),
+                                            ),
+                                            child: Text(
+                                                "WORKER ${pagePosition + 1} of ${widget.workerListToTrain!.length}"),
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.all(5),
+                                            child: PElevatedButton(
+                                                shrink: true,
+                                                onPressed: () async {
+                                                  pageController.nextPage(
+                                                    duration:
+                                                        Duration(seconds: 1),
+                                                    curve: Curves
+                                                        .fastLinearToSlowEaseIn,
+                                                  );
+                                                  if (pagePosition ==
+                                                      widget.workerListToTrain!
+                                                              .length -
+                                                          1) {
+                                                    Navigator.pop(context);
+                                                    Navigator.pop(context);
+                                                    Navigator.pop(context);
+                                                    Navigator.pop(context);
+                                                  }
+                                                  // Navigator.of(context)
+                                                  //     .push(MaterialPageRoute(
+                                                  //         builder: (context) => SopsList(
+                                                  //               processSelected:
+                                                  //                   widget.processSelected,
+                                                  //               selectedShift:
+                                                  //                   widget.selectedShift,
+                                                  //             )));
+                                                },
+                                                text: 'SKIP',
+                                                style: TextStyle(fontSize: 15)),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  "WORKER SIGNATURE:",
+                                  style: const TextStyle(
+                                    color: kPrimaryColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 18,
                                   ),
-                                ],
-                              ),
-                              Text(
-                                "WORKER SIGNATURE:",
-                                style: const TextStyle(
-                                  color: kPrimaryColor,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18,
                                 ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                height: 250,
-                                width: double.infinity,
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                      color: Color(0xFF0E577F), width: 1),
+                                SizedBox(
+                                  height: 10,
                                 ),
-                                child: Painter(
-                                  widget.workerListToTrain![pagePosition]
-                                      .painterController,
+                                Container(
+                                  height: 250,
+                                  width: double.infinity,
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                        color: Color(0xFF0E577F), width: 1),
+                                  ),
+                                  child: Painter(
+                                    widget.workerListToTrain![pagePosition]
+                                        .painterController,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(5),
-                                child: PElevatedButton(
-                                    shrink: true,
-                                    onPressed: () async {
-                                      widget.workerListToTrain![pagePosition]
-                                          .painterController
-                                          .clear();
-                                      // setState(() {});
-                                    },
-                                    text: 'CLEAR SIGNATURE',
-                                    style: TextStyle(fontSize: 15)),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                  "I have received adequate training in the ${widget.heading}"),
-                              Container(
-                                padding: EdgeInsets.all(5),
-                                child: PElevatedButton(
-                                    shrink: true,
-                                    onPressed: () async {
-                                      await EasyLoading.show(
-                                        status: 'loading...',
-                                        maskType: EasyLoadingMaskType.black,
-                                      );
-                                      PictureDetails pictureDetails = widget
-                                          .workerListToTrain![pagePosition]
-                                          .painterController
-                                          .finish();
-                                      // String link =
-                                      //     await FirebaseClient.submitPicture(await pictureDetails.toPNG(), 'png');
-                                      List<int> imageBytes =
-                                          (await pictureDetails.toPNG());
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  padding: EdgeInsets.all(5),
+                                  child: PElevatedButton(
+                                      shrink: true,
+                                      onPressed: () async {
+                                        widget.workerListToTrain![pagePosition]
+                                            .painterController
+                                            .clear();
+                                        // setState(() {});
+                                      },
+                                      text: 'CLEAR SIGNATURE',
+                                      style: TextStyle(fontSize: 15)),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                    "I have received adequate training in the ${widget.heading}"),
+                                Container(
+                                  padding: EdgeInsets.all(5),
+                                  child: PElevatedButton(
+                                      shrink: true,
+                                      onPressed: () async {
+                                        await EasyLoading.show(
+                                          status: 'loading...',
+                                          maskType: EasyLoadingMaskType.black,
+                                        );
+                                        PictureDetails pictureDetails = widget
+                                            .workerListToTrain![pagePosition]
+                                            .painterController
+                                            .finish();
+                                        // String link =
+                                        //     await FirebaseClient.submitPicture(await pictureDetails.toPNG(), 'png');
+                                        List<int> imageBytes =
+                                            (await pictureDetails.toPNG());
 
-                                      String tempPath =
-                                          (await getTemporaryDirectory()).path;
-                                      File file = File(
-                                          '$tempPath/${DateTime.now().microsecondsSinceEpoch}.png');
-                                      await file.writeAsBytes(imageBytes);
+                                        String tempPath =
+                                            (await getTemporaryDirectory()).path;
+                                        File file = File(
+                                            '$tempPath/${DateTime.now().microsecondsSinceEpoch}.png');
+                                        await file.writeAsBytes(imageBytes);
 
-                                      await SOPService.postSign(
-                                        file,
-                                        widget.sopDetail,
-                                        widget.workerListToTrain![pagePosition],
-                                        executionShiftId:
-                                            widget.executionShiftId,
-                                      );
-                                      await EasyLoading.dismiss();
-                                      pageController.nextPage(
-                                        duration: Duration(seconds: 1),
-                                        curve: Curves.fastLinearToSlowEaseIn,
-                                      );
-                                      if (pagePosition ==
-                                          widget.workerListToTrain!.length -
-                                              1) {
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                      }
-                                      // Navigator.of(context)
-                                      //     .push(MaterialPageRoute(
-                                      //         builder: (context) => SopsList(
-                                      //               processSelected:
-                                      //                   widget.processSelected,
-                                      //               selectedShift:
-                                      //                   widget.selectedShift,
-                                      //             )));
-                                    },
-                                    text: 'I AGREE',
-                                    style: TextStyle(fontSize: 15)),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              PElevatedButton(
-                                backGroundColor: Colors.white,
-                                shrink: true,
-                                onPressed: () async {
-                                  pageController.nextPage(
-                                    duration: Duration(seconds: 1),
-                                    curve: Curves.fastLinearToSlowEaseIn,
-                                  );
-                                  if (pagePosition ==
-                                      widget.workerListToTrain!.length - 1) {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
-                                  }
-                                  // Navigator.of(context)
-                                  //     .push(MaterialPageRoute(
-                                  //         builder: (context) => SopsList(
-                                  //               processSelected:
-                                  //                   widget.processSelected,
-                                  //               selectedShift:
-                                  //                   widget.selectedShift,
-                                  //             )));
-                                  // Navigator.pop(context);
-                                },
-                                text: 'DECLINE',
-                                style: TextStyle(
-                                    color: Color(0xFF0E577F), fontSize: 15),
-                              )
-                            ],
+                                        await SOPService.postSign(
+                                          file,
+                                          widget.sopDetail,
+                                          widget.workerListToTrain![pagePosition],
+                                          executionShiftId:
+                                              widget.executionShiftId,
+                                        );
+                                        await EasyLoading.dismiss();
+                                        pageController.nextPage(
+                                          duration: Duration(seconds: 1),
+                                          curve: Curves.fastLinearToSlowEaseIn,
+                                        );
+                                        if (pagePosition ==
+                                            widget.workerListToTrain!.length -
+                                                1) {
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                        }
+                                        // Navigator.of(context)
+                                        //     .push(MaterialPageRoute(
+                                        //         builder: (context) => SopsList(
+                                        //               processSelected:
+                                        //                   widget.processSelected,
+                                        //               selectedShift:
+                                        //                   widget.selectedShift,
+                                        //             )));
+                                      },
+                                      text: 'I AGREE',
+                                      style: TextStyle(fontSize: 15)),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                PElevatedButton(
+                                  backGroundColor: Colors.white,
+                                  shrink: true,
+                                  onPressed: () async {
+                                    pageController.nextPage(
+                                      duration: Duration(seconds: 1),
+                                      curve: Curves.fastLinearToSlowEaseIn,
+                                    );
+                                    if (pagePosition ==
+                                        widget.workerListToTrain!.length - 1) {
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    }
+                                    // Navigator.of(context)
+                                    //     .push(MaterialPageRoute(
+                                    //         builder: (context) => SopsList(
+                                    //               processSelected:
+                                    //                   widget.processSelected,
+                                    //               selectedShift:
+                                    //                   widget.selectedShift,
+                                    //             )));
+                                    // Navigator.pop(context);
+                                  },
+                                  text: 'DECLINE',
+                                  style: TextStyle(
+                                      color: Color(0xFF0E577F), fontSize: 15),
+                                )
+                              ],
+                            ),
                           );
                         }),
                   )

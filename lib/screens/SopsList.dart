@@ -9,6 +9,7 @@ import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/model/shifts_model.dart';
 import 'package:shiftapp/model/sop_model.dart';
 import 'package:shiftapp/model/workers_model.dart' as workerList;
+import 'package:shiftapp/screens/PreviewImage.dart';
 import 'package:shiftapp/screens/SelectTrainingWorker.dart';
 import 'package:shiftapp/screens/SopWorkerSign.dart';
 import 'package:shiftapp/screens/login.dart';
@@ -90,7 +91,6 @@ class _SopsListState extends State<SopsList> {
   void startTimer() {
     const oneSec = Duration(seconds: 1);
 
-
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
@@ -146,8 +146,7 @@ class _SopsListState extends State<SopsList> {
                 itemCount: widget.sopDetail.sopStep!.length,
                 pageSnapping: true,
                 controller: PageController(viewportFraction: 0.85),
-                onPageChanged: (page) {
-                },
+                onPageChanged: (page) {},
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, pagePosition) {
                   var workers = "";
@@ -271,18 +270,31 @@ class _SopsListState extends State<SopsList> {
                                       ),
                                       widget.train
                                           ? Expanded(
-                                              child: PElevatedButton(
-                                                backGroundColor: Colors.white,
-                                                shrink: true,
-                                                onPressed: () async {
-                                                  Navigator.pop(context);
-                                                },
-                                                text: 'STOP',
-                                                style: TextStyle(
-                                                    color: Color(0xFF0E577F),
-                                                    fontSize: 8),
+                                              child: GestureDetector(
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Container(
+                                                height: 50,
+                                                decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: AssetImage(
+                                                            "assets/images/Stop-sign-push-hand.png"),
+                                                        fit: BoxFit.fitHeight)),
                                               ),
                                             )
+                                              // PElevatedButton(
+                                              //   backGroundColor: Colors.white,
+                                              //   shrink: true,
+                                              //   onPressed: () async {
+                                              //     Navigator.pop(context);
+                                              //   },
+                                              //   text: 'STOP',
+                                              //   style: TextStyle(
+                                              //       color: Color(0xFF0E577F),
+                                              //       fontSize: 8),
+                                              // ),
+                                              )
                                           : Expanded(
                                               child: PElevatedButton(
                                                   shrink: true,
@@ -296,25 +308,22 @@ class _SopsListState extends State<SopsList> {
                                                     if (widget.sopDetail
                                                             .trainingRequired !=
                                                         0) {
-                                                      Navigator.of(context).push(
-                                                          MaterialPageRoute(
-                                                              builder: (context) => SelectTrainingWorker(
-                                                                  processSelected:
-                                                                      widget
-                                                                          .processSelected,
-                                                                  selectedShift:
-                                                                      widget
-                                                                          .selectedShift,
-                                                                  heading: widget
-                                                                      .sopDetail
-                                                                      .name
-                                                                      .toString(),
-                                                                  sopDetail: widget
-                                                                      .sopDetail,
-                                                                  executionShiftId:
-                                                                      widget
-                                                                          .executionShiftId
-                                                                  )));
+                                                      Navigator.of(context).push(MaterialPageRoute(
+                                                          builder: (context) => SelectTrainingWorker(
+                                                              processSelected:
+                                                                  widget
+                                                                      .processSelected,
+                                                              selectedShift: widget
+                                                                  .selectedShift,
+                                                              heading: widget
+                                                                  .sopDetail
+                                                                  .name
+                                                                  .toString(),
+                                                              sopDetail: widget
+                                                                  .sopDetail,
+                                                              executionShiftId:
+                                                                  widget
+                                                                      .executionShiftId)));
                                                     }
                                                   },
                                                   text:
@@ -352,11 +361,11 @@ class _SopsListState extends State<SopsList> {
                             padding: const EdgeInsets.only(
                                 left: 8.0, right: 8.0, top: 8.0),
                             child: Text(
-                              "Step Name",
+                              "Step Name:",
                               style: const TextStyle(
-                                color: kPrimaryColor,
-                                fontSize: 12,
-                              ),
+                                  color: kPrimaryColor,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                           Padding(
@@ -375,11 +384,11 @@ class _SopsListState extends State<SopsList> {
                                   padding: const EdgeInsets.only(
                                       left: 8.0, right: 8.0, top: 8.0),
                                   child: Text(
-                                    "Description",
+                                    "Description:",
                                     style: const TextStyle(
-                                      color: kPrimaryColor,
-                                      fontSize: 12,
-                                    ),
+                                        color: kPrimaryColor,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 )
                               : Container(),
@@ -397,11 +406,11 @@ class _SopsListState extends State<SopsList> {
                             padding: const EdgeInsets.only(
                                 left: 8.0, right: 8.0, top: 8.0),
                             child: Text(
-                              "Worker Type",
+                              "Worker Type:",
                               style: const TextStyle(
-                                color: kPrimaryColor,
-                                fontSize: 12,
-                              ),
+                                  color: kPrimaryColor,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                           Padding(
@@ -419,11 +428,11 @@ class _SopsListState extends State<SopsList> {
                             padding: const EdgeInsets.only(
                                 left: 8.0, right: 8.0, top: 8.0),
                             child: Text(
-                              "Equipments required",
+                              "Equipments required:",
                               style: const TextStyle(
-                                color: kPrimaryColor,
-                                fontSize: 12,
-                              ),
+                                  color: kPrimaryColor,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                           Padding(
@@ -441,24 +450,36 @@ class _SopsListState extends State<SopsList> {
                             padding: const EdgeInsets.only(
                                 left: 8.0, right: 8.0, top: 8.0),
                             child: Text(
-                              "Photo",
+                              "Photo:",
                               style: const TextStyle(
-                                color: kPrimaryColor,
-                                fontSize: 12,
-                              ),
+                                  color: kPrimaryColor,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8.0, right: 8.0, top: 8.0),
-                            child: Container(
-                              height: 260,
-                              width: 260,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: NetworkImage(
-                                          "${widget.sopDetail.sopStep![pagePosition].imageUrl}"),
-                                      fit: BoxFit.fill)),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PreviewImage(
+                                          image: widget
+                                              .sopDetail
+                                              .sopStep![pagePosition]
+                                              .imageUrl)));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 8.0, right: 8.0, top: 8.0),
+                              child: Container(
+                                height: 260,
+                                width: 260,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: NetworkImage(
+                                            "${widget.sopDetail.sopStep![pagePosition].imageUrl}"),
+                                        fit: BoxFit.fill)),
+                              ),
                             ),
                           ),
                         ],

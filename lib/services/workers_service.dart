@@ -34,7 +34,7 @@ class WorkersService {
       Response response = await dio.get(url,
           options: Options(
             headers: {
-              authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
+              authorization: 'Bearer ' + prefs.getString(tokenKey)!,
             },
           ));
 
@@ -70,7 +70,7 @@ class WorkersService {
       Response response = await dio.get(url,
           options: Options(
             headers: {
-              authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
+              authorization: 'Bearer ' + prefs.getString(tokenKey)!,
             },
           ));
 
@@ -105,7 +105,7 @@ class WorkersService {
       Response response = await dio.get(url,
           options: Options(
             headers: {
-              authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
+              authorization: 'Bearer ' + prefs.getString(tokenKey)!,
             },
           ));
 
@@ -140,7 +140,7 @@ class WorkersService {
         url,
         options: Options(
           headers: {
-            authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
+            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
           },
         ),
       );
@@ -191,7 +191,7 @@ class WorkersService {
         },
         options: Options(
           headers: {
-            authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
+            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
           },
         ),
       );
@@ -233,7 +233,7 @@ class WorkersService {
         },
         options: Options(
           headers: {
-            authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
+            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
           },
         ),
       );
@@ -264,7 +264,7 @@ class WorkersService {
           ));
       final prefs = await SharedPreferences.getInstance();
 
-      var token = prefs!.getString(tokenKey)!;
+      var token = prefs.getString(tokenKey);
 
       Response response = await dio.post(
         baseUrl + 'shifts/removeWorkers',
@@ -276,7 +276,7 @@ class WorkersService {
         },
         options: Options(
           headers: {
-            authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
+            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
           },
         ),
       );
@@ -322,7 +322,7 @@ class WorkersService {
         },
         options: Options(
           headers: {
-            authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
+            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
           },
         ),
       );
@@ -359,7 +359,7 @@ class WorkersService {
       Response response = await dio.get(baseUrl + 'workerType/' + processId,
           options: Options(
             headers: {
-              authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
+              authorization: 'Bearer ' + prefs.getString(tokenKey)!,
             },
           ));
 
@@ -408,7 +408,7 @@ class WorkersService {
         },
         options: Options(
           headers: {
-            authorization: 'Bearer ' + prefs!.getString(tokenKey)!,
+            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
           },
         ),
       );
