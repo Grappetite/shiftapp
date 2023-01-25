@@ -306,7 +306,12 @@ class _DropDownPageState extends State<DropDownPage> {
                                           processSelected: processSelected,
                                         ),
                                       ),
-                                    );
+                                    ).then((value) {
+                                      shiftList!.clear();
+                                      setState(() {
+
+                                    });
+                                    });
                                   } else {
                                     EasyLoading.showError(
                                         'Shift already started by another supervisor');
@@ -338,7 +343,12 @@ class _DropDownPageState extends State<DropDownPage> {
                                           processSelected: processSelected,
                                         ),
                                       ),
-                                    );
+                                    ).then((value) {
+                                      shiftList!.clear();
+                                      setState(() {
+
+                                    });
+                                    });
                                   } else {
                                     shiftList = shifts.data;
                                     setState(() {});
@@ -366,7 +376,12 @@ class _DropDownPageState extends State<DropDownPage> {
                                         processSelected: processSelected,
                                       ),
                                     ),
-                                  );
+                                  ).then((value) {
+                                    shiftList!.clear();
+                                    setState(() {
+
+                                    });
+                                  });
                                 } else {
                                   EasyLoading.showError('Please select shift');
                                 }

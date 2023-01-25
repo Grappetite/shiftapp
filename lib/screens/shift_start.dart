@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shiftapp/screens/inner_widgets/alert_cancel_ok_buttons.dart';
 import 'package:shiftapp/screens/workers_listing.dart';
 import 'package:shiftapp/util/string.dart';
 
 import '../config/constants.dart';
 import '../model/login_model.dart';
 import '../model/shifts_model.dart';
+import 'inner_widgets/alert_title_label.dart';
 import 'inner_widgets/change_shift_time.dart';
 
 class ShiftStart extends StatefulWidget {
@@ -19,6 +21,7 @@ class ShiftStart extends StatefulWidget {
   final ShiftItem selectedShift;
   final yesterdayEfficiency;
   final bestEfficiency;
+
   const ShiftStart(
       {Key? key,
       required this.processSelected,
@@ -406,21 +409,387 @@ class _ShiftStartState extends State<ShiftStart> {
                   widget.selectedShift.displayScreen! == 3) {
                 return;
               }
+              if (startTimeOriginal == null) {
+                startTimeOriginal = widget.selectedShift.startTime!;
+              }
+              if (endTimeOriginal == null) {
+                endTimeOriginal = widget.selectedShift.endTime!;
+              }
+              if (DateTime.now()
+                          .difference(DateTime.parse(startTimeOriginal))
+                          .inHours >
+                      1
+                  ) {
+                // TextEditingController controller = TextEditingController();
+                // TextEditingController controller2 = TextEditingController();
+                //
+                // bool timeSelected = true;
+                // bool checkboxForComment = false;
+                var test = await showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext contexts) {
+                      return AlertDialog(
+                          insetPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          backgroundColor: Colors.transparent,
+                          content: Container(
+                              width: MediaQuery.of(context).size.width / 1.15,
+                              height: MediaQuery.of(context).size.height / 2.25,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                border:
+                                    Border.all(color: Colors.grey, width: 3),
+                              ),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 8),
+                                    child: Align(
+                                      alignment: Alignment.topRight,
+                                      child: IconButton(
+                                        onPressed: () {
+                                          Navigator.pop(context, false);
+                                        },
+                                        icon: const Icon(
+                                          Icons.close,
+                                          color: kPrimaryColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 24),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const AlertTitleLabel(
+                                            title: 'Verify SHIFT TIME',
+                                          ),
+                                          const SizedBox(
+                                            height: 16,
+                                          ),
+                                          const Text(
+                                              'Please confirm shift time change:'),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          buildInfoItem(
+                                            'Date',
+                                            widget.selectedShift
+                                                .showStartDateOnly,
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          buildInfoItem(
+                                              'Start Time',
+                                              widget.selectedShift.startTime!
+                                                  .timeToShow),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          buildInfoItem(
+                                              'End Time',
+                                              widget.selectedShift.endTime!
+                                                  .timeToShow),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          buildInfoItem(
+                                            'Shift Length',
+                                            widget.selectedShift.endDateObject
+                                                    .difference(widget
+                                                        .selectedShift
+                                                        .startDateObject)
+                                                    .inHours
+                                                    .toString() +
+                                                ' ' +
+                                                'Hours : ' +
+                                                (widget.selectedShift
+                                                            .endDateObject
+                                                            .difference(widget
+                                                                .selectedShift
+                                                                .startDateObject)
+                                                            .inMinutes %
+                                                        60)
+                                                    .toString() +
+                                                ' Minutes',
+                                          ),
+                                          const SizedBox(
+                                            height: 16,
+                                          ),
+                                          AlertCancelOk(
+                                              okHandler: () async {
+                                                Navigator.pop(context);
+                                                var waitVal =
+                                                    await Navigator.of(context)
+                                                        .push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        WorkersListing(
+                                                      shiftId: null,
+                                                      processId: widget
+                                                          .processSelected.id!,
+                                                      selectedShift:
+                                                          widget.selectedShift,
+                                                      process: widget
+                                                          .processSelected,
+                                                    ),
+                                                  ),
+                                                );
 
-              var waitVal = await Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => WorkersListing(
-                    shiftId: null,
-                    processId: widget.processSelected.id!,
-                    selectedShift: widget.selectedShift,
-                    process: widget.processSelected,
+                                                if (waitVal != null) {
+                                                  if (waitVal == true) {
+                                                    this.widget.popBack.call();
+                                                  }
+                                                }
+                                              },
+                                              okButton: 'Correct'.toUpperCase(),
+                                              cancelTitle: "Change start time",
+                                              cancelHandler: () {
+                                                Navigator.pop(contexts);
+
+                                                if (startTimeOriginal == null) {
+                                                  startTimeOriginal = widget
+                                                      .selectedShift.startTime!;
+                                                }
+                                                if (endTimeOriginal == null) {
+                                                  endTimeOriginal = widget
+                                                      .selectedShift.endTime!;
+                                                }
+                                                var maxtime = DateTime.parse(
+                                                        startTimeOriginal)
+                                                    .add(Duration(
+                                                        minutes: DateTime.parse(
+                                                                    endTimeOriginal)
+                                                                .difference(
+                                                                    DateTime.parse(
+                                                                        startTimeOriginal))
+                                                                .inHours *
+                                                            60));
+                                                var mintime = DateTime.parse(
+                                                        startTimeOriginal)
+                                                    .subtract(
+                                                        Duration(minutes: 120));
+                                                DateTime? newTime =
+                                                    DateTime.now();
+                                                showCupertinoModalPopup(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext builder) {
+                                                      return Container(
+                                                        color: Colors.white,
+                                                        height: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width,
+                                                        width: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width,
+                                                        child: Column(
+                                                          children: [
+                                                            Expanded(
+                                                                flex: 1,
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child: Text(
+                                                                      "Shift time can only be re-set 2 hours in advance of the new time.",
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color:
+                                                                            kPrimaryColor,
+                                                                      )),
+                                                                )),
+                                                            Expanded(
+                                                              flex: 4,
+                                                              child:
+                                                                  CupertinoDatePicker(
+                                                                mode: CupertinoDatePickerMode
+                                                                    .dateAndTime,
+                                                                onDateTimeChanged:
+                                                                    (value) async {
+                                                                  newTime =
+                                                                      value;
+                                                                },
+                                                                initialDateTime:
+                                                                    DateTime
+                                                                        .now(),
+                                                                minimumDate:
+                                                                    mintime,
+                                                                maximumDate:
+                                                                    maxtime,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    }).then((value) async {
+                                                  if (newTime != null) {
+                                                    customSelectedStartTime = widget
+                                                        .selectedShift
+                                                        .makeTimeStringFromHourMinute(
+                                                            newTime!.hour,
+                                                            newTime!.minute);
+                                                    DateTime tempStart = DateFormat(
+                                                            "yyyy-MM-dd hh:mm:ss")
+                                                        .parse(
+                                                            startTimeOriginal);
+                                                    DateTime tempEnd = DateFormat(
+                                                            "yyyy-MM-dd hh:mm:ss")
+                                                        .parse(endTimeOriginal);
+                                                    var differenceT = tempEnd
+                                                        .difference(tempStart)
+                                                        .inMinutes;
+
+                                                    String endDate = '';
+
+                                                    print('object');
+
+                                                    bool? selected =
+                                                        await showDialog(
+                                                            context: context,
+                                                            barrierDismissible:
+                                                                false,
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return ChangeShiftTime(
+                                                                hours: tempEnd
+                                                                        .difference(
+                                                                            tempStart)
+                                                                        .inHours
+                                                                        .toString() +
+                                                                    ' ' +
+                                                                    'Hours : ' +
+                                                                    (tempEnd.difference(tempStart).inMinutes %
+                                                                            60)
+                                                                        .toString() +
+                                                                    ' Minutes',
+                                                                date: widget
+                                                                    .selectedShift
+                                                                    .showStartDateOnly,
+                                                                endTime: newTime!
+                                                                    .add(Duration(
+                                                                        minutes:
+                                                                            differenceT))
+                                                                    .toString()
+                                                                    .timeToShow,
+                                                                startTime: newTime
+                                                                    .toString()
+                                                                    .timeToShow,
+                                                              );
+                                                            });
+
+                                                    if (selected == true) {
+                                                      if (endDate.isNotEmpty) {
+                                                        widget.selectedShift
+                                                            .endTime = endDate;
+                                                      }
+                                                      setState(() {
+                                                        widget.selectedShift
+                                                                .startTime =
+                                                            customSelectedStartTime;
+                                                        widget.selectedShift.endTime = widget
+                                                            .selectedShift
+                                                            .makeTimeStringFromHourMinuteMahboob(
+                                                                DateTime(
+                                                                  newTime!
+                                                                      .add(Duration(
+                                                                          minutes:
+                                                                              differenceT))
+                                                                      .year,
+                                                                  newTime!
+                                                                      .add(Duration(
+                                                                          minutes:
+                                                                              differenceT))
+                                                                      .month,
+                                                                  newTime!
+                                                                      .add(Duration(
+                                                                          minutes:
+                                                                              differenceT))
+                                                                      .day,
+                                                                ),
+                                                                newTime!
+                                                                    .add(Duration(
+                                                                        minutes:
+                                                                            differenceT))
+                                                                    .hour,
+                                                                newTime!
+                                                                    .add(Duration(
+                                                                        minutes:
+                                                                            differenceT))
+                                                                    .minute);
+                                                      });
+                                                      var waitVal =
+                                                          await Navigator.of(
+                                                                  context)
+                                                              .push(
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              WorkersListing(
+                                                            shiftId: null,
+                                                            processId: widget
+                                                                .processSelected
+                                                                .id!,
+                                                            selectedShift: widget
+                                                                .selectedShift,
+                                                            process: widget
+                                                                .processSelected,
+                                                          ),
+                                                        ),
+                                                      );
+
+                                                      if (waitVal != null) {
+                                                        if (waitVal == true) {
+                                                          this
+                                                              .widget
+                                                              .popBack
+                                                              .call();
+                                                        }
+                                                      }
+                                                    }
+                                                  }
+                                                });
+                                              }),
+                                          Expanded(
+                                            child: Container(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )));
+                    });
+              } else {
+                var waitVal = await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => WorkersListing(
+                      shiftId: null,
+                      processId: widget.processSelected.id!,
+                      selectedShift: widget.selectedShift,
+                      process: widget.processSelected,
+                    ),
                   ),
-                ),
-              );
+                );
 
-              if (waitVal != null) {
-                if (waitVal == true) {
-                  this.widget.popBack.call();
+                if (waitVal != null) {
+                  if (waitVal == true) {
+                    this.widget.popBack.call();
+                  }
                 }
               }
             },
@@ -431,6 +800,35 @@ class _ShiftStartState extends State<ShiftStart> {
           height: 16,
         ),
       ],
+    );
+  }
+
+  Padding buildInfoItem(String labelName, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              '$labelName:',
+              style: const TextStyle(
+                color: kPrimaryColor,
+                fontWeight: FontWeight.w600,
+                fontSize: 15,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(
+                color: kPrimaryColor,
+                fontSize: 15,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

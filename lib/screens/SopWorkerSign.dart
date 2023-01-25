@@ -89,7 +89,6 @@ class _SopWorkerSignState extends State<SopWorkerSign> {
 
   var isTimeOver = false;
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,7 +176,8 @@ class _SopWorkerSignState extends State<SopWorkerSign> {
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Container(
-                                      padding: EdgeInsets.all(4), // Border width
+                                      padding: EdgeInsets.all(4),
+                                      // Border width
                                       decoration: BoxDecoration(
                                           color: Colors.white,
                                           shape: BoxShape.circle),
@@ -329,44 +329,55 @@ class _SopWorkerSignState extends State<SopWorkerSign> {
                                   child: PElevatedButton(
                                       shrink: true,
                                       onPressed: () async {
-                                        await EasyLoading.show(
-                                          status: 'loading...',
-                                          maskType: EasyLoadingMaskType.black,
-                                        );
-                                        PictureDetails pictureDetails = widget
+                                        if (!widget
                                             .workerListToTrain![pagePosition]
                                             .painterController
-                                            .finish();
-                                        // String link =
-                                        //     await FirebaseClient.submitPicture(await pictureDetails.toPNG(), 'png');
-                                        List<int> imageBytes =
-                                            (await pictureDetails.toPNG());
+                                            .isEmpty) {
+                                          await EasyLoading.show(
+                                            status: 'loading...',
+                                            maskType: EasyLoadingMaskType.black,
+                                          );
+                                          PictureDetails pictureDetails = widget
+                                              .workerListToTrain![pagePosition]
+                                              .painterController
+                                              .finish();
+                                          // String link =
+                                          //     await FirebaseClient.submitPicture(await pictureDetails.toPNG(), 'png');
+                                          List<int> imageBytes =
+                                              (await pictureDetails.toPNG());
 
-                                        String tempPath =
-                                            (await getTemporaryDirectory()).path;
-                                        File file = File(
-                                            '$tempPath/${DateTime.now().microsecondsSinceEpoch}.png');
-                                        await file.writeAsBytes(imageBytes);
+                                          String tempPath =
+                                              (await getTemporaryDirectory())
+                                                  .path;
+                                          File file = File(
+                                              '$tempPath/${DateTime.now().microsecondsSinceEpoch}.png');
+                                          await file.writeAsBytes(imageBytes);
 
-                                        await SOPService.postSign(
-                                          file,
-                                          widget.sopDetail,
-                                          widget.workerListToTrain![pagePosition],
-                                          executionShiftId:
-                                              widget.executionShiftId,
-                                        );
-                                        await EasyLoading.dismiss();
-                                        pageController.nextPage(
-                                          duration: Duration(seconds: 1),
-                                          curve: Curves.fastLinearToSlowEaseIn,
-                                        );
-                                        if (pagePosition ==
-                                            widget.workerListToTrain!.length -
-                                                1) {
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
+                                          await SOPService.postSign(
+                                            file,
+                                            widget.sopDetail,
+                                            widget.workerListToTrain![
+                                                pagePosition],
+                                            executionShiftId:
+                                                widget.executionShiftId,
+                                          );
+                                          await EasyLoading.dismiss();
+                                          pageController.nextPage(
+                                            duration: Duration(seconds: 1),
+                                            curve:
+                                                Curves.fastLinearToSlowEaseIn,
+                                          );
+                                          if (pagePosition ==
+                                              widget.workerListToTrain!.length -
+                                                  1) {
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                          }
+                                        } else {
+                                          EasyLoading.showError(
+                                              "Please Sign or Decline");
                                         }
                                         // Navigator.of(context)
                                         //     .push(MaterialPageRoute(
