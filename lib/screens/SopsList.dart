@@ -380,11 +380,73 @@ class _SopsListState extends State<SopsList> {
                             ),
                           ),
                           widget.sopDetail.sopStep![pagePosition].detail != null
+                              ? widget.sopDetail.sopStep![pagePosition].detail!
+                                      .isNotEmpty
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0, right: 8.0, top: 8.0),
+                                      child: Text(
+                                        "Description:",
+                                        style: const TextStyle(
+                                            color: kPrimaryColor,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )
+                                  : Container()
+                              : Container(),
+                          widget.sopDetail.sopStep![pagePosition].detail != null
+                              ? widget.sopDetail.sopStep![pagePosition].detail!
+                                      .isNotEmpty
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0, right: 8.0, top: 0.0),
+                                      child: Html(
+                                        data:
+                                            "${widget.sopDetail.sopStep![pagePosition].detail}",
+                                      ),
+                                    )
+                                  : Container()
+                              : Container(),
+                          widget.sopDetail.sopStep![pagePosition]
+                                      .sopWorkerType !=
+                                  null
+                              ? widget.sopDetail.sopStep![pagePosition]
+                              .sopWorkerType!.isNotEmpty?Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 8.0, right: 8.0, top: 8.0),
+                                  child: Text(
+                                    "Worker Type:",
+                                    style: const TextStyle(
+                                        color: kPrimaryColor,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )  : Container()
+                              : Container(),
+                          widget.sopDetail.sopStep![pagePosition]
+                                      .sopWorkerType !=
+                                  null
+                              ?widget.sopDetail.sopStep![pagePosition]
+                              .sopWorkerType!.isNotEmpty? Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 8.0, right: 8.0, top: 8.0),
+                                  child: Text(
+                                    "${workers}",
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                )
+                              : Container() : Container(),
+                          widget.sopDetail.sopStep![pagePosition].equipment !=
+                                  null
                               ? Padding(
                                   padding: const EdgeInsets.only(
                                       left: 8.0, right: 8.0, top: 8.0),
                                   child: Text(
-                                    "Description:",
+                                    "Equipments required:",
                                     style: const TextStyle(
                                         color: kPrimaryColor,
                                         fontSize: 15,
@@ -392,96 +454,62 @@ class _SopsListState extends State<SopsList> {
                                   ),
                                 )
                               : Container(),
-                          widget.sopDetail.sopStep![pagePosition].detail != null
+                          widget.sopDetail.sopStep![pagePosition].equipment !=
+                                  null
                               ? Padding(
                                   padding: const EdgeInsets.only(
                                       left: 8.0, right: 8.0, top: 8.0),
-                                  child: Html(
-                                    data:
-                                        "${widget.sopDetail.sopStep![pagePosition].detail}",
+                                  child: Text(
+                                    "${widget.sopDetail.sopStep![pagePosition].equipment}",
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 )
                               : Container(),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8.0, right: 8.0, top: 8.0),
-                            child: Text(
-                              "Worker Type:",
-                              style: const TextStyle(
-                                  color: kPrimaryColor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8.0, right: 8.0, top: 8.0),
-                            child: Text(
-                              "${workers}",
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8.0, right: 8.0, top: 8.0),
-                            child: Text(
-                              "Equipments required:",
-                              style: const TextStyle(
-                                  color: kPrimaryColor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8.0, right: 8.0, top: 8.0),
-                            child: Text(
-                              "${widget.sopDetail.sopStep![pagePosition].equipment}",
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 8.0, right: 8.0, top: 8.0),
-                            child: Text(
-                              "Photo:",
-                              style: const TextStyle(
-                                  color: kPrimaryColor,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => PreviewImage(
-                                          image: widget
-                                              .sopDetail
-                                              .sopStep![pagePosition]
-                                              .imageUrl)));
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 8.0, right: 8.0, top: 8.0),
-                              child: Container(
-                                height: 260,
-                                width: 260,
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                        image: NetworkImage(
-                                            "${widget.sopDetail.sopStep![pagePosition].imageUrl}"),
-                                        fit: BoxFit.fill)),
-                              ),
-                            ),
-                          ),
+                          widget.sopDetail.sopStep![pagePosition].imageUrl !=
+                                  null
+                              ? Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 8.0, right: 8.0, top: 8.0),
+                                  child: Text(
+                                    "Photo:",
+                                    style: const TextStyle(
+                                        color: kPrimaryColor,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                )
+                              : Container(),
+                          widget.sopDetail.sopStep![pagePosition].imageUrl !=
+                                  null
+                              ? GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => PreviewImage(
+                                                image: widget
+                                                    .sopDetail
+                                                    .sopStep![pagePosition]
+                                                    .imageUrl)));
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 8.0, right: 8.0, top: 8.0),
+                                    child: Container(
+                                      height: 260,
+                                      width: 260,
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: NetworkImage(
+                                                  "${widget.sopDetail.sopStep![pagePosition].imageUrl}"),
+                                              fit: BoxFit.fill)),
+                                    ),
+                                  ),
+                                )
+                              : Container(),
                         ],
                       ),
                     ),
