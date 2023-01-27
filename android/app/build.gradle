@@ -75,5 +75,5 @@ dependencies {
 }
 
 static def getFileNameByDate() {
-    return new SimpleDateFormat("MMM_dd_yyyy_01", Locale.getDefault()).format(Calendar.getInstance().getTime())
+    return new SimpleDateFormat("MMM_dd_yyyy hh:mm:ss", Locale.getDefault()).format(Calendar.getInstance().getTime())
 }
