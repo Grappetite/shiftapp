@@ -241,7 +241,7 @@ class _WorkersListingState extends State<WorkersListing> {
             const SizedBox(
               height: 8,
             ),
-            Expanded(
+            listLists.isNotEmpty? Expanded(
               child: WorkItemView(
                 currentIntex: 0,
                 totalItems: 3,
@@ -257,7 +257,7 @@ class _WorkersListingState extends State<WorkersListing> {
                 execShiftId: 0,
                 workerType: this.workerType,
               ),
-            ),
+            ):Container(),
             const SizedBox(
               height: 8,
             ),

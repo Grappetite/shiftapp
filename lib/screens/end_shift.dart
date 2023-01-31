@@ -346,10 +346,10 @@ class _EndShiftViewState extends State<EndShiftView> {
                 child: ExplainerWidget(
                   iconName: 'SopTraining',
                   title: 'SOP TRAINING',
-                  text1: sopCount != null
+                  text1: sopCount != 0
                       ? '${sopCount} Workers require SOP Training'
-                      : "",
-                  text2: sopCount != null ? 'Tap to train now' : "",
+                      :  "",
+                  text2: sopCount != 0 ? 'Tap to train now' : "Tap to view Sops",
                   onTap: () async {
                     await Navigator.push(
                         context,
@@ -472,12 +472,12 @@ class _EndShiftViewState extends State<EndShiftView> {
     );
   }
 
-  var sopCount;
+  var sopCount=0;
   void loadExpectedUnits() async {
     expectedUnits = 0;
     var shiftWorkerList =
         await WorkersService.getAllShiftWorkersList(executeShiftId!);
-    sopCount = shiftWorkerList!.sopCount;
+    sopCount = shiftWorkerList!.sopCount!;
     for (var calculation in shiftWorkerList!.data!) {
       expectedUnits = expectedUnits +
           ((((calculation.actualTimeloggedout!

@@ -62,9 +62,9 @@ class Datum {
         updatedAt: json["updated_at"] == null
             ? null
             : DateTime.parse(json["updated_at"]),
-        stepCount: json["stepCount"] == null ? null : json["stepCount"],
+        stepCount: json["stepCount"] == null ? 0 : json["stepCount"],
         trainingRequired:
-            json["trainingRequired"] == null ? null : json["trainingRequired"],
+            json["trainingRequired"] == null ? 0 : json["trainingRequired"],
         sopStep: json["sopStep"] == null
             ? null
             : List<SopStep>.from(

@@ -259,7 +259,7 @@ class _SopViewState extends State<SopView> {
                                         subheading2:
                                             "${sopData!.data![index].sopStep!.length} Steps",
                                         heading2:
-                                            "(${widget.processSelected.name})",
+                                            "",
                                         image: "assets/icon/icon_logo.jpg",
                                         assets: true,
                                         remaining: sopData!.data![index]
@@ -494,7 +494,7 @@ class _SopViewState extends State<SopView> {
                                         subheading2:
                                             "${sopData!.data![index].sopStep!.length} Steps",
                                         heading2:
-                                            "(${widget.processSelected.name})",
+                                            "",
                                         image: "assets/icon/icon_logo.jpg",
                                         assets: true,
                                         remaining: sopData!.data![index]
