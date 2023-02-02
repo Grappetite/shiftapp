@@ -75,7 +75,7 @@ class _SopWorkerSignState extends State<SopWorkerSign> {
       onSelected: (int value) {},
       onCanceled: () {},
       elevation: 4,
-      icon: const Icon(Icons.more_vert),
+      icon: const Icon(Icons.more_vert,color: Colors.white,),
       offset: const Offset(0, 65),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
