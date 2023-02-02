@@ -386,8 +386,11 @@ class _DropDownPageState extends State<DropDownPage> {
                                   EasyLoading.showError('Please select shift');
                                 }
                               }
+                              else{
+                                EasyLoading.showError('Could not load shifts');
+                              }
                             }
-                            print("object");
+                            // print("object");
                             return;
                           },
                           text: 'NEXT',
