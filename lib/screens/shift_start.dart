@@ -415,11 +415,15 @@ class _ShiftStartState extends State<ShiftStart> {
               if (endTimeOriginal == null) {
                 endTimeOriginal = widget.selectedShift.endTime!;
               }
-              if (DateTime.now()
-                          .difference(DateTime.parse(startTimeOriginal))
-                          .inHours >
-                      1
-                  ) {
+              print(DateTime.parse(startTimeOriginal)
+                  .difference(DateTime.now())
+                  .inMinutes);
+              if (DateTime.parse(startTimeOriginal)
+                      .difference(DateTime.now())
+                      .inMinutes <
+                  60 && DateTime.parse(startTimeOriginal)
+                  .difference(DateTime.now())
+                  .inMinutes>-1) {
                 // TextEditingController controller = TextEditingController();
                 // TextEditingController controller2 = TextEditingController();
                 //
