@@ -135,12 +135,14 @@ class _SopWorkerSignState extends State<SopWorkerSign> {
                         SizedBox(
                           width: 10,
                         ),
-                        Text(
-                          "${widget.heading} COMPLETED",
-                          style: const TextStyle(
-                            color: kPrimaryColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
+                        Expanded(
+                          child: Text(
+                            "${widget.heading} COMPLETED",
+                            style: const TextStyle(
+                              color: kPrimaryColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 18,
+                            ),
                           ),
                         ),
                       ],
