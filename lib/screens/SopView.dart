@@ -199,47 +199,6 @@ class _SopViewState extends State<SopView> {
                             },
                           ),
                         ),
-                        // SizedBox(
-                        //   width: 30,
-                        // ),
-                        // Expanded(
-                        //   child: TextFormField(
-                        //     enabled: false,
-                        //     enableSuggestions: false,
-                        //     enableIMEPersonalizedLearning: false,
-                        //     enableInteractiveSelection: false,
-                        //     expands: false,
-                        //     controller: TextEditingController(
-                        //         text: "${widget.processSelected.name!}"),
-                        //     maxLines: 1,
-                        //     decoration: InputDecoration(
-                        //       suffixIcon: Icon(
-                        //         Icons.keyboard_arrow_down,
-                        //         color: Colors.white,
-                        //       ),
-                        //       label: Text("Process"),
-                        //       enabledBorder: const OutlineInputBorder(
-                        //         borderSide: const BorderSide(
-                        //             color: Colors.grey, width: 0.0),
-                        //       ),
-                        //       focusedBorder: const OutlineInputBorder(
-                        //         borderSide: const BorderSide(
-                        //             color: Colors.grey, width: 0.0),
-                        //       ),
-                        //       border: const OutlineInputBorder(
-                        //         borderSide: const BorderSide(
-                        //             color: Colors.grey, width: 0.0),
-                        //       ),
-                        //       enabled: false,
-                        //       hintStyle: TextStyle(
-                        //         color: Colors.grey[500],
-                        //         fontSize: 14,
-                        //       ),
-                        //     ),
-                        //     onChanged: (v) {
-                        //     },
-                        //   ),
-                        // ),
                       ],
                     ),
                   ),

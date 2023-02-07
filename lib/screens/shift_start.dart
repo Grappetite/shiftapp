@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:shiftapp/util/string.dart';
 import '../config/constants.dart';
 import '../model/login_model.dart';
 import '../model/shifts_model.dart';
+import '../widgets/elevated_button.dart';
 import 'inner_widgets/alert_title_label.dart';
 import 'inner_widgets/change_shift_time.dart';
 
@@ -149,7 +151,9 @@ class _ShiftStartState extends State<ShiftStart> {
                                         60));
                             var mintime = DateTime.parse(startTimeOriginal)
                                 .subtract(Duration(minutes: 120));
-                            DateTime? newTime = DateTime.now();
+                            DateTime? newTime;
+                            // = DateTime.now().subtract(
+                            //     Duration(minutes: DateTime.now().minute));
                             showCupertinoModalPopup(
                                 context: context,
                                 builder: (BuildContext builder) {
@@ -161,15 +165,33 @@ class _ShiftStartState extends State<ShiftStart> {
                                       children: [
                                         Expanded(
                                             flex: 1,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Text(
-                                                  "Shift time can only be re-set 2 hours in advance of the new time.",
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                    color: kPrimaryColor,
-                                                  )),
+                                            child: Column(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                      "Shift time can only be re-set 2 hours in advance of the new time.",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                        color: kPrimaryColor,
+                                                      )),
+                                                ),
+                                                Expanded(
+                                                  child: PElevatedButton(
+                                                    onPressed: () {
+                                                      // okHandler.call();
+                                                      if(newTime==null)
+                                                        {
+                                                          newTime=DateTime.now().roundDown();
+                                                        }
+                                                      Navigator.pop(context);
+                                                    },
+                                                    text: "Done",
+                                                  ),
+                                                ),
+                                              ],
                                             )),
                                         Expanded(
                                           flex: 4,
@@ -179,7 +201,9 @@ class _ShiftStartState extends State<ShiftStart> {
                                             onDateTimeChanged: (value) async {
                                               newTime = value;
                                             },
-                                            initialDateTime: DateTime.now(),
+                                            minuteInterval: 15,
+                                            initialDateTime:
+                                                DateTime.now().roundDown(),
                                             minimumDate: mintime,
                                             maximumDate: maxtime,
                                           ),
@@ -419,11 +443,13 @@ class _ShiftStartState extends State<ShiftStart> {
                   .difference(DateTime.now())
                   .inMinutes);
               if (DateTime.parse(startTimeOriginal)
-                      .difference(DateTime.now())
-                      .inMinutes <
-                  60 && DateTime.parse(startTimeOriginal)
-                  .difference(DateTime.now())
-                  .inMinutes>-1) {
+                          .difference(DateTime.now())
+                          .inMinutes <
+                      60 &&
+                  DateTime.parse(startTimeOriginal)
+                          .difference(DateTime.now())
+                          .inMinutes >
+                      -1) {
                 // TextEditingController controller = TextEditingController();
                 // TextEditingController controller2 = TextEditingController();
                 //
@@ -581,8 +607,14 @@ class _ShiftStartState extends State<ShiftStart> {
                                                         startTimeOriginal)
                                                     .subtract(
                                                         Duration(minutes: 120));
-                                                DateTime? newTime =
-                                                    DateTime.now();
+                                                DateTime? newTime;
+                                                // =
+                                                //     DateTime.now().subtract(
+                                                //         Duration(
+                                                //             minutes:
+                                                //                 DateTime.now()
+                                                //                     .minute));
+
                                                 showCupertinoModalPopup(
                                                     context: context,
                                                     builder:
@@ -601,21 +633,39 @@ class _ShiftStartState extends State<ShiftStart> {
                                                           children: [
                                                             Expanded(
                                                                 flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
-                                                                  child: Text(
-                                                                      "Shift time can only be re-set 2 hours in advance of the new time.",
-                                                                      textAlign:
-                                                                          TextAlign
+                                                                child: Column(
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child: Text(
+                                                                          "Shift time can only be re-set 2 hours in advance of the new time.",
+                                                                          textAlign: TextAlign
                                                                               .center,
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color:
-                                                                            kPrimaryColor,
-                                                                      )),
+                                                                          style:
+                                                                              const TextStyle(
+                                                                            color:
+                                                                                kPrimaryColor,
+                                                                          )),
+                                                                    ),
+                                                                    Expanded(
+                                                                      child:
+                                                                          PElevatedButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                              if(newTime==null)
+                                                                              {
+                                                                                newTime=DateTime.now().roundDown();
+                                                                              }
+                                                                              Navigator.pop(context);
+                                                                          // okHandler.call();
+                                                                        },
+                                                                        text:
+                                                                            "Done",
+                                                                      ),
+                                                                    ),
+                                                                  ],
                                                                 )),
                                                             Expanded(
                                                               flex: 4,
@@ -623,14 +673,19 @@ class _ShiftStartState extends State<ShiftStart> {
                                                                   CupertinoDatePicker(
                                                                 mode: CupertinoDatePickerMode
                                                                     .dateAndTime,
+                                                                initialDateTime:
+                                                                    DateTime.now()
+                                                                        .roundDown(),
+                                                                minuteInterval:
+                                                                    15,
                                                                 onDateTimeChanged:
                                                                     (value) async {
                                                                   newTime =
                                                                       value;
                                                                 },
-                                                                initialDateTime:
-                                                                    DateTime
-                                                                        .now(),
+                                                                // initialDateTime:
+                                                                //     DateTime
+                                                                //         .now(),
                                                                 minimumDate:
                                                                     mintime,
                                                                 maximumDate:
@@ -907,5 +962,20 @@ class TimerTopWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+extension on DateTime {
+  DateTime roundDown() {
+    return DateTime(
+        this.year,
+        this.month,
+        this.day,
+        this.hour,
+        (this.minute / 15).round() * 15,
+        this.second,
+        this.millisecond,
+        this.microsecond);
+    ;
   }
 }

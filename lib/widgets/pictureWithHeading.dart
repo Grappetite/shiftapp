@@ -33,7 +33,7 @@ class pictureWithHeading extends StatelessWidget {
         padding: const EdgeInsets.all(5.0),
         child: Container(
           padding: EdgeInsets.all(10),
-          height: suffix != null ? 90 : 80,
+          height: suffix != null ? 100 : 90,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
@@ -63,73 +63,78 @@ class pictureWithHeading extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            suffix != null
-                                ? RichText(
-                                    text: TextSpan(children: [
-                                    TextSpan(
-                                      text: heading!,
+                        Expanded(flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              suffix != null
+                                  ? RichText(
+                                      text: TextSpan(children: [
+                                      TextSpan(
+                                        text: heading!,
+                                        style: const TextStyle(
+                                          color: kPrimaryColor,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: heading2!,
+                                        style: const TextStyle(
+                                          color: kPrimaryColor,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ]))
+                                  : Text(
+                                      heading!,
                                       style: const TextStyle(
                                         color: kPrimaryColor,
                                         fontWeight: FontWeight.w600,
-                                        fontSize: 14,
+                                        fontSize: 18,
                                       ),
                                     ),
-                                    TextSpan(
-                                      text: heading2!,
+                              suffix != null
+                                  ? Text(
+                                      subheading!,
+                                      style: const TextStyle(
+                                          color: kPrimaryColor, fontSize: 12),
+                                    )
+                                  : Text(
+                                      subheading!,
                                       style: const TextStyle(
                                         color: kPrimaryColor,
-                                        fontSize: 12,
+                                        fontSize: 18,
                                       ),
                                     ),
-                                  ]))
-                                : Text(
-                                    heading!,
-                                    style: const TextStyle(
-                                      color: kPrimaryColor,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                            suffix != null
-                                ? Text(
-                                    subheading!,
-                                    style: const TextStyle(
-                                        color: kPrimaryColor, fontSize: 12),
-                                  )
-                                : Text(
-                                    subheading!,
-                                    style: const TextStyle(
-                                      color: kPrimaryColor,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                            Spacer(),
-                            suffix != null
-                                ? Text(
-                                    subheading2!,
-                                    style: const TextStyle(
-                                        color: kPrimaryColor, fontSize: 12),
-                                  )
-                                : Container()
-                          ],
+                              Spacer(),
+                              suffix != null
+                                  ? Text(
+                                      subheading2!,
+                                      style: const TextStyle(
+                                          color: kPrimaryColor, fontSize: 12),
+                                    )
+                                  : Container()
+                            ],
+                          ),
                         ),
                         suffix != null
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  suffix!,
-                                  Text(
-                                    remaining!,
-                                    style: const TextStyle(
-                                        color: kPrimaryColor, fontSize: 12),
-                                  ),
-                                ],
-                              )
+                            ? Expanded(
+                          flex:1,
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    suffix!,
+                                    Text(
+                                      remaining!,
+                                      style: const TextStyle(
+                                          color: kPrimaryColor, fontSize: 12),
+                                    ),
+                                  ],
+                                ),
+                            )
                             : Container()
                       ],
                     ),
