@@ -68,7 +68,10 @@ class _SopViewState extends State<SopView> {
       onSelected: (int value) {},
       onCanceled: () {},
       elevation: 4,
-      icon: const Icon(Icons.more_vert,color: Colors.white,),
+      icon: const Icon(
+        Icons.more_vert,
+        color: Colors.white,
+      ),
       offset: const Offset(0, 65),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -174,10 +177,8 @@ class _SopViewState extends State<SopView> {
                             decoration: InputDecoration(
                               alignLabelWithHint: true,
                               prefixIcon: Icon(Icons.search),
-
                               prefixIconColor: Colors.grey,
                               hintText: "Search",
-
                               enabledBorder: const OutlineInputBorder(
                                 borderSide: const BorderSide(
                                     color: Colors.grey, width: 0.0),
@@ -193,8 +194,7 @@ class _SopViewState extends State<SopView> {
                             ),
                             onChanged: (v) {
                               setState(
-                                () {
-                                },
+                                () {},
                               );
                             },
                           ),
@@ -208,17 +208,17 @@ class _SopViewState extends State<SopView> {
                   sopData != null
                       ? sopData!.data!.length != 0
                           ? Expanded(
-                            child: ListView.separated(
+                              child: ListView.separated(
                                 itemBuilder: (context, index) {
                                   if (searchText.text.isEmpty) {
                                     return pictureWithHeading(
-                                        heading: "${sopData!.data![index].name}",
+                                        heading:
+                                            "${sopData!.data![index].name}",
                                         subheading:
                                             "Updated: ${DateFormat("yyyy-MM-dd").parse(sopData!.data![index].updatedAt.toString()).toString().split(" ")[0]}",
                                         subheading2:
                                             "${sopData!.data![index].sopStep!.length} Steps",
-                                        heading2:
-                                            "",
+                                        heading2: "",
                                         image: "assets/icon/icon_logo.jpg",
                                         assets: true,
                                         remaining: sopData!.data![index]
@@ -237,7 +237,8 @@ class _SopViewState extends State<SopView> {
                                                 ),
                                               )
                                             : Icon(
-                                                Icons.check_circle_outline_sharp,
+                                                Icons
+                                                    .check_circle_outline_sharp,
                                                 color: Colors.green,
                                               ),
                                         onPress: () {
@@ -268,7 +269,8 @@ class _SopViewState extends State<SopView> {
                                                             color: Colors.white,
                                                             borderRadius:
                                                                 BorderRadius
-                                                                    .circular(16),
+                                                                    .circular(
+                                                                        16),
                                                             border: Border.all(
                                                                 color:
                                                                     Colors.grey,
@@ -285,263 +287,38 @@ class _SopViewState extends State<SopView> {
                                                               Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(8.0),
+                                                                            .all(
+                                                                        8.0),
                                                                 child: Row(
                                                                   mainAxisAlignment:
                                                                       MainAxisAlignment
                                                                           .spaceBetween,
                                                                   children: [
-                                                                    Text(
-                                                                      "${sopData!.data![index].name}",
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color:
-                                                                            kPrimaryColor,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w600,
-                                                                        fontSize:
-                                                                            18,
+                                                                    Expanded(
+                                                                      child:
+                                                                          Text(
+                                                                        "${sopData!.data![index].name}",
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              kPrimaryColor,
+                                                                          fontWeight:
+                                                                              FontWeight.w600,
+                                                                          fontSize:
+                                                                              18,
+                                                                        ),
                                                                       ),
                                                                     ),
                                                                     GestureDetector(
-                                                                      onTap: () {
+                                                                      onTap:
+                                                                          () {
                                                                         Navigator.pop(
                                                                             context);
                                                                       },
-                                                                      child: Icon(
-                                                                        Icons
-                                                                            .close,
-                                                                        color: Colors
-                                                                            .grey,
-                                                                      ),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceEvenly,
-                                                                children: [
-                                                                  Column(
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
-                                                                    children: [
-                                                                      Text(
-                                                                        "${"Process:"}",
-                                                                        style: const TextStyle(
-                                                                            color:
-                                                                                kPrimaryColor,
-                                                                            fontSize:
-                                                                                12),
-                                                                      ),
-                                                                      Text(
-                                                                        "${"Updated:"}",
-                                                                        style: const TextStyle(
-                                                                            color:
-                                                                                kPrimaryColor,
-                                                                            fontSize:
-                                                                                12),
-                                                                      ),
-                                                                      Text(
-                                                                        "${"Steps:"}",
-                                                                        style: const TextStyle(
-                                                                            color:
-                                                                                kPrimaryColor,
-                                                                            fontSize:
-                                                                                12),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  Column(
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
-                                                                    children: [
-                                                                      Text(
-                                                                        "${"${widget.processSelected.name}"}",
-                                                                        style: const TextStyle(
-                                                                            color:
-                                                                                kPrimaryColor,
-                                                                            fontSize:
-                                                                                12),
-                                                                      ),
-                                                                      Text(
-                                                                        "${DateFormat("yyyy-MM-dd").parse(sopData!.data![index].updatedAt.toString()).toString().split(" ")[0]}",
-                                                                        style: const TextStyle(
-                                                                            color:
-                                                                                kPrimaryColor,
-                                                                            fontSize:
-                                                                                12),
-                                                                      ),
-                                                                      Text(
-                                                                        "${sopData!.data![index].sopStep!.length}",
-                                                                        style: const TextStyle(
-                                                                            color:
-                                                                                kPrimaryColor,
-                                                                            fontSize:
-                                                                                12),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              PElevatedButton(
-                                                                onPressed:
-                                                                    () async {
-                                                                  if(sopData!.data![index].trainingRequired != 0) {
-                                                                    Navigator.of(context).push(MaterialPageRoute(
-                                                                        builder: (context) => SelectTrainingWorker(
-                                                                            processSelected: widget
-                                                                                .processSelected,
-                                                                            selectedShift: widget
-                                                                                .selectedShift,
-                                                                            heading: sopData!.data![index].name
-                                                                                .toString(),
-                                                                            sopDetail: sopData!.data![
-                                                                                index],
-                                                                            executionShiftId:
-                                                                                widget.executionShiftId)));
-                                                                  }
-                                                                },
-                                                                backGroundColor: sopData!.data![index].trainingRequired != 0?kPrimaryColor:Colors.grey,
-                                                                text:
-                                                                    'Train SOP${sopData!.data![index].trainingRequired != 0 ? "(${sopData!.data![index].trainingRequired})" : ""}',
-                                                              ),
-                                                              PElevatedButton(
-                                                                onPressed:
-                                                                    () async {
-                                                                  Navigator.of(context).push(MaterialPageRoute(
-                                                                      builder: (context) => SopsList(
-                                                                          processSelected:
-                                                                              widget
-                                                                                  .processSelected,
-                                                                          selectedShift:
-                                                                              widget
-                                                                                  .selectedShift,
-                                                                          heading: sopData!
-                                                                              .data![
-                                                                                  index]
-                                                                              .name
-                                                                              .toString(),
-                                                                          train:
-                                                                              false,
-                                                                          sopDetail:
-                                                                              sopData!.data![
-                                                                                  index],
-                                                                          executionShiftId:
-                                                                              widget.executionShiftId)));
-                                                                },
-                                                                text: 'View SOP',
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ));
-                                                  })
-                                              .then((value) => getSop(
-                                                  widget.processSelected.id));
-                                        });
-                                  } else if (sopData!.data![index].name!
-                                      .toLowerCase()
-                                      .contains(searchText.text.toLowerCase())) {
-                                    return pictureWithHeading(
-                                        heading: "${sopData!.data![index].name}",
-                                        subheading:
-                                            "Updated: ${DateFormat("yyyy-MM-dd").parse(sopData!.data![index].updatedAt.toString()).toString().split(" ")[0]}",
-                                        subheading2:
-                                            "${sopData!.data![index].sopStep!.length} Steps",
-                                        heading2:
-                                            "",
-                                        image: "assets/icon/icon_logo.jpg",
-                                        assets: true,
-                                        remaining: sopData!.data![index]
-                                                    .trainingRequired !=
-                                                0
-                                            ? "Training required: ${sopData!.data![index].trainingRequired}"
-                                            : "",
-                                        suffix: sopData!.data![index]
-                                                    .trainingRequired !=
-                                                0
-                                            ? Icon(
-                                                Icons.info_outline_rounded,
-                                                color: Colors.red,
-                                              )
-                                            : Icon(
-                                                Icons.check_circle_outline_sharp,
-                                                color: Colors.green,
-                                              ),
-                                        onPress: () {
-                                          showDialog(
-                                                  context: context,
-                                                  barrierDismissible: false,
-                                                  builder: (BuildContext context) {
-                                                    return AlertDialog(
-                                                        insetPadding:
-                                                            const EdgeInsets
-                                                                    .fromLTRB(
-                                                                0, 0, 0, 0),
-                                                        backgroundColor:
-                                                            Colors.transparent,
-                                                        content: Container(
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width /
-                                                              1.15,
-                                                          height: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .height /
-                                                              3.75,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Colors.white,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(16),
-                                                            border: Border.all(
-                                                                color:
-                                                                    Colors.grey,
-                                                                width: 3),
-                                                          ),
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .start,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(8.0),
-                                                                child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .spaceBetween,
-                                                                  children: [
-                                                                    Text(
-                                                                      "${sopData!.data![index].name}",
-                                                                      style:
-                                                                          const TextStyle(
-                                                                        color:
-                                                                            kPrimaryColor,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w600,
-                                                                        fontSize:
-                                                                            18,
-                                                                      ),
-                                                                    ),
-                                                                    GestureDetector(
-                                                                      onTap: () {
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      },
-                                                                      child: Icon(
+                                                                      child:
+                                                                          Icon(
                                                                         Icons
                                                                             .close,
                                                                         color: Colors
@@ -628,15 +405,14 @@ class _SopViewState extends State<SopView> {
                                                                               index]
                                                                           .trainingRequired !=
                                                                       0) {
-                                                                    Navigator.of(context).push(
-                                                                        MaterialPageRoute(
-                                                                            builder: (context) => SelectTrainingWorker(
-                                                                                processSelected: widget.processSelected,
-                                                                                selectedShift: widget.selectedShift,
-                                                                                heading: sopData!.data![index].name.toString(),
-                                                                                sopDetail: sopData!.data![index],
-                                                                                executionShiftId: widget.executionShiftId
-                                                                                )));
+                                                                    Navigator.of(context).push(MaterialPageRoute(
+                                                                        builder: (context) => SelectTrainingWorker(
+                                                                            processSelected:
+                                                                                widget.processSelected,
+                                                                            selectedShift: widget.selectedShift,
+                                                                            heading: sopData!.data![index].name.toString(),
+                                                                            sopDetail: sopData!.data![index],
+                                                                            executionShiftId: widget.executionShiftId)));
                                                                   }
                                                                 },
                                                                 backGroundColor: sopData!
@@ -645,7 +421,8 @@ class _SopViewState extends State<SopView> {
                                                                             .trainingRequired !=
                                                                         0
                                                                     ? kPrimaryColor
-                                                                    : Colors.grey,
+                                                                    : Colors
+                                                                        .grey,
                                                                 text:
                                                                     'Train SOP${sopData!.data![index].trainingRequired != 0 ? "(${sopData!.data![index].trainingRequired})" : ""}',
                                                               ),
@@ -654,26 +431,265 @@ class _SopViewState extends State<SopView> {
                                                                     () async {
                                                                   Navigator.of(context).push(MaterialPageRoute(
                                                                       builder: (context) => SopsList(
-                                                                          processSelected:
-                                                                              widget
-                                                                                  .processSelected,
-                                                                          selectedShift:
-                                                                              widget
-                                                                                  .selectedShift,
-                                                                          heading: sopData!
-                                                                              .data![
-                                                                                  index]
-                                                                              .name
+                                                                          processSelected: widget
+                                                                              .processSelected,
+                                                                          selectedShift: widget
+                                                                              .selectedShift,
+                                                                          heading: sopData!.data![index].name
                                                                               .toString(),
                                                                           train:
                                                                               false,
-                                                                          sopDetail:
-                                                                              sopData!.data![
-                                                                                  index],
+                                                                          sopDetail: sopData!.data![
+                                                                              index],
                                                                           executionShiftId:
                                                                               widget.executionShiftId)));
                                                                 },
-                                                                text: 'View SOP',
+                                                                text:
+                                                                    'View SOP',
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ));
+                                                  })
+                                              .then((value) => getSop(
+                                                  widget.processSelected.id));
+                                        });
+                                  } else if (sopData!.data![index].name!
+                                      .toLowerCase()
+                                      .contains(
+                                          searchText.text.toLowerCase())) {
+                                    return pictureWithHeading(
+                                        heading:
+                                            "${sopData!.data![index].name}",
+                                        subheading:
+                                            "Updated: ${DateFormat("yyyy-MM-dd").parse(sopData!.data![index].updatedAt.toString()).toString().split(" ")[0]}",
+                                        subheading2:
+                                            "${sopData!.data![index].sopStep!.length} Steps",
+                                        heading2: "",
+                                        image: "assets/icon/icon_logo.jpg",
+                                        assets: true,
+                                        remaining: sopData!.data![index]
+                                                    .trainingRequired !=
+                                                0
+                                            ? "Training required: ${sopData!.data![index].trainingRequired}"
+                                            : "",
+                                        suffix: sopData!.data![index]
+                                                    .trainingRequired !=
+                                                0
+                                            ? Icon(
+                                                Icons.info_outline_rounded,
+                                                color: Colors.red,
+                                              )
+                                            : Icon(
+                                                Icons
+                                                    .check_circle_outline_sharp,
+                                                color: Colors.green,
+                                              ),
+                                        onPress: () {
+                                          showDialog(
+                                                  context: context,
+                                                  barrierDismissible: false,
+                                                  builder: (BuildContext context) {
+                                                    return AlertDialog(
+                                                        insetPadding:
+                                                            const EdgeInsets
+                                                                    .fromLTRB(
+                                                                0, 0, 0, 0),
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                        content: Container(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width /
+                                                              1.15,
+                                                          height: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .height /
+                                                              3.75,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        16),
+                                                            border: Border.all(
+                                                                color:
+                                                                    Colors.grey,
+                                                                width: 3),
+                                                          ),
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    Expanded(
+                                                                      child:
+                                                                          Text(
+                                                                        "${sopData!.data![index].name}",
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              kPrimaryColor,
+                                                                          fontWeight:
+                                                                              FontWeight.w600,
+                                                                          fontSize:
+                                                                              18,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        Navigator.pop(
+                                                                            context);
+                                                                      },
+                                                                      child:
+                                                                          Icon(
+                                                                        Icons
+                                                                            .close,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceEvenly,
+                                                                children: [
+                                                                  Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Text(
+                                                                        "${"Process:"}",
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                kPrimaryColor,
+                                                                            fontSize:
+                                                                                12),
+                                                                      ),
+                                                                      Text(
+                                                                        "${"Updated:"}",
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                kPrimaryColor,
+                                                                            fontSize:
+                                                                                12),
+                                                                      ),
+                                                                      Text(
+                                                                        "${"Steps:"}",
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                kPrimaryColor,
+                                                                            fontSize:
+                                                                                12),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Text(
+                                                                        "${"${widget.processSelected.name}"}",
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                kPrimaryColor,
+                                                                            fontSize:
+                                                                                12),
+                                                                      ),
+                                                                      Text(
+                                                                        "${DateFormat("yyyy-MM-dd").parse(sopData!.data![index].updatedAt.toString()).toString().split(" ")[0]}",
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                kPrimaryColor,
+                                                                            fontSize:
+                                                                                12),
+                                                                      ),
+                                                                      Text(
+                                                                        "${sopData!.data![index].sopStep!.length}",
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                kPrimaryColor,
+                                                                            fontSize:
+                                                                                12),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              PElevatedButton(
+                                                                onPressed:
+                                                                    () async {
+                                                                  if (sopData!
+                                                                          .data![
+                                                                              index]
+                                                                          .trainingRequired !=
+                                                                      0) {
+                                                                    Navigator.of(context).push(MaterialPageRoute(
+                                                                        builder: (context) => SelectTrainingWorker(
+                                                                            processSelected:
+                                                                                widget.processSelected,
+                                                                            selectedShift: widget.selectedShift,
+                                                                            heading: sopData!.data![index].name.toString(),
+                                                                            sopDetail: sopData!.data![index],
+                                                                            executionShiftId: widget.executionShiftId)));
+                                                                  }
+                                                                },
+                                                                backGroundColor: sopData!
+                                                                            .data![
+                                                                                index]
+                                                                            .trainingRequired !=
+                                                                        0
+                                                                    ? kPrimaryColor
+                                                                    : Colors
+                                                                        .grey,
+                                                                text:
+                                                                    'Train SOP${sopData!.data![index].trainingRequired != 0 ? "(${sopData!.data![index].trainingRequired})" : ""}',
+                                                              ),
+                                                              PElevatedButton(
+                                                                onPressed:
+                                                                    () async {
+                                                                  Navigator.of(context).push(MaterialPageRoute(
+                                                                      builder: (context) => SopsList(
+                                                                          processSelected: widget
+                                                                              .processSelected,
+                                                                          selectedShift: widget
+                                                                              .selectedShift,
+                                                                          heading: sopData!.data![index].name
+                                                                              .toString(),
+                                                                          train:
+                                                                              false,
+                                                                          sopDetail: sopData!.data![
+                                                                              index],
+                                                                          executionShiftId:
+                                                                              widget.executionShiftId)));
+                                                                },
+                                                                text:
+                                                                    'View SOP',
                                                               ),
                                                             ],
                                                           ),
@@ -692,10 +708,9 @@ class _SopViewState extends State<SopView> {
                                 itemCount: sopData!.data!.length,
                                 shrinkWrap: true,
                               ),
-                          )
+                            )
                           : Container(child: Center(child: Text("No Sops")))
                       : Container(),
-
                 ],
               ),
             ),

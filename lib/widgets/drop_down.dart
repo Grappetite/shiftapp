@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../config/constants.dart';
@@ -147,47 +148,90 @@ class _DropDownState extends State<DropDown> {
                                 width: MediaQuery.of(context).size.width - 128,
                                 height:
                                     MediaQuery.of(context).size.height / 4.5,
-                                child: Scrollbar(
-                                  thumbVisibility: true,
-                                  trackVisibility: true,
-                                  controller: ScrollController(
-                                      initialScrollOffset: 0.0),
-                                  child: ListView(children: [
-                                    for (int index = 0;
-                                        index < listToShow.length;
-                                        index++)
-                                      listToShow[index] != ""
-                                          ? Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.stretch,
-                                              children: [
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.pop(context);
+                                child: CupertinoScrollbar(
+                                  child: ListView.builder(
+                                    itemBuilder: (context, index) {
+                                      return
+                                          // for (int index = 0;
+                                          // index < listToShow.length;
+                                          // index++)
+                                          listToShow[index] != ""
+                                              ? Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .stretch,
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.pop(context);
 
-                                                    selectedString =
-                                                        listToShow[index];
+                                                        selectedString =
+                                                            listToShow[index];
 
-                                                    widget.onChange(
-                                                        selectedString);
-                                                  },
-                                                  child: Text(
-                                                    listToShow[index],
-                                                    style: const TextStyle(
-                                                        fontSize: 16),
-                                                  ),
-                                                ),
-                                                Divider(
-                                                  height: 12,
-                                                  thickness: 1,
-                                                  color: Colors.grey[50],
-                                                ),
-                                              ],
-                                            )
-                                          : Container()
-                                  ]),
+                                                        widget.onChange(
+                                                            selectedString);
+                                                      },
+                                                      child: Text(
+                                                        listToShow[index],
+                                                        style: const TextStyle(
+                                                            fontSize: 16),
+                                                      ),
+                                                    ),
+                                                    Divider(
+                                                      height: 12,
+                                                      thickness: 1,
+                                                      color: Colors.grey[50],
+                                                    ),
+                                                  ],
+                                                )
+                                              : Container();
+                                    },
+                                    itemCount: listToShow.length,
+                                  ),
+                                )
+                                // Scrollbar(
+                                //   thumbVisibility: true,
+                                //   trackVisibility: true,
+                                //   controller: ScrollController(
+                                //       initialScrollOffset: 0.0),
+                                //   child: ListView(
+                                //       primary:false,
+                                //       children: [
+                                //     for (int index = 0;
+                                //         index < listToShow.length;
+                                //         index++)
+                                //       listToShow[index] != ""
+                                //           ? Column(
+                                //               crossAxisAlignment:
+                                //                   CrossAxisAlignment.stretch,
+                                //               children: [
+                                //                 GestureDetector(
+                                //                   onTap: () {
+                                //                     Navigator.pop(context);
+                                //
+                                //                     selectedString =
+                                //                         listToShow[index];
+                                //
+                                //                     widget.onChange(
+                                //                         selectedString);
+                                //                   },
+                                //                   child: Text(
+                                //                     listToShow[index],
+                                //                     style: const TextStyle(
+                                //                         fontSize: 16),
+                                //                   ),
+                                //                 ),
+                                //                 Divider(
+                                //                   height: 12,
+                                //                   thickness: 1,
+                                //                   color: Colors.grey[50],
+                                //                 ),
+                                //               ],
+                                //             )
+                                //           : Container()
+                                //   ]),
+                                // ),
                                 ),
-                              ),
                       ],
                     );
                   },
