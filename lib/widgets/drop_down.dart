@@ -85,7 +85,8 @@ class _DropDownState extends State<DropDown> {
                   listToShow = widget.currentList;
                 }
                 searchField = "";
-
+                bool? test = false;
+                var sc = ScrollController();
                 return StatefulBuilder(
                   builder: (context, setState) {
                     return SimpleDialog(
@@ -149,8 +150,17 @@ class _DropDownState extends State<DropDown> {
                                 height:
                                     MediaQuery.of(context).size.height / 4.5,
                                 child: CupertinoScrollbar(
+                                  thumbVisibility: test,
+                                  controller: sc,
                                   child: ListView.builder(
+                                    controller: sc,
                                     itemBuilder: (context, index) {
+                                      Future.delayed(Duration(seconds: 1), () {
+                                        if (!test!) {
+                                          test = true;
+                                        }
+                                        setState(() {});
+                                      });
                                       return
                                           // for (int index = 0;
                                           // index < listToShow.length;
