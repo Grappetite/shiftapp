@@ -19,7 +19,7 @@ class DevConfig implements BaseConfig {
   String get baseUrl => "https://dev-shift.grappetite.com/api/v1/";
 
   @override
-  String get version => "V.2";
+  String get version => "V.3";
 
   @override
   String get imageUrl => "https://dev-shift.grappetite.com/api/v1/public";
@@ -39,7 +39,7 @@ class ProductionConfig implements BaseConfig {
   String get baseUrl => "https://dev-shift.grappetite.com/api/v1/";
 
   @override
-  String get version => "V.2";
+  String get version => "V.3";
 
   @override
   String get imageUrl => "https://dev-shift.grappetite.com/api/v1/";
@@ -59,7 +59,7 @@ class LiveConfig implements BaseConfig {
   String get baseUrl => "https://takealot.grappetite.com/api/v1/";
 
   @override
-  String get version => "V.2";
+  String get version => "V.3";
 
   @override
   String get imageUrl => "https://takealot.grappetite.com/api/v1/";
