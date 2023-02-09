@@ -77,7 +77,10 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
       onSelected: (int value) {},
       onCanceled: () {},
       elevation: 4,
-      icon: const Icon(Icons.more_vert,color: Colors.white,),
+      icon: const Icon(
+        Icons.more_vert,
+        color: Colors.white,
+      ),
       offset: const Offset(0, 65),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -114,6 +117,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
   TextEditingController searchController = TextEditingController();
 
   var isTimeOver = false;
+
   void startTimer() {
     const oneSec = Duration(seconds: 1);
 
@@ -196,238 +200,263 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                             style: const TextStyle(
                                 color: kPrimaryColor, fontSize: 14),
                           ),
-                          // GestureDetector(
-                          //   onTap: () {
-                          //     searchController.clear();
-                          //     showDialog(
-                          //             context: context,
-                          //             builder: (context) {
-                          //               return StatefulBuilder(
-                          //                   builder: (context, setState) {
-                          //                 return SimpleDialog(
-                          //                   insetPadding:
-                          //                       const EdgeInsets.symmetric(
-                          //                           vertical: 80.0),
-                          //                   contentPadding:
-                          //                       const EdgeInsets.fromLTRB(
-                          //                           12.0, 12.0, 5.0, 12.0),
-                          //                   // title: Text(""),
-                          //                   children: [
-                          //                     Row(
-                          //                       children: [
-                          //                         const SizedBox(
-                          //                           height: 8,
-                          //                         ),
-                          //                         const Text(
-                          //                           'SELECT EXISTING WORKERS',
-                          //                           style: TextStyle(
-                          //                             fontSize: 16,
-                          //                             fontWeight:
-                          //                                 FontWeight.w700,
-                          //                             color: kPrimaryColor,
-                          //                           ),
-                          //                         ),
-                          //                         Expanded(
-                          //                           child: Container(),
-                          //                         ),
-                          //                         GestureDetector(
-                          //                           onTap: () {
-                          //                             Navigator.pop(context);
-                          //                           },
-                          //                           child: const Padding(
-                          //                             padding:
-                          //                                 EdgeInsets.all(4.0),
-                          //                             child: Icon(
-                          //                               Icons.close,
-                          //                               color: kPrimaryColor,
-                          //                             ),
-                          //                           ),
-                          //                         ),
-                          //                       ],
-                          //                     ),
-                          //                     const SizedBox(
-                          //                       height: 8,
-                          //                     ),
-                          //                     Container(
-                          //                       decoration: BoxDecoration(
-                          //                         border: Border.all(
-                          //                           color: Colors.grey,
-                          //                         ),
-                          //                         borderRadius:
-                          //                             const BorderRadius.all(
-                          //                           Radius.circular(8),
-                          //                         ),
-                          //                       ),
-                          //                       child: Padding(
-                          //                         padding: const EdgeInsets
-                          //                                 .symmetric(
-                          //                             vertical: 8,
-                          //                             horizontal: 8),
-                          //                         child: Row(
-                          //                           children: [
-                          //                             const Icon(
-                          //                               Icons.search,
-                          //                               color: kPrimaryColor,
-                          //                             ),
-                          //                             const SizedBox(
-                          //                               width: 4,
-                          //                             ),
-                          //                             Expanded(
-                          //                               child: TextFormField(
-                          //                                   controller:
-                          //                                       searchController,
-                          //                                   maxLines: 1,
-                          //                                   style:
-                          //                                       const TextStyle(
-                          //                                     fontSize: 18,
-                          //                                   ),
-                          //                                   decoration:
-                          //                                       InputDecoration
-                          //                                           .collapsed(
-                          //                                     hintText:
-                          //                                         'Search',
-                          //                                     hintStyle:
-                          //                                         TextStyle(
-                          //                                       color: Colors
-                          //                                           .grey[500],
-                          //                                       fontSize: 16,
-                          //                                     ),
-                          //                                   ),
-                          //                                   onChanged: (v) {
-                          //                                     if (searchController
-                          //                                                 .text
-                          //                                                 .length %
-                          //                                             3 ==
-                          //                                         0) {
-                          //                                       _pagingControllerSearch
-                          //                                           .itemList!
-                          //                                           .clear();
-                          //                                       _pagingControllerSearch
-                          //                                           .notifyListeners();
-                          //                                       getSopWorker(
-                          //                                         widget
-                          //                                             .sopDetail
-                          //                                             .id,
-                          //                                         dialog: true,
-                          //                                         searchParam:
-                          //                                             searchController
-                          //                                                 .text,
-                          //                                       );
-                          //                                     }
-                          //                                   }),
-                          //                             ),
-                          //                           ],
-                          //                         ),
-                          //                       ),
-                          //                     ),
-                          //                     const SizedBox(
-                          //                       height: 8,
-                          //                     ),
-                          //                     PElevatedButton(
-                          //                       text: 'ADD SELECTED WORKERS ',
-                          //                       onPressed: () {
-                          //                         Navigator.pop(context, true);
-                          //                       },
-                          //                     ),
-                          //                     const SizedBox(
-                          //                       height: 8,
-                          //                     ),
-                          //                     Container(
-                          //                       height: MediaQuery.of(context)
-                          //                               .size
-                          //                               .height /
-                          //                           2.5,
-                          //                       width: MediaQuery.of(context)
-                          //                           .size
-                          //                           .width,
-                          //                       child: PagedListView<int,
-                          //                           ShiftWorker>(
-                          //                         pagingController:
-                          //                             _pagingControllerSearch,
-                          //                         shrinkWrap: true,
-                          //                         scrollDirection:
-                          //                             Axis.vertical,
-                          //                         builderDelegate:
-                          //                             PagedChildBuilderDelegate<
-                          //                                     ShiftWorker>(
-                          //                                 itemBuilder: (context,
-                          //                                     item, index) {
-                          //                           return Padding(
-                          //                               padding:
-                          //                                   const EdgeInsets
-                          //                                       .all(8.0),
-                          //                               child: UserItem(
-                          //                                 keyNo:
-                          //                                     item.key != null
-                          //                                         ? item.key!
-                          //                                         : '',
-                          //                                 personName: item
-                          //                                         .firstName! +
-                          //                                     ' ' +
-                          //                                     item.lastName!,
-                          //                                 initialSelected:
-                          //                                     item.isSelected,
-                          //                                 picUrl: item.picture,
-                          //                                 changedStatus: (bool
-                          //                                     newStatus) async {
-                          //                                   setState(() {
-                          //                                     item.isSelected =
-                          //                                         newStatus;
-                          //                                   });
-                          //                                   if (newStatus) {
-                          //                                     selectedWorkers!
-                          //                                         .add(item);
-                          //                                     _pagingController
-                          //                                         .itemList!
-                          //                                         .add(item);
-                          //                                     _pagingController
-                          //                                         .notifyListeners();
-                          //                                   } else {
-                          //                                     selectedWorkers!
-                          //                                         .removeWhere(
-                          //                                             (element) {
-                          //                                       if (element
-                          //                                               .userId ==
-                          //                                           item.userId) {
-                          //                                         return true;
-                          //                                       } else {
-                          //                                         return false;
-                          //                                       }
-                          //                                     });
-                          //                                     _pagingController
-                          //                                         .itemList!
-                          //                                         .removeWhere(
-                          //                                             (element) {
-                          //                                       if (element
-                          //                                               .userId ==
-                          //                                           item.userId) {
-                          //                                         return true;
-                          //                                       } else {
-                          //                                         return false;
-                          //                                       }
-                          //                                     });
-                          //                                     _pagingController
-                          //                                         .notifyListeners();
-                          //                                   }
-                          //                                 },
-                          //                               ));
-                          //                         }),
-                          //                       ),
-                          //                     ),
-                          //                   ],
-                          //                 );
-                          //               });
-                          //             })
-                          //         .then((value) => getSopWorker(
-                          //             widget.sopDetail.id,
-                          //             dialog: true,
-                          //             searchParam: searchController.text));
-                          //   },
-                          //   child: Icon(
-                          //     Icons.search,
-                          //     color: kPrimaryColor,
-                          //   ),
-                          // )
+                          GestureDetector(
+                            onTap: () {
+                              searchController.clear();
+                              showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return StatefulBuilder(
+                                            builder: (context, setState) {
+                                          return SimpleDialog(
+                                            insetPadding:
+                                                const EdgeInsets.symmetric(
+                                                    vertical: 80.0),
+                                            contentPadding:
+                                                const EdgeInsets.fromLTRB(
+                                                    12.0, 12.0, 5.0, 12.0),
+                                            // title: Text(""),
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  const SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  const Text(
+                                                    'SELECT EXISTING WORKERS',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      color: kPrimaryColor,
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: Container(),
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: const Padding(
+                                                      padding:
+                                                          EdgeInsets.all(4.0),
+                                                      child: Icon(
+                                                        Icons.close,
+                                                        color: kPrimaryColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: Colors.grey,
+                                                  ),
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                    Radius.circular(8),
+                                                  ),
+                                                ),
+                                                child: Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      vertical: 8,
+                                                      horizontal: 8),
+                                                  child: Row(
+                                                    children: [
+                                                      const Icon(
+                                                        Icons.search,
+                                                        color: kPrimaryColor,
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 4,
+                                                      ),
+                                                      Expanded(
+                                                        child: TextFormField(
+                                                            controller:
+                                                                searchController,
+                                                            maxLines: 1,
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 18,
+                                                            ),
+                                                            decoration:
+                                                                InputDecoration
+                                                                    .collapsed(
+                                                              hintText:
+                                                                  'Search',
+                                                              hintStyle:
+                                                                  TextStyle(
+                                                                color: Colors
+                                                                    .grey[500],
+                                                                fontSize: 16,
+                                                              ),
+                                                            ),
+                                                            onChanged: (v) {
+                                                              if (searchController
+                                                                          .text
+                                                                          .length %
+                                                                      3 ==
+                                                                  0) {
+                                                                _pagingControllerSearch
+                                                                    .itemList!
+                                                                    .clear();
+                                                                _pagingControllerSearch
+                                                                    .notifyListeners();
+                                                                getSopWorker(
+                                                                  widget
+                                                                      .sopDetail
+                                                                      .id,
+                                                                  dialog: true,
+                                                                  searchParam:
+                                                                      searchController
+                                                                          .text,
+                                                                );
+                                                              }
+                                                            }),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
+                                              PElevatedButton(
+                                                text: 'ADD SELECTED WORKERS ',
+                                                onPressed: () {
+                                                  Navigator.pop(context, true);
+                                                },
+                                              ),
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
+                                              Container(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height /
+                                                    2.5,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                child: PagedListView<int,
+                                                    ShiftWorker>(
+                                                  pagingController:
+                                                      _pagingControllerSearch,
+                                                  shrinkWrap: true,
+                                                  scrollDirection:
+                                                      Axis.vertical,
+                                                  builderDelegate:
+                                                      PagedChildBuilderDelegate<
+                                                              ShiftWorker>(
+                                                          itemBuilder: (context,
+                                                              item, index) {
+                                                    return Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: UserItem(
+                                                          keyNo:
+                                                              item.key != null
+                                                                  ? item.key!
+                                                                  : '',
+                                                          personName: item
+                                                                  .firstName! +
+                                                              ' ' +
+                                                              item.lastName!,
+                                                          initialSelected:
+                                                              item.isSelected,
+                                                          picUrl: item.picture,
+                                                          changedStatus: (bool
+                                                              newStatus) async {
+                                                            setState(() {
+                                                              item.isSelected =
+                                                                  newStatus;
+                                                            });
+                                                            if (newStatus) {
+                                                              selectedWorkers!
+                                                                  .removeWhere(
+                                                                      (element) {
+                                                                    if (element
+                                                                        .userId ==
+                                                                        item.userId) {
+                                                                      return true;
+                                                                    } else {
+                                                                      return false;
+                                                                    }
+                                                                  });
+                                                              _pagingController
+                                                                  .itemList!
+                                                                  .removeWhere(
+                                                                      (element) {
+                                                                    if (element
+                                                                        .userId ==
+                                                                        item.userId) {
+                                                                      return true;
+                                                                    } else {
+                                                                      return false;
+                                                                    }
+                                                                  });
+                                                              _pagingController
+                                                                  .notifyListeners();
+                                                              selectedWorkers!
+                                                                  .add(item);
+                                                              _pagingController
+                                                                  .itemList!
+                                                                  .insert(0, item);
+                                                              _pagingController
+                                                                  .notifyListeners();
+                                                            } else {
+                                                              selectedWorkers!
+                                                                  .removeWhere(
+                                                                      (element) {
+                                                                if (element
+                                                                        .userId ==
+                                                                    item.userId) {
+                                                                  return true;
+                                                                } else {
+                                                                  return false;
+                                                                }
+                                                              });
+                                                              _pagingController
+                                                                  .itemList!
+                                                                  .removeWhere(
+                                                                      (element) {
+                                                                if (element
+                                                                        .userId ==
+                                                                    item.userId) {
+                                                                  return true;
+                                                                } else {
+                                                                  return false;
+                                                                }
+                                                              });
+                                                              _pagingController
+                                                                  .notifyListeners();
+                                                            }
+                                                          },
+                                                        ));
+                                                  }),
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        });
+                                      })
+                                  .then((value) => getSopWorker(
+                                      widget.sopDetail.id,
+                                      dialog: true,
+                                      searchParam: searchController.text));
+                            },
+                            child: Icon(
+                              Icons.search,
+                              color: kPrimaryColor,
+                            ),
+                          )
                         ],
                       ),
                       SizedBox(
@@ -464,101 +493,6 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                           }
                                         });
                                       }
-
-                                      // String dateString =
-                                      // widget.selectedShift!.startTime!;
-                                      //
-                                      // ///previously
-                                      // // DateFormat("yyyy-MM-dd hh:mm:ss")
-                                      // //     .format(DateTime.now());
-                                      // ///end
-                                      // if (widget.isEditing && newStatus) {
-                                      //   setState(() {
-                                      //     currentItem.isSelected = newStatus;
-                                      //   });
-                                      //
-                                      //   await EasyLoading.show(
-                                      //     status: 'Adding...',
-                                      //     maskType: EasyLoadingMaskType.black,
-                                      //   );
-                                      //
-                                      //   var response =
-                                      //   await WorkersService.addWorkers(
-                                      //       widget.execShiftId, [
-                                      //     currentItem.id!.toString()
-                                      //   ], [
-                                      //     dateString
-                                      //   ], [], [
-                                      //     currentItem.efficiencyCalculation
-                                      //         .toString()
-                                      //   ]);
-                                      //
-                                      //   await EasyLoading.dismiss();
-                                      //
-                                      //   if (response) {
-                                      //   } else {
-                                      //     EasyLoading.showError('Error');
-                                      //   }
-                                      // } else if (widget.isEditing && !newStatus) {
-                                      //   setState(() {
-                                      //     currentItem.isSelected =
-                                      //         currentItem.isSelected;
-                                      //   });
-                                      //   await showDialog(
-                                      //       context: context,
-                                      //       barrierDismissible: false,
-                                      //       builder: (BuildContext context) {
-                                      //         return ConfirmTimeEnd(
-                                      //           shiftItem:
-                                      //           this.widget.selectedShift!,
-                                      //           editing: widget.isEditing,
-                                      //         );
-                                      //       }).then((value) async {
-                                      //     if (value != false) {
-                                      //       // dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
-                                      //       //     .format(DateTime.parse(value));
-                                      //       dateString = value;
-                                      //       setState(() {
-                                      //         currentItem.isSelected = newStatus;
-                                      //       });
-                                      //
-                                      //       /// end
-                                      //       await EasyLoading.show(
-                                      //         status: 'Removing...',
-                                      //         maskType: EasyLoadingMaskType.black,
-                                      //       );
-                                      //
-                                      //       var response = await WorkersService
-                                      //           .removeWorkers(
-                                      //           widget.execShiftId, [
-                                      //         currentItem.id!.toString()
-                                      //       ], [
-                                      //         dateString
-                                      //       ], [], [
-                                      //         currentItem.efficiencyCalculation
-                                      //             .toString()
-                                      //       ]);
-                                      //       widget.listLists[i]
-                                      //           .remove(currentItem);
-                                      //       setState(() {});
-                                      //       await EasyLoading.dismiss();
-                                      //
-                                      //       if (response) {
-                                      //       } else {
-                                      //         EasyLoading.showError('Error');
-                                      //       }
-                                      //     } else {
-                                      //       setState(() {
-                                      //         currentItem.isSelected =
-                                      //             currentItem.isSelected;
-                                      //       });
-                                      //     }
-                                      //   });
-                                      // } else {
-                                      //   setState(() {
-                                      //     currentItem.isSelected = newStatus;
-                                      //   });
-                                      // }
                                     },
                                   ))),
                         ),
@@ -665,9 +599,15 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
               workerData!.data!.data!, workerData!.data!.currentPage! + 1);
         }
       }
+      _pagingControllerSearch.notifyListeners();
+      _pagingController.notifyListeners();
     } catch (error) {
       // } catch (error) {
-      _pagingController.error = error;
+      if (!dialog) {
+        _pagingController.error = error;
+      } else {
+        _pagingControllerSearch.error = error;
+      }
     }
     // await EasyLoading.dismiss();
     setState(() {});
