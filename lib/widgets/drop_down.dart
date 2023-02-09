@@ -39,6 +39,7 @@ class _DropDownState extends State<DropDown> {
   late String searchField = "";
 
   late String selectedString = "";
+  bool? test = false;
 
   @override
   void initState() {
@@ -85,7 +86,6 @@ class _DropDownState extends State<DropDown> {
                   listToShow = widget.currentList;
                 }
                 searchField = "";
-                bool? test = false;
                 var sc = ScrollController();
                 return StatefulBuilder(
                   builder: (context, setState) {
@@ -158,8 +158,9 @@ class _DropDownState extends State<DropDown> {
                                       Future.delayed(Duration(seconds: 1), () {
                                         if (!test!) {
                                           test = true;
+                                          setState(() {});
+
                                         }
-                                        setState(() {});
                                       });
                                       return
                                           // for (int index = 0;
