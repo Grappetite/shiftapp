@@ -261,7 +261,7 @@ class _ShiftStartState extends State<ShiftStart> {
                                   if (endDate.isNotEmpty) {
                                     widget.selectedShift.endTime = endDate;
                                   }
-                                  setState(() {
+                                  if (mounted)setState(() {
                                     widget.selectedShift.startTime =
                                         customSelectedStartTime;
                                     widget.selectedShift.endTime = widget
@@ -757,7 +757,7 @@ class _ShiftStartState extends State<ShiftStart> {
                                                         widget.selectedShift
                                                             .endTime = endDate;
                                                       }
-                                                      setState(() {
+                                                      if (mounted)setState(() {
                                                         widget.selectedShift
                                                                 .startTime =
                                                             customSelectedStartTime;

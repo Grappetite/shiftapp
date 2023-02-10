@@ -158,7 +158,7 @@ class _SopWorkerSignState extends State<SopWorkerSign> {
                         physics: NeverScrollableScrollPhysics(),
                         controller: pageController,
                         onPageChanged: (page) {
-                          // setState(() {
+                          // if (mounted)setState(() {
                           //   activePage = page;
                           // });
                         },
@@ -316,7 +316,7 @@ class _SopWorkerSignState extends State<SopWorkerSign> {
                                         widget.workerListToTrain![pagePosition]
                                             .painterController
                                             .clear();
-                                        // setState(() {});
+                                        // if (mounted)setState(() {});
                                       },
                                       text: 'CLEAR SIGNATURE',
                                       style: TextStyle(fontSize: 15)),

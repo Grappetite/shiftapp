@@ -228,7 +228,7 @@ class _HomeMainViewState extends State<HomeMainView> {
       ),
       color: kPrimaryColor,
     );
-    setState(() {});
+    if (mounted)setState(() {});
     if (widget.sessionStarted) {
       moveToEndSession();
     } else {
@@ -288,7 +288,7 @@ class _HomeMainViewState extends State<HomeMainView> {
         widget.processSelected.id, widget.selectedShift.id);
     yesterdayEfficiency = response["yestEfficiency"];
     bestEfficiency = response["maxVale"];
-    if (mounted) setState(() {});
+     if (mounted)setState(() {});
     await EasyLoading.dismiss();
   }
 }

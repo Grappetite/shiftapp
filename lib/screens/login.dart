@@ -172,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         return;
                       }
 
-                      setState(() {
+                      if (mounted)setState(() {
                         showLogin = false;
                       });
                       Navigator.of(context).pushReplacement(MaterialPageRoute(

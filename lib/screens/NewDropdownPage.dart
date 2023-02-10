@@ -91,7 +91,7 @@ class _DropDownPageState extends State<DropDownPage> {
                               process!.map((e) => e.name!.trim()).toList(),
                           showError: false,
                           onChange: (newString) {
-                            setState(() {
+                            if (mounted)setState(() {
                               selectedString = newString;
                               shiftList = [];
                             });
@@ -126,7 +126,7 @@ class _DropDownPageState extends State<DropDownPage> {
                                         element.started = false;
                                       }
                                     });
-                                    setState(() {});
+                                    if (mounted)setState(() {});
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -308,7 +308,7 @@ class _DropDownPageState extends State<DropDownPage> {
                                       ),
                                     ).then((value) {
                                       shiftList!.clear();
-                                      setState(() {
+                                      if (mounted)setState(() {
 
                                     });
                                     });
@@ -345,13 +345,13 @@ class _DropDownPageState extends State<DropDownPage> {
                                       ),
                                     ).then((value) {
                                       shiftList!.clear();
-                                      setState(() {
+                                      if (mounted)setState(() {
 
                                     });
                                     });
                                   } else {
                                     shiftList = shifts.data;
-                                    setState(() {});
+                                    if (mounted)setState(() {});
                                   }
                                 } else if (selectedShift != null) {
                                   if (DateTime.now().isAfter(selectedShift!
@@ -378,7 +378,7 @@ class _DropDownPageState extends State<DropDownPage> {
                                     ),
                                   ).then((value) {
                                     shiftList!.clear();
-                                    setState(() {
+                                    if (mounted)setState(() {
 
                                     });
                                   });
@@ -408,7 +408,7 @@ class _DropDownPageState extends State<DropDownPage> {
     );
     try {
       process = await LoginService.getProcess();
-      setState(() {});
+      if (mounted)setState(() {});
       await EasyLoading.dismiss();
     } catch (e) {
       await EasyLoading.dismiss();

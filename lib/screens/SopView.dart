@@ -105,8 +105,8 @@ class _SopViewState extends State<SopView> {
   //           } else {
   //             timeRemaining = widget.selectedShift.timeRemaining;
   //           }
-  //           if (mounted)
-  //             setState(() {
+  //           
+  //             if (mounted)setState(() {
   //               timeElasped = widget.selectedShift.timeElasped;
   //             });
   //         },
@@ -193,7 +193,7 @@ class _SopViewState extends State<SopView> {
                               ),
                             ),
                             onChanged: (v) {
-                              setState(
+                              if (mounted)setState(
                                 () {},
                               );
                             },
@@ -732,6 +732,6 @@ class _SopViewState extends State<SopView> {
     sopData = await SOPService.getSops(id!,
         executionShiftId: widget.executionShiftId);
     await EasyLoading.dismiss();
-    if (mounted) setState(() {});
+     if (mounted)setState(() {});
   }
 }

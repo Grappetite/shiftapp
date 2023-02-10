@@ -41,7 +41,8 @@ class _WorkersListingState extends State<WorkersListing> {
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
-        setState(() {
+        
+        if (mounted)setState(() {
           timeElasped = widget.selectedShift.timeElasped;
         });
 
@@ -65,11 +66,11 @@ class _WorkersListingState extends State<WorkersListing> {
         widget.shiftId.toString(), widget.processId.toString());
 
     if (result != null) {
-      setState(() {
+      if (mounted)setState(() {
         workerType = result.data!;
       });
       for (var currentItem in workerType) {
-        setState(() {
+        if (mounted)setState(() {
           listNames.add(currentItem.name!);
           listLists.add([]);
         });
@@ -91,7 +92,7 @@ class _WorkersListingState extends State<WorkersListing> {
         ],
       );
     }
-    setState(() {});
+    if (mounted)setState(() {});
   }
 
   bool showCategories = false;
@@ -122,7 +123,7 @@ class _WorkersListingState extends State<WorkersListing> {
       return;
     }
 
-    setState(() {});
+    if (mounted)setState(() {});
     List<ShiftWorker> shiftWorkers = [];
 
     shiftWorkers.addAll(responseShift.data!.worker!);
@@ -150,7 +151,7 @@ class _WorkersListingState extends State<WorkersListing> {
     for (var currentItem in listNames) {
       var response =
           shiftWorkers.where((e) => e.workerType == currentItem).toList();
-      setState(() {
+      if (mounted)setState(() {
         listLists.add(response);
       });
     }
@@ -158,11 +159,11 @@ class _WorkersListingState extends State<WorkersListing> {
         widget.shiftId.toString(), widget.processId.toString());
 
     if (result != null) {
-      setState(() {
+      if (mounted)setState(() {
         workerType = result.data!;
       });
       for (var currentItem in workerType) {
-        setState(() {
+        if (mounted)setState(() {
           listNames.add(currentItem.name!);
           listLists.add([]);
         });
@@ -184,7 +185,7 @@ class _WorkersListingState extends State<WorkersListing> {
       );
     }
     listNames = listNames.toSet().toList();
-    setState(() {
+    if (mounted)setState(() {
       isLoader = false;
     });
 

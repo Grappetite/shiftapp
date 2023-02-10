@@ -62,7 +62,7 @@ class _HandOverShiftState extends State<HandOverShift> {
                                 .toList(),
                             showError: false,
                             onChange: (newString) {
-                              setState(() {
+                              if (mounted)setState(() {
                                 selectedString = newString;
 
                                 processIndexSelected = -1;
@@ -73,7 +73,7 @@ class _HandOverShiftState extends State<HandOverShift> {
                                     .map((e) => e.fullName!.trim())
                                     .toList()
                                     .indexOf(newString);
-                                setState(() {});
+                                if (mounted)setState(() {});
                               });
                             },
                             placeHolderText: 'Select User',
@@ -153,7 +153,7 @@ class _HandOverShiftState extends State<HandOverShift> {
     );
 
     response = await ShiftService.getOnlineUsers();
-    setState(() {});
+    if (mounted)setState(() {});
     await EasyLoading.dismiss();
   }
 }

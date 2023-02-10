@@ -131,8 +131,8 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
         } else {
           timeRemaining = widget.selectedShift.timeRemaining;
         }
-        if (mounted)
-          setState(() {
+        
+          if (mounted)setState(() {
             timeElasped = widget.selectedShift.timeElasped;
           });
       },
@@ -374,7 +374,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                           picUrl: item.picture,
                                                           changedStatus: (bool
                                                               newStatus) async {
-                                                            setState(() {
+                                                            if (mounted)setState(() {
                                                               item.isSelected =
                                                                   newStatus;
                                                             });
@@ -479,7 +479,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                     initialSelected: item.isSelected,
                                     picUrl: item.picture,
                                     changedStatus: (bool newStatus) async {
-                                      setState(() {
+                                      if (mounted)setState(() {
                                         item.isSelected = newStatus;
                                       });
                                       if (newStatus) {
@@ -610,6 +610,6 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
       }
     }
     // await EasyLoading.dismiss();
-    setState(() {});
+    if (mounted)setState(() {});
   }
 }

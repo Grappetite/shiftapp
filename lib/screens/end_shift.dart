@@ -82,19 +82,19 @@ class _EndShiftViewState extends State<EndShiftView> {
         } else {
           timeRemaining = widget.selectedShift.timeRemaining;
         }
-        setState(() {
-          timeElasped = widget.selectedShift.timeElasped;
-          if (int.parse(timeElasped.split(":")[1].toString()) % 30 == 0 &&
-              stopper == false) {
-            stopper = true;
-            loadExpectedUnits();
-          } else if (int.parse(timeElasped.split(":")[1].toString()) % 30 !=
-                  0 &&
-              stopper == true) {
-            stopper = false;
-          }
-
-        });
+        
+          if (mounted)setState(() {
+            timeElasped = widget.selectedShift.timeElasped;
+            if (int.parse(timeElasped.split(":")[1].toString()) % 30 == 0 &&
+                stopper == false) {
+              stopper = true;
+              loadExpectedUnits();
+            } else if (int.parse(timeElasped.split(":")[1].toString()) % 30 !=
+                    0 &&
+                stopper == true) {
+              stopper = false;
+            }
+          });
       },
     );
   }
@@ -213,7 +213,10 @@ class _EndShiftViewState extends State<EndShiftView> {
       onSelected: (int value) {},
       onCanceled: () {},
       elevation: 4,
-      icon: const Icon(Icons.more_vert,color: Colors.white,),
+      icon: const Icon(
+        Icons.more_vert,
+        color: Colors.white,
+      ),
       offset: const Offset(0, 65),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -244,7 +247,7 @@ class _EndShiftViewState extends State<EndShiftView> {
     }
     numberSelected = responseShift!.data!.shiftWorker!.length;
 
-    setState(() {
+    if (mounted)setState(() {
       totalUsersCount = responseShift.data!.shiftWorker!.length +
           responseShift.data!.worker!.length;
     });
@@ -348,8 +351,9 @@ class _EndShiftViewState extends State<EndShiftView> {
                   title: 'SOP TRAINING',
                   text1: sopCount != 0
                       ? '${sopCount} Workers require SOP Training'
-                      :  "",
-                  text2: sopCount != 0 ? 'Tap to train now' : "Tap to view Sops",
+                      : "",
+                  text2:
+                      sopCount != 0 ? 'Tap to train now' : "Tap to view Sops",
                   onTap: () async {
                     await Navigator.push(
                         context,
@@ -472,7 +476,8 @@ class _EndShiftViewState extends State<EndShiftView> {
     );
   }
 
-  var sopCount=0;
+  var sopCount = 0;
+
   void loadExpectedUnits() async {
     expectedUnits = 0;
     var shiftWorkerList =
@@ -494,7 +499,7 @@ class _EndShiftViewState extends State<EndShiftView> {
                   60) *
               (double.parse(widget.process.baseline!)));
     }
-    setState(() {});
+    if (mounted)setState(() {});
   }
 }
 

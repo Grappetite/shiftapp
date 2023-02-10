@@ -44,7 +44,7 @@ class _AddTempWorkerState extends State<AddTempWorker> {
     var result = await WorkersService.getWorkTypes(
         this.widget.shiftId, widget.processId);
     workerType = result!.data!;
-    setState(() {
+    if (mounted)setState(() {
       workerType = result.data!;
     });
   }
@@ -156,7 +156,7 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                                     .toList(),
                                 showError: false,
                                 onChange: (newString) {
-                                  setState(() {
+                                  if (mounted)setState(() {
                                     selectedWorkerType = newString;
                                   });
 

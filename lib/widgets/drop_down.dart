@@ -115,22 +115,23 @@ class _DropDownState extends State<DropDown> {
                               ),
                             ),
                             onChanged: (v) {
-                              setState(
-                                () {
-                                  searchField = v;
-                                  if (searchField.isNotEmpty) {
-                                    listToShow = widget.currentList
-                                        .where(
-                                          (e) => e.toLowerCase().contains(
-                                                searchField.toLowerCase(),
-                                              ),
-                                        )
-                                        .toList();
-                                  } else {
-                                    listToShow = widget.currentList;
-                                  }
-                                },
-                              );
+                              if (mounted)
+                                setState(
+                                  () {
+                                    searchField = v;
+                                    if (searchField.isNotEmpty) {
+                                      listToShow = widget.currentList
+                                          .where(
+                                            (e) => e.toLowerCase().contains(
+                                                  searchField.toLowerCase(),
+                                                ),
+                                          )
+                                          .toList();
+                                    } else {
+                                      listToShow = widget.currentList;
+                                    }
+                                  },
+                                );
                             },
                           ),
                           const Divider(

@@ -193,7 +193,7 @@ class _ChangeShiftTimeState extends State<ChangeShiftTime> {
                                 return;
                               }
 
-                              setState(() {
+                              if (mounted)setState(() {
                                 timeSelected = true;
                               });
                             },

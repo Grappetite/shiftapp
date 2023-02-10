@@ -70,7 +70,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
       oneSec,
           (Timer timer) {
 
-        setState(() {
+        if (mounted)setState(() {
           timeElasped = widget.selectedShift.timeElasped;
         });
 
@@ -103,11 +103,11 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
     await EasyLoading.dismiss();
 
     for (var currentItem in widget.workers) {
-      setState(() {
+      if (mounted)setState(() {
         workers.removeWhere((e) => e.id == currentItem.id);
       });
     }
-    setState(() {});
+    if (mounted)setState(() {});
   }
 
   @override
@@ -249,7 +249,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                 ),
                                 onChanged: (v) {
                                   if (v.isEmpty) {
-                                    setState(() {
+                                    if (mounted)setState(() {
                                       isSearching = true;
                                     });
 
@@ -263,7 +263,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                               .contains(v.toLowerCase()))
                                       .toList();
 
-                                  setState(() {
+                                  if (mounted)setState(() {
                                     isSearching = true;
                                   });
                                 }),
@@ -328,18 +328,18 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                         selected.data!.isTemp = true;
                         selected.data!.newAdded = true;
                         if (!this.isSearching) {
-                          setState(() {
+                          if (mounted)setState(() {
                             this.workers.insert(0, selected.data!);
                           });
                         } else {
-                          setState(() {
+                          if (mounted)setState(() {
                             this.workers.insert(0, selected.data!);
                           });
                         }
 
                         if (this.isSearching) {
                           this.searchController.text = '';
-                          setState(() {
+                          if (mounted)setState(() {
                             this.isSearching = true;
                           });
                         }
@@ -408,15 +408,15 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                           (e) => e.userId == currentItem.userId)
                                       .toList();
 
-                                  setState(() {
+                                  if (mounted)setState(() {
                                     currentItem.isSelected = newStatus;
 
                                     if (find.isNotEmpty) {
-                                      setState(() {
+                                      if (mounted)setState(() {
                                         find.first.isSelected = newStatus;
                                       });
                                     } else {
-                                      setState(() {
+                                      if (mounted)setState(() {
                                         workers.add(currentItem);
                                       });
                                     }
@@ -463,11 +463,11 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                     currentItem.isSelected = newStatus;
 
                                     if (find.isNotEmpty) {
-                                      setState(() {
+                                      if (mounted)setState(() {
                                         find.first.isSelected = newStatus;
                                       });
                                     } else {
-                                      setState(() {
+                                      if (mounted)setState(() {
                                         workers.add(currentItem);
                                       });
                                     }

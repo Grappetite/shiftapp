@@ -101,8 +101,8 @@ class _SopsListState extends State<SopsList> {
         } else {
           timeRemaining = widget.selectedShift.timeRemaining;
         }
-        if (mounted)
-          setState(() {
+        
+          if (mounted)setState(() {
             timeElasped = widget.selectedShift.timeElasped;
           });
       },

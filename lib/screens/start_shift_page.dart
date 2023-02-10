@@ -57,7 +57,7 @@ class _StartShiftViewState extends State<StartShiftView> {
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
-        setState(() {
+        if (mounted)setState(() {
           timeElasped = widget.selectedShift.timeElasped;
         });
 
@@ -193,7 +193,7 @@ class _StartShiftViewState extends State<StartShiftView> {
                         );
                         return;
                       }
-                      setState(() {
+                      if (mounted)setState(() {
                         willpop = false;
                       });
                       await EasyLoading.show(
@@ -297,7 +297,7 @@ class _StartShiftViewState extends State<StartShiftView> {
                         }
                       } else {
                         EasyLoading.showError('Could not load data');
-                        setState(() {
+                        if (mounted)setState(() {
                           willpop = true;
                         });
                       }

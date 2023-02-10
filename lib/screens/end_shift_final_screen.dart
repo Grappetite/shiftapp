@@ -78,7 +78,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
         } else {
           timeRemaining = widget.selectedShift.timeRemaining;
         }
-        setState(() {
+        if (mounted)setState(() {
           timeElasped = widget.selectedShift.timeElasped;
         });
 
@@ -620,7 +620,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                               .makeTimeStringFromHourMinute(
                                   newTime!.hour, newTime!.minute);
 
-                          setState(() {
+                          if (mounted)setState(() {
                             widget.moveWorker
                                 ? customTimeSelectedToSend =
                                     customSelectedStartTime
@@ -687,7 +687,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                                   "${e.name!.trim()} (${e.shiftName})").toList(),
                               showError: false,
                               onChange: (newString) {
-                                setState(() {
+                                if (mounted)setState(() {
                                   selectedString = newString;
                                   workerTypeIndexSelected = -1;
                                   selectedWorkerType = "";
@@ -699,7 +699,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                                       .map((e) => "${e.name!.trim()} (${e.shiftName})")
                                       .toList()
                                       .indexOf(newString);
-                                  setState(() {});
+                                  if (mounted)setState(() {});
                                 });
                               },
                               placeHolderText: 'Process',
@@ -770,7 +770,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                           }).toList(),
                           showError: false,
                           onChange: (newString) {
-                            setState(() {
+                            if (mounted)setState(() {
                               selectedWorkerType = newString;
                             });
 

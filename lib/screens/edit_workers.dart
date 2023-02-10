@@ -62,11 +62,11 @@ class _EditWorkersState extends State<EditWorkers> {
         widget.shiftId.toString(), widget.processId.toString());
 
     if (result != null) {
-      setState(() {
+      if (mounted)setState(() {
         workerType = result.data!;
       });
       for (var currentItem in workerType) {
-        setState(() {
+        if (mounted)setState(() {
           listNames.add(currentItem.name!);
           listLists.add([]);
         });
@@ -74,7 +74,7 @@ class _EditWorkersState extends State<EditWorkers> {
 
       await EasyLoading.dismiss();
     }
-    setState(() {});
+    if (mounted)setState(() {});
   }
 
   void loadWorkers() async {
@@ -142,7 +142,7 @@ class _EditWorkersState extends State<EditWorkers> {
     for (var currentItem in listNames) {
       var response =
           shiftWorkers.where((e) => e.workerType == currentItem).toList();
-      setState(() {
+      if (mounted)setState(() {
         listLists.add(response);
       });
     }

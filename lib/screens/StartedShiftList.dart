@@ -270,7 +270,7 @@ class _StartedShiftsState extends State<StartedShifts> {
     );
     await LoginService.updateFcm();
     shiftsList = await ShiftService.startedShiftsList();
-    setState(() {});
+    if (mounted)setState(() {});
     await EasyLoading.dismiss();
   }
 
