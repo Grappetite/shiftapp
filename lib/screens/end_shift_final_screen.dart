@@ -78,9 +78,10 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
         } else {
           timeRemaining = widget.selectedShift.timeRemaining;
         }
-        if (mounted)setState(() {
-          timeElasped = widget.selectedShift.timeElasped;
-        });
+        if (mounted)
+          setState(() {
+            timeElasped = widget.selectedShift.timeElasped;
+          });
 
         print('');
       },
@@ -516,6 +517,10 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
 
   @override
   void initState() {
+    controller = TextEditingController(
+        text: DateTime.now().isBefore(widget.shiftItem.endDateObject)
+            ? DateTime.now().toString().timeToShow
+            : findEndTime().timeToShow);
     super.initState();
   }
 
@@ -523,6 +528,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
   String selectedWorkerType = "";
   int processIndexSelected = -1;
   int workerTypeIndexSelected = -1;
+  TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -620,7 +626,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                               .makeTimeStringFromHourMinute(
                                   newTime!.hour, newTime!.minute);
 
-                          if (mounted)setState(() {
+                          setState(() {
                             widget.moveWorker
                                 ? customTimeSelectedToSend =
                                     customSelectedStartTime
@@ -632,6 +638,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                                             .split(" ")[0] +
                                         " " +
                                         customSelectedStartTime.split(" ")[1];
+                            controller!.text = customTimeSelectedToSend.timeToShow;
                           });
                         }
                       });
@@ -643,11 +650,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                           ? "Worker removal time"
                           : 'Shift End Time',
                       onChange: (newValue) {},
-                      controller: TextEditingController(
-                          text: DateTime.now()
-                                  .isBefore(widget.shiftItem.endDateObject)
-                              ? DateTime.now().toString().timeToShow
-                              : findEndTime().timeToShow),
+                      controller: controller!,
                       text: DateTime.now()
                               .isBefore(widget.shiftItem.endDateObject)
                           ? DateTime.now().toString().timeToShow
@@ -687,19 +690,21 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                                   "${e.name!.trim()} (${e.shiftName})").toList(),
                               showError: false,
                               onChange: (newString) {
-                                if (mounted)setState(() {
-                                  selectedString = newString;
-                                  workerTypeIndexSelected = -1;
-                                  selectedWorkerType = "";
-                                  processIndexSelected = -1;
-                                });
+                                if (mounted)
+                                  setState(() {
+                                    selectedString = newString;
+                                    workerTypeIndexSelected = -1;
+                                    selectedWorkerType = "";
+                                    processIndexSelected = -1;
+                                  });
 
                                 Future.delayed(Duration(milliseconds: 50), () {
                                   processIndexSelected = widget.processList!
-                                      .map((e) => "${e.name!.trim()} (${e.shiftName})")
+                                      .map((e) =>
+                                          "${e.name!.trim()} (${e.shiftName})")
                                       .toList()
                                       .indexOf(newString);
-                                  if (mounted)setState(() {});
+                                  if (mounted) setState(() {});
                                 });
                               },
                               placeHolderText: 'Process',
@@ -770,9 +775,10 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                           }).toList(),
                           showError: false,
                           onChange: (newString) {
-                            if (mounted)setState(() {
-                              selectedWorkerType = newString;
-                            });
+                            if (mounted)
+                              setState(() {
+                                selectedWorkerType = newString;
+                              });
 
                             workerTypeIndexSelected = widget
                                 .processList![processIndexSelected].workerType!

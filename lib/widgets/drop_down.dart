@@ -156,10 +156,10 @@ class _DropDownState extends State<DropDown> {
                                   child: ListView.builder(
                                     controller: sc,
                                     itemBuilder: (context, index) {
-                                      Future.delayed(Duration(seconds: 1), () {
+                                      Future.delayed(Duration(seconds: 2), () {
                                         if (!test!) {
                                           test = true;
-                                          if (mounted) setState(() {});
+                                          if (context.mounted) setState(() {});
                                         }
                                       });
                                       return

@@ -446,11 +446,11 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                             ],
                                           );
                                         });
-                                      })
-                                  .then((value) => getSopWorker(
-                                      widget.sopDetail.id,
-                                      dialog: true,
-                                      searchParam: searchController.text));
+                                      });
+                                  // .then((value) => getSopWorker(
+                                  //     widget.sopDetail.id,
+                                  //     dialog: false,
+                                  //     searchParam: searchController.text));
                             },
                             child: Icon(
                               Icons.search,

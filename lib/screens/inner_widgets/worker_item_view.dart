@@ -193,9 +193,12 @@ class _WorkItemViewState extends State<WorkItemView> {
                                               workerId: currentItem.id,
                                               processList: widget.processList);
                                         }).then((value) {
-                                      if (value) {
-                                        widget.listLists[i].remove(currentItem);
-                                        if (mounted)setState(() {});
+                                      if (value != null) {
+                                        if (value) {
+                                          widget.listLists[i]
+                                              .remove(currentItem);
+                                          if (mounted) setState(() {});
+                                        }
                                       }
                                     });
                                   }
@@ -218,9 +221,10 @@ class _WorkItemViewState extends State<WorkItemView> {
                                     //     .format(DateTime.now());
                                     ///end
                                     if (widget.isEditing && newStatus) {
-                                      if (mounted)setState(() {
-                                        currentItem.isSelected = newStatus;
-                                      });
+                                      if (mounted)
+                                        setState(() {
+                                          currentItem.isSelected = newStatus;
+                                        });
 
                                       await EasyLoading.show(
                                         status: 'Adding...',
@@ -245,10 +249,11 @@ class _WorkItemViewState extends State<WorkItemView> {
                                         EasyLoading.showError('Error');
                                       }
                                     } else if (widget.isEditing && !newStatus) {
-                                      if (mounted)setState(() {
-                                        currentItem.isSelected =
-                                            currentItem.isSelected;
-                                      });
+                                      if (mounted)
+                                        setState(() {
+                                          currentItem.isSelected =
+                                              currentItem.isSelected;
+                                        });
                                       await showDialog(
                                           context: context,
                                           barrierDismissible: false,
@@ -263,9 +268,11 @@ class _WorkItemViewState extends State<WorkItemView> {
                                           // dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
                                           //     .format(DateTime.parse(value));
                                           dateString = value;
-                                          if (mounted)setState(() {
-                                            currentItem.isSelected = newStatus;
-                                          });
+                                          if (mounted)
+                                            setState(() {
+                                              currentItem.isSelected =
+                                                  newStatus;
+                                            });
 
                                           /// end
                                           await EasyLoading.show(
@@ -285,7 +292,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                           ]);
                                           widget.listLists[i]
                                               .remove(currentItem);
-                                          if (mounted)setState(() {});
+                                          if (mounted) setState(() {});
                                           await EasyLoading.dismiss();
 
                                           if (response) {
@@ -293,16 +300,18 @@ class _WorkItemViewState extends State<WorkItemView> {
                                             EasyLoading.showError('Error');
                                           }
                                         } else {
-                                          if (mounted)setState(() {
-                                            currentItem.isSelected =
-                                                currentItem.isSelected;
-                                          });
+                                          if (mounted)
+                                            setState(() {
+                                              currentItem.isSelected =
+                                                  currentItem.isSelected;
+                                            });
                                         }
                                       });
                                     } else {
-                                      if (mounted)setState(() {
-                                        currentItem.isSelected = newStatus;
-                                      });
+                                      if (mounted)
+                                        setState(() {
+                                          currentItem.isSelected = newStatus;
+                                        });
                                     }
                                   },
                                 ),
@@ -312,23 +321,29 @@ class _WorkItemViewState extends State<WorkItemView> {
                                   if (widget.isEditing) {
                                     this.widget.selectedShift!.executedShiftId =
                                         widget.execShiftId;
-                                    await showDialog(
-                                        context: context,
-                                        barrierDismissible: false,
-                                        builder: (BuildContext context) {
-                                          return ConfirmTimeEnd(
-                                              shiftItem:
-                                                  this.widget.selectedShift!,
-                                              editing: widget.isEditing,
-                                              moveWorker: true,
-                                              workerId: currentItem.id,
-                                              processList: widget.processList);
-                                        }).then((value) {
-                                      if (value) {
-                                        widget.listLists[i].remove(currentItem);
-                                        if (mounted)setState(() {});
-                                      }
-                                    });
+                                    if (currentItem.isSelected) {
+                                      await showDialog(
+                                          context: context,
+                                          barrierDismissible: false,
+                                          builder: (BuildContext context) {
+                                            return ConfirmTimeEnd(
+                                                shiftItem:
+                                                    this.widget.selectedShift!,
+                                                editing: widget.isEditing,
+                                                moveWorker: true,
+                                                workerId: currentItem.id,
+                                                processList:
+                                                    widget.processList);
+                                          }).then((value) {
+                                        if (value != null) {
+                                          if (value) {
+                                            widget.listLists[i]
+                                                .remove(currentItem);
+                                            if (mounted) setState(() {});
+                                          }
+                                        }
+                                      });
+                                    }
                                   }
                                 },
                                 child: UserItem(
@@ -349,9 +364,10 @@ class _WorkItemViewState extends State<WorkItemView> {
                                     //     .format(DateTime.now());
                                     ///end
                                     if (widget.isEditing && newStatus) {
-                                      if (mounted)setState(() {
-                                        currentItem.isSelected = newStatus;
-                                      });
+                                      if (mounted)
+                                        setState(() {
+                                          currentItem.isSelected = newStatus;
+                                        });
 
                                       await EasyLoading.show(
                                         status: 'Adding...',
@@ -376,10 +392,11 @@ class _WorkItemViewState extends State<WorkItemView> {
                                         EasyLoading.showError('Error');
                                       }
                                     } else if (widget.isEditing && !newStatus) {
-                                      if (mounted)setState(() {
-                                        currentItem.isSelected =
-                                            currentItem.isSelected;
-                                      });
+                                      if (mounted)
+                                        setState(() {
+                                          currentItem.isSelected =
+                                              currentItem.isSelected;
+                                        });
                                       await showDialog(
                                           context: context,
                                           barrierDismissible: false,
@@ -394,9 +411,11 @@ class _WorkItemViewState extends State<WorkItemView> {
                                           // dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
                                           //     .format(DateTime.parse(value));
                                           dateString = value;
-                                          if (mounted)setState(() {
-                                            currentItem.isSelected = newStatus;
-                                          });
+                                          if (mounted)
+                                            setState(() {
+                                              currentItem.isSelected =
+                                                  newStatus;
+                                            });
 
                                           /// end
                                           await EasyLoading.show(
@@ -416,7 +435,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                           ]);
                                           widget.listLists[i]
                                               .remove(currentItem);
-                                          if (mounted)setState(() {});
+                                          if (mounted) setState(() {});
                                           await EasyLoading.dismiss();
 
                                           if (response) {
@@ -424,16 +443,18 @@ class _WorkItemViewState extends State<WorkItemView> {
                                             EasyLoading.showError('Error');
                                           }
                                         } else {
-                                          if (mounted)setState(() {
-                                            currentItem.isSelected =
-                                                currentItem.isSelected;
-                                          });
+                                          if (mounted)
+                                            setState(() {
+                                              currentItem.isSelected =
+                                                  currentItem.isSelected;
+                                            });
                                         }
                                       });
                                     } else {
-                                      if (mounted)setState(() {
-                                        currentItem.isSelected = newStatus;
-                                      });
+                                      if (mounted)
+                                        setState(() {
+                                          currentItem.isSelected = newStatus;
+                                        });
                                     }
                                   },
                                 ),
@@ -456,7 +477,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                     }).then((value) {
                                   if (value) {
                                     widget.listLists[i].remove(currentItem);
-                                    if (mounted)setState(() {});
+                                    if (mounted) setState(() {});
                                   }
                                 });
                               }
@@ -479,9 +500,10 @@ class _WorkItemViewState extends State<WorkItemView> {
                                 //     .format(DateTime.now());
                                 ///end
                                 if (widget.isEditing && newStatus) {
-                                  if (mounted)setState(() {
-                                    currentItem.isSelected = newStatus;
-                                  });
+                                  if (mounted)
+                                    setState(() {
+                                      currentItem.isSelected = newStatus;
+                                    });
 
                                   await EasyLoading.show(
                                     status: 'Adding...',
@@ -505,10 +527,11 @@ class _WorkItemViewState extends State<WorkItemView> {
                                     EasyLoading.showError('Error');
                                   }
                                 } else if (widget.isEditing && !newStatus) {
-                                  if (mounted)setState(() {
-                                    currentItem.isSelected =
-                                        currentItem.isSelected;
-                                  });
+                                  if (mounted)
+                                    setState(() {
+                                      currentItem.isSelected =
+                                          currentItem.isSelected;
+                                    });
                                   await showDialog(
                                       context: context,
                                       barrierDismissible: false,
@@ -522,9 +545,10 @@ class _WorkItemViewState extends State<WorkItemView> {
                                       // dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
                                       //     .format(DateTime.parse(value));
                                       dateString = value;
-                                      if (mounted)setState(() {
-                                        currentItem.isSelected = newStatus;
-                                      });
+                                      if (mounted)
+                                        setState(() {
+                                          currentItem.isSelected = newStatus;
+                                        });
 
                                       /// end
                                       await EasyLoading.show(
@@ -543,7 +567,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                             .toString()
                                       ]);
                                       widget.listLists[i].remove(currentItem);
-                                      if (mounted)setState(() {});
+                                      if (mounted) setState(() {});
                                       await EasyLoading.dismiss();
 
                                       if (response) {
@@ -551,16 +575,18 @@ class _WorkItemViewState extends State<WorkItemView> {
                                         EasyLoading.showError('Error');
                                       }
                                     } else {
-                                      if (mounted)setState(() {
-                                        currentItem.isSelected =
-                                            currentItem.isSelected;
-                                      });
+                                      if (mounted)
+                                        setState(() {
+                                          currentItem.isSelected =
+                                              currentItem.isSelected;
+                                        });
                                     }
                                   });
                                 } else {
-                                  if (mounted)setState(() {
-                                    currentItem.isSelected = newStatus;
-                                  });
+                                  if (mounted)
+                                    setState(() {
+                                      currentItem.isSelected = newStatus;
+                                    });
                                 }
                               },
                             ),
@@ -593,19 +619,20 @@ class _WorkItemViewState extends State<WorkItemView> {
                     String dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
                         .format(DateTime.now());
 
-                    if (mounted)setState(() {
-                      for (var curentItem in widget.listLists) {
-                        for (var currentObject in curentItem) {
-                          if (currentObject.isSelected) {
-                            workerIds.add(currentObject.id!.toString());
-                            startTime.add(dateString);
-                            efficiencyCalculation.add(currentObject
-                                .efficiencyCalculation!
-                                .toString());
+                    if (mounted)
+                      setState(() {
+                        for (var curentItem in widget.listLists) {
+                          for (var currentObject in curentItem) {
+                            if (currentObject.isSelected) {
+                              workerIds.add(currentObject.id!.toString());
+                              startTime.add(dateString);
+                              efficiencyCalculation.add(currentObject
+                                  .efficiencyCalculation!
+                                  .toString());
+                            }
                           }
                         }
-                      }
-                    });
+                      });
 
                     int totalCountTemp = 0;
                     for (var currentItem in widget.listLists) {
@@ -692,9 +719,10 @@ class _WorkItemViewState extends State<WorkItemView> {
                         .contains(tmp.data!.workerType!)
                         .toString();
 
-                    if (mounted)setState(() {
-                      this.widget.listLists[index].add(tmp.data!);
-                    });
+                    if (mounted)
+                      setState(() {
+                        this.widget.listLists[index].add(tmp.data!);
+                      });
 
                     print('object');
                   },
@@ -713,9 +741,10 @@ class _WorkItemViewState extends State<WorkItemView> {
                       } else {
                         if (currentList.first.workerTypeId ==
                             worker.workerTypeId) {
-                          if (mounted)setState(() {
-                            currentList.add(worker);
-                          });
+                          if (mounted)
+                            setState(() {
+                              currentList.add(worker);
+                            });
 
                           listExists = true;
                         }
@@ -725,11 +754,12 @@ class _WorkItemViewState extends State<WorkItemView> {
                     }
 
                     if (!listExists) {
-                      if (mounted)setState(() {
-                        widget.listNames.add(worker.workerType!);
+                      if (mounted)
+                        setState(() {
+                          widget.listNames.add(worker.workerType!);
 
-                        widget.listLists.add([worker]);
-                      });
+                          widget.listLists.add([worker]);
+                        });
 
                       print('');
                     }
@@ -767,13 +797,15 @@ class _WorkItemViewState extends State<WorkItemView> {
                       .add(currentObject.efficiencyCalculation!.toString());
                 }
               }
-              if (mounted)setState(() {
-                widget.listLists[index] = workers;
-              });
+              if (mounted)
+                setState(() {
+                  widget.listLists[index] = workers;
+                });
 
-              if (mounted)setState(() {
-                workersLabel = 'WORKERS';
-              });
+              if (mounted)
+                setState(() {
+                  workersLabel = 'WORKERS';
+                });
 
               await EasyLoading.show(
                 status: 'Adding...',
@@ -814,13 +846,15 @@ class _WorkItemViewState extends State<WorkItemView> {
                   }
                 }
               }
-              if (mounted)setState(() {
-                widget.listLists[index] = workers;
-              });
+              if (mounted)
+                setState(() {
+                  widget.listLists[index] = workers;
+                });
 
-              if (mounted)setState(() {
-                workersLabel = 'WORKERS';
-              });
+              if (mounted)
+                setState(() {
+                  workersLabel = 'WORKERS';
+                });
             }
           },
           icon: const Icon(
@@ -937,9 +971,10 @@ class _UserItemState extends State<UserItem> {
                   if (widget.disableRatio) {
                     return;
                   }
-                  if (mounted)setState(() {
-                    widget.initialSelected = newValue;
-                  });
+                  if (mounted)
+                    setState(() {
+                      widget.initialSelected = newValue;
+                    });
                   widget.changedStatus(newValue);
                 }),
             const SizedBox(
