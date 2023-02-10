@@ -158,8 +158,7 @@ class _DropDownState extends State<DropDown> {
                                       Future.delayed(Duration(seconds: 1), () {
                                         if (!test!) {
                                           test = true;
-                                          setState(() {});
-
+                                          if (mounted) setState(() {});
                                         }
                                       });
                                       return

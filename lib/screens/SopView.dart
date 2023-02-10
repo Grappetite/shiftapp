@@ -263,7 +263,7 @@ class _SopViewState extends State<SopView> {
                                                                       context)
                                                                   .size
                                                                   .height /
-                                                              3.75,
+                                                              2.75,
                                                           decoration:
                                                               BoxDecoration(
                                                             color: Colors.white,
@@ -328,6 +328,7 @@ class _SopViewState extends State<SopView> {
                                                                   ],
                                                                 ),
                                                               ),
+                                                              Spacer(),
                                                               Row(
                                                                 mainAxisAlignment:
                                                                     MainAxisAlignment
@@ -397,6 +398,7 @@ class _SopViewState extends State<SopView> {
                                                                   ),
                                                                 ],
                                                               ),
+                                                              Spacer(),
                                                               PElevatedButton(
                                                                 onPressed:
                                                                     () async {
@@ -447,6 +449,7 @@ class _SopViewState extends State<SopView> {
                                                                 text:
                                                                     'View SOP',
                                                               ),
+                                                              Spacer(),
                                                             ],
                                                           ),
                                                         ));
@@ -507,7 +510,7 @@ class _SopViewState extends State<SopView> {
                                                                       context)
                                                                   .size
                                                                   .height /
-                                                              3.75,
+                                                              2.75,
                                                           decoration:
                                                               BoxDecoration(
                                                             color: Colors.white,
@@ -572,6 +575,7 @@ class _SopViewState extends State<SopView> {
                                                                   ],
                                                                 ),
                                                               ),
+                                                              Spacer(),
                                                               Row(
                                                                 mainAxisAlignment:
                                                                     MainAxisAlignment
@@ -641,6 +645,7 @@ class _SopViewState extends State<SopView> {
                                                                   ),
                                                                 ],
                                                               ),
+                                                              Spacer(),
                                                               PElevatedButton(
                                                                 onPressed:
                                                                     () async {
@@ -691,6 +696,7 @@ class _SopViewState extends State<SopView> {
                                                                 text:
                                                                     'View SOP',
                                                               ),
+                                                              Spacer(),
                                                             ],
                                                           ),
                                                         ));
