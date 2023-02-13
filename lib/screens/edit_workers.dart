@@ -131,6 +131,7 @@ class _EditWorkersState extends State<EditWorkers> {
       for (var workingWorker in responseShift.data!.shiftWorker!) {
         if (shiftWorkers[i].userId == workingWorker.userId) {
           shiftWorkers.remove(shiftWorkers[i]);
+          break;
         }
       }
     }
