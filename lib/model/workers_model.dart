@@ -20,8 +20,6 @@ class WorkersListing {
       json['data'].forEach((v) {
         searchWorker!.add(ShiftWorker.fromJson(v));
       });
-
-      print(searchWorker);
     } else {
       data = json['data'] != null ? WorkersData.fromJson(json['data']) : null;
     }
@@ -46,8 +44,6 @@ class WorkersData {
   WorkersData({this.worker, this.shiftWorker});
 
   WorkersData.fromJson(Map<String, dynamic> json) {
-    print(json);
-
     shiftWorker = <ShiftWorker>[];
 
     worker = <ShiftWorker>[];
@@ -132,10 +128,10 @@ class ShiftWorker {
 
     if (json.keys.contains('worker_add')) {
       isAdded = json['worker_add'] == '1';
-      print('object');
+      
     }
 
-    print('object');
+    
   }
 
   Map<String, dynamic> toJson() {

@@ -46,7 +46,7 @@ class _WorkersListingState extends State<WorkersListing> {
           timeElasped = widget.selectedShift.timeElasped;
         });
 
-        print('');
+       
       },
     );
   }
@@ -189,7 +189,7 @@ class _WorkersListingState extends State<WorkersListing> {
       isLoader = false;
     });
 
-    print('');
+   
   }
 
   @override

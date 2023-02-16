@@ -43,7 +43,6 @@ class _HomeViewState extends State<HomeView> {
     super.initState();
     FirebaseMessaging.onMessage.listen(showFlutterNotification);
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('A new onMessageOpenedApp event was published!');
     });
   }
 
@@ -190,7 +189,6 @@ class _HomeMainViewState extends State<HomeMainView> {
         widget.onLogout();
       }
     }
-    print('=');
   }
 
   late AppPopupMenu<int> appMenu02;

@@ -138,7 +138,7 @@ class ShiftService {
       final prefs = await SharedPreferences.getInstance();
 
       String url = baseUrl + "userLoginlist";
-      print('');
+     
 
       Response response = await dio.get(url,
           options: Options(
@@ -165,7 +165,7 @@ class ShiftService {
       final prefs = await SharedPreferences.getInstance();
 
       String url = baseUrl + "efficiency/$id/$shiftId";
-      print('');
+     
 
       Response response = await dio.get(url,
           options: Options(

@@ -83,7 +83,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
             timeElasped = widget.selectedShift.timeElasped;
           });
 
-        print('');
+       
       },
     );
   }
@@ -383,7 +383,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                   ],
                                 );
 
-                                print('');
+                               
 
                                 return;
                               } else {
@@ -519,7 +519,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
   void initState() {
     controller = TextEditingController(
         text: DateTime.now().isBefore(widget.shiftItem.endDateObject)
-            ? DateTime.now().toString().timeToShow
+            ? DateTime.now().roundDown().toString().timeToShow
             : findEndTime().timeToShow);
     super.initState();
   }
@@ -594,6 +594,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                   GestureDetector(
                     onTap: () async {
                       DateTime? newTime;
+                      bool? assign=false;
                       showCupertinoModalPopup(
                           context: context,
                           builder: (BuildContext builder) {
@@ -601,27 +602,64 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                               color: Colors.white,
                               height: MediaQuery.of(context).size.width,
                               width: MediaQuery.of(context).size.width,
-                              child: CupertinoDatePicker(
-                                mode: CupertinoDatePickerMode.dateAndTime,
-                                onDateTimeChanged: (value) async {
-                                  newTime = value;
-                                },
-                                initialDateTime: widget.editing
-                                    ? DateTime.now()
-                                    : widget.shiftItem.startDateObject
-                                        .add(Duration(hours: 3)),
-                                minimumDate: widget.editing
-                                    ? widget.shiftItem.startDateObject
-                                    : widget.shiftItem.startDateObject
-                                        .add(Duration(hours: 3)),
-                                maximumDate: widget.editing
-                                    ? DateTime.now()
-                                    : widget.shiftItem.startDateObject
-                                        .add(Duration(hours: 16)),
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                      flex: 1,
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                                " ${widget.moveWorker ? "Select time for when the worker was moved" : widget.editing ? "Select time for when the worker was removed" : ""}.",
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                  color: kPrimaryColor,
+                                                )),
+                                          ),
+                                          Expanded(
+                                            child: PElevatedButton(
+                                              onPressed: () {
+                                                if (newTime == null) {
+                                                  newTime = DateTime.now()
+                                                      .roundDown();
+                                                }
+                                                assign=true;
+                                                Navigator.pop(context);
+                                                // okHandler.call();
+                                              },
+                                              text: "Done",
+                                            ),
+                                          ),
+                                        ],
+                                      )),
+                                  Expanded(
+                                    flex: 4,
+                                    child: CupertinoDatePicker(
+                                      mode: CupertinoDatePickerMode.dateAndTime,
+                                      onDateTimeChanged: (value) async {
+                                        newTime = value;
+                                      },
+                                      minuteInterval: 15,
+                                      initialDateTime: widget.editing
+                                          ? DateTime.now().roundDown()
+                                          : widget.shiftItem.startDateObject
+                                              .add(Duration(hours: 3)),
+                                      minimumDate: widget.editing
+                                          ? widget.shiftItem.startDateObject
+                                          : widget.shiftItem.startDateObject
+                                              .add(Duration(hours: 3)),
+                                      maximumDate: widget.editing
+                                          ? DateTime.now().roundDown()
+                                          : widget.shiftItem.startDateObject
+                                              .add(Duration(hours: 16)),
+                                    ),
+                                  )
+                                ],
                               ),
                             );
                           }).then((value) {
-                        if (newTime != null) {
+                        if (newTime != null && assign!) {
                           var customSelectedStartTime = widget.shiftItem
                               .makeTimeStringFromHourMinute(
                                   newTime!.hour, newTime!.minute);
@@ -638,7 +676,8 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                                             .split(" ")[0] +
                                         " " +
                                         customSelectedStartTime.split(" ")[1];
-                            controller!.text = customTimeSelectedToSend.timeToShow;
+                            controller!.text =
+                                customTimeSelectedToSend.timeToShow;
                           });
                         }
                       });
@@ -653,7 +692,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                       controller: controller!,
                       text: DateTime.now()
                               .isBefore(widget.shiftItem.endDateObject)
-                          ? DateTime.now().toString().timeToShow
+                          ? DateTime.now().roundDown().toString().timeToShow
                           : findEndTime().timeToShow,
                       suffixIcon: Icons.expand_circle_down_outlined,
                     ),
@@ -898,7 +937,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
     var result = '';
     result = DateTime.now().isBefore(widget.shiftItem.endDateObject)
         ? DateFormat("yyyy-MM-dd hh:mm:ss")
-            .parse(DateTime.now().toString())
+            .parse(DateTime.now().roundDown().toString())
             .toString()
         : widget.shiftItem.endTime!;
 
@@ -915,11 +954,11 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
     //
     //   result = endTime;
     // }
-    print('');
+   
     return result;
   }
 
   String dataToDisplay() {
-    return DateFormat("yyyy-MM-dd").format(DateTime.now());
+    return DateFormat("yyyy-MM-dd").format(DateTime.now().roundDown());
   }
 }

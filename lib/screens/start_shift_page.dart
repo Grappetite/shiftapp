@@ -5,6 +5,7 @@ import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/screens/shift_start.dart';
@@ -51,17 +52,19 @@ class _StartShiftViewState extends State<StartShiftView> {
   String timeElasped = '00:00';
   late Timer _timer;
   bool? willpop = true;
+
   void startTimer() {
     const oneSec = Duration(seconds: 1);
 
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
-        if (mounted)setState(() {
-          timeElasped = widget.selectedShift.timeElasped;
-        });
+        if (mounted)
+          setState(() {
+            timeElasped = widget.selectedShift.timeElasped;
+          });
 
-        print('');
+       
       },
     );
   }
@@ -178,24 +181,25 @@ class _StartShiftViewState extends State<StartShiftView> {
                   width: MediaQuery.of(context).size.width / 1.7,
                   child: TextButton(
                     onPressed: () async {
-                      if (_controller.text.isEmpty && 1 == 2) {
-                        showAlertDialog(
-                          context: context,
-                          title: 'Error',
-                          message: 'Please add comment.',
-                          actions: [
-                            AlertDialogAction(
-                              label: MaterialLocalizations.of(context)
-                                  .okButtonLabel,
-                              key: OkCancelResult.ok,
-                            )
-                          ],
-                        );
-                        return;
-                      }
-                      if (mounted)setState(() {
-                        willpop = false;
-                      });
+                      // if (_controller.text.isEmpty && 1 == 2) {
+                      //   showAlertDialog(
+                      //     context: context,
+                      //     title: 'Error',
+                      //     message: 'Please add comment.',
+                      //     actions: [
+                      //       AlertDialogAction(
+                      //         label: MaterialLocalizations.of(context)
+                      //             .okButtonLabel,
+                      //         key: OkCancelResult.ok,
+                      //       )
+                      //     ],
+                      //   );
+                      //   return;
+                      // }
+                      if (mounted)
+                        setState(() {
+                          willpop = false;
+                        });
                       await EasyLoading.show(
                         status: 'loading...',
                         maskType: EasyLoadingMaskType.black,
@@ -221,7 +225,7 @@ class _StartShiftViewState extends State<StartShiftView> {
                           showAlertDialog(
                             context: context,
                             title: 'Error',
-                            message: result.message,
+                            message: result.message!.capitalizeFirst,
                             actions: [
                               AlertDialogAction(
                                 label: MaterialLocalizations.of(context)
@@ -230,7 +234,8 @@ class _StartShiftViewState extends State<StartShiftView> {
                               )
                             ],
                           );
-
+                          willpop = true;
+                          setState(() {});
                           return;
                         }
 
@@ -297,9 +302,10 @@ class _StartShiftViewState extends State<StartShiftView> {
                         }
                       } else {
                         EasyLoading.showError('Could not load data');
-                        if (mounted)setState(() {
-                          willpop = true;
-                        });
+                        if (mounted)
+                          setState(() {
+                            willpop = true;
+                          });
                       }
                     },
                     child: Image.asset('assets/images/start_button.png'),
@@ -333,7 +339,6 @@ class _StartShiftViewState extends State<StartShiftView> {
         now.day,
         now.hour,
         now.minute);
-    print("Notification Scheduled Date : " + "$scheduledDate");
     return scheduledDate;
   }
 
@@ -344,9 +349,6 @@ class _StartShiftViewState extends State<StartShiftView> {
     body,
   ) async {
     await flutterLocalNotificationsPlugin.cancel(id);
-    print(await flutterLocalNotificationsPlugin
-        .getNotificationAppLaunchDetails()
-        .toString());
     flutterLocalNotificationsPlugin.zonedSchedule(
         id,
         title,

@@ -85,14 +85,16 @@ class _EndShiftViewState extends State<EndShiftView> {
         
           if (mounted)setState(() {
             timeElasped = widget.selectedShift.timeElasped;
-            if (int.parse(timeElasped.split(":")[1].toString()) % 30 == 0 &&
-                stopper == false) {
-              stopper = true;
-              loadExpectedUnits();
-            } else if (int.parse(timeElasped.split(":")[1].toString()) % 30 !=
-                    0 &&
-                stopper == true) {
-              stopper = false;
+            if(timeElasped.isNotEmpty){
+              if (int.parse(timeElasped.split(":")[1].toString()) % 30 == 0 &&
+                  stopper == false) {
+                stopper = true;
+                loadExpectedUnits();
+              } else if (int.parse(timeElasped.split(":")[1].toString()) % 30 !=
+                      0 &&
+                  stopper == true) {
+                stopper = false;
+              }
             }
           });
       },
@@ -252,7 +254,7 @@ class _EndShiftViewState extends State<EndShiftView> {
           responseShift.data!.worker!.length;
     });
 
-    print('');
+   
   }
 
   @override

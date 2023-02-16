@@ -671,7 +671,6 @@ class _WorkItemViewState extends State<WorkItemView> {
 
   Row makeMemberTitleHeader(
       String title, context, List<ShiftWorker> workers, int index) {
-    print(title);
     return Row(
       children: [
         Text(
@@ -724,7 +723,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                         this.widget.listLists[index].add(tmp.data!);
                       });
 
-                    print('object');
+                    
                   },
                   processId: widget.processId.toString(),
                   otherTypeTempWorkerAdded: (worker) {
@@ -761,7 +760,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                           widget.listLists.add([worker]);
                         });
 
-                      print('');
+                     
                     }
                   },
                   listName: this.widget.listNames[index],
@@ -826,7 +825,7 @@ class _WorkItemViewState extends State<WorkItemView> {
               } else {
                 EasyLoading.showError('Error');
               }
-              print('');
+             
             } else {
               for (int i = 0; i < widget.listLists.length; i++) {
                 if (i != index) {

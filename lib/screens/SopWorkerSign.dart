@@ -364,11 +364,7 @@ class _SopWorkerSignState extends State<SopWorkerSign> {
                                                 widget.executionShiftId,
                                           );
                                           await EasyLoading.dismiss();
-                                          pageController.nextPage(
-                                            duration: Duration(seconds: 1),
-                                            curve:
-                                                Curves.fastLinearToSlowEaseIn,
-                                          );
+
                                           if (pagePosition ==
                                               widget.workerListToTrain!.length -
                                                   1) {
@@ -376,6 +372,12 @@ class _SopWorkerSignState extends State<SopWorkerSign> {
                                             Navigator.pop(context);
                                             Navigator.pop(context);
                                             Navigator.pop(context);
+                                          }else{
+                                            pageController.nextPage(
+                                              duration: Duration(seconds: 1),
+                                              curve:
+                                              Curves.fastLinearToSlowEaseIn,
+                                            );
                                           }
                                         } else {
                                           EasyLoading.showError(

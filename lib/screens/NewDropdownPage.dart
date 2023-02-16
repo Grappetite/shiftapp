@@ -159,7 +159,7 @@ class _DropDownPageState extends State<DropDownPage> {
                                                 height: 9,
                                               ),
                                               Text(
-                                                shiftList![index]!.name!,
+                                                shiftList![index].name!,
                                                 style: const TextStyle(
                                                   color: kPrimaryColor,
                                                   fontWeight: FontWeight.w600,
@@ -262,22 +262,54 @@ class _DropDownPageState extends State<DropDownPage> {
                                 processSelected.id!);
                             await EasyLoading.dismiss();
                             if (shifts == null) {
-                              EasyLoading.showError('Could not load shifts');
+                              shifts=ShiftsResponse();
+                              shifts.data = [];
+                              shifts.data!.add(ShiftItem(
+                                  id: 0,
+                                  name: processSelected.name,
+                                  startTime: DateTime.now()
+                                      .add(Duration(hours: 3))
+                                      .toString(),
+                                  endTime: DateTime.now()
+                                      .add(Duration(hours: 3))
+                                      .toString(),
+                                  patternId: 0,
+                                  breakTime: 60,
+                                  shiftMinutes: 3600,
+                                  shiftDuration: "Always",
+                                  started: true));
+                              shifts.data!.first.displayScreen = 3;
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      HomeView(
+                                        selectedShift: shifts!.data!.first,
+                                        processSelected: processSelected,
+                                      ),
+                                ),
+                              ).then((value) {
+                                shiftList!.clear();
+                                if (mounted)setState(() {
+
+                                });
+                              });
+                              // EasyLoading.showError('Could not load shifts');
                             } else {
                               if (shifts.data!.isNotEmpty) {
                                 if (shifts.data!.length == 1) {
                                   if (!shifts.data!.first.started!) {
                                     if (DateTime.now().isAfter(shifts
-                                        .data!.first!.startDateObject
+                                        .data!.first.startDateObject
                                         .subtract(Duration(hours: 2)))) {
                                       if (DateTime.now().isBefore(
-                                          shifts.data!.first!.endDateObject)) {
-                                        shifts.data!.first!.displayScreen = 2;
+                                          shifts.data!.first.endDateObject)) {
+                                        shifts.data!.first.displayScreen = 2;
                                       } else {
-                                        shifts.data!.first!.displayScreen = 3;
+                                        shifts.data!.first.displayScreen = 3;
                                       }
                                     } else {
-                                      shifts.data!.first!.displayScreen = 3;
+                                      shifts.data!.first.displayScreen = 3;
                                     }
                                     if (processSelected.type == "training") {
                                       shifts.data = [];
@@ -295,14 +327,14 @@ class _DropDownPageState extends State<DropDownPage> {
                                           shiftMinutes: 3600,
                                           shiftDuration: "Always",
                                           started: true));
-                                      shifts.data!.first!.displayScreen = 3;
+                                      shifts.data!.first.displayScreen = 3;
                                     }
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (BuildContext context) =>
                                             HomeView(
-                                          selectedShift: shifts.data!.first,
+                                          selectedShift: shifts!.data!.first,
                                           processSelected: processSelected,
                                         ),
                                       ),
@@ -333,13 +365,13 @@ class _DropDownPageState extends State<DropDownPage> {
                                         shiftMinutes: 3600,
                                         shiftDuration: "Always",
                                         started: true));
-                                    shifts.data!.first!.displayScreen = 3;
+                                    shifts.data!.first.displayScreen = 3;
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (BuildContext context) =>
                                             HomeView(
-                                          selectedShift: shifts.data!.first,
+                                          selectedShift: shifts!.data!.first,
                                           processSelected: processSelected,
                                         ),
                                       ),
@@ -386,11 +418,40 @@ class _DropDownPageState extends State<DropDownPage> {
                                   EasyLoading.showError('Please select shift');
                                 }
                               }
-                              else{
+                              else{ shifts.data = [];
+                              shifts.data!.add(ShiftItem(
+                                  id: 0,
+                                  name: processSelected.name,
+                                  startTime: DateTime.now()
+                                      .add(Duration(hours: 3))
+                                      .toString(),
+                                  endTime: DateTime.now()
+                                      .add(Duration(hours: 3))
+                                      .toString(),
+                                  patternId: 0,
+                                  breakTime: 60,
+                                  shiftMinutes: 3600,
+                                  shiftDuration: "Always",
+                                  started: true));
+                              shifts.data!.first.displayScreen = 3;
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      HomeView(
+                                        selectedShift: shifts!.data!.first,
+                                        processSelected: processSelected,
+                                      ),
+                                ),
+                              ).then((value) {
+                                shiftList!.clear();
+                                if (mounted)setState(() {
+
+                                });
+                              });
                                 EasyLoading.showError('Could not load shifts');
                               }
                             }
-                            // print("object");
                             return;
                           },
                           text: 'NEXT',

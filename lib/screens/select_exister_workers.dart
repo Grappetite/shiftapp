@@ -74,7 +74,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
           timeElasped = widget.selectedShift.timeElasped;
         });
 
-        print('');
+       
       },
     );
   }
@@ -295,10 +295,21 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                   const SizedBox(
                     height: 12,
                   ),
-                  const Text(
-                    'Cannot find workers?',
-                    style: TextStyle(color: kPrimaryColor),
-                  ),
+                  // GestureDetector(
+                  //   onTap: (){
+                  //     for(var a in workers)
+                  //       {
+                  //         a.isSelected=true;
+                  //         a.newAdded = true;
+                  //       }
+                  //     setState(() {});
+                  //   },
+                  //   child:
+                    const Text(
+                      'Cannot find workers?',
+                      style: TextStyle(color: kPrimaryColor),
+                    ),
+                  // ),
                   const SizedBox(
                     height: 4,
                   ),
@@ -360,7 +371,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                           ]);
                         }
 
-                        print('');
+                       
                       }
                     },
                     child: Row(
@@ -483,7 +494,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                         } else {
                                           currentItem.newRemove = true;
 
-                                          print('');
+                                         
                                         }
                                       }
                                     } else {}

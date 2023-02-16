@@ -199,7 +199,7 @@ class ShiftStartDetails {
     process = Process.fromJson(json["process"]);
     shiftItem =
         json["shift"] != null ? ShiftItem.fromJson(json["shift"]) : null;
-    print('object');
+    
   }
 
   Map<String, dynamic> toJson() {

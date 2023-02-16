@@ -182,10 +182,10 @@ class _ShiftStartState extends State<ShiftStart> {
                                                   child: PElevatedButton(
                                                     onPressed: () {
                                                       // okHandler.call();
-                                                      if(newTime==null)
-                                                        {
-                                                          newTime=DateTime.now().roundDown();
-                                                        }
+                                                      if (newTime == null) {
+                                                        newTime = DateTime.now()
+                                                            .roundDown();
+                                                      }
                                                       Navigator.pop(context);
                                                     },
                                                     text: "Done",
@@ -202,8 +202,11 @@ class _ShiftStartState extends State<ShiftStart> {
                                               newTime = value;
                                             },
                                             minuteInterval: 15,
-                                            initialDateTime:
-                                                DateTime.now().roundDown(),
+                                            initialDateTime: DateTime.now()
+                                                    .roundDown()
+                                                    .isBefore(mintime)
+                                                ? mintime
+                                                : DateTime.now().roundDown(),
                                             minimumDate: mintime,
                                             maximumDate: maxtime,
                                           ),
@@ -227,7 +230,7 @@ class _ShiftStartState extends State<ShiftStart> {
 
                                 String endDate = '';
 
-                                print('object');
+                                
 
                                 bool? selected = await showDialog(
                                     context: context,
@@ -261,40 +264,41 @@ class _ShiftStartState extends State<ShiftStart> {
                                   if (endDate.isNotEmpty) {
                                     widget.selectedShift.endTime = endDate;
                                   }
-                                  if (mounted)setState(() {
-                                    widget.selectedShift.startTime =
-                                        customSelectedStartTime;
-                                    widget.selectedShift.endTime = widget
-                                        .selectedShift
-                                        .makeTimeStringFromHourMinuteMahboob(
-                                            DateTime(
+                                  if (mounted)
+                                    setState(() {
+                                      widget.selectedShift.startTime =
+                                          customSelectedStartTime;
+                                      widget.selectedShift.endTime = widget
+                                          .selectedShift
+                                          .makeTimeStringFromHourMinuteMahboob(
+                                              DateTime(
+                                                newTime!
+                                                    .add(Duration(
+                                                        minutes: differenceT))
+                                                    .year,
+                                                newTime!
+                                                    .add(Duration(
+                                                        minutes: differenceT))
+                                                    .month,
+                                                newTime!
+                                                    .add(Duration(
+                                                        minutes: differenceT))
+                                                    .day,
+                                              ),
                                               newTime!
                                                   .add(Duration(
                                                       minutes: differenceT))
-                                                  .year,
+                                                  .hour,
                                               newTime!
                                                   .add(Duration(
                                                       minutes: differenceT))
-                                                  .month,
-                                              newTime!
-                                                  .add(Duration(
-                                                      minutes: differenceT))
-                                                  .day,
-                                            ),
-                                            newTime!
-                                                .add(Duration(
-                                                    minutes: differenceT))
-                                                .hour,
-                                            newTime!
-                                                .add(Duration(
-                                                    minutes: differenceT))
-                                                .minute);
-                                  });
+                                                  .minute);
+                                    });
                                 }
                               }
                             });
 
-                            print('');
+                           
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -439,9 +443,6 @@ class _ShiftStartState extends State<ShiftStart> {
               if (endTimeOriginal == null) {
                 endTimeOriginal = widget.selectedShift.endTime!;
               }
-              print(DateTime.parse(startTimeOriginal)
-                  .difference(DateTime.now())
-                  .inMinutes);
               if (DateTime.parse(startTimeOriginal)
                           .difference(DateTime.now())
                           .inMinutes <
@@ -654,11 +655,13 @@ class _ShiftStartState extends State<ShiftStart> {
                                                                           PElevatedButton(
                                                                         onPressed:
                                                                             () {
-                                                                              if(newTime==null)
-                                                                              {
-                                                                                newTime=DateTime.now().roundDown();
-                                                                              }
-                                                                              Navigator.pop(context);
+                                                                          if (newTime ==
+                                                                              null) {
+                                                                            newTime =
+                                                                                DateTime.now().roundDown();
+                                                                          }
+                                                                          Navigator.pop(
+                                                                              context);
                                                                           // okHandler.call();
                                                                         },
                                                                         text:
@@ -672,10 +675,11 @@ class _ShiftStartState extends State<ShiftStart> {
                                                               child:
                                                                   CupertinoDatePicker(
                                                                 mode: CupertinoDatePickerMode
-                                                                    .dateAndTime,
-                                                                initialDateTime:
-                                                                    DateTime.now()
-                                                                        .roundDown(),
+                                                                    .dateAndTime,   initialDateTime: DateTime.now()
+                                                                      .roundDown()
+                                                                      .isBefore(mintime)
+                                                                      ? mintime
+                                                                      : DateTime.now().roundDown(),
                                                                 minuteInterval:
                                                                     15,
                                                                 onDateTimeChanged:
@@ -712,11 +716,7 @@ class _ShiftStartState extends State<ShiftStart> {
                                                     var differenceT = tempEnd
                                                         .difference(tempStart)
                                                         .inMinutes;
-
                                                     String endDate = '';
-
-                                                    print('object');
-
                                                     bool? selected =
                                                         await showDialog(
                                                             context: context,
@@ -757,41 +757,42 @@ class _ShiftStartState extends State<ShiftStart> {
                                                         widget.selectedShift
                                                             .endTime = endDate;
                                                       }
-                                                      if (mounted)setState(() {
-                                                        widget.selectedShift
-                                                                .startTime =
-                                                            customSelectedStartTime;
-                                                        widget.selectedShift.endTime = widget
-                                                            .selectedShift
-                                                            .makeTimeStringFromHourMinuteMahboob(
-                                                                DateTime(
+                                                      if (mounted)
+                                                        setState(() {
+                                                          widget.selectedShift
+                                                                  .startTime =
+                                                              customSelectedStartTime;
+                                                          widget.selectedShift.endTime = widget
+                                                              .selectedShift
+                                                              .makeTimeStringFromHourMinuteMahboob(
+                                                                  DateTime(
+                                                                    newTime!
+                                                                        .add(Duration(
+                                                                            minutes:
+                                                                                differenceT))
+                                                                        .year,
+                                                                    newTime!
+                                                                        .add(Duration(
+                                                                            minutes:
+                                                                                differenceT))
+                                                                        .month,
+                                                                    newTime!
+                                                                        .add(Duration(
+                                                                            minutes:
+                                                                                differenceT))
+                                                                        .day,
+                                                                  ),
                                                                   newTime!
                                                                       .add(Duration(
                                                                           minutes:
                                                                               differenceT))
-                                                                      .year,
+                                                                      .hour,
                                                                   newTime!
                                                                       .add(Duration(
                                                                           minutes:
                                                                               differenceT))
-                                                                      .month,
-                                                                  newTime!
-                                                                      .add(Duration(
-                                                                          minutes:
-                                                                              differenceT))
-                                                                      .day,
-                                                                ),
-                                                                newTime!
-                                                                    .add(Duration(
-                                                                        minutes:
-                                                                            differenceT))
-                                                                    .hour,
-                                                                newTime!
-                                                                    .add(Duration(
-                                                                        minutes:
-                                                                            differenceT))
-                                                                    .minute);
-                                                      });
+                                                                      .minute);
+                                                        });
                                                       var waitVal =
                                                           await Navigator.of(
                                                                   context)
@@ -965,7 +966,7 @@ class TimerTopWidget extends StatelessWidget {
   }
 }
 
-extension on DateTime {
+extension round on DateTime {
   DateTime roundDown() {
     return DateTime(
         this.year,

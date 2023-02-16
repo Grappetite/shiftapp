@@ -29,7 +29,7 @@ class WorkersService {
             '/' +
             shiftId.toString();
       }
-      print('');
+     
 
       Response response = await dio.get(url,
           options: Options(
@@ -100,7 +100,7 @@ class WorkersService {
       final prefs = await SharedPreferences.getInstance();
 
       String url = baseUrl + "startedProcessList/$executeShiftId";
-      print('');
+     
 
       Response response = await dio.get(url,
           options: Options(
