@@ -148,7 +148,7 @@ class _HomeMainViewState extends State<HomeMainView> {
 
     var executeShiftId = this.widget.selectedShift.executedShiftId;
     var response;
-    if (DateFormat("yyyy-MM-dd hh:mm:ss")
+    if (DateFormat("yyyy-MM-dd HH:mm:ss")
         .parse(DateTime.now().toString())
         .isAfter(
             this.widget.selectedShift.endDateObject.add(Duration(hours: 4)))) {

@@ -177,7 +177,7 @@ class _EndShiftViewState extends State<EndShiftView> {
               }
 
               String endTime =
-                  DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.now());
+                  DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
 
               ShiftService.cancelShift(this.widget.execShiftId, endTime);
               var process = await LoginService.getProcess();

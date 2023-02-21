@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:app_popup_menu/app_popup_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -15,7 +13,6 @@ import 'package:shiftapp/model/workers_model.dart';
 import 'package:shiftapp/screens/SopsList.dart';
 import 'package:shiftapp/screens/inner_widgets/worker_item_view.dart';
 import 'package:shiftapp/screens/login.dart';
-import 'package:shiftapp/screens/shift_start.dart';
 import 'package:shiftapp/services/login_service.dart';
 import 'package:shiftapp/services/sop_service.dart';
 import 'package:shiftapp/widgets/elevated_button.dart';
@@ -110,35 +107,11 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
       }
     });
   }
-
-  late Timer _timer;
   String timeElasped = '00:00';
   String timeRemaining = '00:00';
   TextEditingController searchController = TextEditingController();
 
   var isTimeOver = false;
-
-  void startTimer() {
-    const oneSec = Duration(seconds: 1);
-
-    _timer = Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        if (widget.selectedShift.timeRemaining.contains('Over')) {
-          timeRemaining =
-              widget.selectedShift.timeRemaining.replaceAll('Over ', '');
-          isTimeOver = true;
-        } else {
-          timeRemaining = widget.selectedShift.timeRemaining;
-        }
-        
-          if (mounted)setState(() {
-            timeElasped = widget.selectedShift.timeElasped;
-          });
-      },
-    );
-   
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -379,8 +352,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                   newStatus;
                                                             });
                                                             if (newStatus) {
-                                                              selectedWorkers!
-                                                                  .removeWhere(
+                                                              selectedWorkers.removeWhere(
                                                                       (element) {
                                                                     if (element
                                                                         .userId ==
@@ -404,16 +376,14 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                   });
                                                               _pagingController
                                                                   .notifyListeners();
-                                                              selectedWorkers!
-                                                                  .add(item);
+                                                              selectedWorkers.add(item);
                                                               _pagingController
                                                                   .itemList!
                                                                   .insert(0, item);
                                                               _pagingController
                                                                   .notifyListeners();
                                                             } else {
-                                                              selectedWorkers!
-                                                                  .removeWhere(
+                                                              selectedWorkers.removeWhere(
                                                                       (element) {
                                                                 if (element
                                                                         .userId ==
@@ -483,9 +453,9 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                         item.isSelected = newStatus;
                                       });
                                       if (newStatus) {
-                                        selectedWorkers!.add(item);
+                                        selectedWorkers.add(item);
                                       } else {
-                                        selectedWorkers!.removeWhere((element) {
+                                        selectedWorkers.removeWhere((element) {
                                           if (element.userId == item.userId) {
                                             return true;
                                           } else {

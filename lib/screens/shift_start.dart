@@ -1,6 +1,3 @@
-import 'dart:async';
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -220,10 +217,10 @@ class _ShiftStartState extends State<ShiftStart> {
                                     .makeTimeStringFromHourMinute(
                                         newTime!.hour, newTime!.minute);
                                 DateTime tempStart =
-                                    DateFormat("yyyy-MM-dd hh:mm:ss")
+                                    DateFormat("yyyy-MM-dd HH:mm:ss")
                                         .parse(startTimeOriginal);
                                 DateTime tempEnd =
-                                    DateFormat("yyyy-MM-dd hh:mm:ss")
+                                    DateFormat("yyyy-MM-dd HH:mm:ss")
                                         .parse(endTimeOriginal);
                                 var differenceT =
                                     tempEnd.difference(tempStart).inMinutes;
@@ -456,7 +453,7 @@ class _ShiftStartState extends State<ShiftStart> {
                 //
                 // bool timeSelected = true;
                 // bool checkboxForComment = false;
-                var test = await showDialog(
+                 await showDialog(
                     context: context,
                     barrierDismissible: false,
                     builder: (BuildContext contexts) {
@@ -707,11 +704,11 @@ class _ShiftStartState extends State<ShiftStart> {
                                                             newTime!.hour,
                                                             newTime!.minute);
                                                     DateTime tempStart = DateFormat(
-                                                            "yyyy-MM-dd hh:mm:ss")
+                                                            "yyyy-MM-dd HH:mm:ss")
                                                         .parse(
                                                             startTimeOriginal);
                                                     DateTime tempEnd = DateFormat(
-                                                            "yyyy-MM-dd hh:mm:ss")
+                                                            "yyyy-MM-dd HH:mm:ss")
                                                         .parse(endTimeOriginal);
                                                     var differenceT = tempEnd
                                                         .difference(tempStart)
@@ -977,6 +974,5 @@ extension round on DateTime {
         this.second,
         this.millisecond,
         this.microsecond);
-    ;
   }
 }

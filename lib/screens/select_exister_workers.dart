@@ -16,7 +16,7 @@ import 'inner_widgets/worker_item_view.dart';
 class SelectExistingWorkers extends StatefulWidget {
   final List<ShiftWorker> workers;
 
-  int? workerTypeId;
+  final int? workerTypeId;
 
   final Function(AddTempResponse) tempWorkerAdded;
   final Function(ShiftWorker) otherTypeTempWorkerAdded;
@@ -52,7 +52,6 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
   TextEditingController searchController = TextEditingController();
 
   String timeElasped = '00:00';
-  late Timer _timer;
 
   int currentWorkTypeId = 0;
 
@@ -98,7 +97,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
 
     workers = response!.searchWorker!;
 
-    filteredWorkers = response!.searchWorker!;
+    filteredWorkers = response.searchWorker!;
 
     await EasyLoading.dismiss();
 
@@ -355,11 +354,11 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                           });
                         }
                         String dateString =
-                            DateFormat("yyyy-MM-dd hh:mm:ss").format(
+                            DateFormat("yyyy-MM-dd HH:mm:ss").format(
                           DateTime.now(),
                         );
                         if (widget.exShiftId != 0) {
-                          var res = await WorkersService.addWorkers(
+                          await WorkersService.addWorkers(
                               widget.exShiftId, [
                             selected.data!.id.toString()
                           ], [

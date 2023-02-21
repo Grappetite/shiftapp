@@ -185,7 +185,7 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                         );
 
                         String dateString =
-                            DateFormat("yyyy-MM-dd hh:mm:ss").format(
+                            DateFormat("yyyy-MM-dd HH:mm:ss").format(
                           DateTime.now(),
                         );
 

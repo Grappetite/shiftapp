@@ -174,7 +174,7 @@ class LoginService {
       var process = <Process>[];
 
       response.data["data"]["process"].forEach((v) {
-        process!.add(Process.fromJson(v));
+        process.add(Process.fromJson(v));
       });
       var responseObject = process;
 

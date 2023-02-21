@@ -21,7 +21,7 @@ class ShiftsResponse {
       data!.removeWhere((element) {
         if (element.started!) {
           return true;
-        } else if (DateTime.now().isAfter(element.endDateObject!)) {
+        } else if (DateTime.now().isAfter(element.endDateObject)) {
           return true;
         } else {
           return false;
@@ -86,17 +86,17 @@ class ShiftItem {
   }
 
   DateTime get startDateObject {
-    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(startTime!);
+    DateTime tempDate = DateFormat("yyyy-MM-dd HH:mm:ss").parse(startTime!);
     return tempDate;
   }
 
   DateTime get endDateObject {
-    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(endTime!);
+    DateTime tempDate = DateFormat("yyyy-MM-dd HH:mm:ss").parse(endTime!);
     return tempDate;
   }
 
   String get showStartTime {
-    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(startTime!);
+    DateTime tempDate = DateFormat("yyyy-MM-dd HH:mm:ss").parse(startTime!);
     String date = DateFormat("hh:mm a").format(tempDate);
     if (tempDate.hour == 00 && date.contains("AM")) {
       date = date.replaceAll("AM", "PM");
@@ -105,19 +105,19 @@ class ShiftItem {
   }
 
   String get showDate {
-    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(startTime!);
+    DateTime tempDate = DateFormat("yyyy-MM-dd HH:mm:ss").parse(startTime!);
     String date = DateFormat("yyyy-MM-dd").format(tempDate);
     return date;
   }
 
   String get showStartDateOnly {
-    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(startTime!);
+    DateTime tempDate = DateFormat("yyyy-MM-dd HH:mm:ss").parse(startTime!);
     String date = DateFormat("yyyy-MM-dd").format(tempDate);
     return date;
   }
 
   int get showStartTimeHour {
-    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(startTime!);
+    DateTime tempDate = DateFormat("yyyy-MM-dd HH:mm:ss").parse(startTime!);
     String date = DateFormat("hh a")
         .format(tempDate)
         .replaceAll(' AM', '')
@@ -126,7 +126,7 @@ class ShiftItem {
   }
 
   int get showStartTimeMinute {
-    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(startTime!);
+    DateTime tempDate = DateFormat("yyyy-MM-dd HH:mm:ss").parse(startTime!);
     String date = DateFormat("mm a")
         .format(tempDate)
         .replaceAll(' AM', '')
@@ -162,7 +162,7 @@ class ShiftItem {
   }
 
   int get showEndTimeHour {
-    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(endTime!);
+    DateTime tempDate = DateFormat("yyyy-MM-dd HH:mm:ss").parse(endTime!);
     String date = DateFormat("hh a")
         .format(tempDate)
         .replaceAll(' AM', '')
@@ -171,7 +171,7 @@ class ShiftItem {
   }
 
   int get showEndTimeMinute {
-    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(endTime!);
+    DateTime tempDate = DateFormat("yyyy-MM-dd HH:mm:ss").parse(endTime!);
     String date = DateFormat("mm a")
         .format(tempDate)
         .replaceAll(' AM', '')
@@ -180,7 +180,7 @@ class ShiftItem {
   }
 
   String get showEndTime {
-    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(endTime!);
+    DateTime tempDate = DateFormat("yyyy-MM-dd HH:mm:ss").parse(endTime!);
     String date = DateFormat("hh:mm a").format(tempDate);
     return date;
   }

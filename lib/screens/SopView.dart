@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'dart:math';
-
 import 'package:app_popup_menu/app_popup_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -13,7 +11,6 @@ import 'package:shiftapp/model/sop_model.dart';
 import 'package:shiftapp/screens/SelectTrainingWorker.dart';
 import 'package:shiftapp/screens/SopsList.dart';
 import 'package:shiftapp/screens/login.dart';
-import 'package:shiftapp/screens/shift_start.dart';
 import 'package:shiftapp/services/login_service.dart';
 import 'package:shiftapp/services/sop_service.dart';
 import 'package:shiftapp/widgets/elevated_button.dart';
@@ -80,41 +77,10 @@ class _SopViewState extends State<SopView> {
     );
     getSop(widget.processSelected.id);
   }
-
-  late Timer _timer;
   String timeElasped = '00:00';
   String timeRemaining = '00:00';
 
   var isTimeOver = false;
-
-  // void startTimer() {
-  //   const oneSec = Duration(seconds: 1);
-  //
-  //   _timer = Timer.periodic(
-  //     oneSec,
-  //     (Timer timer) {
-  //       const oneSec = Duration(seconds: 1);
-  //
-  //       _timer = Timer.periodic(
-  //         oneSec,
-  //         (Timer timer) {
-  //           if (widget.selectedShift.timeRemaining.contains('Over')) {
-  //             timeRemaining =
-  //                 widget.selectedShift.timeRemaining.replaceAll('Over ', '');
-  //             isTimeOver = true;
-  //           } else {
-  //             timeRemaining = widget.selectedShift.timeRemaining;
-  //           }
-  //           
-  //             if (mounted)setState(() {
-  //               timeElasped = widget.selectedShift.timeElasped;
-  //             });
-  //         },
-  //       );
-  //      
-  //     },
-  //   );
-  // }
 
   TextEditingController searchText = TextEditingController();
 
@@ -715,7 +681,7 @@ class _SopViewState extends State<SopView> {
                                 shrinkWrap: true,
                               ),
                             )
-                          : Container(child: Center(child: Text("No Sops")))
+                          : Expanded(child: Center(child: Text("No Sops")))
                       : Container(),
                 ],
               ),

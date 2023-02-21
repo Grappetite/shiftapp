@@ -66,7 +66,7 @@ class LiveConfig implements BaseConfig {
 
   @override
   String get staging =>
-      "Version:Shift-${version}-${DateFormat("yyyy-MM-dd hh:mm:ss").parse(DateTime.now().toString())}(Live)";
+      "Version:Shift-${version}-${DateFormat("yyyy-MM-dd HH:mm:ss").parse(DateTime.now().toString())}(Live)";
 
   @override
   String get apiUrl => "https://takealot.grappetite.com/api/v1/";

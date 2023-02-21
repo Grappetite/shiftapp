@@ -217,7 +217,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                         widget.selectedShift!.startTime!;
 
                                     ///previously
-                                    // DateFormat("yyyy-MM-dd hh:mm:ss")
+                                    // DateFormat("yyyy-MM-dd HH:mm:ss")
                                     //     .format(DateTime.now());
                                     ///end
                                     if (widget.isEditing && newStatus) {
@@ -265,7 +265,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                             );
                                           }).then((value) async {
                                         if (value != false) {
-                                          // dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
+                                          // dateString = DateFormat("yyyy-MM-dd HH:mm:ss")
                                           //     .format(DateTime.parse(value));
                                           dateString = value;
                                           if (mounted)
@@ -360,7 +360,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                         widget.selectedShift!.startTime!;
 
                                     ///previously
-                                    // DateFormat("yyyy-MM-dd hh:mm:ss")
+                                    // DateFormat("yyyy-MM-dd HH:mm:ss")
                                     //     .format(DateTime.now());
                                     ///end
                                     if (widget.isEditing && newStatus) {
@@ -408,7 +408,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                             );
                                           }).then((value) async {
                                         if (value != false) {
-                                          // dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
+                                          // dateString = DateFormat("yyyy-MM-dd HH:mm:ss")
                                           //     .format(DateTime.parse(value));
                                           dateString = value;
                                           if (mounted)
@@ -496,7 +496,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                     widget.selectedShift!.startTime!;
 
                                 ///previously
-                                // DateFormat("yyyy-MM-dd hh:mm:ss")
+                                // DateFormat("yyyy-MM-dd HH:mm:ss")
                                 //     .format(DateTime.now());
                                 ///end
                                 if (widget.isEditing && newStatus) {
@@ -542,7 +542,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                         );
                                       }).then((value) async {
                                     if (value != false) {
-                                      // dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
+                                      // dateString = DateFormat("yyyy-MM-dd HH:mm:ss")
                                       //     .format(DateTime.parse(value));
                                       dateString = value;
                                       if (mounted)
@@ -616,7 +616,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                     List<String> startTime = [];
 
                     List<String> efficiencyCalculation = [];
-                    String dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
+                    String dateString = DateFormat("yyyy-MM-dd HH:mm:ss")
                         .format(DateTime.now());
 
                     if (mounted)
@@ -784,7 +784,7 @@ class _WorkItemViewState extends State<WorkItemView> {
 
               List<String> efficiencyCalculation = [];
 
-              String dateString = DateFormat("yyyy-MM-dd hh:mm:ss").format(
+              String dateString = DateFormat("yyyy-MM-dd HH:mm:ss").format(
                 DateTime.now(),
               );
 

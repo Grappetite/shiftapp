@@ -15,7 +15,7 @@ extension StringExtension on String {
   }
 
   String get timeToShow {
-    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(this);
+    DateTime tempDate = DateFormat("yyyy-MM-dd HH:mm:ss").parse(this);
     String date = DateFormat("hh:mm a").format(tempDate);
     if (tempDate.hour == 00 && date.contains("AM")) {
       if (DateTime.now().day == tempDate.day &&

@@ -95,35 +95,6 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
     setupFocusNode(doneButton);
   }
 
-  static OverlayEntry? _overlayEntry;
-
-  static void showDoneButtonOverlay(BuildContext context) {
-    if (_overlayEntry != null) {
-      return;
-    }
-
-    OverlayState overlayState = Overlay.of(context) as OverlayState;
-    _overlayEntry = OverlayEntry(
-      builder: (context) {
-        return Positioned(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-          right: 0.0,
-          left: 0.0,
-          child: KeypadDoneButton(),
-        );
-      },
-    );
-
-    overlayState.insert(_overlayEntry!);
-  }
-
-  static void removeDoneButtonOverlay() {
-    if (_overlayEntry != null) {
-      _overlayEntry?.remove();
-      _overlayEntry = null;
-    }
-  }
-
   void setupFocusNode(FocusNode node) {}
 
   @override
@@ -395,7 +366,6 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                         shiftItem: this.widget.selectedShift,
                                       );
                                     });
-
                                 if (answer != null) {
                                   if (answer != false) {
                                     await EasyLoading.show(
@@ -724,7 +694,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                       ? widget.processList!.isNotEmpty
                           ? DropDown(
                               labelText: 'Title',
-                              currentList: (widget.processList! as List).map((e) =>
+                              currentList: (widget.processList!).map((e) =>
                                   // : ${DateFormat('HH:mm dd-MM-yyyy').format(DateTime.parse(e.exec_start_time))} - ${DateFormat('HH:mm dd-MM-yyyy').format(DateTime.parse(e.exec_end_time))}
                                   "${e.name!.trim()} (${e.shiftName})").toList(),
                               showError: false,
@@ -936,25 +906,14 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
   String findEndTime() {
     var result = '';
     result = DateTime.now().isBefore(widget.shiftItem.endDateObject)
-        ? DateFormat("yyyy-MM-dd hh:mm:ss")
-            .parse(DateTime.now().roundDown().toString())
+        ? DateFormat("yyyy-MM-dd HH:mm:ss")
+            .parse(DateTime.now().toString())
             .toString()
         : widget.shiftItem.endTime!;
 
     if (customTimeSelectedToSend.isNotEmpty) {
       return customTimeSelectedToSend;
     }
-    var difference = DateTime.now().difference(widget.shiftItem.endDateObject);
-
-    var minutesRemaining = difference.inMinutes;
-
-    // if (minutesRemaining > -30 && minutesRemaining < 30) {
-    // } else {
-    //   String endTime = DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.now());
-    //
-    //   result = endTime;
-    // }
-   
     return result;
   }
 
