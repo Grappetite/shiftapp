@@ -48,8 +48,9 @@ class pictureWithHeading extends StatelessWidget {
                       flex: 1,
                       child: Container(
                         decoration: BoxDecoration(
-                            color: kPrimaryColor,
+                            // color: kPrimaryColor,
                             borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color:kPrimaryColor),
                             image: assets!
                                 ? DecorationImage(
                                     image: AssetImage(image!), fit: BoxFit.fill)

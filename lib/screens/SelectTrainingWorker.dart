@@ -1,8 +1,10 @@
 import 'package:app_popup_menu/app_popup_menu.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/model/login_model.dart';
@@ -15,6 +17,7 @@ import 'package:shiftapp/screens/inner_widgets/worker_item_view.dart';
 import 'package:shiftapp/screens/login.dart';
 import 'package:shiftapp/services/login_service.dart';
 import 'package:shiftapp/services/sop_service.dart';
+import 'package:shiftapp/services/workers_service.dart';
 import 'package:shiftapp/widgets/elevated_button.dart';
 
 class SelectTrainingWorker extends StatefulWidget {
@@ -334,6 +337,449 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                             const EdgeInsets
                                                                 .all(8.0),
                                                         child: UserItem(
+                                                          reloadTest:(){
+
+                                                            TextEditingController issueDate = new TextEditingController();
+                                                            TextEditingController expiryDate = new TextEditingController();
+
+                                                            showDialog(
+                                                                context: context,
+                                                                barrierDismissible: false,
+                                                                builder: (BuildContext context) {
+                                                                  return AlertDialog(
+                                                                      insetPadding:
+                                                                      const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                                      backgroundColor: Colors.transparent,
+                                                                      content: Container(
+                                                                          width:
+                                                                          MediaQuery.of(context).size.width /
+                                                                              1.15,
+                                                                          height:
+                                                                          MediaQuery.of(context).size.height /
+                                                                              2.35,
+                                                                          decoration: BoxDecoration(
+                                                                            color: Colors.white,
+                                                                            borderRadius:
+                                                                            BorderRadius.circular(16),
+                                                                            border: Border.all(
+                                                                                color: Colors.grey, width: 3),
+                                                                          ),
+                                                                          child: Column(
+                                                                              crossAxisAlignment:
+                                                                              CrossAxisAlignment.start,
+                                                                              children: [
+                                                                                Row(
+                                                                                  children: [
+                                                                                    const SizedBox(
+                                                                                      width: 8,
+                                                                                    ),
+                                                                                    Container(
+                                                                                      child: Image(
+                                                                                        image: const AssetImage(
+                                                                                            'assets/images/warning.png'),
+                                                                                        width:
+                                                                                        MediaQuery.of(context)
+                                                                                            .size
+                                                                                            .width /
+                                                                                            18,
+                                                                                      ),
+                                                                                    ),
+                                                                                    const SizedBox(
+                                                                                      width: 8,
+                                                                                    ),
+                                                                                    const Text(
+                                                                                      'Expired Licence',
+                                                                                      style: TextStyle(
+                                                                                        fontSize: 16,
+                                                                                        fontWeight:
+                                                                                        FontWeight.w700,
+                                                                                        color: kPrimaryColor,
+                                                                                      ),
+                                                                                    ),
+                                                                                    Expanded(
+                                                                                      child: Container(),
+                                                                                    ),
+                                                                                    GestureDetector(
+                                                                                      onTap: () {
+                                                                                        Navigator.pop(context);
+                                                                                      },
+                                                                                      child: const Padding(
+                                                                                        padding:
+                                                                                        EdgeInsets.all(4.0),
+                                                                                        child: Icon(
+                                                                                          Icons.close,
+                                                                                          color: kPrimaryColor,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                const SizedBox(
+                                                                                  height: 8,
+                                                                                ),
+                                                                                Padding(
+                                                                                  padding:
+                                                                                  const EdgeInsets.all(4),
+                                                                                  child: Text(
+                                                                                    "Worker with expired license:",
+                                                                                    style: const TextStyle(
+                                                                                        color: kPrimaryColor,
+                                                                                        fontSize: 15),
+                                                                                  ),
+                                                                                ),
+                                                                                const SizedBox(
+                                                                                  height: 8,
+                                                                                ),
+                                                                                Padding(
+                                                                                  padding:
+                                                                                  const EdgeInsets.all(4),
+                                                                                  child: Text(
+                                                                                    "Enter expiration date and issuance date",
+                                                                                    style: const TextStyle(
+                                                                                        color: kPrimaryColor,
+                                                                                        fontSize: 12),
+                                                                                  ),
+                                                                                ),
+                                                                                Padding(
+                                                                                  padding:
+                                                                                  const EdgeInsets.all(8.0),
+                                                                                  child: Container(
+                                                                                    padding: EdgeInsets.all(4),
+                                                                                    decoration: BoxDecoration(
+                                                                                      borderRadius:
+                                                                                      BorderRadius.circular(
+                                                                                          8),
+                                                                                      border: Border.all(
+                                                                                          color: kPrimaryColor),
+                                                                                    ),
+                                                                                    child: Row(
+                                                                                      children: [
+                                                                                        item.picture != null
+                                                                                            ? Container(
+                                                                                          padding:
+                                                                                          EdgeInsets
+                                                                                              .all(4),
+                                                                                          // Border width
+                                                                                          decoration: BoxDecoration(
+                                                                                              color: Colors
+                                                                                                  .white,
+                                                                                              shape: BoxShape
+                                                                                                  .circle),
+                                                                                          child: ClipOval(
+                                                                                            child: SizedBox
+                                                                                                .fromSize(
+                                                                                              size: const Size
+                                                                                                  .fromRadius(24),
+                                                                                              // Image radius
+                                                                                              child: Image.network(
+                                                                                                  item.picture,
+                                                                                                  fit: BoxFit
+                                                                                                      .cover),
+                                                                                            ),
+                                                                                          ),
+                                                                                        )
+                                                                                            : Container(),
+                                                                                        item.picture != null
+                                                                                            ? SizedBox(
+                                                                                          width: 12,
+                                                                                        )
+                                                                                            : Container(),
+                                                                                        Column(
+                                                                                          crossAxisAlignment:
+                                                                                          CrossAxisAlignment
+                                                                                              .start,
+                                                                                          children: [
+                                                                                            Text(
+                                                                                              item.firstName! +
+                                                                                                  ' ' +
+                                                                                                  item.lastName!,
+                                                                                              style: TextStyle(
+                                                                                                fontSize: 16,
+                                                                                                fontWeight:
+                                                                                                FontWeight
+                                                                                                    .w700,
+                                                                                                color:
+                                                                                                kPrimaryColor,
+                                                                                              ),
+                                                                                            ),
+                                                                                            const SizedBox(
+                                                                                              height: 8,
+                                                                                            ),
+                                                                                            Text(
+                                                                                              item
+                                                                                                  .licenseName!,
+                                                                                              style: const TextStyle(
+                                                                                                  color:
+                                                                                                  kPrimaryColor,
+                                                                                                  fontSize: 15),
+                                                                                            ),
+                                                                                            const SizedBox(
+                                                                                              height: 8,
+                                                                                            ),
+                                                                                            Text(
+                                                                                              "Expiry: " +
+                                                                                                  DateFormat(
+                                                                                                      "yyyy-MM-dd")
+                                                                                                      .parse(item
+                                                                                                      .license_expiry
+                                                                                                      .toString())
+                                                                                                      .toString()
+                                                                                                      .split(
+                                                                                                      " ")[0],
+                                                                                              style: const TextStyle(
+                                                                                                  color:
+                                                                                                  kPrimaryColor,
+                                                                                                  fontSize: 15),
+                                                                                            ),
+                                                                                            const SizedBox(
+                                                                                              height: 8,
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                        SizedBox(
+                                                                                          width: 4,
+                                                                                        ),
+                                                                                        Expanded(
+                                                                                          child: Column(
+                                                                                            children: [
+                                                                                              GestureDetector(
+                                                                                                onTap: () {
+                                                                                                  issueDate
+                                                                                                      .text = DateTime
+                                                                                                      .now()
+                                                                                                      .toString()
+                                                                                                      .split(
+                                                                                                      " ")[0];
+
+                                                                                                  showCupertinoModalPopup(
+                                                                                                      context:
+                                                                                                      context,
+                                                                                                      builder:
+                                                                                                          (BuildContext
+                                                                                                      builder) {
+                                                                                                        return Container(
+                                                                                                          color: Colors
+                                                                                                              .white,
+                                                                                                          height: MediaQuery.of(context)
+                                                                                                              .size
+                                                                                                              .width,
+                                                                                                          width: MediaQuery.of(context)
+                                                                                                              .size
+                                                                                                              .width,
+                                                                                                          child:
+                                                                                                          CupertinoDatePicker(
+                                                                                                            mode:
+                                                                                                            CupertinoDatePickerMode.date,
+                                                                                                            onDateTimeChanged:
+                                                                                                                (value) async {
+                                                                                                              issueDate.text =
+                                                                                                              value.toString().split(" ")[0];
+                                                                                                              setState(() {});
+                                                                                                            },
+                                                                                                            initialDateTime:
+                                                                                                            DateTime.now(),
+                                                                                                            minimumDate:
+                                                                                                            DateTime.now().subtract(Duration(days: 365)),
+                                                                                                            maximumDate:
+                                                                                                            DateTime.now(),
+                                                                                                          ),
+                                                                                                        );
+                                                                                                      });
+                                                                                                },
+                                                                                                child: Padding(
+                                                                                                  padding:
+                                                                                                  const EdgeInsets
+                                                                                                      .all(
+                                                                                                      4.0),
+                                                                                                  child:
+                                                                                                  TextFormField(
+                                                                                                    enabled:
+                                                                                                    false,
+                                                                                                    controller:
+                                                                                                    issueDate,
+                                                                                                    decoration:
+                                                                                                    const InputDecoration(
+                                                                                                      labelText:
+                                                                                                      'Issue Date',
+                                                                                                      border:
+                                                                                                      OutlineInputBorder(
+                                                                                                        borderRadius:
+                                                                                                        BorderRadius
+                                                                                                            .all(
+                                                                                                          Radius.circular(
+                                                                                                              10.0),
+                                                                                                        ),
+                                                                                                        borderSide:
+                                                                                                        BorderSide(
+                                                                                                            color: kPrimaryColor),
+                                                                                                      ),
+                                                                                                      enabledBorder:
+                                                                                                      OutlineInputBorder(
+                                                                                                        borderRadius:
+                                                                                                        BorderRadius
+                                                                                                            .all(
+                                                                                                          Radius.circular(
+                                                                                                              10.0),
+                                                                                                        ),
+                                                                                                        borderSide:
+                                                                                                        BorderSide(
+                                                                                                            color: kPrimaryColor),
+                                                                                                      ),
+                                                                                                      disabledBorder:
+                                                                                                      OutlineInputBorder(
+                                                                                                        borderRadius:
+                                                                                                        BorderRadius
+                                                                                                            .all(
+                                                                                                          Radius.circular(
+                                                                                                              10.0),
+                                                                                                        ),
+                                                                                                        borderSide:
+                                                                                                        BorderSide(
+                                                                                                            color: kPrimaryColor),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                              GestureDetector(
+                                                                                                onTap: () {
+                                                                                                  expiryDate
+                                                                                                      .text = DateTime
+                                                                                                      .now()
+                                                                                                      .toString()
+                                                                                                      .split(
+                                                                                                      " ")[0];
+
+                                                                                                  showCupertinoModalPopup(
+                                                                                                      context:
+                                                                                                      context,
+                                                                                                      builder:
+                                                                                                          (BuildContext
+                                                                                                      builder) {
+                                                                                                        return Container(
+                                                                                                          color: Colors
+                                                                                                              .white,
+                                                                                                          height: MediaQuery.of(context)
+                                                                                                              .size
+                                                                                                              .width,
+                                                                                                          width: MediaQuery.of(context)
+                                                                                                              .size
+                                                                                                              .width,
+                                                                                                          child:
+                                                                                                          CupertinoDatePicker(
+                                                                                                            mode:
+                                                                                                            CupertinoDatePickerMode.date,
+                                                                                                            onDateTimeChanged:
+                                                                                                                (value) async {
+                                                                                                              expiryDate.text =
+                                                                                                              value.toString().split(" ")[0];
+                                                                                                              setState(() {});
+                                                                                                            },
+                                                                                                            initialDateTime:
+                                                                                                            DateTime.now().add(Duration(hours: 1)),
+                                                                                                            minimumDate:
+                                                                                                            DateTime.now(),
+                                                                                                            maximumDate:
+                                                                                                            DateTime.now().add(Duration(days: (365 * 11))),
+                                                                                                          ),
+                                                                                                        );
+                                                                                                      });
+                                                                                                },
+                                                                                                child: Padding(
+                                                                                                  padding:
+                                                                                                  const EdgeInsets
+                                                                                                      .all(
+                                                                                                      4.0),
+                                                                                                  child:
+                                                                                                  TextFormField(
+                                                                                                    enabled:
+                                                                                                    false,
+                                                                                                    controller:
+                                                                                                    expiryDate,
+                                                                                                    decoration:
+                                                                                                    const InputDecoration(
+                                                                                                      labelText:
+                                                                                                      'Expiry Date',
+                                                                                                      border:
+                                                                                                      OutlineInputBorder(
+                                                                                                        borderRadius:
+                                                                                                        BorderRadius
+                                                                                                            .all(
+                                                                                                          Radius.circular(
+                                                                                                              10.0),
+                                                                                                        ),
+                                                                                                        borderSide:
+                                                                                                        BorderSide(
+                                                                                                            color: kPrimaryColor),
+                                                                                                      ),
+                                                                                                      enabledBorder:
+                                                                                                      OutlineInputBorder(
+                                                                                                        borderRadius:
+                                                                                                        BorderRadius
+                                                                                                            .all(
+                                                                                                          Radius.circular(
+                                                                                                              10.0),
+                                                                                                        ),
+                                                                                                        borderSide:
+                                                                                                        BorderSide(
+                                                                                                            color: kPrimaryColor),
+                                                                                                      ),
+                                                                                                      disabledBorder:
+                                                                                                      OutlineInputBorder(
+                                                                                                        borderRadius:
+                                                                                                        BorderRadius
+                                                                                                            .all(
+                                                                                                          Radius.circular(
+                                                                                                              10.0),
+                                                                                                        ),
+                                                                                                        borderSide:
+                                                                                                        BorderSide(
+                                                                                                            color: kPrimaryColor),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ],
+                                                                                          ),
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                Center(
+                                                                                  child: PElevatedButton(
+                                                                                    onPressed: () async {
+                                                                                      await EasyLoading.show(
+                                                                                        status: 'loading...',
+                                                                                        maskType:
+                                                                                        EasyLoadingMaskType
+                                                                                            .black,
+                                                                                      );
+                                                                                      var test =
+                                                                                      await WorkersService
+                                                                                          .updateExpiry(
+                                                                                          worker: item!,
+                                                                                          issueDate:
+                                                                                          issueDate
+                                                                                              .text,
+                                                                                          expiryDate:
+                                                                                          expiryDate
+                                                                                              .text);
+
+                                                                                      await EasyLoading.dismiss();
+                                                                                      Navigator.pop(context);
+                                                                                      if (test!) {
+                                                                                        item.license_expiry=DateTime.parse(expiryDate.text);setState((){});
+                                                                                      }
+                                                                                    },
+                                                                                    text: 'CONTINUE',
+                                                                                  ),
+                                                                                )
+                                                                              ])));
+                                                                });
+                                                          },
+
                                                           keyNo:
                                                               item.key != null
                                                                   ? item.key!
@@ -345,6 +791,8 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                           initialSelected:
                                                               item.isSelected,
                                                           picUrl: item.picture,
+                                                          worker:item ,
+
                                                           changedStatus: (bool
                                                               newStatus) async {
                                                             if (mounted)setState(() {
@@ -447,7 +895,450 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                     personName:
                                         item.firstName! + ' ' + item.lastName!,
                                     initialSelected: item.isSelected,
+                                    reloadTest:(){
+
+                                      TextEditingController issueDate = new TextEditingController();
+                                      TextEditingController expiryDate = new TextEditingController();
+
+                                      showDialog(
+                                          context: context,
+                                          barrierDismissible: false,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                                insetPadding:
+                                                const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                                backgroundColor: Colors.transparent,
+                                                content: Container(
+                                                    width:
+                                                    MediaQuery.of(context).size.width /
+                                                        1.15,
+                                                    height:
+                                                    MediaQuery.of(context).size.height /
+                                                        2.35,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                      BorderRadius.circular(16),
+                                                      border: Border.all(
+                                                          color: Colors.grey, width: 3),
+                                                    ),
+                                                    child: Column(
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                        children: [
+                                                          Row(
+                                                            children: [
+                                                              const SizedBox(
+                                                                width: 8,
+                                                              ),
+                                                              Container(
+                                                                child: Image(
+                                                                  image: const AssetImage(
+                                                                      'assets/images/warning.png'),
+                                                                  width:
+                                                                  MediaQuery.of(context)
+                                                                      .size
+                                                                      .width /
+                                                                      18,
+                                                                ),
+                                                              ),
+                                                              const SizedBox(
+                                                                width: 8,
+                                                              ),
+                                                              const Text(
+                                                                'Expired Licence',
+                                                                style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                  FontWeight.w700,
+                                                                  color: kPrimaryColor,
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                child: Container(),
+                                                              ),
+                                                              GestureDetector(
+                                                                onTap: () {
+                                                                  Navigator.pop(context);
+                                                                },
+                                                                child: const Padding(
+                                                                  padding:
+                                                                  EdgeInsets.all(4.0),
+                                                                  child: Icon(
+                                                                    Icons.close,
+                                                                    color: kPrimaryColor,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 8,
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                            const EdgeInsets.all(4),
+                                                            child: Text(
+                                                              "Worker with expired license:",
+                                                              style: const TextStyle(
+                                                                  color: kPrimaryColor,
+                                                                  fontSize: 15),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 8,
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                            const EdgeInsets.all(4),
+                                                            child: Text(
+                                                              "Enter expiration date and issuance date",
+                                                              style: const TextStyle(
+                                                                  color: kPrimaryColor,
+                                                                  fontSize: 12),
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                            const EdgeInsets.all(8.0),
+                                                            child: Container(
+                                                              padding: EdgeInsets.all(4),
+                                                              decoration: BoxDecoration(
+                                                                borderRadius:
+                                                                BorderRadius.circular(
+                                                                    8),
+                                                                border: Border.all(
+                                                                    color: kPrimaryColor),
+                                                              ),
+                                                              child: Row(
+                                                                children: [
+                                                                  item.picture != null
+                                                                      ? Container(
+                                                                    padding:
+                                                                    EdgeInsets
+                                                                        .all(4),
+                                                                    // Border width
+                                                                    decoration: BoxDecoration(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        shape: BoxShape
+                                                                            .circle),
+                                                                    child: ClipOval(
+                                                                      child: SizedBox
+                                                                          .fromSize(
+                                                                        size: const Size
+                                                                            .fromRadius(24),
+                                                                        // Image radius
+                                                                        child: Image.network(
+                                                                            item.picture,
+                                                                            fit: BoxFit
+                                                                                .cover),
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                      : Container(),
+                                                                  item.picture != null
+                                                                      ? SizedBox(
+                                                                    width: 12,
+                                                                  )
+                                                                      : Container(),
+                                                                  Column(
+                                                                    crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                    children: [
+                                                                      Text(
+                                                                        item.firstName! +
+                                                                            ' ' +
+                                                                            item.lastName!,
+                                                                        style: TextStyle(
+                                                                          fontSize: 16,
+                                                                          fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                          color:
+                                                                          kPrimaryColor,
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height: 8,
+                                                                      ),
+                                                                      Text(
+                                                                        item
+                                                                            .licenseName!,
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                            kPrimaryColor,
+                                                                            fontSize: 15),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height: 8,
+                                                                      ),
+                                                                      Text(
+                                                                        "Expiry: " +
+                                                                            DateFormat(
+                                                                                "yyyy-MM-dd")
+                                                                                .parse(item
+                                                                                .license_expiry
+                                                                                .toString())
+                                                                                .toString()
+                                                                                .split(
+                                                                                " ")[0],
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                            kPrimaryColor,
+                                                                            fontSize: 15),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height: 8,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(
+                                                                    width: 4,
+                                                                  ),
+                                                                  Expanded(
+                                                                    child: Column(
+                                                                      children: [
+                                                                        GestureDetector(
+                                                                          onTap: () {
+                                                                            issueDate
+                                                                                .text = DateTime
+                                                                                .now()
+                                                                                .toString()
+                                                                                .split(
+                                                                                " ")[0];
+
+                                                                            showCupertinoModalPopup(
+                                                                                context:
+                                                                                context,
+                                                                                builder:
+                                                                                    (BuildContext
+                                                                                builder) {
+                                                                                  return Container(
+                                                                                    color: Colors
+                                                                                        .white,
+                                                                                    height: MediaQuery.of(context)
+                                                                                        .size
+                                                                                        .width,
+                                                                                    width: MediaQuery.of(context)
+                                                                                        .size
+                                                                                        .width,
+                                                                                    child:
+                                                                                    CupertinoDatePicker(
+                                                                                      mode:
+                                                                                      CupertinoDatePickerMode.date,
+                                                                                      onDateTimeChanged:
+                                                                                          (value) async {
+                                                                                        issueDate.text =
+                                                                                        value.toString().split(" ")[0];
+                                                                                        setState(() {});
+                                                                                      },
+                                                                                      initialDateTime:
+                                                                                      DateTime.now(),
+                                                                                      minimumDate:
+                                                                                      DateTime.now().subtract(Duration(days: 365)),
+                                                                                      maximumDate:
+                                                                                      DateTime.now(),
+                                                                                    ),
+                                                                                  );
+                                                                                });
+                                                                          },
+                                                                          child: Padding(
+                                                                            padding:
+                                                                            const EdgeInsets
+                                                                                .all(
+                                                                                4.0),
+                                                                            child:
+                                                                            TextFormField(
+                                                                              enabled:
+                                                                              false,
+                                                                              controller:
+                                                                              issueDate,
+                                                                              decoration:
+                                                                              const InputDecoration(
+                                                                                labelText:
+                                                                                'Issue Date',
+                                                                                border:
+                                                                                OutlineInputBorder(
+                                                                                  borderRadius:
+                                                                                  BorderRadius
+                                                                                      .all(
+                                                                                    Radius.circular(
+                                                                                        10.0),
+                                                                                  ),
+                                                                                  borderSide:
+                                                                                  BorderSide(
+                                                                                      color: kPrimaryColor),
+                                                                                ),
+                                                                                enabledBorder:
+                                                                                OutlineInputBorder(
+                                                                                  borderRadius:
+                                                                                  BorderRadius
+                                                                                      .all(
+                                                                                    Radius.circular(
+                                                                                        10.0),
+                                                                                  ),
+                                                                                  borderSide:
+                                                                                  BorderSide(
+                                                                                      color: kPrimaryColor),
+                                                                                ),
+                                                                                disabledBorder:
+                                                                                OutlineInputBorder(
+                                                                                  borderRadius:
+                                                                                  BorderRadius
+                                                                                      .all(
+                                                                                    Radius.circular(
+                                                                                        10.0),
+                                                                                  ),
+                                                                                  borderSide:
+                                                                                  BorderSide(
+                                                                                      color: kPrimaryColor),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        GestureDetector(
+                                                                          onTap: () {
+                                                                            expiryDate
+                                                                                .text = DateTime
+                                                                                .now()
+                                                                                .toString()
+                                                                                .split(
+                                                                                " ")[0];
+
+                                                                            showCupertinoModalPopup(
+                                                                                context:
+                                                                                context,
+                                                                                builder:
+                                                                                    (BuildContext
+                                                                                builder) {
+                                                                                  return Container(
+                                                                                    color: Colors
+                                                                                        .white,
+                                                                                    height: MediaQuery.of(context)
+                                                                                        .size
+                                                                                        .width,
+                                                                                    width: MediaQuery.of(context)
+                                                                                        .size
+                                                                                        .width,
+                                                                                    child:
+                                                                                    CupertinoDatePicker(
+                                                                                      mode:
+                                                                                      CupertinoDatePickerMode.date,
+                                                                                      onDateTimeChanged:
+                                                                                          (value) async {
+                                                                                        expiryDate.text =
+                                                                                        value.toString().split(" ")[0];
+                                                                                        setState(() {});
+                                                                                      },
+                                                                                      initialDateTime:
+                                                                                      DateTime.now().add(Duration(hours: 1)),
+                                                                                      minimumDate:
+                                                                                      DateTime.now(),
+                                                                                      maximumDate:
+                                                                                      DateTime.now().add(Duration(days: (365 * 11))),
+                                                                                    ),
+                                                                                  );
+                                                                                });
+                                                                          },
+                                                                          child: Padding(
+                                                                            padding:
+                                                                            const EdgeInsets
+                                                                                .all(
+                                                                                4.0),
+                                                                            child:
+                                                                            TextFormField(
+                                                                              enabled:
+                                                                              false,
+                                                                              controller:
+                                                                              expiryDate,
+                                                                              decoration:
+                                                                              const InputDecoration(
+                                                                                labelText:
+                                                                                'Expiry Date',
+                                                                                border:
+                                                                                OutlineInputBorder(
+                                                                                  borderRadius:
+                                                                                  BorderRadius
+                                                                                      .all(
+                                                                                    Radius.circular(
+                                                                                        10.0),
+                                                                                  ),
+                                                                                  borderSide:
+                                                                                  BorderSide(
+                                                                                      color: kPrimaryColor),
+                                                                                ),
+                                                                                enabledBorder:
+                                                                                OutlineInputBorder(
+                                                                                  borderRadius:
+                                                                                  BorderRadius
+                                                                                      .all(
+                                                                                    Radius.circular(
+                                                                                        10.0),
+                                                                                  ),
+                                                                                  borderSide:
+                                                                                  BorderSide(
+                                                                                      color: kPrimaryColor),
+                                                                                ),
+                                                                                disabledBorder:
+                                                                                OutlineInputBorder(
+                                                                                  borderRadius:
+                                                                                  BorderRadius
+                                                                                      .all(
+                                                                                    Radius.circular(
+                                                                                        10.0),
+                                                                                  ),
+                                                                                  borderSide:
+                                                                                  BorderSide(
+                                                                                      color: kPrimaryColor),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Center(
+                                                            child: PElevatedButton(
+                                                              onPressed: () async {
+                                                                await EasyLoading.show(
+                                                                  status: 'loading...',
+                                                                  maskType:
+                                                                  EasyLoadingMaskType
+                                                                      .black,
+                                                                );
+                                                                var test =
+                                                                await WorkersService
+                                                                    .updateExpiry(
+                                                                    worker: item!,
+                                                                    issueDate:
+                                                                    issueDate
+                                                                        .text,
+                                                                    expiryDate:
+                                                                    expiryDate
+                                                                        .text);
+
+                                                                await EasyLoading.dismiss();
+                                                                Navigator.pop(context);
+                                                                if (test!) {
+                                                                  item.license_expiry=DateTime.parse(expiryDate.text);setState((){});
+                                                                }
+                                                              },
+                                                              text: 'CONTINUE',
+                                                            ),
+                                                          )
+                                                        ])));
+                                          });
+                                    },
                                     picUrl: item.picture,
+                                    worker:item ,
                                     changedStatus: (bool newStatus) async {
                                       if (mounted)setState(() {
                                         item.isSelected = newStatus;

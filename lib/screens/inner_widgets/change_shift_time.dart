@@ -7,18 +7,15 @@ import 'alert_cancel_ok_buttons.dart';
 import 'alert_title_label.dart';
 
 class ChangeShiftTime extends StatefulWidget {
-  final String startTime;
-  final String endTime;
-  final String hours;
-  final String date;
+  final String? startTime;
+  final String? endTime;
+  final String? hours;
+  final String? date;
   final bool sop;
 
   const ChangeShiftTime(
-      {Key? key,
-      required this.startTime,
-      required this.endTime,
-      required this.hours,
-      required this.date,
+      {Key? key, this.startTime="", this.endTime="", this.hours="",
+       this.date="",
       this.sop = false})
       : super(key: key);
 
@@ -150,19 +147,19 @@ class _ChangeShiftTimeState extends State<ChangeShiftTime> {
                             const SizedBox(
                               height: 8,
                             ),
-                            buildInfoItem('Date', widget.date),
+                            buildInfoItem('Date', widget.date!),
                             const SizedBox(
                               height: 8,
                             ),
-                            buildInfoItem('Start Time', widget.startTime),
+                            buildInfoItem('Start Time', widget.startTime!),
                             const SizedBox(
                               height: 8,
                             ),
-                            buildInfoItem('End Time', widget.endTime),
+                            buildInfoItem('End Time', widget.endTime!),
                             const SizedBox(
                               height: 8,
                             ),
-                            buildInfoItem('Shift Length', widget.hours),
+                            buildInfoItem('Shift Length', widget.hours!),
                           ] else ...[
                             InputView(
                               showError: false,

@@ -100,7 +100,8 @@ class ShiftWorker {
   bool isSelected = false;
 
   bool isAdded = false;
-
+  String? licenseName;
+  DateTime? license_expiry;
   bool newAdded = false;
   bool newRemove = false;
   final PainterController painterController = PainterController();
@@ -113,6 +114,8 @@ class ShiftWorker {
       this.firstName,
       this.lastName,
       this.key,
+      this.licenseName,
+      this.license_expiry,
       this.efficiencyCalculation});
 
   ShiftWorker.fromJson(Map<String, dynamic> json) {
@@ -125,13 +128,11 @@ class ShiftWorker {
     key = json['key'];
     efficiencyCalculation = json['efficiencyCalculation'];
     picture = json['picture'];
-
+    licenseName = json["licenseName"];
+    license_expiry =json["license_expiry"]!=null? DateTime.parse(json["license_expiry"]):null;
     if (json.keys.contains('worker_add')) {
       isAdded = json['worker_add'] == '1';
-      
     }
-
-    
   }
 
   Map<String, dynamic> toJson() {
@@ -286,6 +287,7 @@ class Datum {
   String? status;
   String? name;
   String? lastName;
+
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         shiftWorkerId:
             json["shift_worker_id"] == null ? null : json["shift_worker_id"],
@@ -306,6 +308,7 @@ class Datum {
         name: json["name"] == null ? null : json["name"],
         lastName: json["last_name"] == null ? null : json["last_name"],
       );
+
   Map<String, dynamic> toJson() => {
         "shift_worker_id": shiftWorkerId == null ? null : shiftWorkerId,
         "worker_user_id": workerUserId == null ? null : workerUserId,

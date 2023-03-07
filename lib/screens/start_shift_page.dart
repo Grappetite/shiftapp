@@ -8,6 +8,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/constants.dart';
+import 'package:shiftapp/model/ppe_model.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 import 'package:timezone/timezone.dart' as tz;
 
@@ -27,6 +28,8 @@ class StartShiftView extends StatefulWidget {
   final String endTime;
   final List<String> efficiencyCalculation;
   final ShiftItem selectedShift;
+  final PpeModel? ppe;
+  final String? discrepancyComment;
   final Process process;
 
   const StartShiftView(
@@ -39,6 +42,8 @@ class StartShiftView extends StatefulWidget {
       required this.endTime,
       required this.efficiencyCalculation,
       required this.selectedShift,
+      required this.ppe,
+      required this.discrepancyComment,
       required this.process})
       : super(key: key);
 
@@ -63,15 +68,19 @@ class _StartShiftViewState extends State<StartShiftView> {
           setState(() {
             timeElasped = widget.selectedShift.timeElasped;
           });
-
-       
       },
     );
   }
-
+int count=0;
   @override
   void initState() {
     super.initState();
+    widget.ppe!.data!.forEach((element) {
+      if(element.selected!)
+        {
+          count++;
+        }
+    });
   }
 
   @override
@@ -136,18 +145,20 @@ class _StartShiftViewState extends State<StartShiftView> {
                 const SizedBox(
                   height: 16,
                 ),
-                ComingSoonContainer(
-                  innerWidget: ExplainerWidget(
-                    comingSoon: true,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: ExplainerWidget(
                     iconName: 'construct',
                     title: 'PPE',
-                    text1: '2/5 Planned PPE per Worker Type',
+                    text1: '${count}/${widget.ppe!.data!.length} Planned PPE per Worker Type',
                     text2: '',
                     showWarning: true,
                     showIcon: true,
-                    backgroundColor: lightRedColor,
+                    backgroundColor: count==widget.ppe!.data!.length?lightGreenColor:lightRedColor,
+                    postIcon: count!=widget.ppe!.data!.length?null:Icons.check,
+                    postIconColor: count!=widget.ppe!.data!.length?null:Colors.green,
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  // padding: const EdgeInsets.symmetric(horizontal: 8),
                 ),
                 SizedBox(
                   height: 8,
@@ -216,7 +227,9 @@ class _StartShiftViewState extends State<StartShiftView> {
                           widget.endTime,
                           widget.userId,
                           widget.efficiencyCalculation,
-                          _controller.text);
+                          _controller.text,
+                          ppe: widget.ppe,
+                          discrepancyComment: widget.discrepancyComment);
 
                       await EasyLoading.dismiss();
 

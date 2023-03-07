@@ -16,7 +16,9 @@ class Assets {
   static const String imagesSopTraining = 'assets/images/SopTraining.png';
   static const String imagesStartButton = 'assets/images/start_button.png';
   static const String imagesStartDisable = 'assets/images/start_disable.png';
+  static const String imagesStopSignPushHand = 'assets/images/Stop-sign-push-hand.png';
   static const String imagesToplogo = 'assets/images/toplogo.png';
   static const String imagesWalk = 'assets/images/walk.png';
   static const String imagesWarning = 'assets/images/warning.png';
+
 }
