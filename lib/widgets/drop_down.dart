@@ -16,6 +16,7 @@ class DropDown extends StatefulWidget {
   final bool removeText;
 
   final bool enabled;
+  final bool search;
 
   final bool padding;
 
@@ -26,6 +27,7 @@ class DropDown extends StatefulWidget {
       required this.currentList,
       required this.onChange,
       required this.showError,
+      this.search = true,
       this.preSelected = '',
       this.padding = true,
       this.enabled = true,
@@ -104,36 +106,40 @@ class _DropDownState extends State<DropDown> {
                           const SizedBox(
                             height: 8,
                           ),
-                          TextFormField(
-                            controller: widget.controller,
-                            maxLines: 1,
-                            decoration: InputDecoration.collapsed(
-                              hintText: 'Search',
-                              hintStyle: TextStyle(
-                                color: Colors.grey[500],
-                                fontSize: 14,
-                              ),
-                            ),
-                            onChanged: (v) {
-                              if (mounted)
-                                setState(
-                                  () {
-                                    searchField = v;
-                                    if (searchField.isNotEmpty) {
-                                      listToShow = widget.currentList
-                                          .where(
-                                            (e) => e.toLowerCase().contains(
-                                                  searchField.toLowerCase(),
-                                                ),
-                                          )
-                                          .toList();
-                                    } else {
-                                      listToShow = widget.currentList;
-                                    }
+                          widget.search
+                              ? TextFormField(
+                                  controller: widget.controller,
+                                  maxLines: 1,
+                                  decoration: InputDecoration.collapsed(
+                                    hintText: 'Search',
+                                    hintStyle: TextStyle(
+                                      color: Colors.grey[500],
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  onChanged: (v) {
+                                    if (mounted)
+                                      setState(
+                                        () {
+                                          searchField = v;
+                                          if (searchField.isNotEmpty) {
+                                            listToShow = widget.currentList
+                                                .where(
+                                                  (e) =>
+                                                      e.toLowerCase().contains(
+                                                            searchField
+                                                                .toLowerCase(),
+                                                          ),
+                                                )
+                                                .toList();
+                                          } else {
+                                            listToShow = widget.currentList;
+                                          }
+                                        },
+                                      );
                                   },
-                                );
-                            },
-                          ),
+                                )
+                              : Container(),
                           const Divider(
                             height: 4,
                             thickness: 1,

@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/model/sop_model.dart';
+import 'package:shiftapp/screens/IncidentsScreen.dart';
 import 'package:shiftapp/screens/SopView.dart';
 import 'package:shiftapp/screens/StartedShiftList.dart';
 import 'package:shiftapp/screens/shift_start.dart';
@@ -20,7 +21,6 @@ import '../services/workers_service.dart';
 import 'edit_workers.dart';
 import 'end_shift_final_screen.dart';
 import 'inner_widgets/HandOverShift.dart';
-import 'inner_widgets/coming_soon_container.dart';
 
 class EndShiftView extends StatefulWidget {
   final bool startedBefore;
@@ -82,10 +82,11 @@ class _EndShiftViewState extends State<EndShiftView> {
         } else {
           timeRemaining = widget.selectedShift.timeRemaining;
         }
-        
-          if (mounted)setState(() {
+
+        if (mounted)
+          setState(() {
             timeElasped = widget.selectedShift.timeElasped;
-            if(timeElasped.isNotEmpty){
+            if (timeElasped.isNotEmpty) {
               if (int.parse(timeElasped.split(":")[1].toString()) % 30 == 0 &&
                   stopper == false) {
                 stopper = true;
@@ -249,12 +250,11 @@ class _EndShiftViewState extends State<EndShiftView> {
     }
     numberSelected = responseShift!.data!.shiftWorker!.length;
 
-    if (mounted)setState(() {
-      totalUsersCount = responseShift.data!.shiftWorker!.length +
-          responseShift.data!.worker!.length;
-    });
-
-   
+    if (mounted)
+      setState(() {
+        totalUsersCount = responseShift.data!.shiftWorker!.length +
+            responseShift.data!.worker!.length;
+      });
   }
 
   @override
@@ -406,18 +406,34 @@ class _EndShiftViewState extends State<EndShiftView> {
               const SizedBox(
                 height: 16,
               ),
-              ComingSoonContainer(
+              // ComingSoonContainer(
+              //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              //   innerWidget:
+              Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                innerWidget: ExplainerWidget(
-                  comingSoon: true,
+                child: ExplainerWidget(
+                  // comingSoon: true,
                   iconName: 'exclamation',
                   title: 'INCIDENTS',
-                  text1: '5',
-                  text2: 'Tap to train now or swipe to ignore',
+                  text1: '$totalIncident',
+                  text2: 'Tap to view and add incidents or record downtime',
                   showWarning: false,
-                  text1_2: '01:50:00',
+                  text1_2: '$totalDowntime',
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Incidents(
+                                  selectedShift: widget.selectedShift,
+                                  execShiftId: widget.execShiftId,
+                                  process: widget.process,
+                                  totalDowntime: totalDowntime,
+                                  totalIncident: totalIncident,
+                                ))).then((value) => loadShiftId());
+                  },
                 ),
               ),
+              // ),
               const SizedBox(
                 height: 16,
               ),
@@ -444,20 +460,22 @@ class _EndShiftViewState extends State<EndShiftView> {
                     flex: 52,
                     child: TextButton(
                       onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => EndShiftFinalScreen(
-                              autoOpen: widget.autoOpen,
-                              startTime: widget.selectedShift.startTime!,
-                              selectedShift: widget.selectedShift,
-                              shiftId: widget.shiftId,
-                              processId: widget.processId,
-                              endTime: widget.selectedShift.endTime!,
-                              process: widget.process,
-                              executeShiftId: executeShiftId!,
-                            ),
-                          ),
-                        );
+                        Navigator.of(context)
+                            .push(
+                              MaterialPageRoute(
+                                builder: (context) => EndShiftFinalScreen(
+                                  autoOpen: widget.autoOpen,
+                                  startTime: widget.selectedShift.startTime!,
+                                  selectedShift: widget.selectedShift,
+                                  shiftId: widget.shiftId,
+                                  processId: widget.processId,
+                                  endTime: widget.selectedShift.endTime!,
+                                  process: widget.process,
+                                  executeShiftId: executeShiftId!,
+                                ),
+                              ),
+                            )
+                            .then((value) => loadShiftId());
                       },
                       child: Image.asset('assets/images/end-shift.png'),
                     ),
@@ -479,12 +497,16 @@ class _EndShiftViewState extends State<EndShiftView> {
   }
 
   var sopCount = 0;
+  String totalDowntime = "";
+  String totalIncident = "";
 
   void loadExpectedUnits() async {
     expectedUnits = 0;
     var shiftWorkerList =
         await WorkersService.getAllShiftWorkersList(executeShiftId!);
     sopCount = shiftWorkerList!.sopCount!;
+    totalDowntime = shiftWorkerList!.totalDowntime!.totalDowntime.toString();
+    totalIncident = shiftWorkerList!.totalDowntime!.totalIncident.toString();
     for (var calculation in shiftWorkerList!.data!) {
       expectedUnits = expectedUnits +
           ((((calculation.actualTimeloggedout!
@@ -501,7 +523,7 @@ class _EndShiftViewState extends State<EndShiftView> {
                   60) *
               (double.parse(widget.process.baseline!)));
     }
-    if (mounted)setState(() {});
+    if (mounted) setState(() {});
   }
 }
 
@@ -578,11 +600,17 @@ class ExplainerWidget extends StatelessWidget {
                       color: comingSoon ? Colors.grey : kPrimaryColor,
                     ),
                   ] else ...[
-                    Image(
-                      image: AssetImage('assets/images/$iconName.png'),
-                      width: MediaQuery.of(context).size.width / 12,
-                      color: comingSoon ? Colors.grey : kPrimaryColor,
-                    ),
+                    iconName.contains("http")
+                        ? Image(
+                            image: NetworkImage(iconName),
+                            width: MediaQuery.of(context).size.width / 12,
+                            // color: comingSoon ? Colors.grey : kPrimaryColor,
+                          )
+                        : Image(
+                            image: AssetImage('assets/images/$iconName.png'),
+                            width: MediaQuery.of(context).size.width / 12,
+                            color: comingSoon ? Colors.grey : kPrimaryColor,
+                          ),
                   ],
                   const SizedBox(
                     width: 8,
@@ -613,7 +641,7 @@ class ExplainerWidget extends StatelessWidget {
                           Row(
                             children: [
                               Text(
-                                'Incidents Recorded:',
+                                'Incident Recorded:',
                                 style: TextStyle(
                                     color: comingSoon
                                         ? Colors.grey
@@ -623,11 +651,14 @@ class ExplainerWidget extends StatelessWidget {
                               const SizedBox(
                                 width: 8,
                               ),
-                              Text(
-                                text1,
-                                style: TextStyle(
-                                  color:
-                                      comingSoon ? Colors.grey : kPrimaryColor,
+                              Expanded(
+                                child: Text(
+                                  text1,
+                                  style: TextStyle(
+                                    color: comingSoon
+                                        ? Colors.grey
+                                        : kPrimaryColor,
+                                  ),
                                 ),
                               ),
                             ],
@@ -641,28 +672,33 @@ class ExplainerWidget extends StatelessWidget {
                               height: 4,
                             ),
                           ],
-                          Row(
-                            children: [
-                              Text(
-                                'Downtime Recorded:',
-                                style: TextStyle(
-                                    color: comingSoon
-                                        ? Colors.grey
-                                        : kPrimaryColor,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              const SizedBox(
-                                width: 8,
-                              ),
-                              Text(
-                                text1_2,
-                                style: TextStyle(
-                                  color:
-                                      comingSoon ? Colors.grey : kPrimaryColor,
-                                ),
-                              ),
-                            ],
-                          ),
+                          text1_2 != " "
+                              ? Row(
+                                  children: [
+                                    Text(
+                                      'Downtime Recorded:',
+                                      style: TextStyle(
+                                          color: comingSoon
+                                              ? Colors.grey
+                                              : kPrimaryColor,
+                                          fontWeight: FontWeight.w700),
+                                    ),
+                                    const SizedBox(
+                                      width: 8,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        text1_2,
+                                        style: TextStyle(
+                                          color: comingSoon
+                                              ? Colors.grey
+                                              : kPrimaryColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Container(),
                         ] else ...[
                           text1.isNotEmpty
                               ? Text(
@@ -670,7 +706,9 @@ class ExplainerWidget extends StatelessWidget {
                                   style: TextStyle(
                                       color: comingSoon
                                           ? Colors.grey
-                                          : kPrimaryColor,
+                                          : text1.contains("Workers require")
+                                              ? Colors.red
+                                              : kPrimaryColor,
                                       fontWeight: FontWeight.bold),
                                 )
                               : Container(),

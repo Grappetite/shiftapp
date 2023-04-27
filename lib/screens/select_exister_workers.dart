@@ -503,21 +503,21 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                       const SizedBox(
                                                         height: 8,
                                                       ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(4),
-                                                        child: Text(
-                                                          "Worker with expired license:",
-                                                          style: const TextStyle(
-                                                              color:
-                                                                  kPrimaryColor,
-                                                              fontSize: 15),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 8,
-                                                      ),
+                                                      // Padding(
+                                                      //   padding:
+                                                      //       const EdgeInsets
+                                                      //           .all(4),
+                                                      //   child: Text(
+                                                      //     "Worker with expired license:",
+                                                      //     style: const TextStyle(
+                                                      //         color:
+                                                      //             kPrimaryColor,
+                                                      //         fontSize: 15),
+                                                      //   ),
+                                                      // ),
+                                                      // const SizedBox(
+                                                      //   height: 8,
+                                                      // ),
                                                       Padding(
                                                         padding:
                                                             const EdgeInsets
@@ -605,6 +605,15 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                   ),
                                                                   const SizedBox(
                                                                     height: 8,
+                                                                  ), Text(
+                                                                    widget.listName,
+                                                                    style: const TextStyle(
+                                                                        color:
+                                                                        kPrimaryColor,
+                                                                        fontSize: 15),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 8,
                                                                   ),
                                                                   Text(
                                                                     currentItem
@@ -614,10 +623,10 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                             kPrimaryColor,
                                                                         fontSize:
                                                                             15),
-                                                                  ),
-                                                                  const SizedBox(
+                                                                  ),const SizedBox(
                                                                     height: 8,
                                                                   ),
+
                                                                   Text(
                                                                     "Expiry: " +
                                                                         DateFormat("yyyy-MM-dd")
@@ -685,7 +694,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                           decoration:
                                                                               const InputDecoration(
                                                                             labelText:
-                                                                                'Issue Date',
+                                                                                'New Issue Date',
                                                                             border:
                                                                                 OutlineInputBorder(
                                                                               borderRadius: BorderRadius.all(
@@ -755,7 +764,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                           decoration:
                                                                               const InputDecoration(
                                                                             labelText:
-                                                                                'Expiry Date',
+                                                                                'New Expiry Date',
                                                                             border:
                                                                                 OutlineInputBorder(
                                                                               borderRadius: BorderRadius.all(
@@ -981,21 +990,21 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                         const SizedBox(
                                                           height: 8,
                                                         ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(4),
-                                                          child: Text(
-                                                            "Worker with expired license:",
-                                                            style: const TextStyle(
-                                                                color:
-                                                                    kPrimaryColor,
-                                                                fontSize: 15),
-                                                          ),
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 8,
-                                                        ),
+                                                        // Padding(
+                                                        //   padding:
+                                                        //       const EdgeInsets
+                                                        //           .all(4),
+                                                        //   child: Text(
+                                                        //     "Worker with expired license:",
+                                                        //     style: const TextStyle(
+                                                        //         color:
+                                                        //             kPrimaryColor,
+                                                        //         fontSize: 15),
+                                                        //   ),
+                                                        // ),
+                                                        // const SizedBox(
+                                                        //   height: 8,
+                                                        // ),
                                                         Padding(
                                                           padding:
                                                               const EdgeInsets
@@ -1081,6 +1090,15 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                     ),
                                                                     const SizedBox(
                                                                       height: 8,
+                                                                    ), Text(
+                                                                      widget.listName,
+                                                                      style: const TextStyle(
+                                                                          color:
+                                                                          kPrimaryColor,
+                                                                          fontSize: 15),
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      height: 8,
                                                                     ),
                                                                     Text(
                                                                       currentItem
@@ -1090,10 +1108,10 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                               kPrimaryColor,
                                                                           fontSize:
                                                                               15),
-                                                                    ),
-                                                                    const SizedBox(
+                                                                    ),const SizedBox(
                                                                       height: 8,
                                                                     ),
+
                                                                     Text(
                                                                       "Expiry: " +
                                                                           DateFormat("yyyy-MM-dd")
@@ -1156,7 +1174,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                                 issueDate,
                                                                             decoration:
                                                                                 const InputDecoration(
-                                                                              labelText: 'Issue Date',
+                                                                              labelText: 'New Issue Date',
                                                                               border: OutlineInputBorder(
                                                                                 borderRadius: BorderRadius.all(
                                                                                   Radius.circular(10.0),
@@ -1218,7 +1236,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                                 expiryDate,
                                                                             decoration:
                                                                                 const InputDecoration(
-                                                                              labelText: 'Expiry Date',
+                                                                              labelText: 'New Expiry Date',
                                                                               border: OutlineInputBorder(
                                                                                 borderRadius: BorderRadius.all(
                                                                                   Radius.circular(10.0),

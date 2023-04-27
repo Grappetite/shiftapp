@@ -417,19 +417,19 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                 const SizedBox(
                                                                                   height: 8,
                                                                                 ),
-                                                                                Padding(
-                                                                                  padding:
-                                                                                  const EdgeInsets.all(4),
-                                                                                  child: Text(
-                                                                                    "Worker with expired license:",
-                                                                                    style: const TextStyle(
-                                                                                        color: kPrimaryColor,
-                                                                                        fontSize: 15),
-                                                                                  ),
-                                                                                ),
-                                                                                const SizedBox(
-                                                                                  height: 8,
-                                                                                ),
+                                                                                // Padding(
+                                                                                //   padding:
+                                                                                //   const EdgeInsets.all(4),
+                                                                                //   child: Text(
+                                                                                //     "Worker with expired license:",
+                                                                                //     style: const TextStyle(
+                                                                                //         color: kPrimaryColor,
+                                                                                //         fontSize: 15),
+                                                                                //   ),
+                                                                                // ),
+                                                                                // const SizedBox(
+                                                                                //   height: 8,
+                                                                                // ),
                                                                                 Padding(
                                                                                   padding:
                                                                                   const EdgeInsets.all(4),
@@ -600,7 +600,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                                     decoration:
                                                                                                     const InputDecoration(
                                                                                                       labelText:
-                                                                                                      'Issue Date',
+                                                                                                      'New Issue Date',
                                                                                                       border:
                                                                                                       OutlineInputBorder(
                                                                                                         borderRadius:
@@ -699,7 +699,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                                     decoration:
                                                                                                     const InputDecoration(
                                                                                                       labelText:
-                                                                                                      'Expiry Date',
+                                                                                                      'New Expiry Date',
                                                                                                       border:
                                                                                                       OutlineInputBorder(
                                                                                                         borderRadius:
@@ -975,19 +975,19 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                           const SizedBox(
                                                             height: 8,
                                                           ),
-                                                          Padding(
-                                                            padding:
-                                                            const EdgeInsets.all(4),
-                                                            child: Text(
-                                                              "Worker with expired license:",
-                                                              style: const TextStyle(
-                                                                  color: kPrimaryColor,
-                                                                  fontSize: 15),
-                                                            ),
-                                                          ),
-                                                          const SizedBox(
-                                                            height: 8,
-                                                          ),
+                                                          // Padding(
+                                                          //   padding:
+                                                          //   const EdgeInsets.all(4),
+                                                          //   child: Text(
+                                                          //     "Worker with expired license:",
+                                                          //     style: const TextStyle(
+                                                          //         color: kPrimaryColor,
+                                                          //         fontSize: 15),
+                                                          //   ),
+                                                          // ),
+                                                          // const SizedBox(
+                                                          //   height: 8,
+                                                          // ),
                                                           Padding(
                                                             padding:
                                                             const EdgeInsets.all(4),
@@ -1158,7 +1158,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                               decoration:
                                                                               const InputDecoration(
                                                                                 labelText:
-                                                                                'Issue Date',
+                                                                                'New Issue Date',
                                                                                 border:
                                                                                 OutlineInputBorder(
                                                                                   borderRadius:
@@ -1257,7 +1257,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                               decoration:
                                                                               const InputDecoration(
                                                                                 labelText:
-                                                                                'Expiry Date',
+                                                                                'New Expiry Date',
                                                                                 border:
                                                                                 OutlineInputBorder(
                                                                                   borderRadius:

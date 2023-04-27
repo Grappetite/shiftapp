@@ -96,6 +96,7 @@ class ShiftWorker {
   bool isTemp = false;
 
   String picture = '';
+  String? role = '';
 
   bool isSelected = false;
 
@@ -114,6 +115,7 @@ class ShiftWorker {
       this.firstName,
       this.lastName,
       this.key,
+      this.role,
       this.licenseName,
       this.license_expiry,
       this.efficiencyCalculation});
@@ -129,7 +131,10 @@ class ShiftWorker {
     efficiencyCalculation = json['efficiencyCalculation'];
     picture = json['picture'];
     licenseName = json["licenseName"];
-    license_expiry =json["license_expiry"]!=null? DateTime.parse(json["license_expiry"]):null;
+    role = json["role"];
+    license_expiry = json["license_expiry"] != null
+        ? DateTime.parse(json["license_expiry"])
+        : null;
     if (json.keys.contains('worker_add')) {
       isAdded = json['worker_add'] == '1';
     }
@@ -234,6 +239,7 @@ class ShiftWorkerList {
     this.code,
     this.status,
     this.data,
+    this.totalDowntime,
     this.sopCount,
     this.message,
   });
@@ -243,12 +249,15 @@ class ShiftWorkerList {
   List<Datum>? data;
   int? sopCount;
   String? message;
-
+  TotalDowntime? totalDowntime;
   factory ShiftWorkerList.fromJson(Map<String, dynamic> json) =>
       ShiftWorkerList(
         code: json["code"] == null ? null : json["code"],
         status: json["status"] == null ? null : json["status"],
         sopCount: json["sopCount"] == null ? null : json["sopCount"],
+        totalDowntime: json["totalDowntime"] == null
+            ? null
+            : TotalDowntime.fromJson(json["totalDowntime"]),
         data: json["data"] == null
             ? null
             : List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
@@ -262,6 +271,26 @@ class ShiftWorkerList {
             ? null
             : List<dynamic>.from(data!.map((x) => x.toJson())),
         "message": message == null ? null : message,
+      };
+}
+
+class TotalDowntime {
+  TotalDowntime({
+    this.totalDowntime,
+    this.totalIncident,
+  });
+
+  dynamic totalDowntime;
+  int? totalIncident;
+
+  factory TotalDowntime.fromJson(Map<String, dynamic> json) => TotalDowntime(
+        totalDowntime: json["total_downtime"] ?? 0,
+        totalIncident: json["total_incident"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "total_downtime": totalDowntime,
+        "total_incident": totalIncident,
       };
 }
 

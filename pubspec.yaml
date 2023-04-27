@@ -64,6 +64,7 @@ dependencies:
   painter:
     git:
       url: https://github.com/joranmulderij/painter.git
+  image_picker: ^0.8.7+2
 
 dev_dependencies:
   flutter_test:

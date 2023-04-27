@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -110,7 +111,7 @@ class LoginService {
         prefs.setString("allNotification", "done");
       }
       prefs.setString(tokenKey, responseObject.token!);
-      print(prefs.getString(tokenKey));
+      log(prefs.getString(tokenKey)!);
       return responseObject;
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);

@@ -92,7 +92,7 @@ class pictureWithHeading extends StatelessWidget {
                                       style: const TextStyle(
                                         color: kPrimaryColor,
                                         fontWeight: FontWeight.w600,
-                                        fontSize: 18,
+                                        fontSize: 16,
                                       ),
                                     ),
                               suffix != null

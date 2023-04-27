@@ -6,7 +6,6 @@ import 'package:shiftapp/model/login_model.dart';
 import 'package:shiftapp/model/ppe_model.dart';
 import 'package:shiftapp/model/shifts_model.dart';
 import 'package:shiftapp/model/workers_model.dart';
-import 'package:shiftapp/screens/inner_widgets/change_shift_time.dart';
 import 'package:shiftapp/screens/inner_widgets/index_indicator.dart';
 import 'package:shiftapp/screens/inner_widgets/worker_item_view.dart';
 import 'package:shiftapp/screens/shift_start.dart';
@@ -80,6 +79,12 @@ class _PPESelectionState extends State<PPESelection> {
     ppeData = await PPEService.getPPE(
       id!,
     );
+    ppeData!.data!.removeWhere((element) {
+      if (element.count == 0) {
+        return true;
+      }
+      return false;
+    });
     // ppeData!.data!.addAll(ppeData!.data!);
     await EasyLoading.dismiss();
 
@@ -231,10 +236,7 @@ class _PPESelectionState extends State<PPESelection> {
                                                             return AlertDialog(
                                                                 insetPadding:
                                                                     const EdgeInsets.fromLTRB(
-                                                                        0,
-                                                                        0,
-                                                                        0,
-                                                                        0),
+                                                                        0, 0, 0, 0),
                                                                 backgroundColor:
                                                                     Colors
                                                                         .transparent,
@@ -242,8 +244,11 @@ class _PPESelectionState extends State<PPESelection> {
                                                                     Container(
                                                                         width: MediaQuery.of(context).size.width /
                                                                             1.15,
-                                                                        height: MediaQuery.of(context).size.height /
-                                                                            1.75,
+                                                                        height: !ppeData!.data![index].ppeCheckBoxSelected!
+                                                                            ? MediaQuery.of(context).size.height /
+                                                                                1.75
+                                                                            : MediaQuery.of(context).size.height /
+                                                                                1.25,
                                                                         decoration:
                                                                             BoxDecoration(
                                                                           color:
@@ -261,29 +266,39 @@ class _PPESelectionState extends State<PPESelection> {
                                                                           children: [
                                                                             Padding(
                                                                               padding: const EdgeInsets.only(right: 8),
-                                                                              child: Align(
-                                                                                alignment: Alignment.topRight,
-                                                                                child: IconButton(
-                                                                                  onPressed: () {
-                                                                                    Navigator.pop(context, false);
-                                                                                  },
-                                                                                  icon: const Icon(
-                                                                                    Icons.close,
-                                                                                    color: kPrimaryColor,
+                                                                              child: Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                                                children: [
+                                                                                  Expanded(
+                                                                                    child: Padding(
+                                                                                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                                                                      child: Text(
+                                                                                        "${ppeData!.data![index].name!} REQUIRED PPE".toUpperCase(),
+                                                                                        style: const TextStyle(
+                                                                                          color: kPrimaryColor,
+                                                                                          fontWeight: FontWeight.w600,
+                                                                                          fontSize: 18,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
                                                                                   ),
-                                                                                ),
+                                                                                  Align(
+                                                                                    alignment: Alignment.topRight,
+                                                                                    child: IconButton(
+                                                                                      onPressed: () {
+                                                                                        Navigator.pop(context, false);
+                                                                                      },
+                                                                                      icon: const Icon(
+                                                                                        Icons.close,
+                                                                                        color: kPrimaryColor,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
                                                                               ),
                                                                             ),
-                                                                            Padding(
-                                                                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                                                              child: Text(
-                                                                                "${ppeData!.data![index].name!} REQUIRED PPE".toUpperCase(),
-                                                                                style: const TextStyle(
-                                                                                  color: kPrimaryColor,
-                                                                                  fontWeight: FontWeight.w600,
-                                                                                  fontSize: 18,
-                                                                                ),
-                                                                              ),
+                                                                            Container(
+                                                                              height: 10,
                                                                             ),
                                                                             Expanded(
                                                                                 child: ListView.separated(
@@ -292,7 +307,7 @@ class _PPESelectionState extends State<PPESelection> {
                                                                                     },
                                                                                     separatorBuilder: (context, position) {
                                                                                       return Container(
-                                                                                        height: 20,
+                                                                                        height: 5,
                                                                                       );
                                                                                     },
                                                                                     itemCount: ppeData!.data![index].details!.length)),
@@ -360,13 +375,17 @@ class _PPESelectionState extends State<PPESelection> {
                                                                             Center(
                                                                               child: PElevatedButton(
                                                                                 onPressed: () async {
-                                                                                  await EasyLoading.show(
-                                                                                    status: 'loading...',
-                                                                                    maskType: EasyLoadingMaskType.black,
-                                                                                  );
-                                                                                  await PPEService.postPpe(check: ppeData!.data![index].ppeCheckBoxSelected, ppe: ppeData!.data![index], comment: _controllerAlert.text, processId: widget.processId);
-                                                                                  await EasyLoading.dismiss();
-                                                                                  Navigator.pop(context);
+                                                                                  if (ppeData!.data![index].ppeCheckBoxSelected!) {
+                                                                                    await EasyLoading.show(
+                                                                                      status: 'loading...',
+                                                                                      maskType: EasyLoadingMaskType.black,
+                                                                                    );
+                                                                                    await PPEService.postPpe(check: ppeData!.data![index].ppeCheckBoxSelected, ppe: ppeData!.data![index], comment: _controllerAlert.text, processId: widget.processId);
+                                                                                    await EasyLoading.dismiss();
+                                                                                    Navigator.pop(context);
+                                                                                  } else {
+                                                                                    Navigator.pop(context);
+                                                                                  }
                                                                                 },
                                                                                 text: 'Continue'.toUpperCase(),
                                                                               ),
@@ -534,7 +553,10 @@ class _PPESelectionState extends State<PPESelection> {
                                           Center(
                                             child: PElevatedButton(
                                               onPressed: () async {
-                                                Navigator.pop(context);
+                                                // Navigator.pop(context);
+                                                Navigator.of(context).popUntil(
+                                                    (route) => route.isFirst);
+                                                // Navigator.popUntil(context, (route) => StartedShifts());
                                               },
                                               text: 'Cancel Shift Start'
                                                   .toUpperCase(),
