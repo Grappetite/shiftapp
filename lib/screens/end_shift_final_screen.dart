@@ -82,8 +82,6 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
           setState(() {
             timeElasped = widget.selectedShift.timeElasped;
           });
-
-       
       },
     );
   }
@@ -126,6 +124,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
           return Future.value(true);
         },
         child: Scaffold(
+          // resizeToAvoidBottomInset:false,
           appBar: AppBar(
             leading: GestureDetector(
                 onTap: () {
@@ -186,7 +185,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.grey, width: 3),
+                      // border: Border.all(color: Colors.grey, width: 3),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -353,8 +352,6 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                     )
                                   ],
                                 );
-
-                               
 
                                 return;
                               } else {
@@ -564,7 +561,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                   GestureDetector(
                     onTap: () async {
                       DateTime? newTime;
-                      bool? assign=false;
+                      bool? assign = false;
                       showCupertinoModalPopup(
                           context: context,
                           builder: (BuildContext builder) {
@@ -594,7 +591,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                                                   newTime = DateTime.now()
                                                       .roundDown();
                                                 }
-                                                assign=true;
+                                                assign = true;
                                                 Navigator.pop(context);
                                                 // okHandler.call();
                                               },

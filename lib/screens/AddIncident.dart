@@ -747,6 +747,7 @@ class _AddIncidentState extends State<AddIncident> {
                         horizontal: 8.0, vertical: 8),
                     child: ListView.separated(
                         shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           return UserItem(
                             keyNo: sectionManagers[index].role!,

@@ -503,6 +503,34 @@ class _IncidentsState extends State<Incidents> {
                                                                             .data![index]
                                                                             .isDowntime ==
                                                                         "Yes"
+                                                                    ? Padding(
+                                                                        padding: const EdgeInsets.symmetric(
+                                                                            horizontal:
+                                                                                8.0,
+                                                                            vertical:
+                                                                                8),
+                                                                        child:
+                                                                            Text(
+                                                                          "Down till",
+                                                                          maxLines:
+                                                                              1,
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis,
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontSize:
+                                                                                16,
+                                                                            color:
+                                                                                Colors.grey[500],
+                                                                          ),
+                                                                        ),
+                                                                      )
+                                                                    : Container(),
+
+                                                                incidentData!
+                                                                            .data![index]
+                                                                            .isDowntime ==
+                                                                        "Yes"
                                                                     ? GestureDetector(
                                                                         onTap:
                                                                             () {
