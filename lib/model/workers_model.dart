@@ -87,6 +87,7 @@ class ShiftWorker {
   int? id;
   int? userId;
   int? workerTypeId;
+  int? expiryDays;
   String? workerType;
   String? firstName;
   String? lastName;
@@ -131,6 +132,7 @@ class ShiftWorker {
     efficiencyCalculation = json['efficiencyCalculation'];
     picture = json['picture'];
     licenseName = json["licenseName"];
+    expiryDays = json["expiry_days"];
     role = json["role"];
     license_expiry = json["license_expiry"] != null
         ? DateTime.parse(json["license_expiry"])

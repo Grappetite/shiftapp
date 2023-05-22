@@ -4,7 +4,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/screens/PPESelection.dart';
-import 'package:shiftapp/screens/shift_start.dart';
 
 import '../../model/login_model.dart';
 import '../../model/shifts_model.dart';
@@ -14,7 +13,6 @@ import '../../services/workers_service.dart';
 import '../../widgets/elevated_button.dart';
 import '../end_shift_final_screen.dart';
 import '../select_exister_workers.dart';
-import '../start_shift_page.dart';
 import 'index_indicator.dart';
 
 class WorkItemView extends StatefulWidget {
@@ -940,75 +938,77 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                             12,
                                                                       )
                                                                     : Container(),
-                                                                Column(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  children: [
-                                                                    Text(
-                                                                      currentItem
-                                                                              .firstName! +
-                                                                          ' ' +
-                                                                          currentItem
-                                                                              .lastName!,
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontSize:
-                                                                            16,
-                                                                        fontWeight:
-                                                                            FontWeight.w700,
-                                                                        color:
-                                                                            kPrimaryColor,
+                                                                Expanded(
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Text(
+                                                                        currentItem.firstName! +
+                                                                            ' ' +
+                                                                            currentItem.lastName!,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              16,
+                                                                          fontWeight:
+                                                                              FontWeight.w700,
+                                                                          color:
+                                                                              kPrimaryColor,
+                                                                        ),
                                                                       ),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      height: 8,
-                                                                    ),
-                                                                    Text(
-                                                                      widget.listNames[
-                                                                          i],
-                                                                      style: const TextStyle(
-                                                                          color:
-                                                                              kPrimaryColor,
-                                                                          fontSize:
-                                                                              15),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      height: 8,
-                                                                    ),
-                                                                    Text(
-                                                                      currentItem
-                                                                          .licenseName!,
-                                                                      style: const TextStyle(
-                                                                          color:
-                                                                              kPrimaryColor,
-                                                                          fontSize:
-                                                                              15),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      height: 8,
-                                                                    ),
-                                                                    Text(
-                                                                      "Expiry: " +
-                                                                          DateFormat("yyyy-MM-dd")
-                                                                              .parse(currentItem.license_expiry.toString())
-                                                                              .toString()
-                                                                              .split(" ")[0],
-                                                                      style: const TextStyle(
-                                                                          color:
-                                                                              kPrimaryColor,
-                                                                          fontSize:
-                                                                              15),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      height: 8,
-                                                                    ),
-                                                                  ],
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            8,
+                                                                      ),
+                                                                      Text(
+                                                                        widget.listNames[
+                                                                            i],
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                kPrimaryColor,
+                                                                            fontSize:
+                                                                                15),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            8,
+                                                                      ),
+                                                                      Text(
+                                                                        currentItem
+                                                                            .licenseName!,
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                kPrimaryColor,
+                                                                            fontSize:
+                                                                                15),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            8,
+                                                                      ),
+                                                                      Text(
+                                                                        "Expiry: " +
+                                                                            DateFormat("yyyy-MM-dd").parse(currentItem.license_expiry.toString()).toString().split(" ")[0],
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                kPrimaryColor,
+                                                                            fontSize:
+                                                                                15),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            8,
+                                                                      ),
+                                                                    ],
+                                                                  ),
                                                                 ),
                                                                 SizedBox(
                                                                   width: 4,
                                                                 ),
                                                                 Expanded(
+                                                                  flex: 2,
                                                                   child: Column(
                                                                     children: [
                                                                       GestureDetector(
@@ -1017,7 +1017,9 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                           issueDate.text = DateTime.now()
                                                                               .toString()
                                                                               .split(" ")[0];
-
+                                                                          expiryDate.text = DateTime.now()
+                                                                              .add(Duration(days: currentItem.expiryDays!))
+                                                                              .toString();
                                                                           showCupertinoModalPopup(
                                                                               context: context,
                                                                               builder: (BuildContext builder) {
@@ -1029,10 +1031,11 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                                     mode: CupertinoDatePickerMode.date,
                                                                                     onDateTimeChanged: (value) async {
                                                                                       issueDate.text = value.toString().split(" ")[0];
+                                                                                      expiryDate.text = value.add(Duration(days: currentItem.expiryDays!)).toString();
                                                                                       setState(() {});
                                                                                     },
                                                                                     initialDateTime: DateTime.now(),
-                                                                                    minimumDate: DateTime.now().subtract(Duration(days: 365)),
+                                                                                    minimumDate: DateTime.now().subtract(Duration(days: currentItem.expiryDays! - 3)),
                                                                                     maximumDate: DateTime.now(),
                                                                                   ),
                                                                                 );
@@ -1073,68 +1076,68 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                      GestureDetector(
-                                                                        onTap:
-                                                                            () {
-                                                                          expiryDate.text = DateTime.now()
-                                                                              .toString()
-                                                                              .split(" ")[0];
-
-                                                                          showCupertinoModalPopup(
-                                                                              context: context,
-                                                                              builder: (BuildContext builder) {
-                                                                                return Container(
-                                                                                  color: Colors.white,
-                                                                                  height: MediaQuery.of(context).size.width,
-                                                                                  width: MediaQuery.of(context).size.width,
-                                                                                  child: CupertinoDatePicker(
-                                                                                    mode: CupertinoDatePickerMode.date,
-                                                                                    onDateTimeChanged: (value) async {
-                                                                                      expiryDate.text = value.toString().split(" ")[0];
-                                                                                      setState(() {});
-                                                                                    },
-                                                                                    initialDateTime: DateTime.now().add(Duration(hours: 1)),
-                                                                                    minimumDate: DateTime.now(),
-                                                                                    maximumDate: DateTime.now().add(Duration(days: (365 * 11))),
-                                                                                  ),
-                                                                                );
-                                                                              });
-                                                                        },
-                                                                        child:
-                                                                            Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(4.0),
-                                                                          child:
-                                                                              TextFormField(
-                                                                            enabled:
-                                                                                false,
-                                                                            controller:
-                                                                                expiryDate,
-                                                                            decoration:
-                                                                                const InputDecoration(
-                                                                              labelText: 'New Expiry Date',
-                                                                              border: OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.all(
-                                                                                  Radius.circular(10.0),
-                                                                                ),
-                                                                                borderSide: BorderSide(color: kPrimaryColor),
-                                                                              ),
-                                                                              enabledBorder: OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.all(
-                                                                                  Radius.circular(10.0),
-                                                                                ),
-                                                                                borderSide: BorderSide(color: kPrimaryColor),
-                                                                              ),
-                                                                              disabledBorder: OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.all(
-                                                                                  Radius.circular(10.0),
-                                                                                ),
-                                                                                borderSide: BorderSide(color: kPrimaryColor),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ),
+                                                                      // GestureDetector(
+                                                                      //   onTap:
+                                                                      //       () {
+                                                                      //     expiryDate.text = DateTime.now()
+                                                                      //         .toString()
+                                                                      //         .split(" ")[0];
+                                                                      //
+                                                                      //     showCupertinoModalPopup(
+                                                                      //         context: context,
+                                                                      //         builder: (BuildContext builder) {
+                                                                      //           return Container(
+                                                                      //             color: Colors.white,
+                                                                      //             height: MediaQuery.of(context).size.width,
+                                                                      //             width: MediaQuery.of(context).size.width,
+                                                                      //             child: CupertinoDatePicker(
+                                                                      //               mode: CupertinoDatePickerMode.date,
+                                                                      //               onDateTimeChanged: (value) async {
+                                                                      //                 expiryDate.text = value.toString().split(" ")[0];
+                                                                      //                 setState(() {});
+                                                                      //               },
+                                                                      //               initialDateTime: DateTime.now().add(Duration(hours: 1)),
+                                                                      //               minimumDate: DateTime.now(),
+                                                                      //               maximumDate: DateTime.now().add(Duration(days: (365 * 11))),
+                                                                      //             ),
+                                                                      //           );
+                                                                      //         });
+                                                                      //   },
+                                                                      //   child:
+                                                                      //       Padding(
+                                                                      //     padding:
+                                                                      //         const EdgeInsets.all(4.0),
+                                                                      //     child:
+                                                                      //         TextFormField(
+                                                                      //       enabled:
+                                                                      //           false,
+                                                                      //       controller:
+                                                                      //           expiryDate,
+                                                                      //       decoration:
+                                                                      //           const InputDecoration(
+                                                                      //         labelText: 'New Expiry Date',
+                                                                      //         border: OutlineInputBorder(
+                                                                      //           borderRadius: BorderRadius.all(
+                                                                      //             Radius.circular(10.0),
+                                                                      //           ),
+                                                                      //           borderSide: BorderSide(color: kPrimaryColor),
+                                                                      //         ),
+                                                                      //         enabledBorder: OutlineInputBorder(
+                                                                      //           borderRadius: BorderRadius.all(
+                                                                      //             Radius.circular(10.0),
+                                                                      //           ),
+                                                                      //           borderSide: BorderSide(color: kPrimaryColor),
+                                                                      //         ),
+                                                                      //         disabledBorder: OutlineInputBorder(
+                                                                      //           borderRadius: BorderRadius.all(
+                                                                      //             Radius.circular(10.0),
+                                                                      //           ),
+                                                                      //           borderSide: BorderSide(color: kPrimaryColor),
+                                                                      //         ),
+                                                                      //       ),
+                                                                      //     ),
+                                                                      //   ),
+                                                                      // ),
                                                                     ],
                                                                   ),
                                                                 ),
@@ -1490,80 +1493,79 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                     width: 12,
                                                                   )
                                                                 : Container(),
-                                                            Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Text(
-                                                                  currentItem
-                                                                          .firstName! +
-                                                                      ' ' +
-                                                                      currentItem
-                                                                          .lastName!,
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        16,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w700,
-                                                                    color:
-                                                                        kPrimaryColor,
+                                                            Expanded(
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
+                                                                    currentItem
+                                                                            .firstName! +
+                                                                        ' ' +
+                                                                        currentItem
+                                                                            .lastName!,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          16,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                      color:
+                                                                          kPrimaryColor,
+                                                                    ),
                                                                   ),
-                                                                ),
-                                                                const SizedBox(
-                                                                  height: 8,
-                                                                ),
-                                                                Text(
-                                                                  widget.listNames[
-                                                                      i],
-                                                                  style: const TextStyle(
-                                                                      color:
-                                                                          kPrimaryColor,
-                                                                      fontSize:
-                                                                          15),
-                                                                ),
-                                                                const SizedBox(
-                                                                  height: 8,
-                                                                ),
-                                                                Text(
-                                                                  currentItem
-                                                                      .licenseName!,
-                                                                  style: const TextStyle(
-                                                                      color:
-                                                                          kPrimaryColor,
-                                                                      fontSize:
-                                                                          15),
-                                                                ),
-                                                                const SizedBox(
-                                                                  height: 8,
-                                                                ),
-                                                                Text(
-                                                                  "Expiry: " +
-                                                                      DateFormat(
-                                                                              "yyyy-MM-dd")
-                                                                          .parse(currentItem
-                                                                              .license_expiry
-                                                                              .toString())
-                                                                          .toString()
-                                                                          .split(
-                                                                              " ")[0],
-                                                                  style: const TextStyle(
-                                                                      color:
-                                                                          kPrimaryColor,
-                                                                      fontSize:
-                                                                          15),
-                                                                ),
-                                                                const SizedBox(
-                                                                  height: 8,
-                                                                ),
-                                                              ],
+                                                                  const SizedBox(
+                                                                    height: 8,
+                                                                  ),
+                                                                  Text(
+                                                                    widget.listNames[
+                                                                        i],
+                                                                    style: const TextStyle(
+                                                                        color:
+                                                                            kPrimaryColor,
+                                                                        fontSize:
+                                                                            15),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 8,
+                                                                  ),
+                                                                  Text(
+                                                                    currentItem
+                                                                        .licenseName!,
+                                                                    style: const TextStyle(
+                                                                        color:
+                                                                            kPrimaryColor,
+                                                                        fontSize:
+                                                                            15),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 8,
+                                                                  ),
+                                                                  Text(
+                                                                    "Expiry: " +
+                                                                        DateFormat("yyyy-MM-dd")
+                                                                            .parse(currentItem.license_expiry.toString())
+                                                                            .toString()
+                                                                            .split(" ")[0],
+                                                                    style: const TextStyle(
+                                                                        color:
+                                                                            kPrimaryColor,
+                                                                        fontSize:
+                                                                            15),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 8,
+                                                                  ),
+                                                                ],
+                                                              ),
                                                             ),
                                                             SizedBox(
                                                               width: 4,
                                                             ),
                                                             Expanded(
+                                                              flex: 2,
                                                               child: Column(
                                                                 children: [
                                                                   GestureDetector(
@@ -1574,7 +1576,12 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                           .toString()
                                                                           .split(
                                                                               " ")[0];
-
+                                                                      expiryDate
+                                                                          .text = DateTime
+                                                                              .now()
+                                                                          .add(Duration(
+                                                                              days: currentItem.expiryDays!))
+                                                                          .toString();
                                                                       showCupertinoModalPopup(
                                                                           context:
                                                                               context,
@@ -1588,10 +1595,11 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                                 mode: CupertinoDatePickerMode.date,
                                                                                 onDateTimeChanged: (value) async {
                                                                                   issueDate.text = value.toString().split(" ")[0];
+                                                                                  expiryDate.text = value.add(Duration(days: currentItem.expiryDays!)).toString();
                                                                                   setState(() {});
                                                                                 },
                                                                                 initialDateTime: DateTime.now(),
-                                                                                minimumDate: DateTime.now().subtract(Duration(days: 365)),
+                                                                                minimumDate: DateTime.now().subtract(Duration(days: currentItem.expiryDays! - 3)),
                                                                                 maximumDate: DateTime.now(),
                                                                               ),
                                                                             );
@@ -1643,83 +1651,68 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                  GestureDetector(
-                                                                    onTap: () {
-                                                                      expiryDate
-                                                                          .text = DateTime
-                                                                              .now()
-                                                                          .toString()
-                                                                          .split(
-                                                                              " ")[0];
-
-                                                                      showCupertinoModalPopup(
-                                                                          context:
-                                                                              context,
-                                                                          builder:
-                                                                              (BuildContext builder) {
-                                                                            return Container(
-                                                                              color: Colors.white,
-                                                                              height: MediaQuery.of(context).size.width,
-                                                                              width: MediaQuery.of(context).size.width,
-                                                                              child: CupertinoDatePicker(
-                                                                                mode: CupertinoDatePickerMode.date,
-                                                                                onDateTimeChanged: (value) async {
-                                                                                  expiryDate.text = value.toString().split(" ")[0];
-                                                                                  setState(() {});
-                                                                                },
-                                                                                initialDateTime: DateTime.now().add(Duration(hours: 1)),
-                                                                                minimumDate: DateTime.now(),
-                                                                                maximumDate: DateTime.now().add(Duration(days: (365 * 11))),
-                                                                              ),
-                                                                            );
-                                                                          });
-                                                                    },
-                                                                    child:
-                                                                        Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              4.0),
-                                                                      child:
-                                                                          TextFormField(
-                                                                        enabled:
-                                                                            false,
-                                                                        controller:
-                                                                            expiryDate,
-                                                                        decoration:
-                                                                            const InputDecoration(
-                                                                          labelText:
-                                                                              'New Expiry Date',
-                                                                          border:
-                                                                              OutlineInputBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.all(
-                                                                              Radius.circular(10.0),
-                                                                            ),
-                                                                            borderSide:
-                                                                                BorderSide(color: kPrimaryColor),
-                                                                          ),
-                                                                          enabledBorder:
-                                                                              OutlineInputBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.all(
-                                                                              Radius.circular(10.0),
-                                                                            ),
-                                                                            borderSide:
-                                                                                BorderSide(color: kPrimaryColor),
-                                                                          ),
-                                                                          disabledBorder:
-                                                                              OutlineInputBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.all(
-                                                                              Radius.circular(10.0),
-                                                                            ),
-                                                                            borderSide:
-                                                                                BorderSide(color: kPrimaryColor),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
+                                                                  // GestureDetector(
+                                                                  //   onTap:
+                                                                  //       () {
+                                                                  //     expiryDate.text = DateTime.now()
+                                                                  //         .toString()
+                                                                  //         .split(" ")[0];
+                                                                  //
+                                                                  //     showCupertinoModalPopup(
+                                                                  //         context: context,
+                                                                  //         builder: (BuildContext builder) {
+                                                                  //           return Container(
+                                                                  //             color: Colors.white,
+                                                                  //             height: MediaQuery.of(context).size.width,
+                                                                  //             width: MediaQuery.of(context).size.width,
+                                                                  //             child: CupertinoDatePicker(
+                                                                  //               mode: CupertinoDatePickerMode.date,
+                                                                  //               onDateTimeChanged: (value) async {
+                                                                  //                 expiryDate.text = value.toString().split(" ")[0];
+                                                                  //                 setState(() {});
+                                                                  //               },
+                                                                  //               initialDateTime: DateTime.now().add(Duration(hours: 1)),
+                                                                  //               minimumDate: DateTime.now(),
+                                                                  //               maximumDate: DateTime.now().add(Duration(days: (365 * 11))),
+                                                                  //             ),
+                                                                  //           );
+                                                                  //         });
+                                                                  //   },
+                                                                  //   child:
+                                                                  //       Padding(
+                                                                  //     padding:
+                                                                  //         const EdgeInsets.all(4.0),
+                                                                  //     child:
+                                                                  //         TextFormField(
+                                                                  //       enabled:
+                                                                  //           false,
+                                                                  //       controller:
+                                                                  //           expiryDate,
+                                                                  //       decoration:
+                                                                  //           const InputDecoration(
+                                                                  //         labelText: 'New Expiry Date',
+                                                                  //         border: OutlineInputBorder(
+                                                                  //           borderRadius: BorderRadius.all(
+                                                                  //             Radius.circular(10.0),
+                                                                  //           ),
+                                                                  //           borderSide: BorderSide(color: kPrimaryColor),
+                                                                  //         ),
+                                                                  //         enabledBorder: OutlineInputBorder(
+                                                                  //           borderRadius: BorderRadius.all(
+                                                                  //             Radius.circular(10.0),
+                                                                  //           ),
+                                                                  //           borderSide: BorderSide(color: kPrimaryColor),
+                                                                  //         ),
+                                                                  //         disabledBorder: OutlineInputBorder(
+                                                                  //           borderRadius: BorderRadius.all(
+                                                                  //             Radius.circular(10.0),
+                                                                  //           ),
+                                                                  //           borderSide: BorderSide(color: kPrimaryColor),
+                                                                  //         ),
+                                                                  //       ),
+                                                                  //     ),
+                                                                  //   ),
+                                                                  // ),
                                                                 ],
                                                               ),
                                                             ),
@@ -1727,6 +1720,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                         ),
                                                       ),
                                                     ),
+
                                                     Center(
                                                       child: PElevatedButton(
                                                         onPressed: () async {
