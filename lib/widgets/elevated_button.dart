@@ -3,7 +3,7 @@ import 'package:shiftapp/config/constants.dart';
 
 class PElevatedButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool isApiInProgress;
 
   final Color? backGroundColor;

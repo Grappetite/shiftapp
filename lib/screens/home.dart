@@ -42,8 +42,7 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     FirebaseMessaging.onMessage.listen(showFlutterNotification);
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {});
   }
 
   void goBack() {
@@ -52,65 +51,67 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.processSelected.type=="training"? SopView(
-      processSelected: widget.processSelected,
-      selectedShift: widget.selectedShift,
-    ):DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        body: TabBarView(
-          children: [
-            HomeMainView(
-              selectedShift: widget.selectedShift,
-              processSelected: widget.processSelected,
-              sessionStarted: widget.sessionStarted,
-              onLogout: () async {},
-            ),
-            SopView(
-              processSelected: widget.processSelected,
-              selectedShift: widget.selectedShift,
-            ),
-          ],
-        ),
-        bottomNavigationBar: Container(
-          color: kPrimaryColor,
-          child: TabBar(
-              indicator: UnderlineTabIndicator(
-                borderSide: BorderSide(color: Colors.white, width: 5.0),
-                insets: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 45.0),
+    return widget.processSelected.type == "training"
+        ? SopView(
+            processSelected: widget.processSelected,
+            selectedShift: widget.selectedShift,
+          )
+        : DefaultTabController(
+            length: 2,
+            child: Scaffold(
+              body: TabBarView(
+                children: [
+                  HomeMainView(
+                    selectedShift: widget.selectedShift,
+                    processSelected: widget.processSelected,
+                    sessionStarted: widget.sessionStarted,
+                    onLogout: () async {},
+                  ),
+                  SopView(
+                    processSelected: widget.processSelected,
+                    selectedShift: widget.selectedShift,
+                  ),
+                ],
               ),
-              labelColor: Colors.white,
-              indicatorColor: Colors.white,
-              tabs: [
-                Tab(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.home,
-                          color: Colors.white,
+              bottomNavigationBar: Container(
+                color: kPrimaryColor,
+                child: TabBar(
+                    indicator: UnderlineTabIndicator(
+                      borderSide: BorderSide(color: Colors.white, width: 5.0),
+                      insets: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 45.0),
+                    ),
+                    labelColor: Colors.white,
+                    indicatorColor: Colors.white,
+                    tabs: [
+                      Tab(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: Column(
+                            children: [
+                              Icon(
+                                Icons.home,
+                                color: Colors.white,
+                              ),
+                              Text("Home")
+                            ],
+                          ),
                         ),
-                        Text("Home")
-                      ],
-                    ),
-                  ),
-                ),
-                Tab(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
-                    child: Column(
-                      children: [
-                        const Icon(CupertinoIcons.settings),
-                        Text("SOP")
-                      ],
-                    ),
-                  ),
-                ),
-              ]),
-        ),
-      ),
-    );
+                      ),
+                      Tab(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: Column(
+                            children: [
+                              const Icon(CupertinoIcons.settings),
+                              Text("SOP")
+                            ],
+                          ),
+                        ),
+                      ),
+                    ]),
+              ),
+            ),
+          );
     ;
   }
 }
@@ -121,7 +122,7 @@ class HomeMainView extends StatefulWidget {
   final ShiftItem selectedShift;
   final bool sessionStarted;
   final String? comment;
-  final VoidCallback onLogout;
+  final VoidCallback? onLogout;
 
   const HomeMainView(
       {Key? key,
@@ -186,7 +187,7 @@ class _HomeMainViewState extends State<HomeMainView> {
     }
     if (response != null) {
       if (response == true) {
-        widget.onLogout();
+        widget.onLogout!();
       }
     }
   }
@@ -219,14 +220,17 @@ class _HomeMainViewState extends State<HomeMainView> {
       onSelected: (int value) {},
       onCanceled: () {},
       elevation: 4,
-      icon: const Icon(Icons.more_vert,color: Colors.white,),
+      icon: const Icon(
+        Icons.more_vert,
+        color: Colors.white,
+      ),
       offset: const Offset(0, 65),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
       color: kPrimaryColor,
     );
-    if (mounted)setState(() {});
+    if (mounted) setState(() {});
     if (widget.sessionStarted) {
       moveToEndSession();
     } else {
@@ -271,7 +275,7 @@ class _HomeMainViewState extends State<HomeMainView> {
         yesterdayEfficiency: yesterdayEfficiency,
         bestEfficiency: bestEfficiency,
         popBack: () {
-          widget.onLogout.call();
+          widget.onLogout!.call();
         },
       ),
     );
@@ -286,7 +290,7 @@ class _HomeMainViewState extends State<HomeMainView> {
         widget.processSelected.id, widget.selectedShift.id);
     yesterdayEfficiency = response["yestEfficiency"];
     bestEfficiency = response["maxVale"];
-     if (mounted)setState(() {});
+    if (mounted) setState(() {});
     await EasyLoading.dismiss();
   }
 }

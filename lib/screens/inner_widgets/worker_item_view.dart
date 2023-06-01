@@ -21,7 +21,7 @@ class WorkItemView extends StatefulWidget {
 
   final int execShiftId;
 
-  final VoidCallback reloadData;
+  final VoidCallback? reloadData;
 
   final int currentIntex;
 
@@ -1995,7 +1995,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                   workerTypeId: workerIdType,
                   process: widget.process,
                   tempWorkerAdded: (AddTempResponse tmp) {
-                    this.widget.reloadData();
+                    this.widget.reloadData!();
 
                     var index =
                         this.widget.listNames.indexOf(tmp.data!.workerType!);

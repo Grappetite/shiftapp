@@ -337,44 +337,20 @@ class _AddIncidentState extends State<AddIncident> {
                               width: MediaQuery.of(context).size.width,
                               child: Column(
                                 children: [
-                                  // Expanded(
-                                  //     flex: 1,
-                                  //     child: Column(
-                                  //       children: [
-                                  //         Padding(
-                                  //           padding:
-                                  //           const EdgeInsets.all(
-                                  //               8.0),
-                                  //           child: Text(
-                                  //               "Shift time can only be re-set 2 hours in advance of the new time.",
-                                  //               textAlign: TextAlign
-                                  //                   .center,
-                                  //               style:
-                                  //               const TextStyle(
-                                  //                 color:
-                                  //                 kPrimaryColor,
-                                  //               )),
-                                  //         ),
-                                  //         Expanded(
-                                  //           child:
-                                  //           PElevatedButton(
-                                  //             onPressed:
-                                  //                 () {
-                                  //               if (newTime ==
-                                  //                   null) {
-                                  //                 newTime =
-                                  //                     DateTime.now().roundDown();
-                                  //               }
-                                  //               Navigator.pop(
-                                  //                   context);
-                                  //               // okHandler.call();
-                                  //             },
-                                  //             text:
-                                  //             "Done",
-                                  //           ),
-                                  //         ),
-                                  //       ],
-                                  //     )),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    height: 30,
+                                    child: PElevatedButton(
+                                      onPressed: () {
+                                        dateTimeIncident = dateTimeIncident;
+                                        Navigator.pop(context);
+                                        // okHandler.call();
+                                      },
+                                      text: "Done",
+                                    ),
+                                  ),
                                   Expanded(
                                     flex: 4,
                                     child: CupertinoDatePicker(

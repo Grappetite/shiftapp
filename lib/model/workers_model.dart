@@ -131,12 +131,14 @@ class ShiftWorker {
     key = json['key'];
     efficiencyCalculation = json['efficiencyCalculation'];
     picture = json['picture'];
-    licenseName = json["licenseName"];
+    licenseName = json["licenseName"] ?? "";
     expiryDays = json["expiry_days"];
     role = json["role"];
     license_expiry = json["license_expiry"] != null
         ? DateTime.parse(json["license_expiry"])
-        : null;
+        : json["licenseName"] != null
+            ? DateTime.now().subtract(Duration(days: 1))
+            : null;
     if (json.keys.contains('worker_add')) {
       isAdded = json['worker_add'] == '1';
     }

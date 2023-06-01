@@ -15,7 +15,7 @@ import 'inner_widgets/change_shift_time.dart';
 class ShiftStart extends StatefulWidget {
   final Process processSelected;
 
-  final VoidCallback popBack;
+  final VoidCallback? popBack;
 
   final ShiftItem selectedShift;
   final yesterdayEfficiency;
@@ -227,8 +227,6 @@ class _ShiftStartState extends State<ShiftStart> {
 
                                 String endDate = '';
 
-                                
-
                                 bool? selected = await showDialog(
                                     context: context,
                                     barrierDismissible: false,
@@ -294,8 +292,6 @@ class _ShiftStartState extends State<ShiftStart> {
                                 }
                               }
                             });
-
-                           
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -453,7 +449,7 @@ class _ShiftStartState extends State<ShiftStart> {
                 //
                 // bool timeSelected = true;
                 // bool checkboxForComment = false;
-                 await showDialog(
+                await showDialog(
                     context: context,
                     barrierDismissible: false,
                     builder: (BuildContext contexts) {
@@ -574,7 +570,7 @@ class _ShiftStartState extends State<ShiftStart> {
 
                                                 if (waitVal != null) {
                                                   if (waitVal == true) {
-                                                    this.widget.popBack.call();
+                                                    this.widget.popBack!.call();
                                                   }
                                                 }
                                               },
@@ -672,11 +668,16 @@ class _ShiftStartState extends State<ShiftStart> {
                                                               child:
                                                                   CupertinoDatePicker(
                                                                 mode: CupertinoDatePickerMode
-                                                                    .dateAndTime,   initialDateTime: DateTime.now()
-                                                                      .roundDown()
-                                                                      .isBefore(mintime)
-                                                                      ? mintime
-                                                                      : DateTime.now().roundDown(),
+                                                                    .dateAndTime,
+                                                                initialDateTime: DateTime
+                                                                            .now()
+                                                                        .roundDown()
+                                                                        .isBefore(
+                                                                            mintime)
+                                                                    ? mintime
+                                                                    : DateTime
+                                                                            .now()
+                                                                        .roundDown(),
                                                                 minuteInterval:
                                                                     15,
                                                                 onDateTimeChanged:
@@ -813,7 +814,7 @@ class _ShiftStartState extends State<ShiftStart> {
                                                         if (waitVal == true) {
                                                           this
                                                               .widget
-                                                              .popBack
+                                                              .popBack!
                                                               .call();
                                                         }
                                                       }
@@ -845,7 +846,7 @@ class _ShiftStartState extends State<ShiftStart> {
 
                 if (waitVal != null) {
                   if (waitVal == true) {
-                    this.widget.popBack.call();
+                    this.widget.popBack!.call();
                   }
                 }
               }

@@ -159,7 +159,7 @@ class UIUtitilies {
   }
 
   static Future<void> showErrorDialog(BuildContext context, String errorMessage,
-      VoidCallback firstButtonClicked,
+      VoidCallback? firstButtonClicked,
       {String? buttonText}) async {
     showDialog<void>(
       context: context,
@@ -179,7 +179,7 @@ class UIUtitilies {
                 style: TextStyle(color: kPrimaryColor),
               ),
               onPressed: () {
-                firstButtonClicked();
+                firstButtonClicked!();
               },
             ),
           ],
@@ -189,7 +189,7 @@ class UIUtitilies {
   }
 
   static Future<void> showErrorDialogDisableBackBtn(BuildContext context,
-      String errorMessage, VoidCallback firstButtonClicked,
+      String errorMessage, VoidCallback? firstButtonClicked,
       {String? buttonText}) async {
     return await showDialog<void>(
       context: context,
@@ -211,7 +211,7 @@ class UIUtitilies {
                     style: TextStyle(color: kPrimaryColor),
                   ),
                   onPressed: () {
-                    firstButtonClicked();
+                    firstButtonClicked!();
                   },
                 ),
               ],
@@ -252,7 +252,7 @@ class UIUtitilies {
   }
 
   static void showSuccessDialog(BuildContext context, String successMessage,
-      VoidCallback firstButtonClicked) {
+      VoidCallback? firstButtonClicked) {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -279,7 +279,7 @@ class UIUtitilies {
                 style: TextStyle(color: kPrimaryColor),
               ),
               onPressed: () {
-                firstButtonClicked();
+                firstButtonClicked!();
               },
             ),
           ],

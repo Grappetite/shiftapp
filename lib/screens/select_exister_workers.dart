@@ -840,6 +840,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                   DateTime.parse(
                                                                       expiryDate
                                                                           .text);
+                                                              setState(() {});
                                                             }
                                                           },
                                                           text: 'CONTINUE',
@@ -1327,6 +1328,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                     DateTime.parse(
                                                                         expiryDate
                                                                             .text);
+                                                                setState(() {});
                                                               }
                                                             },
                                                             text: 'CONTINUE',

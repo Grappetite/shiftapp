@@ -6,10 +6,16 @@ import '../../widgets/elevated_button.dart';
 class AlertCancelOk extends StatelessWidget {
   final String? cancelTitle;
   final String okButton;
-  final VoidCallback okHandler;
+  final VoidCallback? okHandler;
   final VoidCallback? cancelHandler;
 
-   AlertCancelOk({Key? key, this.cancelTitle, required this.okButton, required this.okHandler,this.cancelHandler}) : super(key: key);
+  AlertCancelOk(
+      {Key? key,
+      this.cancelTitle,
+      required this.okButton,
+      required this.okHandler,
+      this.cancelHandler})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +33,17 @@ class AlertCancelOk extends StatelessWidget {
               ),
             ),
             onPressed: () {
-              if(cancelHandler==null) {
+              if (cancelHandler == null) {
                 Navigator.pop(context, false);
-              }else{
+              } else {
                 cancelHandler!.call();
               }
             },
-            child:  Text(
-              cancelTitle ?? 'CANCEL' ,
-              style:
-               TextStyle(fontSize: cancelTitle==null?20:10, color: kPrimaryColor),
+            child: Text(
+              cancelTitle ?? 'CANCEL',
+              style: TextStyle(
+                  fontSize: cancelTitle == null ? 20 : 10,
+                  color: kPrimaryColor),
             ),
           ),
         ),
@@ -46,9 +53,7 @@ class AlertCancelOk extends StatelessWidget {
         Expanded(
           child: PElevatedButton(
             onPressed: () {
-
-              okHandler.call();
-
+              okHandler!.call();
             },
             text: okButton,
           ),

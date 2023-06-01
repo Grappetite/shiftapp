@@ -5,7 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class GetAppBar {
   static AppBar appBarWithOnlyTitle(
-      String title, String backText, VoidCallback onBackTapped) {
+      String title, String backText, VoidCallback? onBackTapped) {
     return AppBar(
       toolbarHeight: 100,
       flexibleSpace: Container(
