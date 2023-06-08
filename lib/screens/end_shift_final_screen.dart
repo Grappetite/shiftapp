@@ -880,7 +880,7 @@ class _ConfirmTimeEndState extends State<ConfirmTimeEnd> {
                               }
                             } else {
                               String result = findEndTime();
-                              Navigator.pop(context, result);
+                              // Navigator.pop(context, result);
                             }
                           },
                           text: 'YES',

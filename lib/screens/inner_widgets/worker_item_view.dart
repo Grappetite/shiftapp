@@ -270,7 +270,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                               width: 8,
                                                             ),
                                                             const Text(
-                                                              'Expired Licence',
+                                                              'Expired License',
                                                               style: TextStyle(
                                                                 fontSize: 16,
                                                                 fontWeight:
@@ -325,7 +325,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                               const EdgeInsets
                                                                   .all(4),
                                                           child: Text(
-                                                            "Enter expiration date and issuance date",
+                                                            "Enter new issuance date",
                                                             style: const TextStyle(
                                                                 color:
                                                                     kPrimaryColor,
@@ -432,10 +432,13 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                     ),
                                                                     Text(
                                                                       "Expiry: " +
-                                                                          DateFormat("yyyy-MM-dd")
-                                                                              .parse(currentItem.license_expiry.toString())
-                                                                              .toString()
-                                                                              .split(" ")[0],
+                                                                          currentItem
+                                                                              .license_expiry
+                                                                              .toString(),
+                                                                      // DateFormat("yyyy-MM-dd")
+                                                                      //     .parse(currentItem.license_expiry.toString())
+                                                                      //     .toString()
+                                                                      //     .split(" ")[0],
                                                                       style: const TextStyle(
                                                                           color:
                                                                               kPrimaryColor,
@@ -614,9 +617,8 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                               if (test!) {
                                                                 currentItem
                                                                         .license_expiry =
-                                                                    DateTime.parse(
-                                                                        expiryDate
-                                                                            .text);
+                                                                    expiryDate
+                                                                        .text;
                                                                 setState(() {});
                                                               }
                                                             },
@@ -826,7 +828,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                               width: 8,
                                                             ),
                                                             const Text(
-                                                              'Expired Licence',
+                                                              'Expired License',
                                                               style: TextStyle(
                                                                 fontSize: 16,
                                                                 fontWeight:
@@ -881,7 +883,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                               const EdgeInsets
                                                                   .all(4),
                                                           child: Text(
-                                                            "Enter expiration date and issuance date",
+                                                            "Enter new issuance date",
                                                             style: const TextStyle(
                                                                 color:
                                                                     kPrimaryColor,
@@ -990,7 +992,8 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                       ),
                                                                       Text(
                                                                         "Expiry: " +
-                                                                            DateFormat("yyyy-MM-dd").parse(currentItem.license_expiry.toString()).toString().split(" ")[0],
+                                                                            currentItem.license_expiry.toString(),
+                                                                        // DateFormat("yyyy-MM-dd").parse(currentItem.license_expiry.toString()).toString().split(" ")[0],
                                                                         style: const TextStyle(
                                                                             color:
                                                                                 kPrimaryColor,
@@ -1175,9 +1178,8 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                               if (test!) {
                                                                 currentItem
                                                                         .license_expiry =
-                                                                    DateTime.parse(
-                                                                        expiryDate
-                                                                            .text);
+                                                                    expiryDate
+                                                                        .text;
                                                                 setState(() {});
                                                               }
                                                             },
@@ -1383,7 +1385,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                           width: 8,
                                                         ),
                                                         const Text(
-                                                          'Expired Licence',
+                                                          'Expired License',
                                                           style: TextStyle(
                                                             fontSize: 16,
                                                             fontWeight:
@@ -1434,7 +1436,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                           const EdgeInsets.all(
                                                               4),
                                                       child: Text(
-                                                        "Enter expiration date and issuance date",
+                                                        "Enter new issuance date",
                                                         style: const TextStyle(
                                                             color:
                                                                 kPrimaryColor,
@@ -1545,10 +1547,13 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                   ),
                                                                   Text(
                                                                     "Expiry: " +
-                                                                        DateFormat("yyyy-MM-dd")
-                                                                            .parse(currentItem.license_expiry.toString())
-                                                                            .toString()
-                                                                            .split(" ")[0],
+                                                                        currentItem
+                                                                            .license_expiry
+                                                                            .toString(),
+                                                                    // DateFormat("yyyy-MM-dd")
+                                                                    //         .parse(currentItem.license_expiry.toString())
+                                                                    //         .toString()
+                                                                    //         .split(" ")[0],
                                                                     style: const TextStyle(
                                                                         color:
                                                                             kPrimaryColor,
@@ -1750,9 +1755,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                           if (test!) {
                                                             currentItem
                                                                     .license_expiry =
-                                                                DateTime.parse(
-                                                                    expiryDate
-                                                                        .text);
+                                                                expiryDate.text;
                                                             setState(() {});
                                                           }
                                                         },
@@ -2255,9 +2258,23 @@ class _UserItemState extends State<UserItem> {
               ),
             ),
             widget.worker != null
-                ? widget.worker!.license_expiry != null
-                    ? widget.worker!.license_expiry!.isBefore(DateTime.now())
-                        ? GestureDetector(
+                ? widget.worker!.licenseName != null
+                    ? widget.worker!.license_expiry != "Not yet licensed"
+                        ? DateTime.parse(widget.worker!.license_expiry!)
+                                .isBefore(DateTime.now())
+                            ? GestureDetector(
+                                onTap: widget.reloadTest,
+                                child: Container(
+                                  child: Image(
+                                    image: const AssetImage(
+                                        'assets/images/warning.png'),
+                                    width:
+                                        MediaQuery.of(context).size.width / 18,
+                                  ),
+                                ),
+                              )
+                            : Container()
+                        : GestureDetector(
                             onTap: widget.reloadTest,
                             child: Container(
                               child: Image(
@@ -2267,7 +2284,6 @@ class _UserItemState extends State<UserItem> {
                               ),
                             ),
                           )
-                        : Container()
                     : Container()
                 : Container(),
             const SizedBox(

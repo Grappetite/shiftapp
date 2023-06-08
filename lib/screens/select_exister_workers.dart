@@ -468,7 +468,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                             width: 8,
                                                           ),
                                                           const Text(
-                                                            'Expired Licence',
+                                                            'Expired License',
                                                             style: TextStyle(
                                                               fontSize: 16,
                                                               fontWeight:
@@ -523,7 +523,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                             const EdgeInsets
                                                                 .all(4),
                                                         child: Text(
-                                                          "Enter expiration date and issuance date",
+                                                          "Enter new issuance date",
                                                           style: const TextStyle(
                                                               color:
                                                                   kPrimaryColor,
@@ -632,10 +632,13 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                     ),
                                                                     Text(
                                                                       "Expiry: " +
-                                                                          DateFormat("yyyy-MM-dd")
-                                                                              .parse(currentItem.license_expiry.toString())
-                                                                              .toString()
-                                                                              .split(" ")[0],
+                                                                          currentItem
+                                                                              .license_expiry
+                                                                              .toString(),
+                                                                      // DateFormat("yyyy-MM-dd")
+                                                                      //         .parse(currentItem.license_expiry.toString())
+                                                                      //         .toString()
+                                                                      //         .split(" ")[0],
                                                                       style: const TextStyle(
                                                                           color:
                                                                               kPrimaryColor,
@@ -837,9 +840,8 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                             if (test!) {
                                                               currentItem
                                                                       .license_expiry =
-                                                                  DateTime.parse(
-                                                                      expiryDate
-                                                                          .text);
+                                                                  expiryDate
+                                                                      .text;
                                                               setState(() {});
                                                             }
                                                           },
@@ -965,7 +967,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                               width: 8,
                                                             ),
                                                             const Text(
-                                                              'Expired Licence',
+                                                              'Expired License',
                                                               style: TextStyle(
                                                                 fontSize: 16,
                                                                 fontWeight:
@@ -1022,7 +1024,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                               const EdgeInsets
                                                                   .all(4),
                                                           child: Text(
-                                                            "Enter expiration date and issuance date",
+                                                            "Enter new issuance date",
                                                             style: const TextStyle(
                                                                 color:
                                                                     kPrimaryColor,
@@ -1131,7 +1133,8 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                       ),
                                                                       Text(
                                                                         "Expiry: " +
-                                                                            DateFormat("yyyy-MM-dd").parse(currentItem.license_expiry.toString()).toString().split(" ")[0],
+                                                                            currentItem.license_expiry.toString(),
+                                                                        // DateFormat("yyyy-MM-dd").parse(currentItem.license_expiry.toString()).toString().split(" ")[0],
                                                                         style: const TextStyle(
                                                                             color:
                                                                                 kPrimaryColor,
@@ -1325,9 +1328,8 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                               if (test!) {
                                                                 currentItem
                                                                         .license_expiry =
-                                                                    DateTime.parse(
-                                                                        expiryDate
-                                                                            .text);
+                                                                    expiryDate
+                                                                        .text;
                                                                 setState(() {});
                                                               }
                                                             },

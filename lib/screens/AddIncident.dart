@@ -608,7 +608,7 @@ class _AddIncidentState extends State<AddIncident> {
                                       },
                                       child: Padding(
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0, vertical: 8),
+                                              horizontal: 8.0, vertical: 14),
                                           child: Text(
                                             "Camera",
                                             style: TextStyle(
@@ -627,7 +627,7 @@ class _AddIncidentState extends State<AddIncident> {
                                       },
                                       child: Padding(
                                           padding: const EdgeInsets.symmetric(
-                                              horizontal: 8.0, vertical: 8),
+                                              horizontal: 8.0, vertical: 14),
                                           child: Text(
                                             "Gallery",
                                             style: TextStyle(
@@ -781,10 +781,27 @@ class _AddIncidentState extends State<AddIncident> {
                               isDowntime: isDowntime,
                               description: descriptionController.text,
                               selectedWorker: selectedWorker,
-                              imageFileList: imageFileList!,
+                              imageFileList: imageFileList ?? [],
                             );
                             await EasyLoading.dismiss()
                                 .then((value) => Navigator.pop(context));
+                          } else {
+                            if (incidentTypeIndexSelected == -1) {
+                              EasyLoading.showError(
+                                  "Please select incident type",
+                                  dismissOnTap: true,
+                                  duration: Duration(seconds: 2));
+                            } else if (severityIndexSelected == -1) {
+                              EasyLoading.showError(
+                                  "Please select severity type",
+                                  dismissOnTap: true,
+                                  duration: Duration(seconds: 2));
+                            } else {
+                              EasyLoading.showError(
+                                  "Please fill up all the details",
+                                  dismissOnTap: true,
+                                  duration: Duration(seconds: 2));
+                            }
                           }
                         },
                         text: "Save".toUpperCase(),

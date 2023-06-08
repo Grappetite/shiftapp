@@ -556,7 +556,7 @@ class _IncidentsState extends State<Incidents> {
                                                                                           // initialDateTime:
                                                                                           //     DateTime
                                                                                           //         .now(),
-                                                                                          minimumDate: widget.selectedShift.startDateObject,
+                                                                                          minimumDate: DateTime.parse(incidentData!.data![index].createdAt!),
                                                                                           maximumDate: DateTime.now(),
                                                                                         ),
                                                                                       ),
@@ -864,32 +864,47 @@ class _IncidentsState extends State<Incidents> {
                                                                           index]
                                                                       .isDowntime ==
                                                                   "Yes") {
-                                                                await EasyLoading
-                                                                    .show(
-                                                                  status:
-                                                                      'loading...',
-                                                                  maskType:
-                                                                      EasyLoadingMaskType
-                                                                          .black,
-                                                                );
-                                                                await IncidentService.updateIncident(
-                                                                    dateTimeIncident: controller
-                                                                        .text
-                                                                        .toString()
-                                                                        .split(".")[
-                                                                            0]
-                                                                        .replaceAll(
-                                                                            "T",
-                                                                            " "),
-                                                                    incidentId:
-                                                                        incidentData!
-                                                                            .data![index]
-                                                                            .id);
-                                                                await EasyLoading
-                                                                    .dismiss();
-                                                                Navigator.pop(
-                                                                    context);
-                                                                await getIncidents();
+                                                                if (!controller
+                                                                    .text
+                                                                    .toLowerCase()
+                                                                    .contains(
+                                                                        "Record Downtime"
+                                                                            .toLowerCase())) {
+                                                                  await EasyLoading
+                                                                      .show(
+                                                                    status:
+                                                                        'loading...',
+                                                                    maskType:
+                                                                        EasyLoadingMaskType
+                                                                            .black,
+                                                                  );
+                                                                  await IncidentService.updateIncident(
+                                                                      dateTimeIncident: controller
+                                                                          .text
+                                                                          .toString()
+                                                                          .split(".")[
+                                                                              0]
+                                                                          .replaceAll(
+                                                                              "T",
+                                                                              " "),
+                                                                      incidentId: incidentData!
+                                                                          .data![
+                                                                              index]
+                                                                          .id);
+                                                                  await EasyLoading
+                                                                      .dismiss();
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                  await getIncidents();
+                                                                } else {
+                                                                  EasyLoading.showError(
+                                                                      "Please enter Downtime",
+                                                                      dismissOnTap:
+                                                                          true,
+                                                                      duration: Duration(
+                                                                          seconds:
+                                                                              2));
+                                                                }
                                                               } else {
                                                                 Navigator.pop(
                                                                     context);

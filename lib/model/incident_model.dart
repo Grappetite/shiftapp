@@ -77,7 +77,7 @@ class Datum {
         incidentId: json["incident_id"],
         details: json["details"] ?? "",
         isDowntime: json["is_downtime"],
-        downtime: json["downtime"],
+        downtime: json["downTime"],
         createdAt: json["incident_at"] ?? DateTime.now().toString(),
         process:
             json["process"] == null ? null : Incident.fromJson(json["process"]),

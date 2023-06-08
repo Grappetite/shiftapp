@@ -103,7 +103,7 @@ class ShiftWorker {
 
   bool isAdded = false;
   String? licenseName;
-  DateTime? license_expiry;
+  String? license_expiry;
   bool newAdded = false;
   bool newRemove = false;
   final PainterController painterController = PainterController();
@@ -131,14 +131,12 @@ class ShiftWorker {
     key = json['key'];
     efficiencyCalculation = json['efficiencyCalculation'];
     picture = json['picture'];
-    licenseName = json["licenseName"] ?? "";
+    licenseName = json["licenseName"];
     expiryDays = json["expiry_days"];
     role = json["role"];
     license_expiry = json["license_expiry"] != null
-        ? DateTime.parse(json["license_expiry"])
-        : json["licenseName"] != null
-            ? DateTime.now().subtract(Duration(days: 1))
-            : null;
+        ? json["license_expiry"]
+        : "Not yet licensed";
     if (json.keys.contains('worker_add')) {
       isAdded = json['worker_add'] == '1';
     }

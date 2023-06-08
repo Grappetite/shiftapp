@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/model/login_model.dart';
@@ -388,7 +387,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                   width: 8,
                                                                                 ),
                                                                                 const Text(
-                                                                                  'Expired Licence',
+                                                                                  'Expired License',
                                                                                   style: TextStyle(
                                                                                     fontSize: 16,
                                                                                     fontWeight: FontWeight.w700,
@@ -431,7 +430,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                             Padding(
                                                                               padding: const EdgeInsets.all(4),
                                                                               child: Text(
-                                                                                "Enter expiration date and issuance date",
+                                                                                "Enter new issuance date",
                                                                                 style: const TextStyle(color: kPrimaryColor, fontSize: 12),
                                                                               ),
                                                                             ),
@@ -487,7 +486,8 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                             height: 8,
                                                                                           ),
                                                                                           Text(
-                                                                                            "Expiry: " + DateFormat("yyyy-MM-dd").parse(item.license_expiry.toString()).toString().split(" ")[0],
+                                                                                            "Expiry: " + item.license_expiry.toString(),
+                                                                                            // DateFormat("yyyy-MM-dd").parse(item.license_expiry.toString()).toString().split(" ")[0],
                                                                                             style: const TextStyle(color: kPrimaryColor, fontSize: 15),
                                                                                           ),
                                                                                           const SizedBox(
@@ -629,7 +629,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                   await EasyLoading.dismiss();
                                                                                   Navigator.pop(context);
                                                                                   if (test!) {
-                                                                                    item.license_expiry = DateTime.parse(expiryDate.text);
+                                                                                    item.license_expiry = expiryDate.text;
                                                                                     setState(() {});
                                                                                   }
                                                                                 },
@@ -827,7 +827,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                             8,
                                                                       ),
                                                                       const Text(
-                                                                        'Expired Licence',
+                                                                        'Expired License',
                                                                         style:
                                                                             TextStyle(
                                                                           fontSize:
@@ -883,7 +883,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                         const EdgeInsets
                                                                             .all(4),
                                                                     child: Text(
-                                                                      "Enter expiration date and issuance date",
+                                                                      "Enter new issuance date",
                                                                       style: const TextStyle(
                                                                           color:
                                                                               kPrimaryColor,
@@ -954,7 +954,8 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                   height: 8,
                                                                                 ),
                                                                                 Text(
-                                                                                  "Expiry: " + DateFormat("yyyy-MM-dd").parse(item.license_expiry.toString()).toString().split(" ")[0],
+                                                                                  "Expiry: " + item.license_expiry.toString(),
+                                                                                  // DateFormat("yyyy-MM-dd").parse(item.license_expiry.toString()).toString().split(" ")[0],
                                                                                   style: const TextStyle(color: kPrimaryColor, fontSize: 15),
                                                                                 ),
                                                                                 const SizedBox(
@@ -1112,7 +1113,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                             context);
                                                                         if (test!) {
                                                                           item.license_expiry =
-                                                                              DateTime.parse(expiryDate.text);
+                                                                              expiryDate.text;
                                                                           setState(
                                                                               () {});
                                                                         }
