@@ -49,7 +49,11 @@ class Errors {
         EasyLoading.showError(
             response.data["message"].runtimeType.toString().toLowerCase() ==
                     "string"
-                ? response.data["message"]
+                ? response.data["message"] != "The key field is required."
+                    ? response.data["message"]
+                        .toString()
+                        .replaceAll("last name", "surname")
+                    : "The employee number field is required"
                 : response.data["message"][0].toString(),
             dismissOnTap: true,
             duration: Duration(seconds: 2));
@@ -91,8 +95,8 @@ class LoginService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
           ));
       var fcmToken = await FirebaseMessaging.instance.getToken();
       Response response = await dio.post(
@@ -122,8 +126,8 @@ class LoginService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -159,8 +163,8 @@ class LoginService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -193,8 +197,8 @@ class LoginService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -215,8 +219,8 @@ class LoginService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
       var fcmToken = await FirebaseMessaging.instance.getToken();
@@ -238,8 +242,8 @@ class LoginService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
           ));
       Response response = await dio.get(
         baseUrl + 'appVersion',

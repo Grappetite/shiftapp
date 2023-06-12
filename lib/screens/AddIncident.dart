@@ -52,7 +52,7 @@ class _AddIncidentState extends State<AddIncident> {
   List<IncidentType> severity = [];
   List<ShiftWorker> sectionManagers = [];
   List selectedWorker = [];
-  bool isDowntime = true;
+  bool? isDowntime;
   var selectedSeverityTypeString = "";
   var selectedIsDowntime = "";
   var severityIndexSelected = -1;
@@ -60,7 +60,11 @@ class _AddIncidentState extends State<AddIncident> {
   List? imageFileList;
 
   void _setImageFileListFromFile(XFile? value) {
-    imageFileList = (value == null ? null : <dynamic>[value])!;
+    if (imageFileList == null) {
+      imageFileList = (value == null ? null : <dynamic>[value])!;
+    } else {
+      imageFileList!.add(value);
+    }
   }
 
   dynamic _pickImageError;
@@ -211,6 +215,14 @@ class _AddIncidentState extends State<AddIncident> {
     super.initState();
   }
 
+  /// wechat asset picker
+  // Future<AssetEntity?> _pickFromCamera(BuildContext c) {
+  //   return CameraPicker.pickFromCamera(
+  //     c,
+  //     pickerConfig: const CameraPickerConfig(enableRecording: true),
+  //   );
+  // }
+
   Future<void> _onImageButtonPressed(ImageSource source,
       {BuildContext? context, bool isMultiImage = false}) async {
     if (isMultiImage) {
@@ -221,7 +233,11 @@ class _AddIncidentState extends State<AddIncident> {
         Navigator.pop(context!);
 
         setState(() {
-          imageFileList = pickedFileList;
+          if (imageFileList == null) {
+            imageFileList = pickedFileList;
+          } else {
+            imageFileList!.addAll(pickedFileList);
+          }
         });
       } catch (e) {
         setState(() {
@@ -245,6 +261,55 @@ class _AddIncidentState extends State<AddIncident> {
         });
       }
     }
+
+    /// wechat asset picker
+    // const AssetPickerTextDelegate textDelegate = AssetPickerTextDelegate();
+    // var test = await AssetPicker.pickAssets(
+    //   context!,
+    //   pickerConfig: AssetPickerConfig(
+    //     maxAssets: 10,
+    //     // selectedAssets: assets,
+    //     specialItemPosition: SpecialItemPosition.prepend,
+    //     specialItemBuilder: (
+    //       BuildContext context,
+    //       AssetPathEntity? path,
+    //       int length,
+    //     ) {
+    //       if (path?.isAll != true) {
+    //         return null;
+    //       }
+    //       return Semantics(
+    //         label: textDelegate.sActionUseCameraHint,
+    //         button: true,
+    //         onTapHint: textDelegate.sActionUseCameraHint,
+    //         child: GestureDetector(
+    //           behavior: HitTestBehavior.opaque,
+    //           onTap: () async {
+    //             final AssetEntity? result = await _pickFromCamera(context);
+    //             if (result == null) {
+    //               return;
+    //             }
+    //             final AssetPicker<AssetEntity, AssetPathEntity> picker =
+    //                 context.findAncestorWidgetOfExactType()!;
+    //             final DefaultAssetPickerBuilderDelegate builder =
+    //                 picker.builder as DefaultAssetPickerBuilderDelegate;
+    //             final DefaultAssetPickerProvider p = builder.provider;
+    //             await p.switchPath(
+    //               PathWrapper<AssetPathEntity>(
+    //                 path: await p.currentPath!.path.obtainForNewProperties(),
+    //               ),
+    //             );
+    //             p.selectAsset(result);
+    //           },
+    //           child: const Center(
+    //             child: Icon(Icons.camera_enhance, size: 42.0),
+    //           ),
+    //         ),
+    //       );
+    //     },
+    //   ),
+    // );
+    // print(test);
   }
 
   @override
@@ -546,7 +611,6 @@ class _AddIncidentState extends State<AddIncident> {
                         selectedIsDowntime = newString;
                       },
                       placeHolderText: 'Cause Downtime',
-                      preSelected: "Yes",
                     ),
                   ),
                   Padding(
@@ -662,24 +726,35 @@ class _AddIncidentState extends State<AddIncident> {
                                         width: 180,
                                         child: Stack(
                                           children: [
-                                            Image.file(
-                                                File(imageFileList![ind].path),
-                                                errorBuilder: (BuildContext
-                                                        context,
-                                                    Object error,
-                                                    StackTrace? stackTrace) {
-                                              return Container(
-                                                  height: 180,
-                                                  width: 180,
-                                                  child: Stack(
-                                                    children: [
-                                                      Image.network(
-                                                          "https://dev-shift.grappetite.com/images/logo/logo-m.png"),
-                                                      Center(
-                                                          child: Text("Error"))
-                                                    ],
-                                                  ));
-                                            }),
+                                            Container(
+                                              width: 180,
+                                              child: Image.file(
+                                                  File(
+                                                      imageFileList![ind].path),
+                                                  fit: BoxFit.fill,
+                                                  errorBuilder: (BuildContext
+                                                          context,
+                                                      Object error,
+                                                      StackTrace? stackTrace) {
+                                                return Container(
+                                                    height: 180,
+                                                    width: 180,
+                                                    child: Stack(
+                                                      children: [
+                                                        Container(
+                                                          width: 180,
+                                                          child: Image.network(
+                                                            "https://dev-shift.grappetite.com/images/logo/logo-m.png",
+                                                            fit: BoxFit.fill,
+                                                          ),
+                                                        ),
+                                                        Center(
+                                                            child:
+                                                                Text("Error"))
+                                                      ],
+                                                    ));
+                                              }),
+                                            ),
                                             GestureDetector(
                                               onTap: () {
                                                 imageFileList!.removeAt(ind);
@@ -700,7 +775,7 @@ class _AddIncidentState extends State<AddIncident> {
                                     },
                                     separatorBuilder: (context, ind) {
                                       return Container(
-                                        width: 20,
+                                        width: 10,
                                       );
                                     },
                                     itemCount: imageFileList!.length),
@@ -766,7 +841,8 @@ class _AddIncidentState extends State<AddIncident> {
                         backGroundColor: kPrimaryColor,
                         onPressed: () async {
                           if (incidentTypeIndexSelected != -1 &&
-                              severityIndexSelected != -1) {
+                              severityIndexSelected != -1 &&
+                              isDowntime != null) {
                             await EasyLoading.show(
                               status: 'loading...',
                               maskType: EasyLoadingMaskType.black,
@@ -794,6 +870,11 @@ class _AddIncidentState extends State<AddIncident> {
                             } else if (severityIndexSelected == -1) {
                               EasyLoading.showError(
                                   "Please select severity type",
+                                  dismissOnTap: true,
+                                  duration: Duration(seconds: 2));
+                            } else if (isDowntime == null) {
+                              EasyLoading.showError(
+                                  "Please select downtime - yes/no",
                                   dismissOnTap: true,
                                   duration: Duration(seconds: 2));
                             } else {

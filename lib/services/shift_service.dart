@@ -13,8 +13,8 @@ class ShiftService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -64,8 +64,8 @@ class ShiftService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -101,8 +101,8 @@ class ShiftService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -132,13 +132,12 @@ class ShiftService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
       String url = baseUrl + "userLoginlist";
-     
 
       Response response = await dio.get(url,
           options: Options(
@@ -159,13 +158,12 @@ class ShiftService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
       String url = baseUrl + "efficiency/$id/$shiftId";
-     
 
       Response response = await dio.get(url,
           options: Options(

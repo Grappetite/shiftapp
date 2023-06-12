@@ -12,14 +12,14 @@ import '../model/workers_model.dart';
 import 'login_service.dart';
 
 class WorkersService {
-  static Future<WorkersListing?> getShiftWorkers(int? shiftId,
-      int processId) async {
+  static Future<WorkersListing?> getShiftWorkers(
+      int? shiftId, int processId) async {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
-      ));
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
 
       String url = baseUrl + "newWorkerList/" + processId.toString();
@@ -30,7 +30,6 @@ class WorkersService {
             '/' +
             shiftId.toString();
       }
-
 
       Response response = await dio.get(url,
           options: Options(
@@ -61,9 +60,9 @@ class WorkersService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
-      ));
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
 
       String url = baseUrl + "startedShiftWorkerList/" + shiftId.toString();
@@ -89,18 +88,18 @@ class WorkersService {
     }
   }
 
-  static Future<dynamic> startedProcessList(// processId,
+  static Future<dynamic> startedProcessList(
+      // processId,
       executeShiftId) async {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
-      ));
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
 
       String url = baseUrl + "startedProcessList/$executeShiftId";
-
 
       Response response = await dio.get(url,
           options: Options(
@@ -127,9 +126,9 @@ class WorkersService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
-      ));
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
       String url = baseUrl +
           'searchWorker/' +
@@ -147,7 +146,7 @@ class WorkersService {
       print(response.data);
 
       var responseObject =
-      WorkersListing.fromJson(response.data, isSearch: true);
+          WorkersListing.fromJson(response.data, isSearch: true);
       if (responseObject.searchWorker == null) {
         return null;
       }
@@ -157,7 +156,8 @@ class WorkersService {
     }
   }
 
-  static Future<bool> addWorkers(int exshiftId,
+  static Future<bool> addWorkers(
+      int exshiftId,
       List<String> workerUserId,
       List<String> startTime,
       List<String> executeShiftId,
@@ -165,19 +165,19 @@ class WorkersService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
-      ));
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
       for (int i = 1;
-      i <
-          [
-            workerUserId.length,
-            startTime.length,
-            executeShiftId.length,
-            efficiencyCalculation.length
-          ].reduce(max);
-      i++) {
+          i <
+              [
+                workerUserId.length,
+                startTime.length,
+                executeShiftId.length,
+                efficiencyCalculation.length
+              ].reduce(max);
+          i++) {
         startTime.add(startTime[0]);
       }
       Response response = await dio.post(
@@ -207,17 +207,18 @@ class WorkersService {
     }
   }
 
-  static Future<bool> moveWorkers({required int exshiftId,
-    required String moveTime,
-    required String startedExecuteShiftId,
-    required int workerUserId,
-    required int workerTypeId}) async {
+  static Future<bool> moveWorkers(
+      {required int exshiftId,
+      required String moveTime,
+      required String startedExecuteShiftId,
+      required int workerUserId,
+      required int workerTypeId}) async {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
-      ));
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
 
       Response response = await dio.post(
@@ -248,7 +249,8 @@ class WorkersService {
     }
   }
 
-  static Future<bool> removeWorkers(int shiftId,
+  static Future<bool> removeWorkers(
+      int shiftId,
       List<String> workerUserId,
       List<String> endTime,
       List<String> executeShiftId,
@@ -256,9 +258,9 @@ class WorkersService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
-      ));
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
 
       var token = prefs.getString(tokenKey);
@@ -290,29 +292,29 @@ class WorkersService {
     }
   }
 
-  static Future<AddWorkersResponse?> addShiftWorker(int shiftId,
-      int processId,
-      String startTime,
-      String endTime,
-      List<String> workerUserId,
-      List<String> efficiencyCalculation,
-
-      String comment,
-      {PpeModel? ppe,
-        String? discrepancyComment,}) async {
+  static Future<AddWorkersResponse?> addShiftWorker(
+    int shiftId,
+    int processId,
+    String startTime,
+    String endTime,
+    List<String> workerUserId,
+    List<String> efficiencyCalculation,
+    String comment, {
+    PpeModel? ppe,
+    String? discrepancyComment,
+  }) async {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
-      ));
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
       List<int> ppe_check = [];
       ppe!.data!.forEach((element) {
-        if(element.selected!)
-          {
-            ppe_check.add(element.workerTypeId!);
-          }
+        if (element.selected!) {
+          ppe_check.add(element.workerTypeId!);
+        }
       });
 
       Response response = await dio.post(
@@ -326,7 +328,7 @@ class WorkersService {
           'efficiency_calculation': efficiencyCalculation,
           'comment': comment,
           "ppe_comment": discrepancyComment,
-          "ppe_check":ppe_check,
+          "ppe_check": ppe_check,
         },
         options: Options(
           headers: {
@@ -355,14 +357,14 @@ class WorkersService {
     }
   }
 
-  static Future<WorkerTypeResponse?> getWorkTypes(String shiftId,
-      String processId) async {
+  static Future<WorkerTypeResponse?> getWorkTypes(
+      String shiftId, String processId) async {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
-      ));
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
       Response response = await dio.get(baseUrl + 'workerType/' + processId,
           options: Options(
@@ -389,13 +391,16 @@ class WorkersService {
     }
   }
 
-  static Future<bool?> updateExpiry({required ShiftWorker worker,required issueDate,required expiryDate}) async {
+  static Future<bool?> updateExpiry(
+      {required ShiftWorker worker,
+      required issueDate,
+      required expiryDate}) async {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
-      ));
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
 
       Response response = await dio.post(
@@ -416,7 +421,10 @@ class WorkersService {
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
     }
-  }static Future<AddTempResponse?> addTempWorkers(String firstName,
+  }
+
+  static Future<AddTempResponse?> addTempWorkers(
+      String firstName,
       String lastName,
       String key,
       String workerType,
@@ -425,9 +433,9 @@ class WorkersService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
-      ));
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
 
       Response response = await dio.post(

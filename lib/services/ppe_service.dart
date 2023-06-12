@@ -1,11 +1,7 @@
-import 'dart:collection';
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/model/ppe_model.dart';
-import 'package:shiftapp/model/workers_model.dart' as worker;
 import 'package:shiftapp/services/login_service.dart';
 
 class PPEService {
@@ -13,8 +9,8 @@ class PPEService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -39,22 +35,22 @@ class PPEService {
     }
   }
 
-  static postPpe({Datum? ppe, comment, check,int? processId}) async {
+  static postPpe({Datum? ppe, comment, check, int? processId}) async {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
       var list = "";
       ppe!.details!.forEach((element) {
-        list = list + element.id.toString()+",";
+        list = list + element.id.toString() + ",";
       });
       Response response = await dio.post(baseUrl + "ppe",
           data: FormData.fromMap({
             // "sop_id": sopDetail.id,
-            "ppe_id": list.substring(0,list.length-1),
+            "ppe_id": list.substring(0, list.length - 1),
             "worker_type_id": ppe.workerTypeId,
             "update_required": check,
             "comments": comment,

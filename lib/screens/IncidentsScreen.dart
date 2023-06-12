@@ -380,6 +380,7 @@ class _IncidentsState extends State<Incidents> {
                                     TextEditingController(
                                         text: incidentData!
                                                 .data![index].downtime ??
+                                            // "Record Downtime");
                                             "Record Downtime");
                                 showDialog(
                                     context: context,
@@ -961,8 +962,8 @@ class _IncidentsState extends State<Incidents> {
                                           "Yes"
                                       ? incidentData!.data![index].downtime !=
                                               null
-                                          ? true
-                                          : false
+                                          ? false
+                                          : true
                                       : false,
                                   text1_2: incidentData!
                                               .data![index].isDowntime ==
@@ -970,7 +971,7 @@ class _IncidentsState extends State<Incidents> {
                                       ? incidentData!.data![index].downtime !=
                                               null
                                           ? '${DateTime.parse(incidentData!.data![index].downtime!).difference(DateTime.parse(incidentData!.data![index].createdAt!)).toString().split(".")[0]}'
-                                          : "None:Tap to Record"
+                                          : "None - Tap to Record"
                                       : " ",
                                 ),
                               ),

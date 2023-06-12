@@ -16,11 +16,13 @@ class AddTempWorker extends StatefulWidget {
   final int exId;
 
   final String processId;
+  final String listname;
 
   const AddTempWorker(
       {Key? key,
       required this.shiftId,
       required this.processId,
+      required this.listname,
       required this.exId})
       : super(key: key);
 
@@ -44,9 +46,19 @@ class _AddTempWorkerState extends State<AddTempWorker> {
     var result = await WorkersService.getWorkTypes(
         this.widget.shiftId, widget.processId);
     workerType = result!.data!;
-    if (mounted)setState(() {
-      workerType = result.data!;
-    });
+    if (mounted) {
+      int i = 0;
+      for (var element in workerType) {
+        if (element.name == this.widget.listname) {
+          selectedWorkerTypeID = i.toString();
+          selectedWorkerType = element.name.toString();
+        }
+        i++;
+      }
+      setState(() {
+        workerType = result.data!;
+      });
+    }
   }
 
   @override
@@ -154,11 +166,13 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                                 currentList: workerType
                                     .map((e) => e.name!.trim())
                                     .toList(),
+                                enabled: false,
                                 showError: false,
                                 onChange: (newString) {
-                                  if (mounted)setState(() {
-                                    selectedWorkerType = newString;
-                                  });
+                                  if (mounted)
+                                    setState(() {
+                                      selectedWorkerType = newString;
+                                    });
 
                                   selectedWorkerTypeID = workerType
                                       .firstWhere((e) => e.name == newString)

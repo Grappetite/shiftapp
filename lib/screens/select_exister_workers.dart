@@ -333,10 +333,10 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                           barrierDismissible: false,
                           builder: (BuildContext context) {
                             return AddTempWorker(
-                              shiftId: this.widget.shiftId.toString(),
-                              processId: this.widget.processId,
-                              exId: this.widget.exShiftId,
-                            );
+                                shiftId: this.widget.shiftId.toString(),
+                                processId: this.widget.processId,
+                                exId: this.widget.exShiftId,
+                                listname: this.widget.listName);
                           });
                       if (selected != null) {
                         selected.data!.isSelected = true;
@@ -582,6 +582,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                     )
                                                                   : Container(),
                                                               Expanded(
+                                                                flex: 2,
                                                                 child: Column(
                                                                   crossAxisAlignment:
                                                                       CrossAxisAlignment
@@ -596,7 +597,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                       style:
                                                                           TextStyle(
                                                                         fontSize:
-                                                                            16,
+                                                                            15,
                                                                         fontWeight:
                                                                             FontWeight.w700,
                                                                         color:
@@ -625,7 +626,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                           color:
                                                                               kPrimaryColor,
                                                                           fontSize:
-                                                                              15),
+                                                                              10),
                                                                     ),
                                                                     const SizedBox(
                                                                       height: 8,
@@ -643,7 +644,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                           color:
                                                                               kPrimaryColor,
                                                                           fontSize:
-                                                                              15),
+                                                                              10),
                                                                     ),
                                                                     const SizedBox(
                                                                       height: 8,
@@ -1082,6 +1083,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                       )
                                                                     : Container(),
                                                                 Expanded(
+                                                                  flex: 2,
                                                                   child: Column(
                                                                     crossAxisAlignment:
                                                                         CrossAxisAlignment
@@ -1094,7 +1096,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                         style:
                                                                             TextStyle(
                                                                           fontSize:
-                                                                              16,
+                                                                              15,
                                                                           fontWeight:
                                                                               FontWeight.w700,
                                                                           color:
@@ -1125,7 +1127,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                             color:
                                                                                 kPrimaryColor,
                                                                             fontSize:
-                                                                                15),
+                                                                                10),
                                                                       ),
                                                                       const SizedBox(
                                                                         height:
@@ -1139,7 +1141,7 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                                                                             color:
                                                                                 kPrimaryColor,
                                                                             fontSize:
-                                                                                15),
+                                                                                10),
                                                                       ),
                                                                       const SizedBox(
                                                                         height:

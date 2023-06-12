@@ -15,8 +15,8 @@ class SOPService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -49,8 +49,8 @@ class SOPService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -89,8 +89,8 @@ class SOPService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: 350 * 1000, // 60 seconds
-          receiveTimeout: 350 * 1000 // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 

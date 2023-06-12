@@ -382,73 +382,76 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                             12,
                                                                       )
                                                                     : Container(),
-                                                                Column(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  children: [
-                                                                    Text(
-                                                                      currentItem
-                                                                              .firstName! +
-                                                                          ' ' +
-                                                                          currentItem
-                                                                              .lastName!,
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontSize:
-                                                                            16,
-                                                                        fontWeight:
-                                                                            FontWeight.w700,
-                                                                        color:
-                                                                            kPrimaryColor,
+                                                                Expanded(
+                                                                  flex: 2,
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Text(
+                                                                        currentItem.firstName! +
+                                                                            ' ' +
+                                                                            currentItem.lastName!,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              15,
+                                                                          fontWeight:
+                                                                              FontWeight.w700,
+                                                                          color:
+                                                                              kPrimaryColor,
+                                                                        ),
                                                                       ),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      height: 8,
-                                                                    ),
-                                                                    Text(
-                                                                      widget.listNames[
-                                                                          i],
-                                                                      style: const TextStyle(
-                                                                          color:
-                                                                              kPrimaryColor,
-                                                                          fontSize:
-                                                                              15),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      height: 8,
-                                                                    ),
-                                                                    Text(
-                                                                      currentItem
-                                                                          .licenseName!,
-                                                                      style: const TextStyle(
-                                                                          color:
-                                                                              kPrimaryColor,
-                                                                          fontSize:
-                                                                              15),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      height: 8,
-                                                                    ),
-                                                                    Text(
-                                                                      "Expiry: " +
-                                                                          currentItem
-                                                                              .license_expiry
-                                                                              .toString(),
-                                                                      // DateFormat("yyyy-MM-dd")
-                                                                      //     .parse(currentItem.license_expiry.toString())
-                                                                      //     .toString()
-                                                                      //     .split(" ")[0],
-                                                                      style: const TextStyle(
-                                                                          color:
-                                                                              kPrimaryColor,
-                                                                          fontSize:
-                                                                              15),
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      height: 8,
-                                                                    ),
-                                                                  ],
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            8,
+                                                                      ),
+                                                                      Text(
+                                                                        widget.listNames[
+                                                                            i],
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                kPrimaryColor,
+                                                                            fontSize:
+                                                                                15),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            8,
+                                                                      ),
+                                                                      Text(
+                                                                        currentItem
+                                                                            .licenseName!,
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                kPrimaryColor,
+                                                                            fontSize:
+                                                                                10),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            8,
+                                                                      ),
+                                                                      Text(
+                                                                        "Expiry: " +
+                                                                            currentItem.license_expiry.toString(),
+                                                                        // DateFormat("yyyy-MM-dd")
+                                                                        //     .parse(currentItem.license_expiry.toString())
+                                                                        //     .toString()
+                                                                        //     .split(" ")[0],
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                kPrimaryColor,
+                                                                            fontSize:
+                                                                                10),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            8,
+                                                                      ),
+                                                                    ],
+                                                                  ),
                                                                 ),
                                                                 SizedBox(
                                                                   width: 4,
@@ -941,6 +944,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                       )
                                                                     : Container(),
                                                                 Expanded(
+                                                                  flex: 2,
                                                                   child: Column(
                                                                     crossAxisAlignment:
                                                                         CrossAxisAlignment
@@ -953,7 +957,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                         style:
                                                                             TextStyle(
                                                                           fontSize:
-                                                                              16,
+                                                                              15,
                                                                           fontWeight:
                                                                               FontWeight.w700,
                                                                           color:
@@ -984,7 +988,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                             color:
                                                                                 kPrimaryColor,
                                                                             fontSize:
-                                                                                15),
+                                                                                10),
                                                                       ),
                                                                       const SizedBox(
                                                                         height:
@@ -998,7 +1002,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                             color:
                                                                                 kPrimaryColor,
                                                                             fontSize:
-                                                                                15),
+                                                                                10),
                                                                       ),
                                                                       const SizedBox(
                                                                         height:
@@ -1496,6 +1500,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                   )
                                                                 : Container(),
                                                             Expanded(
+                                                              flex: 2,
                                                               child: Column(
                                                                 crossAxisAlignment:
                                                                     CrossAxisAlignment
@@ -1510,7 +1515,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                     style:
                                                                         TextStyle(
                                                                       fontSize:
-                                                                          16,
+                                                                          15,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .w700,
@@ -1540,7 +1545,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                         color:
                                                                             kPrimaryColor,
                                                                         fontSize:
-                                                                            15),
+                                                                            10),
                                                                   ),
                                                                   const SizedBox(
                                                                     height: 8,
@@ -1558,7 +1563,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                         color:
                                                                             kPrimaryColor,
                                                                         fontSize:
-                                                                            15),
+                                                                            10),
                                                                   ),
                                                                   const SizedBox(
                                                                     height: 8,

@@ -464,13 +464,14 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                           )
                                                                                         : Container(),
                                                                                     Expanded(
+                                                                                      flex: 2,
                                                                                       child: Column(
                                                                                         crossAxisAlignment: CrossAxisAlignment.start,
                                                                                         children: [
                                                                                           Text(
                                                                                             item.firstName! + ' ' + item.lastName!,
                                                                                             style: TextStyle(
-                                                                                              fontSize: 16,
+                                                                                              fontSize: 15,
                                                                                               fontWeight: FontWeight.w700,
                                                                                               color: kPrimaryColor,
                                                                                             ),
@@ -480,7 +481,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                           ),
                                                                                           Text(
                                                                                             item.licenseName!,
-                                                                                            style: const TextStyle(color: kPrimaryColor, fontSize: 15),
+                                                                                            style: const TextStyle(color: kPrimaryColor, fontSize: 10),
                                                                                           ),
                                                                                           const SizedBox(
                                                                                             height: 8,
@@ -488,7 +489,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                           Text(
                                                                                             "Expiry: " + item.license_expiry.toString(),
                                                                                             // DateFormat("yyyy-MM-dd").parse(item.license_expiry.toString()).toString().split(" ")[0],
-                                                                                            style: const TextStyle(color: kPrimaryColor, fontSize: 15),
+                                                                                            style: const TextStyle(color: kPrimaryColor, fontSize: 10),
                                                                                           ),
                                                                                           const SizedBox(
                                                                                             height: 8,
@@ -931,6 +932,8 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                 )
                                                                               : Container(),
                                                                           Expanded(
+                                                                            flex:
+                                                                                2,
                                                                             child:
                                                                                 Column(
                                                                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -938,7 +941,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                 Text(
                                                                                   item.firstName! + ' ' + item.lastName!,
                                                                                   style: TextStyle(
-                                                                                    fontSize: 16,
+                                                                                    fontSize: 15,
                                                                                     fontWeight: FontWeight.w700,
                                                                                     color: kPrimaryColor,
                                                                                   ),
@@ -948,7 +951,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                 ),
                                                                                 Text(
                                                                                   item.licenseName!,
-                                                                                  style: const TextStyle(color: kPrimaryColor, fontSize: 15),
+                                                                                  style: const TextStyle(color: kPrimaryColor, fontSize: 10),
                                                                                 ),
                                                                                 const SizedBox(
                                                                                   height: 8,
@@ -956,7 +959,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                 Text(
                                                                                   "Expiry: " + item.license_expiry.toString(),
                                                                                   // DateFormat("yyyy-MM-dd").parse(item.license_expiry.toString()).toString().split(" ")[0],
-                                                                                  style: const TextStyle(color: kPrimaryColor, fontSize: 15),
+                                                                                  style: const TextStyle(color: kPrimaryColor, fontSize: 10),
                                                                                 ),
                                                                                 const SizedBox(
                                                                                   height: 8,
