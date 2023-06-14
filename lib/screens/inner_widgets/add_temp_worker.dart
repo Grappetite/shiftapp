@@ -47,13 +47,11 @@ class _AddTempWorkerState extends State<AddTempWorker> {
         this.widget.shiftId, widget.processId);
     workerType = result!.data!;
     if (mounted) {
-      int i = 0;
       for (var element in workerType) {
         if (element.name == this.widget.listname) {
-          selectedWorkerTypeID = i.toString();
+          selectedWorkerTypeID = element.id.toString();
           selectedWorkerType = element.name.toString();
         }
-        i++;
       }
       setState(() {
         workerType = result.data!;

@@ -91,10 +91,11 @@ class _DropDownPageState extends State<DropDownPage> {
                               process!.map((e) => e.name!.trim()).toList(),
                           showError: false,
                           onChange: (newString) {
-                            if (mounted)setState(() {
-                              selectedString = newString;
-                              shiftList = [];
-                            });
+                            if (mounted)
+                              setState(() {
+                                selectedString = newString;
+                                shiftList = [];
+                              });
                             processIndexSelected = process!
                                 .map((e) => e.name!.trim())
                                 .toList()
@@ -126,7 +127,7 @@ class _DropDownPageState extends State<DropDownPage> {
                                         element.started = false;
                                       }
                                     });
-                                    if (mounted)setState(() {});
+                                    if (mounted) setState(() {});
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -262,7 +263,7 @@ class _DropDownPageState extends State<DropDownPage> {
                                 processSelected.id!);
                             await EasyLoading.dismiss();
                             if (shifts == null) {
-                              shifts=ShiftsResponse();
+                              shifts = ShiftsResponse();
                               shifts.data = [];
                               shifts.data!.add(ShiftItem(
                                   id: 0,
@@ -282,17 +283,14 @@ class _DropDownPageState extends State<DropDownPage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      HomeView(
-                                        selectedShift: shifts!.data!.first,
-                                        processSelected: processSelected,
-                                      ),
+                                  builder: (BuildContext context) => HomeView(
+                                    selectedShift: shifts!.data!.first,
+                                    processSelected: processSelected,
+                                  ),
                                 ),
                               ).then((value) {
                                 shiftList!.clear();
-                                if (mounted)setState(() {
-
-                                });
+                                if (mounted) setState(() {});
                               });
                               // EasyLoading.showError('Could not load shifts');
                             } else {
@@ -302,8 +300,14 @@ class _DropDownPageState extends State<DropDownPage> {
                                     if (DateTime.now().isAfter(shifts
                                         .data!.first.startDateObject
                                         .subtract(Duration(hours: 2)))) {
-                                      if (DateTime.now().isBefore(
-                                          shifts.data!.first.endDateObject)) {
+                                      if (DateTime.now().isBefore(shifts
+                                              .data!.first.endDateObject) &&
+                                          shifts.data!.first.endDateObject
+                                                  .toString()
+                                                  .split(" ")[0] ==
+                                              DateTime.now()
+                                                  .toString()
+                                                  .split(" ")[0]) {
                                         shifts.data!.first.displayScreen = 2;
                                       } else {
                                         shifts.data!.first.displayScreen = 3;
@@ -340,9 +344,7 @@ class _DropDownPageState extends State<DropDownPage> {
                                       ),
                                     ).then((value) {
                                       shiftList!.clear();
-                                      if (mounted)setState(() {
-
-                                    });
+                                      if (mounted) setState(() {});
                                     });
                                   } else {
                                     EasyLoading.showError(
@@ -377,13 +379,11 @@ class _DropDownPageState extends State<DropDownPage> {
                                       ),
                                     ).then((value) {
                                       shiftList!.clear();
-                                      if (mounted)setState(() {
-
-                                    });
+                                      if (mounted) setState(() {});
                                     });
                                   } else {
                                     shiftList = shifts.data;
-                                    if (mounted)setState(() {});
+                                    if (mounted) setState(() {});
                                   }
                                 } else if (selectedShift != null) {
                                   if (DateTime.now().isAfter(selectedShift!
@@ -410,45 +410,40 @@ class _DropDownPageState extends State<DropDownPage> {
                                     ),
                                   ).then((value) {
                                     shiftList!.clear();
-                                    if (mounted)setState(() {
-
-                                    });
+                                    if (mounted) setState(() {});
                                   });
                                 } else {
                                   EasyLoading.showError('Please select shift');
                                 }
-                              }
-                              else{ shifts.data = [];
-                              shifts.data!.add(ShiftItem(
-                                  id: 0,
-                                  name: processSelected.name,
-                                  startTime: DateTime.now()
-                                      .add(Duration(hours: 3))
-                                      .toString(),
-                                  endTime: DateTime.now()
-                                      .add(Duration(hours: 3))
-                                      .toString(),
-                                  patternId: 0,
-                                  breakTime: 60,
-                                  shiftMinutes: 3600,
-                                  shiftDuration: "Always",
-                                  started: true));
-                              shifts.data!.first.displayScreen = 3;
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      HomeView(
-                                        selectedShift: shifts!.data!.first,
-                                        processSelected: processSelected,
-                                      ),
-                                ),
-                              ).then((value) {
-                                shiftList!.clear();
-                                if (mounted)setState(() {
-
+                              } else {
+                                shifts.data = [];
+                                shifts.data!.add(ShiftItem(
+                                    id: 0,
+                                    name: processSelected.name,
+                                    startTime: DateTime.now()
+                                        .add(Duration(hours: 3))
+                                        .toString(),
+                                    endTime: DateTime.now()
+                                        .add(Duration(hours: 3))
+                                        .toString(),
+                                    patternId: 0,
+                                    breakTime: 60,
+                                    shiftMinutes: 3600,
+                                    shiftDuration: "Always",
+                                    started: true));
+                                shifts.data!.first.displayScreen = 3;
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) => HomeView(
+                                      selectedShift: shifts!.data!.first,
+                                      processSelected: processSelected,
+                                    ),
+                                  ),
+                                ).then((value) {
+                                  shiftList!.clear();
+                                  if (mounted) setState(() {});
                                 });
-                              });
                                 EasyLoading.showError('Could not load shifts');
                               }
                             }
@@ -469,7 +464,7 @@ class _DropDownPageState extends State<DropDownPage> {
     );
     try {
       process = await LoginService.getProcess();
-      if (mounted)setState(() {});
+      if (mounted) setState(() {});
       await EasyLoading.dismiss();
     } catch (e) {
       await EasyLoading.dismiss();

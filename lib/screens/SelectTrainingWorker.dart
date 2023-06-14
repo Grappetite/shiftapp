@@ -270,10 +270,9 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                         ),
                                                         onChanged: (v) {
                                                           if (searchController
-                                                                      .text
-                                                                      .length %
-                                                                  3 ==
-                                                              0) {
+                                                                  .text
+                                                                  .length >=
+                                                              3) {
                                                             _pagingControllerSearch
                                                                 .itemList!
                                                                 .clear();
@@ -1225,14 +1224,14 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
     try {
       if (workerData!.data!.currentPage == workerData!.data!.lastPage!) {
         if (dialog) {
-          for (var element in _pagingController.itemList!) {
-            for (var remove in workerData!.data!.data!) {
-              if (element.userId == remove.userId) {
-                workerData!.data!.data!.remove(remove);
-                break;
-              }
-            }
-          }
+          // for (var element in _pagingController.itemList!) {
+          //   for (var remove in workerData!.data!.data!) {
+          //     if (element.userId == remove.userId) {
+          //       workerData!.data!.data!.remove(remove);
+          //       break;
+          //     }
+          //   }
+          // }
           _pagingControllerSearch.appendLastPage(workerData!.data!.data!);
         } else {
           _pagingController.appendLastPage(workerData!.data!.data!);
@@ -1240,14 +1239,14 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
       } else {
         // final nextPageKey = pageKey + newItems.length;
         if (dialog) {
-          for (var element in _pagingController.itemList!) {
-            for (var remove in workerData!.data!.data!) {
-              if (element.userId == remove.userId) {
-                workerData!.data!.data!.remove(remove);
-                break;
-              }
-            }
-          }
+          // for (var element in _pagingController.itemList!) {
+          //   for (var remove in workerData!.data!.data!) {
+          //     if (element.userId == remove.userId) {
+          //       workerData!.data!.data!.remove(remove);
+          //       break;
+          //     }
+          //   }
+          // }
           _pagingControllerSearch.appendPage(
               workerData!.data!.data!, workerData!.data!.currentPage! + 1);
         } else {

@@ -22,8 +22,18 @@ class ShiftsResponse {
         if (element.started!) {
           return true;
         } else if (DateTime.now().isAfter(element.endDateObject)) {
-          return true;
+          element.startTime = DateTime.parse(element.startTime.toString())
+              .add(Duration(days: 1))
+              .toString(); // element.startDateObject.add(Duration(days: 1));
+          element.endTime = DateTime.parse(element.endTime.toString())
+              .add(Duration(days: 1))
+              .toString(); // element.endDateObject.add(Duration(days: 1));
+          return false;
         } else {
+          // element.startTime=DateTime.parse(element.startTime.toString()).add(Duration(
+          //     days: 1)).toString(); // element.startDateObject.add(Duration(days: 1));
+          // element.endTime=DateTime.parse(element.endTime.toString()).add(Duration(
+          //     days: 1)).toString(); // element.endDateObject.add(Duration(days: 1));
           return false;
         }
       });
