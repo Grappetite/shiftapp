@@ -22,7 +22,7 @@ class PPEService {
             },
           ));
 
-      print(response.data);
+      //print(response.data);
 
       var responseObject = PpeModel.fromJson(response.data);
 
@@ -30,7 +30,7 @@ class PPEService {
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       return Future.value(null);
     }
   }
@@ -64,12 +64,12 @@ class PPEService {
             contentType: 'multipart/form-data',
           ));
       if (response.statusCode == 200) {
-        print(true);
+        //print(true);
       }
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       return Future.value(null);
     }
   }

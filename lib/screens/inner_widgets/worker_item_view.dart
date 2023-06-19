@@ -457,34 +457,38 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                   width: 4,
                                                                 ),
                                                                 Expanded(
+                                                                  flex: 2,
                                                                   child: Column(
                                                                     children: [
                                                                       GestureDetector(
                                                                         onTap:
                                                                             () {
-                                                                          issueDate.text = DateTime.now()
-                                                                              .toString()
-                                                                              .split(" ")[0];
-
-                                                                          showCupertinoModalPopup(
-                                                                              context: context,
-                                                                              builder: (BuildContext builder) {
-                                                                                return Container(
-                                                                                  color: Colors.white,
-                                                                                  height: MediaQuery.of(context).size.width,
-                                                                                  width: MediaQuery.of(context).size.width,
-                                                                                  child: CupertinoDatePicker(
-                                                                                    mode: CupertinoDatePickerMode.date,
-                                                                                    onDateTimeChanged: (value) async {
-                                                                                      issueDate.text = value.toString().split(" ")[0];
-                                                                                      setState(() {});
-                                                                                    },
-                                                                                    initialDateTime: DateTime.now(),
-                                                                                    minimumDate: DateTime.now().subtract(Duration(days: 365)),
-                                                                                    maximumDate: DateTime.now(),
-                                                                                  ),
-                                                                                );
-                                                                              });
+                                                                          {
+                                                                            issueDate.text =
+                                                                                DateTime.now().toString().split(" ")[0];
+                                                                            expiryDate.text =
+                                                                                DateTime.now().add(Duration(days: currentItem.expiryDays!)).toString();
+                                                                            showCupertinoModalPopup(
+                                                                                context: context,
+                                                                                builder: (BuildContext builder) {
+                                                                                  return Container(
+                                                                                    color: Colors.white,
+                                                                                    height: MediaQuery.of(context).size.width,
+                                                                                    width: MediaQuery.of(context).size.width,
+                                                                                    child: CupertinoDatePicker(
+                                                                                      mode: CupertinoDatePickerMode.date,
+                                                                                      onDateTimeChanged: (value) async {
+                                                                                        issueDate.text = value.toString().split(" ")[0];
+                                                                                        expiryDate.text = value.add(Duration(days: currentItem.expiryDays!)).toString();
+                                                                                        setState(() {});
+                                                                                      },
+                                                                                      initialDateTime: DateTime.now(),
+                                                                                      minimumDate: DateTime.now().subtract(Duration(days: currentItem.expiryDays! - 3)),
+                                                                                      maximumDate: DateTime.now(),
+                                                                                    ),
+                                                                                  );
+                                                                                });
+                                                                          }
                                                                         },
                                                                         child:
                                                                             Padding(
@@ -521,68 +525,68 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                      GestureDetector(
-                                                                        onTap:
-                                                                            () {
-                                                                          expiryDate.text = DateTime.now()
-                                                                              .toString()
-                                                                              .split(" ")[0];
-
-                                                                          showCupertinoModalPopup(
-                                                                              context: context,
-                                                                              builder: (BuildContext builder) {
-                                                                                return Container(
-                                                                                  color: Colors.white,
-                                                                                  height: MediaQuery.of(context).size.width,
-                                                                                  width: MediaQuery.of(context).size.width,
-                                                                                  child: CupertinoDatePicker(
-                                                                                    mode: CupertinoDatePickerMode.date,
-                                                                                    onDateTimeChanged: (value) async {
-                                                                                      expiryDate.text = value.toString().split(" ")[0];
-                                                                                      setState(() {});
-                                                                                    },
-                                                                                    initialDateTime: DateTime.now().add(Duration(hours: 1)),
-                                                                                    minimumDate: DateTime.now(),
-                                                                                    maximumDate: DateTime.now().add(Duration(days: (365 * 11))),
-                                                                                  ),
-                                                                                );
-                                                                              });
-                                                                        },
-                                                                        child:
-                                                                            Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(4.0),
-                                                                          child:
-                                                                              TextFormField(
-                                                                            enabled:
-                                                                                false,
-                                                                            controller:
-                                                                                expiryDate,
-                                                                            decoration:
-                                                                                const InputDecoration(
-                                                                              labelText: 'New Expiry Date',
-                                                                              border: OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.all(
-                                                                                  Radius.circular(10.0),
-                                                                                ),
-                                                                                borderSide: BorderSide(color: kPrimaryColor),
-                                                                              ),
-                                                                              enabledBorder: OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.all(
-                                                                                  Radius.circular(10.0),
-                                                                                ),
-                                                                                borderSide: BorderSide(color: kPrimaryColor),
-                                                                              ),
-                                                                              disabledBorder: OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.all(
-                                                                                  Radius.circular(10.0),
-                                                                                ),
-                                                                                borderSide: BorderSide(color: kPrimaryColor),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ),
+                                                                      // GestureDetector(
+                                                                      //   onTap:
+                                                                      //       () {
+                                                                      //     expiryDate.text = DateTime.now()
+                                                                      //         .toString()
+                                                                      //         .split(" ")[0];
+                                                                      //
+                                                                      //     showCupertinoModalPopup(
+                                                                      //         context: context,
+                                                                      //         builder: (BuildContext builder) {
+                                                                      //           return Container(
+                                                                      //             color: Colors.white,
+                                                                      //             height: MediaQuery.of(context).size.width,
+                                                                      //             width: MediaQuery.of(context).size.width,
+                                                                      //             child: CupertinoDatePicker(
+                                                                      //               mode: CupertinoDatePickerMode.date,
+                                                                      //               onDateTimeChanged: (value) async {
+                                                                      //                 expiryDate.text = value.toString().split(" ")[0];
+                                                                      //                 setState(() {});
+                                                                      //               },
+                                                                      //               initialDateTime: DateTime.now().add(Duration(hours: 1)),
+                                                                      //               minimumDate: DateTime.now(),
+                                                                      //               maximumDate: DateTime.now().add(Duration(days: (365 * 11))),
+                                                                      //             ),
+                                                                      //           );
+                                                                      //         });
+                                                                      //   },
+                                                                      //   child:
+                                                                      //       Padding(
+                                                                      //     padding:
+                                                                      //         const EdgeInsets.all(4.0),
+                                                                      //     child:
+                                                                      //         TextFormField(
+                                                                      //       enabled:
+                                                                      //           false,
+                                                                      //       controller:
+                                                                      //           expiryDate,
+                                                                      //       decoration:
+                                                                      //           const InputDecoration(
+                                                                      //         labelText: 'New Expiry Date',
+                                                                      //         border: OutlineInputBorder(
+                                                                      //           borderRadius: BorderRadius.all(
+                                                                      //             Radius.circular(10.0),
+                                                                      //           ),
+                                                                      //           borderSide: BorderSide(color: kPrimaryColor),
+                                                                      //         ),
+                                                                      //         enabledBorder: OutlineInputBorder(
+                                                                      //           borderRadius: BorderRadius.all(
+                                                                      //             Radius.circular(10.0),
+                                                                      //           ),
+                                                                      //           borderSide: BorderSide(color: kPrimaryColor),
+                                                                      //         ),
+                                                                      //         disabledBorder: OutlineInputBorder(
+                                                                      //           borderRadius: BorderRadius.all(
+                                                                      //             Radius.circular(10.0),
+                                                                      //           ),
+                                                                      //           borderSide: BorderSide(color: kPrimaryColor),
+                                                                      //         ),
+                                                                      //       ),
+                                                                      //     ),
+                                                                      //   ),
+                                                                      // ),
                                                                     ],
                                                                   ),
                                                                 ),

@@ -8,6 +8,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiftapp/screens/IncidentsScreen.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 import 'package:shiftapp/util/string.dart';
 
@@ -93,12 +94,24 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
     setupFocusNode(doneButton);
   }
 
+  String totalDowntime = "";
+  String totalIncident = "";
+
+  void loadExpectedUnits() async {
+    var shiftWorkerList =
+        await WorkersService.getAllShiftWorkersList(widget.executeShiftId!);
+    totalDowntime = shiftWorkerList!.totalDowntime!.totalDowntime.toString();
+    totalIncident = shiftWorkerList!.totalDowntime!.totalIncident.toString();
+    if (mounted) setState(() {});
+  }
+
   void setupFocusNode(FocusNode node) {}
 
   @override
   void initState() {
     super.initState();
     setupFocusNode(doneButton);
+    loadExpectedUnits();
     startTimer();
   }
 
@@ -332,6 +345,30 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                 ),
                               ),
                             ),
+                          ),
+                          ExplainerWidget(
+                            // comingSoon: true,
+                            iconName: 'exclamation',
+                            title: 'INCIDENTS',
+                            text1: '$totalIncident',
+                            text2:
+                                'Tap to view and add incidents or record downtime',
+                            showWarning: false,
+                            horizontal: false,
+                            text1_2: '$totalDowntime',
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Incidents(
+                                            selectedShift: widget.selectedShift,
+                                            execShiftId: widget.executeShiftId,
+                                            process: widget.process,
+                                            totalDowntime: totalDowntime,
+                                            totalIncident: totalIncident,
+                                          ))).then(
+                                  (value) => loadExpectedUnits());
+                            },
                           ),
                           Expanded(
                             child: Container(),

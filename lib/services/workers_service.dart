@@ -38,8 +38,6 @@ class WorkersService {
             },
           ));
 
-      print(response.data);
-
       var responseObject = WorkersListing.fromJson(response.data);
 
       if (responseObject.data == null) {
@@ -74,7 +72,7 @@ class WorkersService {
             },
           ));
 
-      print(response.data);
+      //print(response.data);
 
       var responseObject = ShiftWorkerList.fromJson(response.data);
 
@@ -108,7 +106,7 @@ class WorkersService {
             },
           ));
 
-      print(jsonEncode(response.data));
+      //print(jsonEncode(response.data));
       var responseObject = List<Process>.from(
           response.data["data"].map((x) => Process.fromJson(x)));
       // if (responseObject.isEmpty) {
@@ -143,7 +141,7 @@ class WorkersService {
           },
         ),
       );
-      print(response.data);
+      // d.log(response.data.toString());
 
       var responseObject =
           WorkersListing.fromJson(response.data, isSearch: true);
@@ -195,7 +193,7 @@ class WorkersService {
         ),
       );
 
-      print(response.data);
+      //print(response.data);
 
       if (response.data['code'] == 200) {
         return true;
@@ -237,7 +235,7 @@ class WorkersService {
         ),
       );
 
-      print(response.data);
+      //print(response.data);
 
       if (response.statusCode == 200) {
         return true;
@@ -280,7 +278,7 @@ class WorkersService {
         ),
       );
 
-      print(response.data);
+      //print(response.data);
 
       if (response.data['code'] == 200) {
         return true;
@@ -375,7 +373,7 @@ class WorkersService {
 
       var responseObject = WorkerTypeResponse.fromJson(response.data);
 
-      print(response.data);
+      //print(response.data);
 
       if (responseObject.data == null) {
         return null;
@@ -455,7 +453,7 @@ class WorkersService {
         ),
       );
 
-      print(response.data);
+      //print(response.data);
 
       var responseObject = AddTempResponse.fromJson(response.data);
 

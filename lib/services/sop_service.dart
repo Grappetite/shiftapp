@@ -31,7 +31,7 @@ class SOPService {
             },
           ));
 
-      print(response.data);
+      //print(response.data);
 
       var responseObject = SopModel.fromJson(response.data);
 
@@ -39,7 +39,7 @@ class SOPService {
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       return Future.value(null);
     }
   }
@@ -71,7 +71,7 @@ class SOPService {
               ),
               queryParameters: queryPeremater);
 
-      print(response.data);
+      //print(response.data);
 
       var responseObject = WorkerModel.fromJson(response.data);
 
@@ -79,7 +79,7 @@ class SOPService {
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       return Future.value(null);
     }
   }
@@ -121,12 +121,12 @@ class SOPService {
             contentType: 'multipart/form-data',
           ));
       if (response.statusCode == 200) {
-        print(true);
+        //print(true);
       }
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       return Future.value(null);
     }
   }

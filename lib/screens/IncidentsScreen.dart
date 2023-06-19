@@ -427,7 +427,8 @@ class _IncidentsState extends State<Incidents> {
                                                                     horizontal:
                                                                         8.0),
                                                             child: Text(
-                                                              "${incidentData!.data![index].incident!.name!} Incidents"
+                                                              // "${incidentData!.data![index].incident!.name!} Incidents"
+                                                              "${incidentData!.data![index].incidentType!.name!} Incidents"
                                                                   .toUpperCase(),
                                                               style:
                                                                   const TextStyle(
@@ -512,7 +513,7 @@ class _IncidentsState extends State<Incidents> {
                                                                                 8),
                                                                         child:
                                                                             Text(
-                                                                          "Down till",
+                                                                          "Downtime end",
                                                                           maxLines:
                                                                               1,
                                                                           overflow:
@@ -535,8 +536,9 @@ class _IncidentsState extends State<Incidents> {
                                                                     ? GestureDetector(
                                                                         onTap:
                                                                             () {
-                                                                          controller.text =
-                                                                              DateTime.now().toString();
+                                                                          // controller.text =
+                                                                          //     DateTime.now().toString();
+                                                                          var test;
                                                                           showCupertinoModalPopup(
                                                                               context: context,
                                                                               builder: (BuildContext builder) {
@@ -546,13 +548,31 @@ class _IncidentsState extends State<Incidents> {
                                                                                   width: MediaQuery.of(context).size.width,
                                                                                   child: Column(
                                                                                     children: [
+                                                                                      Padding(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: Container(
+                                                                                          height: 30,
+                                                                                          child: PElevatedButton(
+                                                                                            onPressed: () {
+                                                                                              if (test != null) {
+                                                                                                controller.text = test;
+                                                                                              } else {
+                                                                                                controller.text = DateTime.now().subtract(Duration(seconds: DateTime.now().second)).toString();
+                                                                                              }
+                                                                                              Navigator.pop(context);
+                                                                                              // okHandler.call();
+                                                                                            },
+                                                                                            text: "Done",
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
                                                                                       Expanded(
                                                                                         flex: 4,
                                                                                         child: CupertinoDatePicker(
                                                                                           mode: CupertinoDatePickerMode.dateAndTime,
                                                                                           initialDateTime: DateTime.now(),
                                                                                           onDateTimeChanged: (value) async {
-                                                                                            controller.text = value.toString();
+                                                                                            test = value.toString();
                                                                                           },
                                                                                           // initialDateTime:
                                                                                           //     DateTime
@@ -602,7 +622,7 @@ class _IncidentsState extends State<Incidents> {
                                                                       vertical:
                                                                           8),
                                                                   child: Text(
-                                                                    "Date and Time",
+                                                                    "Time recorded",
                                                                     maxLines: 1,
                                                                     overflow:
                                                                         TextOverflow
@@ -650,6 +670,63 @@ class _IncidentsState extends State<Incidents> {
                                                                               )
                                                                             ],
                                                                           ),
+                                                                        ))),
+                                                                Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                      horizontal:
+                                                                          8.0,
+                                                                      vertical:
+                                                                          8),
+                                                                  child: Text(
+                                                                    "Incident Type",
+                                                                    maxLines: 1,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          16,
+                                                                      color: Colors
+                                                                              .grey[
+                                                                          500],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .symmetric(
+                                                                        horizontal:
+                                                                            8.0,
+                                                                        vertical:
+                                                                            8),
+                                                                    child: Container(
+                                                                        width: double.infinity,
+                                                                        decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: const BorderRadius.all(Radius.circular(8))),
+                                                                        child: Padding(
+                                                                          padding: const EdgeInsets.symmetric(
+                                                                              horizontal: 16,
+                                                                              vertical: 16),
+                                                                          child:
+                                                                            //   Row(
+                                                                            // mainAxisAlignment:
+                                                                            //     MainAxisAlignment.spaceBetween,
+                                                                            // children: [
+                                                                              Text(
+                                                                                incidentData!.data![index].incidentType!.name!,
+                                                                                maxLines: 1,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                style: const TextStyle(
+                                                                                  fontSize: 16,
+                                                                                ),
+                                                                              ),
+                                                                              // Icon(
+                                                                              //   Icons.access_time_outlined,
+                                                                              //   color: Colors.grey,
+                                                                              // )
+                                                                            // ],
+                                                                          // ),
                                                                         ))),
                                                                 Padding(
                                                                   padding: const EdgeInsets
@@ -802,6 +879,30 @@ class _IncidentsState extends State<Incidents> {
                                                                             ),
                                                                           ),
                                                                         ))),
+                                                                incidentData!.data![index].images!.isNotEmpty? Padding(
+                                                                  padding: const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                      8.0,
+                                                                      vertical:
+                                                                      8),
+                                                                  child: Text(
+                                                                    "Images",
+                                                                    maxLines: 1,
+                                                                    overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                    style:
+                                                                    TextStyle(
+                                                                      fontSize:
+                                                                      16,
+                                                                      color: Colors
+                                                                          .grey[
+                                                                      500],
+                                                                    ),
+                                                                  ),
+                                                                ):Container(),
+
                                                                 Container(
                                                                   height: 200,
                                                                   child:

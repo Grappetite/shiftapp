@@ -7,8 +7,8 @@ class ShiftsResponse {
   ShiftsResponse({this.message, this.data});
 
   ShiftsResponse.fromJson(Map<String, dynamic> json) {
-    print(json);
-    print(json['data'].first["shifts"]);
+    //print(json);
+    //print(json['data'].first["shifts"]);
 
     message = json['message'];
     if (json['data'] != null) {

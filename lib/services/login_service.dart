@@ -43,7 +43,7 @@ class Errors {
     switch (response.statusCode) {
       case 200:
         var responseJson = json.decode(response.data.toString());
-        print(responseJson);
+        //print(responseJson);
         return responseJson;
       case 400:
         EasyLoading.showError(
@@ -106,10 +106,9 @@ class LoginService {
 
       var responseObject = LoginResponse.fromJson(response.data);
 
-      print(response.data['data']);
+      //print(response.data['data']);
 
       final prefs = await SharedPreferences.getInstance();
-      responseObject.data!.user!.lastName;
       if (prefs.getString("allNotification") == null) {
         flutterLocalNotificationsPlugin.cancelAll();
         prefs.setString("allNotification", "done");
@@ -139,7 +138,7 @@ class LoginService {
                 },
               ));
 
-      print(response.data);
+      //print(response.data);
 
       var responseObject = ShiftsResponse.fromJson(response.data);
 
@@ -154,7 +153,7 @@ class LoginService {
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       return null;
     }
   }
@@ -175,7 +174,7 @@ class LoginService {
             },
           ));
 
-      print(response.data);
+      //print(response.data);
       var process = <Process>[];
 
       response.data["data"]["process"].forEach((v) {

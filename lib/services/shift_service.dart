@@ -28,7 +28,7 @@ class ShiftService {
         ),
       );
 
-      print(response.data);
+      //print(response.data);
       return true;
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
@@ -49,13 +49,13 @@ class ShiftService {
         ),
       );
 
-      print(response.data);
+      //print(response.data);
       return List<ShiftStartDetails>.from(
           response.data["data"].map((x) => ShiftStartDetails.fromJson(x)));
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
-      print(e);
+      //print(e);
     }
   }
 
@@ -85,7 +85,7 @@ class ShiftService {
         ),
       );
 
-      print(response.data);
+      //print(response.data);
 
       if (response.data['code'] == 200) {
         return response.data["data"];
@@ -116,7 +116,7 @@ class ShiftService {
         ),
       );
 
-      print(response.data);
+      //print(response.data);
 
       if (response.data['code'] == 200) {
         return true;
@@ -150,7 +150,7 @@ class ShiftService {
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
-      print(e);
+      //print(e);
     }
   }
 
@@ -175,7 +175,7 @@ class ShiftService {
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
-      print(e);
+      //print(e);
     }
   }
 }

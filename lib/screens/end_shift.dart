@@ -547,6 +547,7 @@ class ExplainerWidget extends StatelessWidget {
   final Color? postIconColor;
 
   bool comingSoon;
+  bool horizontal;
 
   ExplainerWidget({
     Key? key,
@@ -560,6 +561,7 @@ class ExplainerWidget extends StatelessWidget {
     this.backgroundColor = Colors.white,
     this.postIcon,
     this.postIconColor,
+    this.horizontal = true,
     this.onTap,
     this.comingSoon = false,
   }) : super(key: key);
@@ -567,8 +569,8 @@ class ExplainerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 8,
+      padding: EdgeInsets.symmetric(
+        horizontal: horizontal ? 8 : 0,
       ),
       child: GestureDetector(
         onTap: onTap,

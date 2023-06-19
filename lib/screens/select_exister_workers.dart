@@ -104,9 +104,15 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
     await EasyLoading.dismiss();
 
     for (var currentItem in widget.workers) {
+      // log(currentItem.role.toString());
+      // log(currentItem.key.toString());
+      // log(currentItem.firstName.toString());
+      // if (currentItem.role.toString() == "1213") {
+      //   log("here");
+      // }
       if (mounted)
         setState(() {
-          workers.removeWhere((e) => e.id == currentItem.id);
+          workers.removeWhere((e) => e.key == currentItem.key);
         });
     }
     if (mounted) setState(() {});
@@ -365,17 +371,17 @@ class _SelectExistingWorkersState extends State<SelectExistingWorkers> {
                             DateFormat("yyyy-MM-dd HH:mm:ss").format(
                           DateTime.now(),
                         );
-                        if (widget.exShiftId != 0) {
-                          await WorkersService.addWorkers(widget.exShiftId, [
-                            selected.data!.id.toString()
-                          ], [
-                            dateString
-                          ], [
-                            this.widget.exShiftId.toString()
-                          ], [
-                            selected.data!.efficiencyCalculation.toString()
-                          ]);
-                        }
+                        // if (widget.exShiftId != 0) {
+                        //   await WorkersService.addWorkers(widget.exShiftId, [
+                        //     selected.data!.id.toString()
+                        //   ], [
+                        //     dateString
+                        //   ], [
+                        //     this.widget.exShiftId.toString()
+                        //   ], [
+                        //     selected.data!.efficiencyCalculation.toString()
+                        //   ]);
+                        // }
                       }
                     },
                     child: Row(

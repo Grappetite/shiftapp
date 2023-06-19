@@ -243,7 +243,7 @@ class UIUtitilies {
     );
 
     if (check != null) {
-      print(check);
+      //print(check);
 
       return check;
     }

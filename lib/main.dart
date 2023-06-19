@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -22,7 +21,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await setupFlutterNotifications();
   showFlutterNotification(message);
 
-  print('Handling a background message ${message.messageId}');
+  //print('Handling a background message ${message.messageId}');
 }
 
 late AndroidNotificationChannel channel;
@@ -176,7 +175,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> _testAsyncErrorOnInit() async {
     Future<void>.delayed(const Duration(seconds: 2), () {
       final List<int> list = <int>[];
-      print(list[100]);
+      //print(list[100]);
     });
   }
 
@@ -220,16 +219,16 @@ class _MyAppState extends State<MyApp> {
         return child;
       }),
       home: FutureBuilder(
-        future: _initializeFlutterFireFuture,
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.done:
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text('Error: ${snapshot.error}'),
-                );
-              }
-              return  SplashScreen();
+          future: _initializeFlutterFireFuture,
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.done:
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                }
+                return SplashScreen();
               // return Center(
               //   child: Column(
               //     children: <Widget>[
@@ -309,7 +308,7 @@ class _MyAppState extends State<MyApp> {
               //           runZonedGuarded(() {
               //             Future<void>.delayed(const Duration(seconds: 2), () {
               //               final List<int> list = <int>[];
-              //               print(list[100]);
+              //               //print(list[100]);
               //             });
               //           }, FirebaseCrashlytics.instance.recordError);
               //         },
@@ -355,8 +354,10 @@ class _MyAppState extends State<MyApp> {
               //     ],
               //   ),
               // );
-            default: return SplashScreen() ; }
-        }),
+              default:
+                return SplashScreen();
+            }
+          }),
     );
   }
 }

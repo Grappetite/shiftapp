@@ -27,7 +27,7 @@ class IncidentService {
             },
           ));
 
-      print(response.data);
+      //print(response.data);
 
       var responseObject = IncidentsModel.fromJson(response.data);
 
@@ -35,7 +35,7 @@ class IncidentService {
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       return Future.value(null);
     }
   }
@@ -56,7 +56,7 @@ class IncidentService {
             },
           ));
 
-      print(response.data);
+      //print(response.data);
 
       var responseObject = List<IncidentType>.from(
           response.data["data"]!.map((x) => IncidentType.fromJson(x)));
@@ -65,7 +65,7 @@ class IncidentService {
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       return Future.value(null);
     }
   }
@@ -86,7 +86,7 @@ class IncidentService {
             },
           ));
 
-      print(response.data);
+      //print(response.data);
 
       var responseObject = List<IncidentType>.from(
           response.data["data"]!.map((x) => IncidentType.fromJson(x)));
@@ -95,7 +95,7 @@ class IncidentService {
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       return Future.value(null);
     }
   }
@@ -116,7 +116,7 @@ class IncidentService {
             },
           ));
 
-      print(response.data);
+      //print(response.data);
 
       var responseObject = List<ShiftWorker>.from(
           response.data["data"]!.map((x) => ShiftWorker.fromJson(x)));
@@ -125,7 +125,7 @@ class IncidentService {
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       return Future.value(null);
     }
   }
@@ -173,12 +173,12 @@ class IncidentService {
             contentType: 'multipart/form-data',
           ));
       if (response.statusCode == 200) {
-        print(true);
+        //print(true);
       }
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       return Future.value(null);
     }
   }
@@ -205,12 +205,12 @@ class IncidentService {
             contentType: 'multipart/form-data',
           ));
       if (response.statusCode == 200) {
-        print(true);
+        //print(true);
       }
     } on DioError catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
-      print(e.toString());
+      //print(e.toString());
       return Future.value(null);
     }
   }

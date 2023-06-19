@@ -49,17 +49,17 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDooSUGSf63Ghq02_iIhtnmwMDs4HlWS6c',
-    appId: '1:406099696497:ios:acd9c8e17b5e620e3574d0',
-    messagingSenderId: '406099696497',
-    projectId: 'flutterfire-e2e-tests',
-    databaseURL:
-        'https://flutterfire-e2e-tests-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'flutterfire-e2e-tests.appspot.com',
-    androidClientId:
-        '406099696497-tvtvuiqogct1gs1s6lh114jeps7hpjm5.apps.googleusercontent.com',
-    iosClientId:
-        '406099696497-taeapvle10rf355ljcvq5dt134mkghmp.apps.googleusercontent.com',
-    iosBundleId: 'io.flutter.plugins.firebase.tests',
+    apiKey: 'AIzaSyC15_QGnWcaAGQDtmC4vEorD_1l_XuhCgw',
+    appId: '1:336254182347:ios:53da991ce0a4c16fd70c4e',
+    messagingSenderId: '336254182347',
+    projectId: 'shift-e7c9a',
+    // databaseURL:
+    //     'https://flutterfire-e2e-tests-default-rtdb.europe-west1.firebasedatabase.app',
+    // storageBucket: 'flutterfire-e2e-tests.appspot.com',
+    // androidClientId:
+    //     '406099696497-tvtvuiqogct1gs1s6lh114jeps7hpjm5.apps.googleusercontent.com',
+    // iosClientId:
+    //     '406099696497-taeapvle10rf355ljcvq5dt134mkghmp.apps.googleusercontent.com',
+    iosBundleId: 'com.grappetite.shiftapp',
   );
 }

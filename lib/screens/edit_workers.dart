@@ -62,19 +62,21 @@ class _EditWorkersState extends State<EditWorkers> {
         widget.shiftId.toString(), widget.processId.toString());
 
     if (result != null) {
-      if (mounted)setState(() {
-        workerType = result.data!;
-      });
-      for (var currentItem in workerType) {
-        if (mounted)setState(() {
-          listNames.add(currentItem.name!);
-          listLists.add([]);
+      if (mounted)
+        setState(() {
+          workerType = result.data!;
         });
+      for (var currentItem in workerType) {
+        if (mounted)
+          setState(() {
+            listNames.add(currentItem.name!);
+            listLists.add([]);
+          });
       }
 
       await EasyLoading.dismiss();
     }
-    if (mounted)setState(() {});
+    if (mounted) setState(() {});
   }
 
   void loadWorkers() async {
@@ -88,8 +90,7 @@ class _EditWorkersState extends State<EditWorkers> {
         widget.execShiftId, widget.processId);
 
     ///process started by other users list
-    processList = await WorkersService.startedProcessList(
-        widget.execShiftId);
+    processList = await WorkersService.startedProcessList(widget.execShiftId);
 
     if (responseShift != null) {
       if (responseShift.data!.shiftWorker!.length == 0) {
@@ -141,11 +142,13 @@ class _EditWorkersState extends State<EditWorkers> {
       shiftWorkers.add(currentItem);
     }
     for (var currentItem in listNames) {
-      var response =
-          shiftWorkers.where((e) => e.workerType == currentItem).toList();
-      if (mounted)setState(() {
-        listLists.add(response);
-      });
+      var response = shiftWorkers
+          .where((e) => e.workerType == currentItem && e.isSelected)
+          .toList();
+      if (mounted)
+        setState(() {
+          listLists.add(response);
+        });
     }
     await EasyLoading.dismiss();
   }
