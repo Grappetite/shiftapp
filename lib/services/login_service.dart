@@ -135,7 +135,6 @@ class LoginService {
           await dio.get(baseUrl + 'shifts/' + processId.toString(),
               options: Options(
                 headers: {
-                  
                   authorization: 'Bearer ' + prefs.getString(tokenKey)!,
                 },
               ));
@@ -172,7 +171,6 @@ class LoginService {
       Response response = await dio.get(baseUrl + 'processList',
           options: Options(
             headers: {
-              
               authorization: 'Bearer ' + prefs.getString(tokenKey)!,
             },
           ));
@@ -207,7 +205,6 @@ class LoginService {
       Response response = await dio.post(baseUrl + 'logout',
           options: Options(
             headers: {
-              
               authorization: 'Bearer ' + prefs.getString(tokenKey)!,
             },
           ));
@@ -230,7 +227,6 @@ class LoginService {
       Response response = await dio.patch(baseUrl + 'updateToken',
           options: Options(
             headers: {
-              
               authorization: 'Bearer ' + prefs.getString(tokenKey)!,
             },
           ),
