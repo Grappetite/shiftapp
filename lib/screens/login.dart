@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ? TextEditingController(text: "mahboob+supervisor@grappetite.com")
       : TextEditingController();
   TextEditingController passwordController = Environment().config.preset
-      ? TextEditingController(text: "Mahboob321")
+      ? TextEditingController(text: "mahboob123")
       : TextEditingController();
   String selectedString = "";
   bool showInitText = true;
@@ -172,9 +172,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         return;
                       }
 
-                      if (mounted)setState(() {
-                        showLogin = false;
-                      });
+                      if (mounted)
+                        setState(() {
+                          showLogin = false;
+                        });
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => StartedShifts()));
                       return;
