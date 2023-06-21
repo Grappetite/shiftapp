@@ -108,6 +108,7 @@ class _DropDownState extends State<DropDown> {
                           ),
                           widget.search
                               ? TextFormField(
+                                  textInputAction: TextInputAction.go,
                                   controller: widget.controller,
                                   maxLines: 1,
                                   decoration: InputDecoration.collapsed(

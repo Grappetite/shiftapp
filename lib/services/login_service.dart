@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -98,7 +99,7 @@ class LoginService {
           connectTimeout: Duration(minutes: 2), // 60 seconds
           receiveTimeout: Duration(minutes: 2) // 60 seconds
           ));
-      var fcmToken = await FirebaseMessaging.instance.getToken();
+      var fcmToken = !kIsWeb ? await FirebaseMessaging.instance.getToken() : "";
       Response response = await dio.post(
         baseUrl + 'login',
         data: {'email': username, 'password': password, 'fcmToken': fcmToken},
@@ -134,6 +135,7 @@ class LoginService {
           await dio.get(baseUrl + 'shifts/' + processId.toString(),
               options: Options(
                 headers: {
+                  
                   authorization: 'Bearer ' + prefs.getString(tokenKey)!,
                 },
               ));
@@ -170,6 +172,7 @@ class LoginService {
       Response response = await dio.get(baseUrl + 'processList',
           options: Options(
             headers: {
+              
               authorization: 'Bearer ' + prefs.getString(tokenKey)!,
             },
           ));
@@ -204,6 +207,7 @@ class LoginService {
       Response response = await dio.post(baseUrl + 'logout',
           options: Options(
             headers: {
+              
               authorization: 'Bearer ' + prefs.getString(tokenKey)!,
             },
           ));
@@ -222,10 +226,11 @@ class LoginService {
           receiveTimeout: Duration(minutes: 2) // 60 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
-      var fcmToken = await FirebaseMessaging.instance.getToken();
+      var fcmToken = !kIsWeb ? await FirebaseMessaging.instance.getToken() : "";
       Response response = await dio.patch(baseUrl + 'updateToken',
           options: Options(
             headers: {
+              
               authorization: 'Bearer ' + prefs.getString(tokenKey)!,
             },
           ),

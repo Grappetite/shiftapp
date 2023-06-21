@@ -95,6 +95,7 @@ class InputView extends StatelessWidget {
                 ),
                 Expanded(
                   child: TextFormField(
+                      textInputAction: TextInputAction.go,
                       enabled: !this.isDisabled,
                       controller: controller,
                       minLines: 1,
@@ -123,6 +124,7 @@ class InputView extends StatelessWidget {
             ),
           ] else if (customHeight == 0) ...[
             TextFormField(
+                textInputAction: TextInputAction.go,
                 enabled: !isDisabled,
                 controller: controller,
                 obscureText: isSecure,
@@ -158,6 +160,7 @@ class InputView extends StatelessWidget {
             SizedBox(
               height: 50,
               child: TextFormField(
+                  textInputAction: TextInputAction.go,
                   enabled: !isDisabled,
                   controller: controller,
                   obscureText: isSecure,

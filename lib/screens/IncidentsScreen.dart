@@ -469,6 +469,7 @@ class _IncidentsState extends State<Incidents> {
                                                                       .start,
                                                               children: [
                                                                 // TextFormField(
+                                                                //                       textInputAction: TextInputAction.go,
                                                                 //   controller:
                                                                 //       controller,
                                                                 //   decoration:
@@ -709,23 +710,26 @@ class _IncidentsState extends State<Incidents> {
                                                                               horizontal: 16,
                                                                               vertical: 16),
                                                                           child:
-                                                                            //   Row(
-                                                                            // mainAxisAlignment:
-                                                                            //     MainAxisAlignment.spaceBetween,
-                                                                            // children: [
+                                                                              //   Row(
+                                                                              // mainAxisAlignment:
+                                                                              //     MainAxisAlignment.spaceBetween,
+                                                                              // children: [
                                                                               Text(
-                                                                                incidentData!.data![index].incidentType!.name!,
-                                                                                maxLines: 1,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                style: const TextStyle(
-                                                                                  fontSize: 16,
-                                                                                ),
-                                                                              ),
-                                                                              // Icon(
-                                                                              //   Icons.access_time_outlined,
-                                                                              //   color: Colors.grey,
-                                                                              // )
-                                                                            // ],
+                                                                            incidentData!.data![index].incidentType!.name!,
+                                                                            maxLines:
+                                                                                1,
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              fontSize: 16,
+                                                                            ),
+                                                                          ),
+                                                                          // Icon(
+                                                                          //   Icons.access_time_outlined,
+                                                                          //   color: Colors.grey,
+                                                                          // )
+                                                                          // ],
                                                                           // ),
                                                                         ))),
                                                                 Padding(
@@ -879,29 +883,34 @@ class _IncidentsState extends State<Incidents> {
                                                                             ),
                                                                           ),
                                                                         ))),
-                                                                incidentData!.data![index].images!.isNotEmpty? Padding(
-                                                                  padding: const EdgeInsets
-                                                                      .symmetric(
-                                                                      horizontal:
-                                                                      8.0,
-                                                                      vertical:
-                                                                      8),
-                                                                  child: Text(
-                                                                    "Images",
-                                                                    maxLines: 1,
-                                                                    overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                    style:
-                                                                    TextStyle(
-                                                                      fontSize:
-                                                                      16,
-                                                                      color: Colors
-                                                                          .grey[
-                                                                      500],
-                                                                    ),
-                                                                  ),
-                                                                ):Container(),
+                                                                incidentData!
+                                                                        .data![
+                                                                            index]
+                                                                        .images!
+                                                                        .isNotEmpty
+                                                                    ? Padding(
+                                                                        padding: const EdgeInsets.symmetric(
+                                                                            horizontal:
+                                                                                8.0,
+                                                                            vertical:
+                                                                                8),
+                                                                        child:
+                                                                            Text(
+                                                                          "Images",
+                                                                          maxLines:
+                                                                              1,
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis,
+                                                                          style:
+                                                                              TextStyle(
+                                                                            fontSize:
+                                                                                16,
+                                                                            color:
+                                                                                Colors.grey[500],
+                                                                          ),
+                                                                        ),
+                                                                      )
+                                                                    : Container(),
 
                                                                 Container(
                                                                   height: 200,

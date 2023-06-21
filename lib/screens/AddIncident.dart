@@ -70,8 +70,10 @@ class _AddIncidentState extends State<AddIncident> {
   dynamic _pickImageError;
   TextEditingController descriptionController = TextEditingController();
   final ImagePicker _picker = ImagePicker();
-  String dateTimeIncident = DateTime.now().toString();
-
+  String dateTimeIncident = DateTime.now()
+      .subtract(Duration(seconds: DateTime.now().second))
+      .toString();
+  String emails = "";
   void startTimer() {
     const oneSec = Duration(seconds: 1);
 
@@ -392,7 +394,9 @@ class _AddIncidentState extends State<AddIncident> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      dateTimeIncident = DateTime.now().toString();
+                      dateTimeIncident = DateTime.now()
+                          .subtract(Duration(seconds: DateTime.now().second))
+                          .toString();
                       showCupertinoModalPopup(
                           context: context,
                           builder: (BuildContext builder) {
@@ -538,6 +542,14 @@ class _AddIncidentState extends State<AddIncident> {
                                   .map((e) => e.name!.trim())
                                   .toList()
                                   .indexOf(newString);
+                              int i = 0;
+                              emails = "";
+                              incidentType[incidentTypeIndexSelected]
+                                  .emails!
+                                  .forEach((element) {
+                                emails =
+                                    emails + "\n ${++i}) " + element.email!;
+                              });
                             },
                             placeHolderText: 'Incident Type',
                             preSelected: "",
@@ -630,6 +642,7 @@ class _AddIncidentState extends State<AddIncident> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 8.0, vertical: 8),
                     child: TextFormField(
+                      textInputAction: TextInputAction.go,
                       controller: descriptionController,
                       decoration: InputDecoration(
                         hintText: "Description",
@@ -786,7 +799,7 @@ class _AddIncidentState extends State<AddIncident> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 8.0, vertical: 8),
                     child: Text(
-                      'SEND REPORTS TO?',
+                      'SEND REPORTS TO?${emails != "" ? "\nAn email will be sent by default to:${emails}\n" : ""}',
                       style: TextStyle(
                           color: kPrimaryColor,
                           fontSize: 16,

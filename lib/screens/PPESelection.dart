@@ -345,6 +345,7 @@ class _PPESelectionState extends State<PPESelection> {
                                                                                 ? Padding(
                                                                                     padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8),
                                                                                     child: TextFormField(
+                                                                                      textInputAction: TextInputAction.go,
                                                                                       decoration: const InputDecoration(
                                                                                         hintText: 'Enter Comments',
                                                                                         border: OutlineInputBorder(
@@ -438,6 +439,8 @@ class _PPESelectionState extends State<PPESelection> {
                                             padding: const EdgeInsets.symmetric(
                                                 vertical: 8.0),
                                             child: TextFormField(
+                                              textInputAction:
+                                                  TextInputAction.go,
                                               decoration: const InputDecoration(
                                                 hintText: 'Enter Comments',
                                                 border: OutlineInputBorder(

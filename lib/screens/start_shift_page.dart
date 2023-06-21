@@ -17,7 +17,6 @@ import '../model/login_model.dart';
 import '../model/shifts_model.dart';
 import '../services/workers_service.dart';
 import 'end_shift.dart';
-import 'inner_widgets/coming_soon_container.dart';
 
 class StartShiftView extends StatefulWidget {
   final int shiftId;
@@ -71,15 +70,15 @@ class _StartShiftViewState extends State<StartShiftView> {
       },
     );
   }
-int count=0;
+
+  int count = 0;
   @override
   void initState() {
     super.initState();
     widget.ppe!.data!.forEach((element) {
-      if(element.selected!)
-        {
-          count++;
-        }
+      if (element.selected!) {
+        count++;
+      }
     });
   }
 
@@ -150,13 +149,18 @@ int count=0;
                   child: ExplainerWidget(
                     iconName: 'construct',
                     title: 'PPE',
-                    text1: '${count}/${widget.ppe!.data!.length} Planned PPE per Worker Type',
+                    text1:
+                        '${count}/${widget.ppe!.data!.length} Planned PPE per Worker Type',
                     text2: '',
                     showWarning: true,
                     showIcon: true,
-                    backgroundColor: count==widget.ppe!.data!.length?lightGreenColor:lightRedColor,
-                    postIcon: count!=widget.ppe!.data!.length?null:Icons.check,
-                    postIconColor: count!=widget.ppe!.data!.length?null:Colors.green,
+                    backgroundColor: count == widget.ppe!.data!.length
+                        ? lightGreenColor
+                        : lightRedColor,
+                    postIcon:
+                        count != widget.ppe!.data!.length ? null : Icons.check,
+                    postIconColor:
+                        count != widget.ppe!.data!.length ? null : Colors.green,
                   ),
                   // padding: const EdgeInsets.symmetric(horizontal: 8),
                 ),
@@ -167,6 +171,7 @@ int count=0;
                   padding:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
                   child: TextFormField(
+                    textInputAction: TextInputAction.go,
                     decoration: const InputDecoration(
                       hintText: 'Enter Comments',
                       border: OutlineInputBorder(

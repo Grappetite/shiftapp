@@ -475,16 +475,36 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                                     color: Colors.white,
                                                                                     height: MediaQuery.of(context).size.width,
                                                                                     width: MediaQuery.of(context).size.width,
-                                                                                    child: CupertinoDatePicker(
-                                                                                      mode: CupertinoDatePickerMode.date,
-                                                                                      onDateTimeChanged: (value) async {
-                                                                                        issueDate.text = value.toString().split(" ")[0];
-                                                                                        expiryDate.text = value.add(Duration(days: currentItem.expiryDays!)).toString();
-                                                                                        setState(() {});
-                                                                                      },
-                                                                                      initialDateTime: DateTime.now(),
-                                                                                      minimumDate: DateTime.now().subtract(Duration(days: currentItem.expiryDays! - 3)),
-                                                                                      maximumDate: DateTime.now(),
+                                                                                    child: Column(
+                                                                                      children: [
+                                                                                        SizedBox(
+                                                                                          height: 10,
+                                                                                        ),
+                                                                                        Container(
+                                                                                          height: 30,
+                                                                                          child: PElevatedButton(
+                                                                                            onPressed: () {
+                                                                                              Navigator.pop(context);
+                                                                                              // okHandler.call();
+                                                                                            },
+                                                                                            text: "Done",
+                                                                                          ),
+                                                                                        ),
+                                                                                        Expanded(
+                                                                                          flex: 4,
+                                                                                          child: CupertinoDatePicker(
+                                                                                            mode: CupertinoDatePickerMode.date,
+                                                                                            onDateTimeChanged: (value) async {
+                                                                                              issueDate.text = value.toString().split(" ")[0];
+                                                                                              expiryDate.text = value.add(Duration(days: currentItem.expiryDays!)).toString();
+                                                                                              setState(() {});
+                                                                                            },
+                                                                                            initialDateTime: DateTime.now(),
+                                                                                            minimumDate: DateTime.now().subtract(Duration(days: currentItem.expiryDays! - 3)),
+                                                                                            maximumDate: DateTime.now(),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ],
                                                                                     ),
                                                                                   );
                                                                                 });
@@ -496,6 +516,8 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                               const EdgeInsets.all(4.0),
                                                                           child:
                                                                               TextFormField(
+                                                                            textInputAction:
+                                                                                TextInputAction.go,
                                                                             enabled:
                                                                                 false,
                                                                             controller:
@@ -558,6 +580,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                       //         const EdgeInsets.all(4.0),
                                                                       //     child:
                                                                       //         TextFormField(
+                                                                      // //                 textInputAction: TextInputAction.go,
                                                                       //       enabled:
                                                                       //           false,
                                                                       //       controller:
@@ -1038,16 +1061,36 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                                   color: Colors.white,
                                                                                   height: MediaQuery.of(context).size.width,
                                                                                   width: MediaQuery.of(context).size.width,
-                                                                                  child: CupertinoDatePicker(
-                                                                                    mode: CupertinoDatePickerMode.date,
-                                                                                    onDateTimeChanged: (value) async {
-                                                                                      issueDate.text = value.toString().split(" ")[0];
-                                                                                      expiryDate.text = value.add(Duration(days: currentItem.expiryDays!)).toString();
-                                                                                      setState(() {});
-                                                                                    },
-                                                                                    initialDateTime: DateTime.now(),
-                                                                                    minimumDate: DateTime.now().subtract(Duration(days: currentItem.expiryDays! - 3)),
-                                                                                    maximumDate: DateTime.now(),
+                                                                                  child: Column(
+                                                                                    children: [
+                                                                                      SizedBox(
+                                                                                        height: 10,
+                                                                                      ),
+                                                                                      Container(
+                                                                                        height: 30,
+                                                                                        child: PElevatedButton(
+                                                                                          onPressed: () {
+                                                                                            Navigator.pop(context);
+                                                                                            // okHandler.call();
+                                                                                          },
+                                                                                          text: "Done",
+                                                                                        ),
+                                                                                      ),
+                                                                                      Expanded(
+                                                                                        flex: 4,
+                                                                                        child: CupertinoDatePicker(
+                                                                                          mode: CupertinoDatePickerMode.date,
+                                                                                          onDateTimeChanged: (value) async {
+                                                                                            issueDate.text = value.toString().split(" ")[0];
+                                                                                            expiryDate.text = value.add(Duration(days: currentItem.expiryDays!)).toString();
+                                                                                            setState(() {});
+                                                                                          },
+                                                                                          initialDateTime: DateTime.now(),
+                                                                                          minimumDate: DateTime.now().subtract(Duration(days: currentItem.expiryDays! - 3)),
+                                                                                          maximumDate: DateTime.now(),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
                                                                                   ),
                                                                                 );
                                                                               });
@@ -1058,6 +1101,8 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                               const EdgeInsets.all(4.0),
                                                                           child:
                                                                               TextFormField(
+                                                                            textInputAction:
+                                                                                TextInputAction.go,
                                                                             enabled:
                                                                                 false,
                                                                             controller:
@@ -1120,6 +1165,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                       //         const EdgeInsets.all(4.0),
                                                                       //     child:
                                                                       //         TextFormField(
+                                                                      //                 textInputAction: TextInputAction.go,
                                                                       //       enabled:
                                                                       //           false,
                                                                       //       controller:
@@ -1605,16 +1651,36 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                               color: Colors.white,
                                                                               height: MediaQuery.of(context).size.width,
                                                                               width: MediaQuery.of(context).size.width,
-                                                                              child: CupertinoDatePicker(
-                                                                                mode: CupertinoDatePickerMode.date,
-                                                                                onDateTimeChanged: (value) async {
-                                                                                  issueDate.text = value.toString().split(" ")[0];
-                                                                                  expiryDate.text = value.add(Duration(days: currentItem.expiryDays!)).toString();
-                                                                                  setState(() {});
-                                                                                },
-                                                                                initialDateTime: DateTime.now(),
-                                                                                minimumDate: DateTime.now().subtract(Duration(days: currentItem.expiryDays! - 3)),
-                                                                                maximumDate: DateTime.now(),
+                                                                              child: Column(
+                                                                                children: [
+                                                                                  SizedBox(
+                                                                                    height: 10,
+                                                                                  ),
+                                                                                  Container(
+                                                                                    height: 30,
+                                                                                    child: PElevatedButton(
+                                                                                      onPressed: () {
+                                                                                        Navigator.pop(context);
+                                                                                        // okHandler.call();
+                                                                                      },
+                                                                                      text: "Done",
+                                                                                    ),
+                                                                                  ),
+                                                                                  Expanded(
+                                                                                    flex: 4,
+                                                                                    child: CupertinoDatePicker(
+                                                                                      mode: CupertinoDatePickerMode.date,
+                                                                                      onDateTimeChanged: (value) async {
+                                                                                        issueDate.text = value.toString().split(" ")[0];
+                                                                                        expiryDate.text = value.add(Duration(days: currentItem.expiryDays!)).toString();
+                                                                                        setState(() {});
+                                                                                      },
+                                                                                      initialDateTime: DateTime.now(),
+                                                                                      minimumDate: DateTime.now().subtract(Duration(days: currentItem.expiryDays! - 3)),
+                                                                                      maximumDate: DateTime.now(),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
                                                                               ),
                                                                             );
                                                                           });
@@ -1626,6 +1692,8 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                               4.0),
                                                                       child:
                                                                           TextFormField(
+                                                                        textInputAction:
+                                                                            TextInputAction.go,
                                                                         enabled:
                                                                             false,
                                                                         controller:
@@ -1698,6 +1766,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                                                                   //         const EdgeInsets.all(4.0),
                                                                   //     child:
                                                                   //         TextFormField(
+                                                                  //                     textInputAction: TextInputAction.go,
                                                                   //       enabled:
                                                                   //           false,
                                                                   //       controller:

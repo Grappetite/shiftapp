@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:app_popup_menu/app_popup_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -77,6 +78,7 @@ class _SopViewState extends State<SopView> {
     );
     getSop(widget.processSelected.id);
   }
+
   String timeElasped = '00:00';
   String timeRemaining = '00:00';
 
@@ -134,6 +136,7 @@ class _SopViewState extends State<SopView> {
                       children: [
                         Expanded(
                           child: TextFormField(
+                            textInputAction: TextInputAction.go,
                             controller: searchText,
                             enableSuggestions: false,
                             enableIMEPersonalizedLearning: false,
@@ -159,9 +162,10 @@ class _SopViewState extends State<SopView> {
                               ),
                             ),
                             onChanged: (v) {
-                              if (mounted)setState(
-                                () {},
-                              );
+                              if (mounted)
+                                setState(
+                                  () {},
+                                );
                             },
                           ),
                         ),
@@ -698,6 +702,6 @@ class _SopViewState extends State<SopView> {
     sopData = await SOPService.getSops(id!,
         executionShiftId: widget.executionShiftId);
     await EasyLoading.dismiss();
-     if (mounted)setState(() {});
+    if (mounted) setState(() {});
   }
 }

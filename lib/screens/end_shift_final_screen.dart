@@ -309,6 +309,7 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                         ),
                                         Expanded(
                                           child: TextField(
+                                            textInputAction: TextInputAction.go,
                                             controller: textController,
                                             textAlign: TextAlign.center,
                                             focusNode: doneButton,

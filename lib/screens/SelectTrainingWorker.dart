@@ -252,6 +252,8 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                   ),
                                                   Expanded(
                                                     child: TextFormField(
+                                                        textInputAction:
+                                                            TextInputAction.go,
                                                         controller:
                                                             searchController,
                                                         maxLines: 1,
@@ -514,16 +516,36 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                                       color: Colors.white,
                                                                                                       height: MediaQuery.of(context).size.width,
                                                                                                       width: MediaQuery.of(context).size.width,
-                                                                                                      child: CupertinoDatePicker(
-                                                                                                        mode: CupertinoDatePickerMode.date,
-                                                                                                        onDateTimeChanged: (value) async {
-                                                                                                          issueDate.text = value.toString().split(" ")[0];
-                                                                                                          expiryDate.text = value.add(Duration(days: item.expiryDays!)).toString();
-                                                                                                          setState(() {});
-                                                                                                        },
-                                                                                                        initialDateTime: DateTime.now(),
-                                                                                                        minimumDate: DateTime.now().subtract(Duration(days: item.expiryDays! - 3)),
-                                                                                                        maximumDate: DateTime.now(),
+                                                                                                      child: Column(
+                                                                                                        children: [
+                                                                                                          SizedBox(
+                                                                                                            height: 10,
+                                                                                                          ),
+                                                                                                          Container(
+                                                                                                            height: 30,
+                                                                                                            child: PElevatedButton(
+                                                                                                              onPressed: () {
+                                                                                                                Navigator.pop(context);
+                                                                                                                // okHandler.call();
+                                                                                                              },
+                                                                                                              text: "Done",
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 4,
+                                                                                                            child: CupertinoDatePicker(
+                                                                                                              mode: CupertinoDatePickerMode.date,
+                                                                                                              onDateTimeChanged: (value) async {
+                                                                                                                issueDate.text = value.toString().split(" ")[0];
+                                                                                                                expiryDate.text = value.add(Duration(days: item.expiryDays!)).toString();
+                                                                                                                setState(() {});
+                                                                                                              },
+                                                                                                              initialDateTime: DateTime.now(),
+                                                                                                              minimumDate: DateTime.now().subtract(Duration(days: item.expiryDays! - 3)),
+                                                                                                              maximumDate: DateTime.now(),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                        ],
                                                                                                       ),
                                                                                                     );
                                                                                                   });
@@ -531,6 +553,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                             child: Padding(
                                                                                               padding: const EdgeInsets.all(4.0),
                                                                                               child: TextFormField(
+                                                                                                textInputAction: TextInputAction.go,
                                                                                                 enabled: false,
                                                                                                 controller: issueDate,
                                                                                                 decoration: const InputDecoration(
@@ -584,6 +607,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                           //   child: Padding(
                                                                                           //     padding: const EdgeInsets.all(4.0),
                                                                                           //     child: TextFormField(
+                                                                                          // textInputAction: TextInputAction.go,
                                                                                           //       enabled: false,
                                                                                           //       controller: expiryDate,
                                                                                           //       decoration: const InputDecoration(
@@ -987,16 +1011,36 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                             color: Colors.white,
                                                                                             height: MediaQuery.of(context).size.width,
                                                                                             width: MediaQuery.of(context).size.width,
-                                                                                            child: CupertinoDatePicker(
-                                                                                              mode: CupertinoDatePickerMode.date,
-                                                                                              onDateTimeChanged: (value) async {
-                                                                                                issueDate.text = value.toString().split(" ")[0];
-                                                                                                expiryDate.text = value.add(Duration(days: item.expiryDays!)).toString();
-                                                                                                setState(() {});
-                                                                                              },
-                                                                                              initialDateTime: DateTime.now(),
-                                                                                              minimumDate: DateTime.now().subtract(Duration(days: item.expiryDays! - 3)),
-                                                                                              maximumDate: DateTime.now(),
+                                                                                            child: Column(
+                                                                                              children: [
+                                                                                                SizedBox(
+                                                                                                  height: 10,
+                                                                                                ),
+                                                                                                Container(
+                                                                                                  height: 30,
+                                                                                                  child: PElevatedButton(
+                                                                                                    onPressed: () {
+                                                                                                      Navigator.pop(context);
+                                                                                                      // okHandler.call();
+                                                                                                    },
+                                                                                                    text: "Done",
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Expanded(
+                                                                                                  flex: 4,
+                                                                                                  child: CupertinoDatePicker(
+                                                                                                    mode: CupertinoDatePickerMode.date,
+                                                                                                    onDateTimeChanged: (value) async {
+                                                                                                      issueDate.text = value.toString().split(" ")[0];
+                                                                                                      expiryDate.text = value.add(Duration(days: item.expiryDays!)).toString();
+                                                                                                      setState(() {});
+                                                                                                    },
+                                                                                                    initialDateTime: DateTime.now(),
+                                                                                                    minimumDate: DateTime.now().subtract(Duration(days: item.expiryDays! - 3)),
+                                                                                                    maximumDate: DateTime.now(),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
                                                                                             ),
                                                                                           );
                                                                                         });
@@ -1004,6 +1048,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                   child: Padding(
                                                                                     padding: const EdgeInsets.all(4.0),
                                                                                     child: TextFormField(
+                                                                                      textInputAction: TextInputAction.go,
                                                                                       enabled: false,
                                                                                       controller: issueDate,
                                                                                       decoration: const InputDecoration(
@@ -1057,6 +1102,7 @@ class _SelectTrainingWorkerState extends State<SelectTrainingWorker> {
                                                                                 //   child: Padding(
                                                                                 //     padding: const EdgeInsets.all(4.0),
                                                                                 //     child: TextFormField(
+                                                                                //       textInputAction: TextInputAction.go,
                                                                                 //       enabled: false,
                                                                                 //       controller: expiryDate,
                                                                                 //       decoration: const InputDecoration(

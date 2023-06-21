@@ -91,25 +91,29 @@ const _kTestingCrashlytics = true;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  FlutterError.onError = (errorDetails) {
-    // If you wish to record a "non-fatal" exception, please use `FirebaseCrashlytics.instance.recordFlutterError` instead
-    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-  };
-  PlatformDispatcher.instance.onError = (error, stack) {
-    // If you wish to record a "non-fatal" exception, please remove the "fatal" parameter
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    return true;
-  };
+  if (!kIsWeb)
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  if (!kIsWeb)
+    FlutterError.onError = (errorDetails) {
+      // If you wish to record a "non-fatal" exception, please use `FirebaseCrashlytics.instance.recordFlutterError` instead
+      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+    };
+  if (!kIsWeb)
+    PlatformDispatcher.instance.onError = (error, stack) {
+      // If you wish to record a "non-fatal" exception, please remove the "fatal" parameter
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
   const String? environment = String.fromEnvironment(
     'ENVIRONMENT',
     defaultValue: Environment.dev,
   );
   Environment().initConfig(environment);
   configLoading();
-  FirebaseApp app = await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  if (!kIsWeb)
+    FirebaseApp app = await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
   initializeTimeZones();
   bool? result = await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
@@ -136,13 +140,15 @@ Future<void> main() async {
             String? payload,
           ) async {});
 
-  InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-    iOS: initializationSettingsIOS,
-  );
-  await flutterLocalNotificationsPlugin.initialize(
-    initializationSettings,
-  );
+  if (!kIsWeb) {
+    InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+    );
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+    );
+  }
   runApp(MyApp());
 }
 
@@ -200,7 +206,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _initializeFlutterFireFuture = _initializeFlutterFire();
+    if (!kIsWeb) _initializeFlutterFireFuture = _initializeFlutterFire();
   }
 
   @override
@@ -219,7 +225,7 @@ class _MyAppState extends State<MyApp> {
         return child;
       }),
       home: FutureBuilder(
-          future: _initializeFlutterFireFuture,
+          future: !kIsWeb ? _initializeFlutterFireFuture : Future.value(true),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.done:

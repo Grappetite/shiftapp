@@ -161,18 +161,22 @@ class IncidentType {
     this.name,
     this.icon,
     this.icon_url,
+    this.emails,
   });
 
   int? id;
   String? name;
   String? icon;
   String? icon_url;
-
+  List<Email>? emails;
   factory IncidentType.fromJson(Map<String, dynamic> json) => IncidentType(
         id: json["id"],
         name: json["name"],
         icon: json["icon"],
         icon_url: json["icon_url"],
+        emails: json["emails"] == null
+            ? []
+            : List<Email>.from(json["emails"]!.map((x) => Email.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -180,5 +184,25 @@ class IncidentType {
         "name": name,
         "icon": icon,
         "icon_url": icon_url,
+      };
+}
+
+class Email {
+  int? incidentTypeId;
+  String? email;
+
+  Email({
+    this.incidentTypeId,
+    this.email,
+  });
+
+  factory Email.fromJson(Map<String, dynamic> json) => Email(
+        incidentTypeId: json["incident_type_id"],
+        email: json["email"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "incident_type_id": incidentTypeId,
+        "email": email,
       };
 }
