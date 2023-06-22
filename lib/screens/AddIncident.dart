@@ -3,15 +3,18 @@ import 'dart:io';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:app_popup_menu/app_popup_menu.dart';
+import 'package:dio/dio.dart' as d;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/main.dart';
 import 'package:shiftapp/model/incident_model.dart';
+import 'package:shiftapp/model/incident_model.dart' as incidents;
 import 'package:shiftapp/model/login_model.dart';
 import 'package:shiftapp/model/shifts_model.dart';
 import 'package:shiftapp/model/workers_model.dart';
@@ -29,13 +32,16 @@ class AddIncident extends StatefulWidget {
   final ShiftItem selectedShift;
   final int execShiftId;
   final Process process;
-
-  const AddIncident({
-    Key? key,
-    required this.selectedShift,
-    required this.execShiftId,
-    required this.process,
-  }) : super(key: key);
+  final bool edit;
+  final incidents.Datum? incidentData;
+  const AddIncident(
+      {Key? key,
+      required this.selectedShift,
+      required this.execShiftId,
+      required this.process,
+      this.incidentData,
+      this.edit = false})
+      : super(key: key);
 
   @override
   State<AddIncident> createState() => _AddIncidentState();
@@ -552,7 +558,11 @@ class _AddIncidentState extends State<AddIncident> {
                               });
                             },
                             placeHolderText: 'Incident Type',
-                            preSelected: "",
+                            preSelected: widget.edit &&
+                                    incidentType != null &&
+                                    incidentTypeIndexSelected != -1
+                                ? incidentType[incidentTypeIndexSelected].name
+                                : "",
                           ),
                         ),
                   severity.isEmpty
@@ -591,7 +601,11 @@ class _AddIncidentState extends State<AddIncident> {
                                   .indexOf(newString);
                             },
                             placeHolderText: 'Severity',
-                            preSelected: "",
+                            preSelected: widget.edit &&
+                                    severity != null &&
+                                    severityIndexSelected != -1
+                                ? severity[severityIndexSelected].name
+                                : "",
                           ),
                         ),
                   Padding(
@@ -623,6 +637,9 @@ class _AddIncidentState extends State<AddIncident> {
                         selectedIsDowntime = newString;
                       },
                       placeHolderText: 'Cause Downtime',
+                      preSelected: widget.edit && selectedIsDowntime != ""
+                          ? selectedIsDowntime
+                          : "",
                     ),
                   ),
                   Padding(
@@ -722,6 +739,88 @@ class _AddIncidentState extends State<AddIncident> {
                       style: TextStyle(color: Color(0xFF0E577F), fontSize: 16),
                     ),
                   ),
+                  widget.edit
+                      ? widget.incidentData!.images == null
+                          ? Container()
+                          : widget.incidentData!.images!.isNotEmpty
+                              ? Container(
+                                  height: 200,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0, vertical: 8),
+                                    child: ListView.separated(
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (context, ind) {
+                                          return Container(
+                                            height: 180,
+                                            width: 180,
+                                            child: Stack(
+                                              children: [
+                                                Container(
+                                                  width: 180,
+                                                  child: Image.network(
+                                                      widget.incidentData!
+                                                          .images![ind].image!,
+                                                      fit: BoxFit.fill,
+                                                      errorBuilder:
+                                                          (BuildContext context,
+                                                              Object error,
+                                                              StackTrace?
+                                                                  stackTrace) {
+                                                    return Container(
+                                                        height: 180,
+                                                        width: 180,
+                                                        child: Stack(
+                                                          children: [
+                                                            Container(
+                                                              width: 180,
+                                                              child:
+                                                                  Image.network(
+                                                                "https://dev-shift.grappetite.com/images/logo/logo-m.png",
+                                                                fit:
+                                                                    BoxFit.fill,
+                                                              ),
+                                                            ),
+                                                            Center(
+                                                                child: Text(
+                                                                    "Error"))
+                                                          ],
+                                                        ));
+                                                  }),
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    widget.incidentData!.images!
+                                                        .removeAt(ind);
+                                                    setState(() {});
+                                                  },
+                                                  child: Container(
+                                                    color: kPrimaryColor,
+                                                    child: Icon(
+                                                      Icons.delete,
+                                                      color: Colors.white,
+                                                      size: 15,
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                        separatorBuilder: (context, ind) {
+                                          return Container(
+                                            width: 10,
+                                          );
+                                        },
+                                        itemCount: widget
+                                            .incidentData!.images!.length),
+                                  ),
+                                )
+                              : Container()
+                      : Container(),
+
+                  ///from files
                   imageFileList == null
                       ? Container()
                       : imageFileList!.isNotEmpty
@@ -795,58 +894,67 @@ class _AddIncidentState extends State<AddIncident> {
                               ),
                             )
                           : Container(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 8),
-                    child: Text(
-                      'SEND REPORTS TO?${emails != "" ? "\nAn email will be sent by default to:${emails}\n" : ""}',
-                      style: TextStyle(
-                          color: kPrimaryColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 8),
-                    child: ListView.separated(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return UserItem(
-                            keyNo: sectionManagers[index].role!,
-                            personName: sectionManagers[index].firstName! +
-                                ' ' +
-                                sectionManagers[index].lastName!,
-                            worker: sectionManagers[index],
-                            initialSelected: sectionManagers[index].isSelected,
-                            picUrl: sectionManagers[index].picture,
-                            changedStatus: (bool newStatus) async {
-                              if (mounted)
-                                setState(() {
-                                  sectionManagers[index].isSelected = newStatus;
-                                });
-                              if (newStatus) {
-                                selectedWorker.add(sectionManagers[index].id);
-                              } else {
-                                selectedWorker.removeWhere((element) {
-                                  if (element == sectionManagers[index].id) {
-                                    return true;
-                                  } else {
-                                    return false;
-                                  }
-                                });
-                              }
-                            },
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return Container(
-                            height: 10,
-                          );
-                        },
-                        itemCount: sectionManagers.length),
-                  ),
+                  widget.edit
+                      ? Container()
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 8),
+                          child: Text(
+                            'SEND REPORTS TO?${emails != "" ? "\nAn email will be sent by default to:${emails}\n" : ""}',
+                            style: TextStyle(
+                                color: kPrimaryColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                  widget.edit
+                      ? Container()
+                      : Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 8),
+                          child: ListView.separated(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return UserItem(
+                                  keyNo: sectionManagers[index].role!,
+                                  personName:
+                                      sectionManagers[index].firstName! +
+                                          ' ' +
+                                          sectionManagers[index].lastName!,
+                                  worker: sectionManagers[index],
+                                  initialSelected:
+                                      sectionManagers[index].isSelected,
+                                  picUrl: sectionManagers[index].picture,
+                                  changedStatus: (bool newStatus) async {
+                                    if (mounted)
+                                      setState(() {
+                                        sectionManagers[index].isSelected =
+                                            newStatus;
+                                      });
+                                    if (newStatus) {
+                                      selectedWorker
+                                          .add(sectionManagers[index].id);
+                                    } else {
+                                      selectedWorker.removeWhere((element) {
+                                        if (element ==
+                                            sectionManagers[index].id) {
+                                          return true;
+                                        } else {
+                                          return false;
+                                        }
+                                      });
+                                    }
+                                  },
+                                );
+                              },
+                              separatorBuilder: (context, index) {
+                                return Container(
+                                  height: 10,
+                                );
+                              },
+                              itemCount: sectionManagers.length),
+                        ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: PElevatedButton(
@@ -860,20 +968,51 @@ class _AddIncidentState extends State<AddIncident> {
                               status: 'loading...',
                               maskType: EasyLoadingMaskType.black,
                             );
-                            await IncidentService.postIncident(
-                              dateTimeIncident: dateTimeIncident,
-                              process_id: widget.process.id!,
-                              execute_shift_id: widget.execShiftId,
-                              incidentType:
-                                  incidentType[incidentTypeIndexSelected],
-                              severity: severity[severityIndexSelected],
-                              isDowntime: isDowntime,
-                              description: descriptionController.text,
-                              selectedWorker: selectedWorker,
-                              imageFileList: imageFileList ?? [],
-                            );
-                            await EasyLoading.dismiss()
-                                .then((value) => Navigator.pop(context));
+                            if (!widget.edit) {
+                              await IncidentService.postIncident(
+                                dateTimeIncident: dateTimeIncident,
+                                process_id: widget.process.id!,
+                                execute_shift_id: widget.execShiftId,
+                                incidentType:
+                                    incidentType[incidentTypeIndexSelected],
+                                severity: severity[severityIndexSelected],
+                                isDowntime: isDowntime,
+                                description: descriptionController.text,
+                                selectedWorker: selectedWorker,
+                                imageFileList: imageFileList ?? [],
+                              );
+                            } else {
+                              Map<String, dynamic> data = {
+                                "id": widget.incidentData!.id,
+                                "process_id": widget.process.id!,
+                                "incident_type_id":
+                                    incidentType[incidentTypeIndexSelected]!.id,
+                                "incident_id":
+                                    severity[severityIndexSelected]!.id,
+                                "is_downtime": isDowntime! ? "Yes" : "No",
+                                "details": descriptionController.text,
+                                "incident_at": dateTimeIncident,
+                                // "image[]": test
+                              };
+                              int i = 0;
+                              for (var element in imageFileList ?? []) {
+                                data.addIf(
+                                    true,
+                                    "image[${i++}]",
+                                    await d.MultipartFile.fromFile(element.path,
+                                        filename:
+                                            "${DateTime.now().microsecondsSinceEpoch}.png"));
+                              }
+                              i = 0;
+                              widget.incidentData!.images!.forEach((element) {
+                                data.addIf(
+                                    true, "image_id[${i++}]", element.id!);
+                              });
+                              // log(jsonEncode(data).toString());
+                              await IncidentService.updateIncident(data: data);
+                            }
+                            await EasyLoading.dismiss().then(
+                                (value) => Navigator.pop(context, widget.edit));
                           } else {
                             if (incidentTypeIndexSelected == -1) {
                               EasyLoading.showError(
@@ -926,7 +1065,28 @@ class _AddIncidentState extends State<AddIncident> {
       incidentType = (await IncidentService.getIncidentType())!;
       severity = (await IncidentService.getSeverity())!;
       sectionManagers = (await IncidentService.getSectionManager())!;
-
+      if (widget.edit) {
+        selectedIncidentTypeString =
+            widget.incidentData!.incidentType!.name!.trim();
+        incidentTypeIndexSelected = incidentType
+            .map((e) => e.name!.trim())
+            .toList()
+            .indexOf(widget.incidentData!.incidentType!.name!);
+        int i = 0;
+        emails = "";
+        incidentType[incidentTypeIndexSelected].emails!.forEach((element) {
+          emails = emails + "\n ${++i}) " + element.email!;
+        });
+        isDowntime = widget.incidentData!.isDowntime == "Yes" ? true : false;
+        selectedIsDowntime = widget.incidentData!.isDowntime!;
+        selectedSeverityTypeString = widget.incidentData!.incident!.name!;
+        severityIndexSelected = severity
+            .map((e) => e.name!.trim())
+            .toList()
+            .indexOf(widget.incidentData!.incident!.name!);
+        descriptionController.text = widget.incidentData!.details!;
+        dateTimeIncident = widget.incidentData!.createdAt!;
+      }
       if (mounted) setState(() {});
       await EasyLoading.dismiss();
     } catch (e) {

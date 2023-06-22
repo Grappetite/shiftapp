@@ -186,6 +186,7 @@ class IncidentService {
   static updateIncident({
     String? dateTimeIncident,
     int? incidentId,
+    Map<String, dynamic>? data,
   }) async {
     try {
       var dio = Dio(BaseOptions(
@@ -194,9 +195,13 @@ class IncidentService {
           receiveTimeout: Duration(minutes: 2) // 60 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
-      Response response = await dio.put(
-          baseUrl + "incidents/$incidentId?downtime=${dateTimeIncident}",
-          data: FormData.fromMap({}),
+      Response response = await dio.post(
+          // baseUrl + "incidents/$incidentId?downtime=${dateTimeIncident}",
+          baseUrl + "incidentUpdate",
+          data: dateTimeIncident != null
+              ? FormData.fromMap(
+                  {"downtime": dateTimeIncident, "id": incidentId})
+              : FormData.fromMap(data!),
           options: Options(
             headers: {
               authorization: 'Bearer ' + prefs.getString(tokenKey)!,

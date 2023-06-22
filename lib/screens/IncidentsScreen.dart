@@ -13,6 +13,7 @@ import 'package:shiftapp/model/incident_model.dart';
 import 'package:shiftapp/model/login_model.dart';
 import 'package:shiftapp/model/shifts_model.dart';
 import 'package:shiftapp/screens/AddIncident.dart';
+import 'package:shiftapp/screens/PreviewImage.dart';
 import 'package:shiftapp/screens/StartedShiftList.dart';
 import 'package:shiftapp/screens/end_shift.dart';
 import 'package:shiftapp/screens/inner_widgets/HandOverShift.dart';
@@ -931,19 +932,31 @@ class _IncidentsState extends State<Incidents> {
                                                                                 180,
                                                                             width:
                                                                                 180,
-                                                                            child: Image.network(incidentData!.data![index].images![ind].image!, errorBuilder: (BuildContext context,
-                                                                                Object error,
-                                                                                StackTrace? stackTrace) {
-                                                                              return Container(
-                                                                                  height: 180,
-                                                                                  width: 180,
-                                                                                  child: Stack(
-                                                                                    children: [
-                                                                                      Image.network("https://dev-shift.grappetite.com/images/logo/logo-m.png"),
-                                                                                      Center(child: Text("Error"))
-                                                                                    ],
-                                                                                  ));
-                                                                            }),
+                                                                            child:
+                                                                                GestureDetector(
+                                                                              onTap: () {
+                                                                                Navigator.push(
+                                                                                    context,
+                                                                                    MaterialPageRoute(
+                                                                                        builder: (context) => PreviewImage(
+                                                                                              image: incidentData!.data![index].images![ind].image!,
+                                                                                            )));
+                                                                              },
+                                                                              child: Image.network(incidentData!.data![index].images![ind].image!, fit: BoxFit.fitWidth, errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                                                                                return Container(
+                                                                                    height: 180,
+                                                                                    width: 180,
+                                                                                    child: Stack(
+                                                                                      children: [
+                                                                                        Image.network(
+                                                                                          "https://dev-shift.grappetite.com/images/logo/logo-m.png",
+                                                                                          fit: BoxFit.fitWidth,
+                                                                                        ),
+                                                                                        Center(child: Text("Error"))
+                                                                                      ],
+                                                                                    ));
+                                                                              }),
+                                                                            ),
                                                                           );
                                                                         },
                                                                         separatorBuilder: (context, ind) {
@@ -1022,6 +1035,96 @@ class _IncidentsState extends State<Incidents> {
                                                               }
                                                             },
                                                             text: "Save"
+                                                                .toUpperCase(),
+                                                            style: TextStyle(
+                                                                fontSize: 16)),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal:
+                                                                    8.0),
+                                                        child: PElevatedButton(
+                                                            shrink: true,
+                                                            backGroundColor:
+                                                                kPrimaryColor,
+                                                            onPressed:
+                                                                () async {
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) => AddIncident(
+                                                                          selectedShift: widget
+                                                                              .selectedShift,
+                                                                          execShiftId: widget
+                                                                              .execShiftId,
+                                                                          process: widget
+                                                                              .process,
+                                                                          edit:
+                                                                              true,
+                                                                          incidentData:
+                                                                              incidentData!.data![index]))).then(
+                                                                  (value) {
+                                                                if (value !=
+                                                                    null) {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                }
+                                                                getIncidents();
+                                                              });
+                                                              // if (incidentData!
+                                                              //         .data![
+                                                              //             index]
+                                                              //         .isDowntime ==
+                                                              //     "Yes") {
+                                                              //   if (!controller
+                                                              //       .text
+                                                              //       .toLowerCase()
+                                                              //       .contains(
+                                                              //           "Record Downtime"
+                                                              //               .toLowerCase())) {
+                                                              //     await EasyLoading
+                                                              //         .show(
+                                                              //       status:
+                                                              //           'loading...',
+                                                              //       maskType:
+                                                              //           EasyLoadingMaskType
+                                                              //               .black,
+                                                              //     );
+                                                              //     await IncidentService.updateIncident(
+                                                              //         dateTimeIncident: controller
+                                                              //             .text
+                                                              //             .toString()
+                                                              //             .split(".")[
+                                                              //                 0]
+                                                              //             .replaceAll(
+                                                              //                 "T",
+                                                              //                 " "),
+                                                              //         incidentId: incidentData!
+                                                              //             .data![
+                                                              //                 index]
+                                                              //             .id);
+                                                              //     await EasyLoading
+                                                              //         .dismiss();
+                                                              //     Navigator.pop(
+                                                              //         context);
+                                                              //     await getIncidents();
+                                                              //   } else {
+                                                              //     EasyLoading.showError(
+                                                              //         "Please enter Downtime",
+                                                              //         dismissOnTap:
+                                                              //             true,
+                                                              //         duration: Duration(
+                                                              //             seconds:
+                                                              //                 2));
+                                                              //   }
+                                                              // } else {
+                                                              //   Navigator.pop(
+                                                              //       context);
+                                                              // }
+                                                            },
+                                                            text: "Edit"
                                                                 .toUpperCase(),
                                                             style: TextStyle(
                                                                 fontSize: 16)),
