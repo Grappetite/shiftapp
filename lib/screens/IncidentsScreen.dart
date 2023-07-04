@@ -1165,7 +1165,10 @@ class _IncidentsState extends State<Incidents> {
                                   iconName: incidentData!
                                       .data![index]!.incidentType!.icon_url!,
                                   title: incidentData!
-                                      .data![index].incident!.name!,
+                                          .data![index].incident!.name! +
+                                      " - " +
+                                      incidentData!
+                                          .data![index].incidentType!.name!,
                                   text1:
                                       '${DateFormat("yyyy-MM-dd HH:mm").parse(incidentData!.data![index].createdAt!.replaceAll("T", " ")).toString().split(".")[0]}',
                                   text2: "Description: " +
