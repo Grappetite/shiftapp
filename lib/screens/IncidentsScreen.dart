@@ -681,6 +681,56 @@ class _IncidentsState extends State<Incidents> {
                                                                       vertical:
                                                                           8),
                                                                   child: Text(
+                                                                    "Process",
+                                                                    maxLines: 1,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          16,
+                                                                      color: Colors
+                                                                              .grey[
+                                                                          500],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .symmetric(
+                                                                        horizontal:
+                                                                            8.0,
+                                                                        vertical:
+                                                                            8),
+                                                                    child: Container(
+                                                                        width: double.infinity,
+                                                                        decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: const BorderRadius.all(Radius.circular(8))),
+                                                                        child: Padding(
+                                                                          padding: const EdgeInsets.symmetric(
+                                                                              horizontal: 16,
+                                                                              vertical: 16),
+                                                                          child:
+                                                                              Text(
+                                                                            incidentData!.data![index].process!.name!,
+                                                                            maxLines:
+                                                                                1,
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              fontSize: 16,
+                                                                            ),
+                                                                          ),
+                                                                        ))),
+                                                                Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                      horizontal:
+                                                                          8.0,
+                                                                      vertical:
+                                                                          8),
+                                                                  child: Text(
                                                                     "Incident Type",
                                                                     maxLines: 1,
                                                                     overflow:
@@ -733,56 +783,7 @@ class _IncidentsState extends State<Incidents> {
                                                                           // ],
                                                                           // ),
                                                                         ))),
-                                                                Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .symmetric(
-                                                                      horizontal:
-                                                                          8.0,
-                                                                      vertical:
-                                                                          8),
-                                                                  child: Text(
-                                                                    "Description",
-                                                                    maxLines: 1,
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          16,
-                                                                      color: Colors
-                                                                              .grey[
-                                                                          500],
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Padding(
-                                                                    padding: const EdgeInsets
-                                                                            .symmetric(
-                                                                        horizontal:
-                                                                            8.0,
-                                                                        vertical:
-                                                                            8),
-                                                                    child: Container(
-                                                                        width: double.infinity,
-                                                                        decoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: const BorderRadius.all(Radius.circular(8))),
-                                                                        child: Padding(
-                                                                          padding: const EdgeInsets.symmetric(
-                                                                              horizontal: 16,
-                                                                              vertical: 16),
-                                                                          child:
-                                                                              Text(
-                                                                            incidentData!.data![index].details!,
-                                                                            maxLines:
-                                                                                1,
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                            style:
-                                                                                const TextStyle(
-                                                                              fontSize: 16,
-                                                                            ),
-                                                                          ),
-                                                                        ))),
+
                                                                 Padding(
                                                                   padding: const EdgeInsets
                                                                           .symmetric(
@@ -842,7 +843,7 @@ class _IncidentsState extends State<Incidents> {
                                                                       vertical:
                                                                           8),
                                                                   child: Text(
-                                                                    "Process",
+                                                                    "Description",
                                                                     maxLines: 1,
                                                                     overflow:
                                                                         TextOverflow
@@ -873,7 +874,7 @@ class _IncidentsState extends State<Incidents> {
                                                                               vertical: 16),
                                                                           child:
                                                                               Text(
-                                                                            incidentData!.data![index].process!.name!,
+                                                                            incidentData!.data![index].details!,
                                                                             maxLines:
                                                                                 1,
                                                                             overflow:

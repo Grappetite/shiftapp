@@ -130,195 +130,215 @@ class _ShiftStartState extends State<ShiftStart> {
                         ),
                       ],
                     ] else ...[
-                      GestureDetector(
-                          onTap: () async {
-                            if (startTimeOriginal == null) {
-                              startTimeOriginal =
-                                  widget.selectedShift.startTime!;
-                            }
-                            if (endTimeOriginal == null) {
-                              endTimeOriginal = widget.selectedShift.endTime!;
-                            }
-                            var maxtime = DateTime.parse(startTimeOriginal).add(
-                                Duration(
-                                    minutes: DateTime.parse(endTimeOriginal)
-                                            .difference(DateTime.parse(
-                                                startTimeOriginal))
-                                            .inHours *
-                                        60));
-                            var mintime = DateTime.parse(startTimeOriginal)
-                                .subtract(Duration(minutes: 120));
-                            DateTime? newTime;
-                            // = DateTime.now().subtract(
-                            //     Duration(minutes: DateTime.now().minute));
-                            showCupertinoModalPopup(
-                                context: context,
-                                builder: (BuildContext builder) {
-                                  return Container(
-                                    color: Colors.white,
-                                    height: MediaQuery.of(context).size.width,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: Column(
-                                      children: [
-                                        Expanded(
-                                            flex: 1,
-                                            child: Column(
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                      "Shift time can only be re-set 2 hours in advance of the new time.",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                        color: kPrimaryColor,
-                                                      )),
-                                                ),
-                                                Expanded(
-                                                  child: PElevatedButton(
-                                                    onPressed: () {
-                                                      // okHandler.call();
-                                                      if (newTime == null) {
-                                                        newTime = DateTime.now()
-                                                            .roundDown();
-                                                      }
-                                                      Navigator.pop(context);
-                                                    },
-                                                    text: "Done",
-                                                  ),
-                                                ),
-                                              ],
-                                            )),
-                                        Expanded(
-                                          flex: 4,
-                                          child: CupertinoDatePicker(
-                                            mode: CupertinoDatePickerMode
-                                                .dateAndTime,
-                                            onDateTimeChanged: (value) async {
-                                              newTime = value;
-                                            },
-                                            minuteInterval: 15,
-                                            initialDateTime: DateTime.now()
-                                                    .roundDown()
-                                                    .isBefore(mintime)
-                                                ? mintime
-                                                : DateTime.now().roundDown(),
-                                            minimumDate: mintime,
-                                            maximumDate: maxtime,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                }).then((value) async {
-                              if (newTime != null) {
-                                customSelectedStartTime = widget.selectedShift
-                                    .makeTimeStringFromHourMinute(
-                                        newTime!.hour, newTime!.minute);
-                                DateTime tempStart =
-                                    DateFormat("yyyy-MM-dd HH:mm:ss")
-                                        .parse(startTimeOriginal);
-                                DateTime tempEnd =
-                                    DateFormat("yyyy-MM-dd HH:mm:ss")
-                                        .parse(endTimeOriginal);
-                                var differenceT =
-                                    tempEnd.difference(tempStart).inMinutes;
-
-                                String endDate = '';
-
-                                bool? selected = await showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    builder: (BuildContext context) {
-                                      return ChangeShiftTime(
-                                        hours: tempEnd
-                                                .difference(tempStart)
-                                                .inHours
-                                                .toString() +
-                                            ' ' +
-                                            'Hours : ' +
-                                            (tempEnd
-                                                        .difference(tempStart)
-                                                        .inMinutes %
-                                                    60)
-                                                .toString() +
-                                            ' Minutes',
-                                        date: widget
-                                            .selectedShift.showStartDateOnly,
-                                        endTime: newTime!
-                                            .add(Duration(minutes: differenceT))
-                                            .toString()
-                                            .timeToShow,
-                                        startTime:
-                                            newTime.toString().timeToShow,
-                                      );
-                                    });
-
-                                if (selected == true) {
-                                  if (endDate.isNotEmpty) {
-                                    widget.selectedShift.endTime = endDate;
-                                  }
-                                  if (mounted)
-                                    setState(() {
-                                      widget.selectedShift.startTime =
-                                          customSelectedStartTime;
-                                      widget.selectedShift.endTime = widget
-                                          .selectedShift
-                                          .makeTimeStringFromHourMinuteMahboob(
-                                              DateTime(
-                                                newTime!
-                                                    .add(Duration(
-                                                        minutes: differenceT))
-                                                    .year,
-                                                newTime!
-                                                    .add(Duration(
-                                                        minutes: differenceT))
-                                                    .month,
-                                                newTime!
-                                                    .add(Duration(
-                                                        minutes: differenceT))
-                                                    .day,
-                                              ),
-                                              newTime!
-                                                  .add(Duration(
-                                                      minutes: differenceT))
-                                                  .hour,
-                                              newTime!
-                                                  .add(Duration(
-                                                      minutes: differenceT))
-                                                  .minute);
-                                    });
-                                }
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              if (startTimeOriginal == null) {
+                                startTimeOriginal =
+                                    widget.selectedShift.startTime!;
                               }
-                            });
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                buildShowStartTime(),
-                                style: const TextStyle(
-                                    color: kPrimaryColor,
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              const Text(
-                                ' to ',
-                                style: TextStyle(
-                                    color: kPrimaryColor,
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              Text(
-                                widget.selectedShift.showEndTime,
-                                style: const TextStyle(
-                                    color: kPrimaryColor,
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                            ],
-                          )),
+                              if (endTimeOriginal == null) {
+                                endTimeOriginal = widget.selectedShift.endTime!;
+                              }
+                              var maxtime = DateTime.parse(startTimeOriginal)
+                                  .add(Duration(
+                                      minutes: DateTime.parse(endTimeOriginal)
+                                              .difference(DateTime.parse(
+                                                  startTimeOriginal))
+                                              .inHours *
+                                          60));
+                              var mintime = DateTime.parse(startTimeOriginal)
+                                  .subtract(Duration(minutes: 120));
+                              DateTime? newTime;
+                              // = DateTime.now().subtract(
+                              //     Duration(minutes: DateTime.now().minute));
+                              showCupertinoModalPopup(
+                                  context: context,
+                                  builder: (BuildContext builder) {
+                                    return Container(
+                                      color: Colors.white,
+                                      height: MediaQuery.of(context).size.width,
+                                      width: MediaQuery.of(context).size.width,
+                                      child: Column(
+                                        children: [
+                                          Expanded(
+                                              flex: 1,
+                                              child: Column(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(
+                                                        "Set Start Time",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: const TextStyle(
+                                                            color:
+                                                                kPrimaryColor,
+                                                            fontSize: 22,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(
+                                                        "Shift time can only be re-set 2 hours in advance of the new time.",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: const TextStyle(
+                                                          color: kPrimaryColor,
+                                                        )),
+                                                  ),
+                                                  Expanded(
+                                                    child: PElevatedButton(
+                                                      onPressed: () {
+                                                        // okHandler.call();
+                                                        if (newTime == null) {
+                                                          newTime =
+                                                              DateTime.now()
+                                                                  .roundDown();
+                                                        }
+                                                        Navigator.pop(context);
+                                                      },
+                                                      text: "Done",
+                                                    ),
+                                                  ),
+                                                ],
+                                              )),
+                                          Expanded(
+                                            flex: 2,
+                                            child: CupertinoDatePicker(
+                                              mode: CupertinoDatePickerMode
+                                                  .dateAndTime,
+                                              onDateTimeChanged: (value) async {
+                                                newTime = value;
+                                              },
+                                              minuteInterval: 15,
+                                              initialDateTime: DateTime.now()
+                                                      .roundDown()
+                                                      .isBefore(mintime)
+                                                  ? mintime
+                                                  : DateTime.now().roundDown(),
+                                              minimumDate: mintime,
+                                              maximumDate: maxtime,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }).then((value) async {
+                                if (newTime != null) {
+                                  customSelectedStartTime = widget.selectedShift
+                                      .makeTimeStringFromHourMinute(
+                                          newTime!.hour, newTime!.minute);
+                                  DateTime tempStart =
+                                      DateFormat("yyyy-MM-dd HH:mm:ss")
+                                          .parse(startTimeOriginal);
+                                  DateTime tempEnd =
+                                      DateFormat("yyyy-MM-dd HH:mm:ss")
+                                          .parse(endTimeOriginal);
+                                  var differenceT =
+                                      tempEnd.difference(tempStart).inMinutes;
+
+                                  String endDate = '';
+
+                                  bool? selected = await showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (BuildContext context) {
+                                        return ChangeShiftTime(
+                                          hours: tempEnd
+                                                  .difference(tempStart)
+                                                  .inHours
+                                                  .toString() +
+                                              ' ' +
+                                              'Hours : ' +
+                                              (tempEnd
+                                                          .difference(tempStart)
+                                                          .inMinutes %
+                                                      60)
+                                                  .toString() +
+                                              ' Minutes',
+                                          date: widget
+                                              .selectedShift.showStartDateOnly,
+                                          endTime: newTime!
+                                              .add(Duration(
+                                                  minutes: differenceT))
+                                              .toString()
+                                              .timeToShow,
+                                          startTime:
+                                              newTime.toString().timeToShow,
+                                        );
+                                      });
+
+                                  if (selected == true) {
+                                    if (endDate.isNotEmpty) {
+                                      widget.selectedShift.endTime = endDate;
+                                    }
+                                    if (mounted)
+                                      setState(() {
+                                        widget.selectedShift.startTime =
+                                            customSelectedStartTime;
+                                        widget.selectedShift.endTime = widget
+                                            .selectedShift
+                                            .makeTimeStringFromHourMinuteMahboob(
+                                                DateTime(
+                                                  newTime!
+                                                      .add(Duration(
+                                                          minutes: differenceT))
+                                                      .year,
+                                                  newTime!
+                                                      .add(Duration(
+                                                          minutes: differenceT))
+                                                      .month,
+                                                  newTime!
+                                                      .add(Duration(
+                                                          minutes: differenceT))
+                                                      .day,
+                                                ),
+                                                newTime!
+                                                    .add(Duration(
+                                                        minutes: differenceT))
+                                                    .hour,
+                                                newTime!
+                                                    .add(Duration(
+                                                        minutes: differenceT))
+                                                    .minute);
+                                      });
+                                  }
+                                }
+                              });
+                            },
+                            child: Text(
+                              buildShowStartTime(),
+                              style: const TextStyle(
+                                  color: kPrimaryColor,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                          const Text(
+                            ' to ',
+                            style: TextStyle(
+                                color: kPrimaryColor,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          Text(
+                            widget.selectedShift.showEndTime,
+                            style: const TextStyle(
+                                color: kPrimaryColor,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ],
+                      ),
                       if (widget.selectedShift.displayScreenMessage !=
                           null) ...[
                         Text(

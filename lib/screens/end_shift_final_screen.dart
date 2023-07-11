@@ -8,8 +8,10 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiftapp/model/incident_model.dart';
 import 'package:shiftapp/screens/IncidentsScreen.dart';
 import 'package:shiftapp/screens/shift_start.dart';
+import 'package:shiftapp/services/incident_service.dart';
 import 'package:shiftapp/util/string.dart';
 
 import '../config/constants.dart';
@@ -94,10 +96,37 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
     setupFocusNode(doneButton);
   }
 
+  IncidentsModel? incidentData;
+  bool? allowEnd = false;
+  getIncidents() async {
+    await EasyLoading.show(
+      status: 'loading...',
+      maskType: EasyLoadingMaskType.black,
+    );
+    incidentData = await IncidentService.getIncident(
+        widget.process.id!, widget.executeShiftId);
+    if (incidentData != null) {
+      incidentData!.data!.removeWhere((element) {
+        if (element.isDowntime == "Yes" && element.downtime != null) {
+          return true;
+        } else if (element.isDowntime == "No") {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    }
+    await EasyLoading.dismiss();
+
+    if (mounted) setState(() {});
+  }
+
   String totalDowntime = "";
   String totalIncident = "";
 
   void loadExpectedUnits() async {
+    getIncidents();
+
     var shiftWorkerList =
         await WorkersService.getAllShiftWorkersList(widget.executeShiftId!);
     totalDowntime = shiftWorkerList!.totalDowntime!.totalDowntime.toString();
@@ -392,6 +421,20 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                                 );
 
                                 return;
+                              } else if (!incidentData!.data!.isEmpty) {
+                                showAlertDialog(
+                                  context: context,
+                                  title: 'Record Downtime',
+                                  message:
+                                      'Please record Incident down time before ending the shift.',
+                                  actions: [
+                                    AlertDialogAction(
+                                      label: MaterialLocalizations.of(context)
+                                          .okButtonLabel,
+                                      key: OkCancelResult.ok,
+                                    )
+                                  ],
+                                );
                               } else {
                                 var answer = await showDialog(
                                     context: context,
