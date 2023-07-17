@@ -800,7 +800,7 @@ class _AddIncidentState extends State<AddIncident> {
                                                     child: Icon(
                                                       Icons.delete,
                                                       color: Colors.white,
-                                                      size: 15,
+                                                      size: 25,
                                                     ),
                                                   ),
                                                 )
@@ -877,7 +877,7 @@ class _AddIncidentState extends State<AddIncident> {
                                                 child: Icon(
                                                   Icons.delete,
                                                   color: Colors.white,
-                                                  size: 15,
+                                                  size: 25,
                                                 ),
                                               ),
                                             )
@@ -955,6 +955,45 @@ class _AddIncidentState extends State<AddIncident> {
                               },
                               itemCount: sectionManagers.length),
                         ),
+                  widget.edit
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: PElevatedButton(
+                              shrink: true,
+                              backGroundColor: kPrimaryColor,
+                              onPressed: () async {
+                                showAlertDialog(
+                                  context: context,
+                                  title: 'Delete',
+                                  message:
+                                      'Are you sure you want to delete the incident',
+                                  actions: [
+                                    AlertDialogAction(
+                                      label: "Yes",
+                                      key: OkCancelResult.ok,
+                                    ),
+                                    AlertDialogAction(
+                                      label: "No",
+                                      key: OkCancelResult.cancel,
+                                    )
+                                  ],
+                                ).then((value) async {
+                                  if (value == OkCancelResult.ok) {
+                                    await EasyLoading.show(
+                                      status: 'loading...',
+                                      maskType: EasyLoadingMaskType.black,
+                                    );
+                                    await IncidentService.deleteIncident(
+                                        widget.incidentData!.id);
+                                    await EasyLoading.dismiss().then((value) =>
+                                        Navigator.pop(context, widget.edit));
+                                  }
+                                });
+                              },
+                              text: "Delete".toUpperCase(),
+                              style: TextStyle(fontSize: 16)),
+                        )
+                      : Container(),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: PElevatedButton(

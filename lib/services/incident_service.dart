@@ -219,4 +219,33 @@ class IncidentService {
       return Future.value(null);
     }
   }
+
+  static deleteIncident(int? id) async {
+    try {
+      var dio = Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: Duration(minutes: 2), // 60 seconds
+          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          ));
+      final prefs = await SharedPreferences.getInstance();
+      Response response = await dio.delete(
+          // baseUrl + "incidents/$incidentId?downtime=${dateTimeIncident}",
+          baseUrl + "incidents/${id}",
+          options: Options(
+            headers: {
+              authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+              Headers.acceptHeader: "application/json",
+            },
+            contentType: 'multipart/form-data',
+          ));
+      if (response.statusCode == 200) {
+        //print(true);
+      }
+    } on DioError catch (e) {
+      return Errors.returnResponse(e.response!);
+    } catch (e) {
+      //print(e.toString());
+      return Future.value(null);
+    }
+  }
 }

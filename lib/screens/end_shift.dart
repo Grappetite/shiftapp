@@ -3,14 +3,17 @@ import 'dart:async';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:app_popup_menu/app_popup_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/config/constants.dart';
+import 'package:shiftapp/model/incident_model.dart';
 import 'package:shiftapp/model/sop_model.dart';
 import 'package:shiftapp/screens/IncidentsScreen.dart';
 import 'package:shiftapp/screens/SopView.dart';
 import 'package:shiftapp/screens/StartedShiftList.dart';
 import 'package:shiftapp/screens/shift_start.dart';
+import 'package:shiftapp/services/incident_service.dart';
 import 'package:shiftapp/services/login_service.dart';
 
 import '../main.dart';
@@ -231,8 +234,33 @@ class _EndShiftViewState extends State<EndShiftView> {
   }
 
   SopModel? sopData;
+  var isExpired = null;
+  IncidentsModel? incidentData;
+  getIncidents() async {
+    await EasyLoading.show(
+      status: 'loading...',
+      maskType: EasyLoadingMaskType.black,
+    );
+    incidentData = await IncidentService.getIncident(
+        widget.process.id!, widget.execShiftId);
+    if (incidentData != null) {
+      incidentData!.data!.removeWhere((element) {
+        if (element.isDowntime == "Yes" && element.downtime != null) {
+          return true;
+        } else if (element.isDowntime == "No") {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    }
+    await EasyLoading.dismiss();
+
+    if (mounted) setState(() {});
+  }
 
   void loadUsers() async {
+    getIncidents();
     var responseShift =
         await WorkersService.getShiftWorkers(executeShiftId!, widget.processId);
 
@@ -246,6 +274,16 @@ class _EndShiftViewState extends State<EndShiftView> {
         responseShift.data!.shiftWorker = responseShift.data!.shiftWorker!
             .where((e) => e.isAdded == true)
             .toList();
+        isExpired = responseShift.data!.shiftWorker!.any((element) {
+          return element.licenseName != null
+              ? element.license_expiry != "Not yet licensed"
+                  ? DateTime.parse(element.license_expiry!)
+                          .isBefore(DateTime.now())
+                      ? true
+                      : false
+                  : true
+              : false;
+        });
       }
     }
     numberSelected = responseShift!.data!.shiftWorker!.length;
@@ -380,7 +418,7 @@ class _EndShiftViewState extends State<EndShiftView> {
                       ? '$numberSelected/${widget.process.headCount} Workers'
                       : '$numberSelected/$totalUsersCount Workers',
                   text2: 'Tap to Add or remove',
-                  showWarning: false,
+                  showWarning: isExpired == null ? false : isExpired,
                   onTap: () async {
                     var response = await Navigator.push(
                       context,
@@ -417,7 +455,9 @@ class _EndShiftViewState extends State<EndShiftView> {
                   title: 'INCIDENTS',
                   text1: '$totalIncident',
                   text2: 'Tap to view and add incidents or record downtime',
-                  showWarning: false,
+                  showWarning: incidentData != null
+                      ? !incidentData!.data!.isEmpty
+                      : false,
                   text1_2: '$totalDowntime',
                   onTap: () {
                     Navigator.push(

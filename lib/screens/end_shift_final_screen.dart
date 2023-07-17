@@ -383,7 +383,9 @@ class _EndShiftFinalScreenState extends State<EndShiftFinalScreen> {
                             text1: '$totalIncident',
                             text2:
                                 'Tap to view and add incidents or record downtime',
-                            showWarning: false,
+                            showWarning: incidentData != null
+                                ? !incidentData!.data!.isEmpty
+                                : false,
                             horizontal: false,
                             text1_2: '$totalDowntime',
                             onTap: () {
