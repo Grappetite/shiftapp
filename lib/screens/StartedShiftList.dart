@@ -4,13 +4,13 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shiftapp/model/login_model.dart';
+import 'package:shiftapp/screens/NewDropdownPage.dart';
 import 'package:shiftapp/services/login_service.dart';
 import 'package:shiftapp/services/shift_service.dart';
 
 import '../config/constants.dart';
 import '../model/shifts_model.dart';
 import '../widgets/elevated_button.dart';
-import 'NewDropdownPage.dart';
 import 'home.dart';
 import 'login.dart';
 
@@ -62,8 +62,7 @@ class _StartedShiftsState extends State<StartedShifts> {
                   ),
                   Expanded(
                     child: shiftsList != null
-                        ?
-                        RefreshIndicator(
+                        ? RefreshIndicator(
                             child: ListView.separated(
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
@@ -163,8 +162,7 @@ class _StartedShiftsState extends State<StartedShifts> {
                                                       .format(DateTime.parse(
                                                           shiftsList![index]
                                                               .executeShiftStartTime!))
-                                                      .toString()
-                                              ,
+                                                      .toString(),
                                               style: const TextStyle(
                                                 color: kPrimaryColor,
                                                 fontWeight: FontWeight.w600,
@@ -270,7 +268,7 @@ class _StartedShiftsState extends State<StartedShifts> {
     );
     await LoginService.updateFcm();
     shiftsList = await ShiftService.startedShiftsList();
-    if (mounted)setState(() {});
+    if (mounted) setState(() {});
     await EasyLoading.dismiss();
   }
 

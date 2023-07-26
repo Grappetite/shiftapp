@@ -58,21 +58,24 @@ dependencies:
   url_launcher: ^6.1.6
   infinite_scroll_pagination: ^3.2.0
   path_provider: ^2.0.11
-  flutter_html: ^2.2.1
+  flutter_html: ^3.0.0-alpha.3
   photo_view: ^0.14.0
   firebase_crashlytics: ^3.0.11
   painter:
     git:
       url: https://github.com/joranmulderij/painter.git
-  image_picker: ^0.8.7+2
+#  file_picker: ^5.3.3
+  image_picker: ^1.0.1
+#  flutter_math_fork: ^0.7.1
+#  macos_ui: ^2.0.0
 #  wechat_assets_picker: ^8.5.0
 #  wechat_camera_picker: ^3.6.0
 
 dependency_overrides:
-  macos_ui:
-    git:
-      url: https://github.com/Mayb3Nots/macos_ui.git
-      ref: dev
+#  macos_ui:
+#    git:
+#      url: https://github.com/Mayb3Nots/macos_ui.git
+#      ref: dev
 
 dev_dependencies:
   flutter_test:
@@ -90,7 +93,7 @@ flutter_icons:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

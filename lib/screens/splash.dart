@@ -45,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void loadToNextView() async {
     var data = await LoginService.checkVersion();
     if (data["data"]["name"] == Environment().config.version) {
-      await Future.delayed(const Duration(seconds: 1), () {});
+      // await Future.delayed(const Duration(seconds: 1), () {});
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const LoginScreen()),

@@ -66,10 +66,12 @@ class _AddIncidentState extends State<AddIncident> {
   List? imageFileList;
 
   void _setImageFileListFromFile(XFile? value) {
-    if (imageFileList == null) {
-      imageFileList = (value == null ? null : <dynamic>[value])!;
-    } else {
-      imageFileList!.add(value);
+    if (value != null) {
+      if (imageFileList == null) {
+        imageFileList = (value == null ? null : <dynamic>[value])!;
+      } else {
+        imageFileList!.add(value);
+      }
     }
   }
 
@@ -255,9 +257,14 @@ class _AddIncidentState extends State<AddIncident> {
     } else {
       try {
         final XFile? pickedFile = await _picker.pickImage(
-          source: source,
-          imageQuality: 50,
-        );
+            source: source,
+            maxWidth:
+                600, // !!!!<=========    NOTE: maxWidth: null means **_full original width_**
+            maxHeight:
+                600, // !!!!<=========    NOTE: maxHeight: null means **_full original height_**
+            imageQuality:
+                50, //  !!!!<==== you can use this to increase/decrease image size
+            preferredCameraDevice: CameraDevice.rear);
         Navigator.pop(context!);
 
         setState(() {
