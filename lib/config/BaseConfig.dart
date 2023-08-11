@@ -75,6 +75,27 @@ class LiveConfig implements BaseConfig {
   bool get preset => false;
 }
 
+class NewBuildConfig implements BaseConfig {
+  @override
+  String get baseUrl => "https://shiftdemo.grappetite.com/api/v1/";
+
+  @override
+  String get version => "V.1";
+
+  @override
+  String get imageUrl => "https://shiftdemo.grappetite.com/api/v1/";
+
+  @override
+  String get staging =>
+      "Version:Shift-${version}-${DateFormat("yyyy-MM-dd HH:mm:ss").parse(DateTime.now().toString())}(Demo)";
+
+  @override
+  String get apiUrl => "https://shiftdemo.grappetite.com/api/v1/";
+
+  @override
+  bool get preset => false;
+}
+
 class Environment {
   factory Environment() {
     return _singleton;
@@ -87,6 +108,7 @@ class Environment {
   static const String dev = 'dev';
   static const String production = 'production';
   static const String live = 'live';
+  static const String newBuild = 'newBuild';
 
   late BaseConfig config;
 
@@ -100,6 +122,8 @@ class Environment {
         return ProductionConfig();
       case Environment.live:
         return LiveConfig();
+      case Environment.newBuild:
+        return NewBuildConfig();
       default:
         return DevConfig();
     }
