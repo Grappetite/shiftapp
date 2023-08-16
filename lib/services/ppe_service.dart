@@ -27,7 +27,7 @@ class PPEService {
       var responseObject = PpeModel.fromJson(response.data);
 
       return responseObject;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
       //print(e.toString());
@@ -66,7 +66,7 @@ class PPEService {
       if (response.statusCode == 200) {
         //print(true);
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
       //print(e.toString());

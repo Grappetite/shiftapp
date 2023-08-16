@@ -36,7 +36,7 @@ class SOPService {
       var responseObject = SopModel.fromJson(response.data);
 
       return responseObject;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
       //print(e.toString());
@@ -76,7 +76,7 @@ class SOPService {
       var responseObject = WorkerModel.fromJson(response.data);
 
       return responseObject;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
       //print(e.toString());
@@ -123,7 +123,7 @@ class SOPService {
       if (response.statusCode == 200) {
         //print(true);
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
       //print(e.toString());

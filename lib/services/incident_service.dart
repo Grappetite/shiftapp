@@ -32,7 +32,7 @@ class IncidentService {
       var responseObject = IncidentsModel.fromJson(response.data);
 
       return responseObject;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
       //print(e.toString());
@@ -62,7 +62,7 @@ class IncidentService {
           response.data["data"]!.map((x) => IncidentType.fromJson(x)));
 
       return responseObject;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
       //print(e.toString());
@@ -92,7 +92,7 @@ class IncidentService {
           response.data["data"]!.map((x) => IncidentType.fromJson(x)));
 
       return responseObject;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
       //print(e.toString());
@@ -122,7 +122,7 @@ class IncidentService {
           response.data["data"]!.map((x) => ShiftWorker.fromJson(x)));
 
       return responseObject;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
       //print(e.toString());
@@ -175,7 +175,7 @@ class IncidentService {
       if (response.statusCode == 200) {
         //print(true);
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
       //print(e.toString());
@@ -212,7 +212,7 @@ class IncidentService {
       if (response.statusCode == 200) {
         //print(true);
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
       //print(e.toString());
@@ -241,7 +241,7 @@ class IncidentService {
       if (response.statusCode == 200) {
         //print(true);
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
       //print(e.toString());

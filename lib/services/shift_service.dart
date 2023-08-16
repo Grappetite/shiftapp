@@ -30,7 +30,7 @@ class ShiftService {
 
       //print(response.data);
       return true;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     }
   }
@@ -52,7 +52,7 @@ class ShiftService {
       //print(response.data);
       return List<ShiftStartDetails>.from(
           response.data["data"].map((x) => ShiftStartDetails.fromJson(x)));
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
       //print(e);
@@ -92,7 +92,7 @@ class ShiftService {
       }
 
       return false;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     }
   }
@@ -123,7 +123,7 @@ class ShiftService {
       }
 
       return false;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     }
   }
@@ -147,7 +147,7 @@ class ShiftService {
           ));
       return List<User>.from(
           response.data["data"].map((x) => User.fromJson(x)));
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
       //print(e);
@@ -172,7 +172,7 @@ class ShiftService {
             },
           ));
       return response.data['data'];
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
       //print(e);

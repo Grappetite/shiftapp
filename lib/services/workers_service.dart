@@ -48,7 +48,7 @@ class WorkersService {
       }
 
       return responseObject;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     }
   }
@@ -80,7 +80,7 @@ class WorkersService {
       }
 
       return responseObject;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     }
   }
@@ -113,7 +113,7 @@ class WorkersService {
       // }
 
       return responseObject;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     }
   }
@@ -148,7 +148,7 @@ class WorkersService {
         return null;
       }
       return responseObject;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     }
   }
@@ -199,7 +199,7 @@ class WorkersService {
       }
 
       return false;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     }
   }
@@ -241,7 +241,7 @@ class WorkersService {
       }
 
       return false;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     }
   }
@@ -284,7 +284,7 @@ class WorkersService {
       }
 
       return false;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     }
   }
@@ -341,7 +341,7 @@ class WorkersService {
       }
 
       return responseObject;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       if (e.response != null) {
         if (e.response!.data != null) {
           return AddWorkersResponse.fromJson(e.response!.data!, error: true);
@@ -349,7 +349,7 @@ class WorkersService {
       } else {
         return null;
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     }
   }
@@ -383,7 +383,7 @@ class WorkersService {
       }
 
       return responseObject;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     }
   }
@@ -417,7 +417,7 @@ class WorkersService {
       );
 
       return true;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     }
   }
@@ -463,7 +463,7 @@ class WorkersService {
       }
 
       return responseObject;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     }
   }

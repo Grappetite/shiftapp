@@ -117,7 +117,7 @@ class LoginService {
       prefs.setString(tokenKey, responseObject.token!);
       log(prefs.getString(tokenKey)!);
       return responseObject;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     }
   }
@@ -151,7 +151,7 @@ class LoginService {
       }
 
       return responseObject;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     } catch (e) {
       //print(e.toString());
@@ -188,7 +188,7 @@ class LoginService {
       }
 
       return responseObject;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     }
   }
@@ -210,7 +210,7 @@ class LoginService {
           ));
 
       return response;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     }
   }
@@ -233,7 +233,7 @@ class LoginService {
           data: {'token': fcmToken});
 
       return response;
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     }
   }
@@ -251,7 +251,7 @@ class LoginService {
       if (response.statusCode == 200) {
         return response.data;
       }
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       return Errors.returnResponse(e.response!);
     }
   }
