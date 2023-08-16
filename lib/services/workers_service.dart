@@ -406,6 +406,8 @@ class WorkersService {
           'worker_user_id': worker.id,
           'license_expiry': expiryDate,
           'issue_date': issueDate,
+          'user_id': worker.userId,
+          'license_id': worker.licenseId,
         },
         options: Options(
           headers: {

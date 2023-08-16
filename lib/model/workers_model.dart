@@ -104,6 +104,7 @@ class ShiftWorker {
   bool isAdded = false;
   String? licenseName;
   String? license_expiry;
+  int? licenseId;
   bool newAdded = false;
   bool newRemove = false;
   final PainterController painterController = PainterController();
@@ -129,6 +130,7 @@ class ShiftWorker {
     firstName = json['firstName'];
     lastName = json['lastName'];
     key = json['key'];
+    licenseId = json['licenseId'];
     efficiencyCalculation = json['efficiencyCalculation'];
     picture = json['picture'];
     licenseName = json["licenseName"];
