@@ -16,8 +16,8 @@ class WorkersService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -57,8 +57,8 @@ class WorkersService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -91,8 +91,8 @@ class WorkersService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -123,8 +123,8 @@ class WorkersService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
       String url = baseUrl +
@@ -162,8 +162,8 @@ class WorkersService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
       for (int i = 1;
@@ -213,8 +213,8 @@ class WorkersService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -255,8 +255,8 @@ class WorkersService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -303,8 +303,8 @@ class WorkersService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
       List<int> ppe_check = [];
@@ -359,8 +359,8 @@ class WorkersService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
       Response response = await dio.get(baseUrl + 'workerType/' + processId,
@@ -395,8 +395,8 @@ class WorkersService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -432,8 +432,8 @@ class WorkersService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 

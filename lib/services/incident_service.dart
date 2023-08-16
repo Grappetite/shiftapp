@@ -11,8 +11,8 @@ class IncidentService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -44,8 +44,8 @@ class IncidentService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -74,8 +74,8 @@ class IncidentService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -104,8 +104,8 @@ class IncidentService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -143,8 +143,8 @@ class IncidentService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
       List<MultipartFile> test = [];
@@ -191,8 +191,8 @@ class IncidentService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
       Response response = await dio.post(
@@ -224,8 +224,8 @@ class IncidentService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
       Response response = await dio.delete(

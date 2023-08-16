@@ -13,8 +13,8 @@ class ShiftService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -64,8 +64,8 @@ class ShiftService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -101,8 +101,8 @@ class ShiftService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -132,8 +132,8 @@ class ShiftService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -158,8 +158,8 @@ class ShiftService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 

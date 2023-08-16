@@ -96,8 +96,8 @@ class LoginService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       var fcmToken = !kIsWeb ? await FirebaseMessaging.instance.getToken() : "";
       Response response = await dio.post(
@@ -126,8 +126,8 @@ class LoginService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -163,8 +163,8 @@ class LoginService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -197,8 +197,8 @@ class LoginService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
 
@@ -219,8 +219,8 @@ class LoginService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       final prefs = await SharedPreferences.getInstance();
       var fcmToken = !kIsWeb ? await FirebaseMessaging.instance.getToken() : "";
@@ -242,8 +242,8 @@ class LoginService {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
-          connectTimeout: Duration(minutes: 2), // 60 seconds
-          receiveTimeout: Duration(minutes: 2) // 60 seconds
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
           ));
       Response response = await dio.get(
         baseUrl + 'appVersion',
