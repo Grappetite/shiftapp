@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
+import 'package:shiftapp/config/BaseConfig.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/model/login_model.dart';
 import 'package:shiftapp/model/ppe_model.dart';
@@ -106,7 +107,7 @@ class _PPESelectionState extends State<PPESelection> {
               Column(
                 children: [
                   Image.asset(
-                    'assets/images/toplogo.png',
+                    Environment().config.imageUrl,
                     height: 20,
                   ),
                   const SizedBox(
@@ -514,6 +515,7 @@ class _PPESelectionState extends State<PPESelection> {
                                                           currentItem.length;
                                                 }
 
+                                                /// Shift without worker
                                                 if (workerIds.isEmpty) {
                                                   return;
                                                 }

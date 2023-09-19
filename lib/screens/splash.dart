@@ -27,14 +27,8 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     } catch (e) {
-      Clipboard.setData(new ClipboardData(
-          text: Environment()
-                  .config
-                  .staging
-                  .toLowerCase()
-                  .contains("Production".toLowerCase())
-              ? "https://install.appcenter.ms/users/mahboob-grappetite.com/apps/shift-android/distribution_groups/dev"
-              : "https://install.appcenter.ms/users/mahboob-grappetite.com/apps/shift-android/distribution_groups/public"));
+      Clipboard.setData(
+          new ClipboardData(text: Environment().config.downloadLink));
       EasyLoading.showError(
           "Can not launch the url, but it's copied to your clipboard",
           dismissOnTap: true,

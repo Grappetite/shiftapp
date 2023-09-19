@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiftapp/config/BaseConfig.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/model/shifts_model.dart';
 import 'package:shiftapp/model/sop_model.dart';
@@ -13,7 +14,6 @@ import 'package:shiftapp/screens/PreviewImage.dart';
 import 'package:shiftapp/screens/SelectTrainingWorker.dart';
 import 'package:shiftapp/screens/SopWorkerSign.dart';
 import 'package:shiftapp/screens/login.dart';
-import 'package:shiftapp/screens/shift_start.dart';
 import 'package:shiftapp/widgets/elevated_button.dart';
 
 import '../model/login_model.dart';
@@ -73,7 +73,10 @@ class _SopsListState extends State<SopsList> {
       onSelected: (int value) {},
       onCanceled: () {},
       elevation: 4,
-      icon: const Icon(Icons.more_vert,color: Colors.white,),
+      icon: const Icon(
+        Icons.more_vert,
+        color: Colors.white,
+      ),
       offset: const Offset(0, 65),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -101,13 +104,13 @@ class _SopsListState extends State<SopsList> {
         } else {
           timeRemaining = widget.selectedShift.timeRemaining;
         }
-        
-          if (mounted)setState(() {
+
+        if (mounted)
+          setState(() {
             timeElasped = widget.selectedShift.timeElasped;
           });
       },
     );
-   
   }
 
   @override
@@ -118,7 +121,8 @@ class _SopsListState extends State<SopsList> {
           title: Column(
             children: [
               Image.asset(
-                'assets/images/toplogo.png',
+                Environment()
+                    .config.imageUrl,
                 height: 20,
               ),
               const SizedBox(
@@ -412,34 +416,38 @@ class _SopsListState extends State<SopsList> {
                                       .sopWorkerType !=
                                   null
                               ? widget.sopDetail.sopStep![pagePosition]
-                              .sopWorkerType!.isNotEmpty?Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 8.0, right: 8.0, top: 8.0),
-                                  child: Text(
-                                    "Worker Type:",
-                                    style: const TextStyle(
-                                        color: kPrimaryColor,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                )  : Container()
+                                      .sopWorkerType!.isNotEmpty
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0, right: 8.0, top: 8.0),
+                                      child: Text(
+                                        "Worker Type:",
+                                        style: const TextStyle(
+                                            color: kPrimaryColor,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    )
+                                  : Container()
                               : Container(),
                           widget.sopDetail.sopStep![pagePosition]
                                       .sopWorkerType !=
                                   null
-                              ?widget.sopDetail.sopStep![pagePosition]
-                              .sopWorkerType!.isNotEmpty? Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 8.0, right: 8.0, top: 8.0),
-                                  child: Text(
-                                    "${workers}",
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                )
-                              : Container() : Container(),
+                              ? widget.sopDetail.sopStep![pagePosition]
+                                      .sopWorkerType!.isNotEmpty
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 8.0, right: 8.0, top: 8.0),
+                                      child: Text(
+                                        "${workers}",
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    )
+                                  : Container()
+                              : Container(),
                           widget.sopDetail.sopStep![pagePosition].equipment !=
                                   null
                               ? Padding(

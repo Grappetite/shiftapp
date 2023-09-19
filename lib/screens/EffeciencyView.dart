@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shiftapp/config/BaseConfig.dart';
 import 'package:shiftapp/model/login_model.dart';
 import 'package:shiftapp/screens/StartedShiftList.dart';
 
@@ -32,7 +33,8 @@ class EffeciencyView extends StatelessWidget {
             title: Column(
               children: [
                 Image.asset(
-                  'assets/images/toplogo.png',
+                  Environment()
+                      .config.imageUrl,
                   height: 20,
                 ),
                 SizedBox(

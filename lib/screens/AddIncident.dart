@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiftapp/config/BaseConfig.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/main.dart';
 import 'package:shiftapp/model/incident_model.dart';
@@ -351,7 +352,8 @@ class _AddIncidentState extends State<AddIncident> {
               title: Column(
                 children: [
                   Image.asset(
-                    'assets/images/toplogo.png',
+                    Environment()
+                        .config.imageUrl,
                     height: 20,
                   ),
                   SizedBox(

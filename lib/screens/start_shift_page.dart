@@ -7,6 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiftapp/config/BaseConfig.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/model/ppe_model.dart';
 import 'package:shiftapp/screens/shift_start.dart';
@@ -95,7 +96,8 @@ class _StartShiftViewState extends State<StartShiftView> {
           title: Column(
             children: [
               Image.asset(
-                'assets/images/toplogo.png',
+                Environment()
+                    .config.imageUrl,
                 height: 20,
               ),
               SizedBox(

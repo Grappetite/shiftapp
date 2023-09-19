@@ -6,6 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiftapp/config/BaseConfig.dart';
 import 'package:shiftapp/model/login_model.dart';
 import 'package:shiftapp/model/shifts_model.dart';
 import 'package:shiftapp/screens/SopView.dart';
@@ -57,7 +58,13 @@ class _HomeViewState extends State<HomeView> {
             selectedShift: widget.selectedShift,
           )
         : DefaultTabController(
-            length: 2,
+            length: Environment()
+                    .config
+                    .staging
+                    .toLowerCase()
+                    .contains("Localhome".toLowerCase())
+                ? 1
+                : 2,
             child: Scaffold(
               body: TabBarView(
                 children: [
@@ -67,10 +74,15 @@ class _HomeViewState extends State<HomeView> {
                     sessionStarted: widget.sessionStarted,
                     onLogout: () async {},
                   ),
-                  SopView(
-                    processSelected: widget.processSelected,
-                    selectedShift: widget.selectedShift,
-                  ),
+                  if (!Environment()
+                      .config
+                      .staging
+                      .toLowerCase()
+                      .contains("Localhome".toLowerCase()))
+                    SopView(
+                      processSelected: widget.processSelected,
+                      selectedShift: widget.selectedShift,
+                    ),
                 ],
               ),
               bottomNavigationBar: Container(
@@ -97,17 +109,22 @@ class _HomeViewState extends State<HomeView> {
                           ),
                         ),
                       ),
-                      Tab(
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 4.0),
-                          child: Column(
-                            children: [
-                              const Icon(CupertinoIcons.settings),
-                              Text("SOP")
-                            ],
+                      if (!Environment()
+                          .config
+                          .staging
+                          .toLowerCase()
+                          .contains("Localhome".toLowerCase()))
+                        Tab(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 4.0),
+                            child: Column(
+                              children: [
+                                const Icon(CupertinoIcons.settings),
+                                Text("SOP")
+                              ],
+                            ),
                           ),
                         ),
-                      ),
                     ]),
               ),
             ),
@@ -249,7 +266,8 @@ class _HomeMainViewState extends State<HomeMainView> {
         title: Column(
           children: [
             Image.asset(
-              'assets/images/toplogo.png',
+              Environment()
+                  .config.imageUrl,
               height: 20,
             ),
             const SizedBox(

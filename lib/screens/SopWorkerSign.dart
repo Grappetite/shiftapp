@@ -1,21 +1,19 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:app_popup_menu/app_popup_menu.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:painter/painter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiftapp/config/BaseConfig.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/model/login_model.dart';
 import 'package:shiftapp/model/shifts_model.dart';
 import 'package:shiftapp/model/sop_model.dart';
 import 'package:shiftapp/model/workers_model.dart' as workerList;
 import 'package:shiftapp/screens/login.dart';
-import 'package:shiftapp/screens/shift_start.dart';
 import 'package:shiftapp/services/login_service.dart';
 import 'package:shiftapp/services/sop_service.dart';
 import 'package:shiftapp/widgets/elevated_button.dart';
@@ -75,7 +73,10 @@ class _SopWorkerSignState extends State<SopWorkerSign> {
       onSelected: (int value) {},
       onCanceled: () {},
       elevation: 4,
-      icon: const Icon(Icons.more_vert,color: Colors.white,),
+      icon: const Icon(
+        Icons.more_vert,
+        color: Colors.white,
+      ),
       offset: const Offset(0, 65),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -97,7 +98,7 @@ class _SopWorkerSignState extends State<SopWorkerSign> {
           title: Column(
             children: [
               Image.asset(
-                'assets/images/toplogo.png',
+                Environment().config.imageUrl,
                 height: 20,
               ),
               const SizedBox(
@@ -372,11 +373,11 @@ class _SopWorkerSignState extends State<SopWorkerSign> {
                                             Navigator.pop(context);
                                             Navigator.pop(context);
                                             Navigator.pop(context);
-                                          }else{
+                                          } else {
                                             pageController.nextPage(
                                               duration: Duration(seconds: 1),
                                               curve:
-                                              Curves.fastLinearToSlowEaseIn,
+                                                  Curves.fastLinearToSlowEaseIn,
                                             );
                                           }
                                         } else {

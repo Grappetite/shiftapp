@@ -12,17 +12,21 @@ abstract class BaseConfig {
   String get version;
 
   bool get preset;
+
+  String get downloadLink;
 }
 
 class DevConfig implements BaseConfig {
   @override
   String get baseUrl => "https://dev-shift.grappetite.com/api/v1/";
+  @override
+  String get downloadLink => "https://dev-shift.grappetite.com/api/v1/";
 
   @override
   String get version => "V.4";
 
   @override
-  String get imageUrl => "https://dev-shift.grappetite.com/api/v1/public";
+  String get imageUrl => "assets/images/toplogo.png";
 
   @override
   String get apiUrl => "https://dev-shift.grappetite.com/api/v1/";
@@ -34,15 +38,39 @@ class DevConfig implements BaseConfig {
   bool get preset => true;
 }
 
-class ProductionConfig implements BaseConfig {
+class LocalConfig implements BaseConfig {
   @override
   String get baseUrl => "https://dev-shift.grappetite.com/api/v1/";
+  @override
+  String get downloadLink => "https://dev-shift.grappetite.com/api/v1/";
 
   @override
   String get version => "V.4";
 
   @override
-  String get imageUrl => "https://dev-shift.grappetite.com/api/v1/";
+  String get imageUrl => "assets/images/toplogo.png";
+
+  @override
+  String get apiUrl => "https://dev-shift.grappetite.com/api/v1/";
+
+  @override
+  String get staging => "Version:Localhome";
+
+  @override
+  bool get preset => true;
+}
+
+class ProductionConfig implements BaseConfig {
+  @override
+  String get baseUrl => "https://dev-shift.grappetite.com/api/v1/";
+  @override
+  String get downloadLink => "https://dev-shift.grappetite.com/api/v1/";
+
+  @override
+  String get version => "V.4";
+
+  @override
+  String get imageUrl => "assets/images/toplogo.png";
 
   @override
   String get apiUrl => "https://dev-shift.grappetite.com/api/v1/";
@@ -54,15 +82,18 @@ class ProductionConfig implements BaseConfig {
   bool get preset => false;
 }
 
-class LiveConfig implements BaseConfig {
+class TakealotConfig implements BaseConfig {
   @override
   String get baseUrl => "https://takealot.grappetite.com/api/v1/";
+  @override
+  String get downloadLink =>
+      "install.appcenter.ms/users/mahboob-grappetite.com/apps/shift-android/distribution_groups/public";
 
   @override
   String get version => "V.4";
 
   @override
-  String get imageUrl => "https://takealot.grappetite.com/api/v1/";
+  String get imageUrl => "assets/images/toplogo.png";
 
   @override
   String get staging =>
@@ -75,15 +106,41 @@ class LiveConfig implements BaseConfig {
   bool get preset => false;
 }
 
-class NewBuildConfig implements BaseConfig {
+class TakealotDemoConfig implements BaseConfig {
+  @override
+  String get baseUrl => "https://takealotdemo.grappetite.com/api/v1/";
+  @override
+  String get downloadLink => "https://takealotdemo.grappetite.com/api/v1/";
+
+  @override
+  String get version => "V.4";
+
+  @override
+  String get imageUrl => "assets/images/toplogo.png";
+
+  @override
+  String get staging =>
+      "Version:Shift-${version}-${DateFormat("yyyy-MM-dd HH:mm:ss").parse(DateTime.now().toString())}(Takealotdummy)";
+
+  @override
+  String get apiUrl => "https://takealotdemo.grappetite.com/api/v1/";
+
+  @override
+  bool get preset => false;
+}
+
+class StingrayConfig implements BaseConfig {
   @override
   String get baseUrl => "https://shiftdemo.grappetite.com/api/v1/";
+  @override
+  String get downloadLink =>
+      "install.appcenter.ms/users/mahboob-grappetite.com/apps/shift-android/distribution_groups/stingray";
 
   @override
   String get version => "V.1";
 
   @override
-  String get imageUrl => "https://shiftdemo.grappetite.com/api/v1/";
+  String get imageUrl => "assets/images/thestingratgroup (white).png";
 
   @override
   String get staging =>
@@ -109,6 +166,8 @@ class Environment {
   static const String production = 'production';
   static const String live = 'live';
   static const String newBuild = 'newBuild';
+  static const String dummy = 'dummy';
+  static const String takealotdemo = 'takealotdemo';
 
   late BaseConfig config;
 
@@ -121,9 +180,13 @@ class Environment {
       case Environment.production:
         return ProductionConfig();
       case Environment.live:
-        return LiveConfig();
+        return TakealotConfig();
       case Environment.newBuild:
-        return NewBuildConfig();
+        return StingrayConfig();
+      case Environment.dummy:
+        return LocalConfig();
+      case Environment.takealotdemo:
+        return TakealotDemoConfig();
       default:
         return DevConfig();
     }

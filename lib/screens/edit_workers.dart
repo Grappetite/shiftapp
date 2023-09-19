@@ -1,6 +1,7 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:shiftapp/config/BaseConfig.dart';
 
 import '../../model/login_model.dart';
 import '../model/shifts_model.dart';
@@ -161,7 +162,8 @@ class _EditWorkersState extends State<EditWorkers> {
         title: Column(
           children: [
             Image.asset(
-              'assets/images/toplogo.png',
+              Environment()
+                  .config.imageUrl,
               height: 20,
             ),
             SizedBox(

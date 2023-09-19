@@ -6,6 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiftapp/config/BaseConfig.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/model/shifts_model.dart';
 import 'package:shiftapp/model/sop_model.dart';
@@ -94,7 +95,8 @@ class _SopViewState extends State<SopView> {
           title: Column(
             children: [
               Image.asset(
-                'assets/images/toplogo.png',
+                Environment()
+                    .config.imageUrl,
                 height: 20,
               ),
               const SizedBox(

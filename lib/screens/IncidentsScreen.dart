@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiftapp/config/BaseConfig.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/main.dart';
 import 'package:shiftapp/model/incident_model.dart';
@@ -238,7 +239,8 @@ class _IncidentsState extends State<Incidents> {
               title: Column(
                 children: [
                   Image.asset(
-                    'assets/images/toplogo.png',
+                    Environment()
+                        .config.imageUrl,
                     height: 20,
                   ),
                   SizedBox(

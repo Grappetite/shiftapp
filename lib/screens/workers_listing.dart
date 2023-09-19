@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:shiftapp/config/BaseConfig.dart';
 import 'package:shiftapp/screens/shift_start.dart';
 
 import '../model/login_model.dart';
@@ -41,12 +42,10 @@ class _WorkersListingState extends State<WorkersListing> {
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
-        
-        if (mounted)setState(() {
-          timeElasped = widget.selectedShift.timeElasped;
-        });
-
-       
+        if (mounted)
+          setState(() {
+            timeElasped = widget.selectedShift.timeElasped;
+          });
       },
     );
   }
@@ -66,14 +65,16 @@ class _WorkersListingState extends State<WorkersListing> {
         widget.shiftId.toString(), widget.processId.toString());
 
     if (result != null) {
-      if (mounted)setState(() {
-        workerType = result.data!;
-      });
-      for (var currentItem in workerType) {
-        if (mounted)setState(() {
-          listNames.add(currentItem.name!);
-          listLists.add([]);
+      if (mounted)
+        setState(() {
+          workerType = result.data!;
         });
+      for (var currentItem in workerType) {
+        if (mounted)
+          setState(() {
+            listNames.add(currentItem.name!);
+            listLists.add([]);
+          });
       }
 
       await EasyLoading.dismiss();
@@ -92,7 +93,7 @@ class _WorkersListingState extends State<WorkersListing> {
         ],
       );
     }
-    if (mounted)setState(() {});
+    if (mounted) setState(() {});
   }
 
   bool showCategories = false;
@@ -123,7 +124,7 @@ class _WorkersListingState extends State<WorkersListing> {
       return;
     }
 
-    if (mounted)setState(() {});
+    if (mounted) setState(() {});
     List<ShiftWorker> shiftWorkers = [];
 
     shiftWorkers.addAll(responseShift.data!.worker!);
@@ -151,22 +152,25 @@ class _WorkersListingState extends State<WorkersListing> {
     for (var currentItem in listNames) {
       var response =
           shiftWorkers.where((e) => e.workerType == currentItem).toList();
-      if (mounted)setState(() {
-        listLists.add(response);
-      });
+      if (mounted)
+        setState(() {
+          listLists.add(response);
+        });
     }
     var result = await WorkersService.getWorkTypes(
         widget.shiftId.toString(), widget.processId.toString());
 
     if (result != null) {
-      if (mounted)setState(() {
-        workerType = result.data!;
-      });
-      for (var currentItem in workerType) {
-        if (mounted)setState(() {
-          listNames.add(currentItem.name!);
-          listLists.add([]);
+      if (mounted)
+        setState(() {
+          workerType = result.data!;
         });
+      for (var currentItem in workerType) {
+        if (mounted)
+          setState(() {
+            listNames.add(currentItem.name!);
+            listLists.add([]);
+          });
       }
       // await EasyLoading.dismiss();
     } else {
@@ -185,11 +189,10 @@ class _WorkersListingState extends State<WorkersListing> {
       );
     }
     listNames = listNames.toSet().toList();
-    if (mounted)setState(() {
-      isLoader = false;
-    });
-
-   
+    if (mounted)
+      setState(() {
+        isLoader = false;
+      });
   }
 
   @override
@@ -209,7 +212,7 @@ class _WorkersListingState extends State<WorkersListing> {
             Column(
               children: [
                 Image.asset(
-                  'assets/images/toplogo.png',
+                  Environment().config.imageUrl,
                   height: 20,
                 ),
                 const SizedBox(
@@ -242,23 +245,25 @@ class _WorkersListingState extends State<WorkersListing> {
             const SizedBox(
               height: 8,
             ),
-            listLists.isNotEmpty? Expanded(
-              child: WorkItemView(
-                currentIntex: 0,
-                totalItems: 3,
-                listNames: listNames,
-                listLists: listLists,
-                shiftId: widget.shiftId,
-                processId: widget.processId,
-                selectedShift: widget.selectedShift,
-                process: this.widget.process,
-                reloadData: () {
-                  loadData();
-                },
-                execShiftId: 0,
-                workerType: this.workerType,
-              ),
-            ):Container(),
+            listLists.isNotEmpty
+                ? Expanded(
+                    child: WorkItemView(
+                      currentIntex: 0,
+                      totalItems: 3,
+                      listNames: listNames,
+                      listLists: listLists,
+                      shiftId: widget.shiftId,
+                      processId: widget.processId,
+                      selectedShift: widget.selectedShift,
+                      process: this.widget.process,
+                      reloadData: () {
+                        loadData();
+                      },
+                      execShiftId: 0,
+                      workerType: this.workerType,
+                    ),
+                  )
+                : Container(),
             const SizedBox(
               height: 8,
             ),

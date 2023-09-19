@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiftapp/config/BaseConfig.dart';
 import 'package:shiftapp/config/constants.dart';
 import 'package:shiftapp/model/incident_model.dart';
 import 'package:shiftapp/model/sop_model.dart';
@@ -278,6 +279,8 @@ class _EndShiftViewState extends State<EndShiftView> {
           return element.licenseName != null
               ? element.license_expiry != "Not yet licensed"
                   ? DateTime.parse(element.license_expiry!)
+
+                          ///before it was isBefore
                           .isBefore(DateTime.now())
                       ? true
                       : false
@@ -321,7 +324,7 @@ class _EndShiftViewState extends State<EndShiftView> {
           title: Column(
             children: [
               Image.asset(
-                'assets/images/toplogo.png',
+                Environment().config.imageUrl,
                 height: 20,
               ),
               SizedBox(
@@ -384,28 +387,33 @@ class _EndShiftViewState extends State<EndShiftView> {
               const SizedBox(
                 height: 16,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: ExplainerWidget(
-                  iconName: 'SopTraining',
-                  title: 'SOP TRAINING',
-                  text1: sopCount != 0
-                      ? '${sopCount} Workers require SOP Training'
-                      : "",
-                  text2:
-                      sopCount != 0 ? 'Tap to train now' : "Tap to view Sops",
-                  onTap: () async {
-                    await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) => SopView(
-                                processSelected: widget.process,
-                                selectedShift: widget.selectedShift,
-                                executionShiftId: executeShiftId)));
-                    loadShiftId();
-                  },
+              if (!Environment()
+                  .config
+                  .staging
+                  .toLowerCase()
+                  .contains("Localhome".toLowerCase()))
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: ExplainerWidget(
+                    iconName: 'SopTraining',
+                    title: 'SOP TRAINING',
+                    text1: sopCount != 0
+                        ? '${sopCount} Workers require SOP Training'
+                        : "",
+                    text2:
+                        sopCount != 0 ? 'Tap to train now' : "Tap to view Sops",
+                    onTap: () async {
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => SopView(
+                                  processSelected: widget.process,
+                                  selectedShift: widget.selectedShift,
+                                  executionShiftId: executeShiftId)));
+                      loadShiftId();
+                    },
+                  ),
                 ),
-              ),
               const SizedBox(
                 height: 16,
               ),
@@ -447,32 +455,37 @@ class _EndShiftViewState extends State<EndShiftView> {
               // ComingSoonContainer(
               //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
               //   innerWidget:
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: ExplainerWidget(
-                  // comingSoon: true,
-                  iconName: 'exclamation',
-                  title: 'INCIDENTS',
-                  text1: '$totalIncident',
-                  text2: 'Tap to view and add incidents or record downtime',
-                  showWarning: incidentData != null
-                      ? !incidentData!.data!.isEmpty
-                      : false,
-                  text1_2: '$totalDowntime',
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Incidents(
-                                  selectedShift: widget.selectedShift,
-                                  execShiftId: widget.execShiftId,
-                                  process: widget.process,
-                                  totalDowntime: totalDowntime,
-                                  totalIncident: totalIncident,
-                                ))).then((value) => loadShiftId());
-                  },
+              if (!Environment()
+                  .config
+                  .staging
+                  .toLowerCase()
+                  .contains("Localhome".toLowerCase()))
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: ExplainerWidget(
+                    // comingSoon: true,
+                    iconName: 'exclamation',
+                    title: 'INCIDENTS',
+                    text1: '$totalIncident',
+                    text2: 'Tap to view and add incidents or record downtime',
+                    showWarning: incidentData != null
+                        ? !incidentData!.data!.isEmpty
+                        : false,
+                    text1_2: '$totalDowntime',
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Incidents(
+                                    selectedShift: widget.selectedShift,
+                                    execShiftId: widget.execShiftId,
+                                    process: widget.process,
+                                    totalDowntime: totalDowntime,
+                                    totalIncident: totalIncident,
+                                  ))).then((value) => loadShiftId());
+                    },
+                  ),
                 ),
-              ),
               // ),
               const SizedBox(
                 height: 16,
