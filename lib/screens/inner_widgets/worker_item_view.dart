@@ -2243,7 +2243,7 @@ class _WorkItemViewState extends State<WorkItemView> {
               // String dateString = DateFormat("yyyy-MM-dd HH:mm:ss").format(
               //   DateTime.now(),
               // );
-              if (workerIds.isNotEmpty) {
+              if (newlyAdded.isNotEmpty) {
                 ///here
                 // DateTime? newTime=DateTime.now();
                 DateTime? newTime;

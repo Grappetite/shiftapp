@@ -67,7 +67,7 @@ class ProductionConfig implements BaseConfig {
   String get downloadLink => "https://dev-shift.grappetite.com/api/v1/";
 
   @override
-  String get version => "V.4";
+  String get version => "V.5";
 
   @override
   String get imageUrl => "assets/images/toplogo.png";
@@ -90,7 +90,7 @@ class TakealotConfig implements BaseConfig {
       "install.appcenter.ms/users/mahboob-grappetite.com/apps/shift-android/distribution_groups/public";
 
   @override
-  String get version => "V.4";
+  String get version => "V.5";
 
   @override
   String get imageUrl => "assets/images/toplogo.png";
@@ -113,7 +113,7 @@ class TakealotDemoConfig implements BaseConfig {
   String get downloadLink => "https://takealotdemo.grappetite.com/api/v1/";
 
   @override
-  String get version => "V.4";
+  String get version => "V.5";
 
   @override
   String get imageUrl => "assets/images/toplogo.png";
@@ -144,7 +144,7 @@ class StingrayConfig implements BaseConfig {
 
   @override
   String get staging =>
-      "Version:Shift-${version}-${DateFormat("yyyy-MM-dd HH:mm:ss").parse(DateTime.now().toString())}(Demo)";
+      "Version:Shift-${version}-${DateFormat("yyyy-MM-dd HH:mm:ss").parse(DateTime.now().toString())}(StingRay)";
 
   @override
   String get apiUrl => "https://shiftdemo.grappetite.com/api/v1/";
