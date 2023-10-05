@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 import 'package:shiftapp/config/constants.dart';
+import 'package:shiftapp/screens/PPESelection.dart';
+import 'package:shiftapp/screens/shift_start.dart';
 
 import '../../model/login_model.dart';
 import '../../model/shifts_model.dart';
@@ -11,7 +14,6 @@ import '../../services/workers_service.dart';
 import '../../widgets/elevated_button.dart';
 import '../end_shift_final_screen.dart';
 import '../select_exister_workers.dart';
-import '../start_shift_page.dart';
 import 'index_indicator.dart';
 
 class WorkItemView extends StatefulWidget {
@@ -20,16 +22,16 @@ class WorkItemView extends StatefulWidget {
 
   final int execShiftId;
 
-  final VoidCallback reloadData;
+  final VoidCallback? reloadData;
 
   final int currentIntex;
 
   final int processId;
-  final ShiftItem selectedShift;
+  ShiftItem? selectedShift;
 
   final int? shiftId;
   final Process process;
-
+  List<Process>? processList;
   final int totalItems;
   List<String> listNames;
   List<List<ShiftWorker>> listLists;
@@ -47,7 +49,8 @@ class WorkItemView extends StatefulWidget {
       required this.process,
       required this.reloadData,
       required this.execShiftId,
-      this.workerType = const []})
+      this.workerType = const [],
+      this.processList})
       : super(key: key);
 
   @override
@@ -136,7 +139,7 @@ class _WorkItemViewState extends State<WorkItemView> {
                         style: DefaultTextStyle.of(context).style,
                         children: <TextSpan>[
                           TextSpan(
-                            text: workerSelected,
+                            text: "$workerSelected/${widget.process.headCount}",
                             style: const TextStyle(
                                 color: kPrimaryColor,
                                 fontSize: 18,
@@ -173,90 +176,1877 @@ class _WorkItemViewState extends State<WorkItemView> {
                     height: 8,
                   ),
                   for (var currentItem in widget.listLists[i]) ...[
-                    UserItem(
-                      keyNo: currentItem.key != null ? currentItem.key! : '',
-                      personName:
-                          currentItem.firstName! + ' ' + currentItem.lastName!,
-                      initialSelected: currentItem.isSelected,
-                      picUrl: currentItem.picture,
-                      changedStatus: (bool newStatus) async {
-                        String dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
-                            .format(
-                                DateTime.now().toUtc().add(Duration(hours: 2)));
+                    widget.isEditing
+                        ? currentItem.isSelected
+                            ? GestureDetector(
+                                onTap: () async {
+                                  if (widget.isEditing) {
+                                    this.widget.selectedShift!.executedShiftId =
+                                        widget.execShiftId;
+                                    await showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (BuildContext context) {
+                                          return ConfirmTimeEnd(
+                                              shiftItem:
+                                                  this.widget.selectedShift!,
+                                              editing: widget.isEditing,
+                                              moveWorker: true,
+                                              workerId: currentItem.id,
+                                              processList: widget.processList);
+                                        }).then((value) {
+                                      if (value != null) {
+                                        if (value) {
+                                          widget.listLists[i]
+                                              .remove(currentItem);
+                                          if (mounted) setState(() {});
+                                        }
+                                      }
+                                    });
+                                  }
+                                },
+                                child: UserItem(
+                                  keyNo: currentItem.key != null
+                                      ? currentItem.key!
+                                      : '',
+                                  personName: currentItem.firstName! +
+                                      ' ' +
+                                      currentItem.lastName!,
+                                  reloadTest: () {
+                                    TextEditingController issueDate =
+                                        new TextEditingController();
+                                    TextEditingController expiryDate =
+                                        new TextEditingController();
 
-                        if (widget.isEditing && newStatus) {
-                          setState(() {
-                            currentItem.isSelected = newStatus;
-                          });
+                                    showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                              insetPadding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 0, 0, 0),
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              content: Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      1.15,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      2.35,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16),
+                                                    border: Border.all(
+                                                        color: Colors.grey,
+                                                        width: 3),
+                                                  ),
+                                                  child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            const SizedBox(
+                                                              width: 8,
+                                                            ),
+                                                            Container(
+                                                              child: Image(
+                                                                image: const AssetImage(
+                                                                    'assets/images/warning.png'),
+                                                                width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width /
+                                                                    18,
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 8,
+                                                            ),
+                                                            const Text(
+                                                              'Expired License',
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                color:
+                                                                    kPrimaryColor,
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              child:
+                                                                  Container(),
+                                                            ),
+                                                            GestureDetector(
+                                                              onTap: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child:
+                                                                  const Padding(
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(
+                                                                            4.0),
+                                                                child: Icon(
+                                                                  Icons.close,
+                                                                  color:
+                                                                      kPrimaryColor,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 8,
+                                                        ),
+                                                        // Padding(
+                                                        //   padding:
+                                                        //   const EdgeInsets.all(4),
+                                                        //   child: Text(
+                                                        //     "Worker with expired license:",
+                                                        //     style: const TextStyle(
+                                                        //         color: kPrimaryColor,
+                                                        //         fontSize: 15),
+                                                        //   ),
+                                                        // ),
+                                                        // const SizedBox(
+                                                        //   height: 8,
+                                                        // ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(4),
+                                                          child: Text(
+                                                            "Enter new expiry date",
+                                                            style: const TextStyle(
+                                                                color:
+                                                                    kPrimaryColor,
+                                                                fontSize: 12),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Container(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    4),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8),
+                                                              border: Border.all(
+                                                                  color:
+                                                                      kPrimaryColor),
+                                                            ),
+                                                            child: Row(
+                                                              children: [
+                                                                currentItem.picture !=
+                                                                        null
+                                                                    ? Container(
+                                                                        padding:
+                                                                            EdgeInsets.all(4),
+                                                                        // Border width
+                                                                        decoration: BoxDecoration(
+                                                                            color:
+                                                                                Colors.white,
+                                                                            shape: BoxShape.circle),
+                                                                        child:
+                                                                            ClipOval(
+                                                                          child:
+                                                                              SizedBox.fromSize(
+                                                                            size:
+                                                                                const Size.fromRadius(24),
+                                                                            // Image radius
+                                                                            child:
+                                                                                Image.network(currentItem.picture, fit: BoxFit.cover),
+                                                                          ),
+                                                                        ),
+                                                                      )
+                                                                    : Container(),
+                                                                currentItem.picture !=
+                                                                        null
+                                                                    ? SizedBox(
+                                                                        width:
+                                                                            12,
+                                                                      )
+                                                                    : Container(),
+                                                                Expanded(
+                                                                  flex: 2,
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Text(
+                                                                        currentItem.firstName! +
+                                                                            ' ' +
+                                                                            currentItem.lastName!,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              15,
+                                                                          fontWeight:
+                                                                              FontWeight.w700,
+                                                                          color:
+                                                                              kPrimaryColor,
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            8,
+                                                                      ),
+                                                                      Text(
+                                                                        widget.listNames[
+                                                                            i],
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                kPrimaryColor,
+                                                                            fontSize:
+                                                                                15),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            8,
+                                                                      ),
+                                                                      Text(
+                                                                        currentItem
+                                                                            .licenseName!,
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                kPrimaryColor,
+                                                                            fontSize:
+                                                                                10),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            8,
+                                                                      ),
+                                                                      Text(
+                                                                        "Expiry: " +
+                                                                            currentItem.license_expiry.toString(),
+                                                                        // DateFormat("yyyy-MM-dd")
+                                                                        //     .parse(currentItem.license_expiry.toString())
+                                                                        //     .toString()
+                                                                        //     .split(" ")[0],
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                kPrimaryColor,
+                                                                            fontSize:
+                                                                                10),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            8,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 4,
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 2,
+                                                                  child: Column(
+                                                                    children: [
+                                                                      // GestureDetector(
+                                                                      //   onTap:
+                                                                      //       () {
+                                                                      //     {
+                                                                      //       issueDate.text =
+                                                                      //           DateTime.now().toString().split(" ")[0];
+                                                                      //       expiryDate.text =
+                                                                      //           DateTime.now().add(Duration(days: currentItem.expiryDays!)).toString().split(" ")[0];
+                                                                      //       showCupertinoModalPopup(
+                                                                      //           context: context,
+                                                                      //           builder: (BuildContext builder) {
+                                                                      //             return Container(
+                                                                      //               color: Colors.white,
+                                                                      //               height: MediaQuery.of(context).size.width,
+                                                                      //               width: MediaQuery.of(context).size.width,
+                                                                      //               child: Column(
+                                                                      //                 children: [
+                                                                      //                   SizedBox(
+                                                                      //                     height: 10,
+                                                                      //                   ),
+                                                                      //                   Container(
+                                                                      //                     height: 30,
+                                                                      //                     child: PElevatedButton(
+                                                                      //                       onPressed: () {
+                                                                      //                         Navigator.pop(context);
+                                                                      //                         // okHandler.call();
+                                                                      //                       },
+                                                                      //                       text: "Done",
+                                                                      //                     ),
+                                                                      //                   ),
+                                                                      //                   Expanded(
+                                                                      //                     flex: 4,
+                                                                      //                     child: CupertinoDatePicker(
+                                                                      //                       mode: CupertinoDatePickerMode.date,
+                                                                      //                       onDateTimeChanged: (value) async {
+                                                                      //                         issueDate.text = value.toString().split(" ")[0];
+                                                                      //                         expiryDate.text = value.add(Duration(days: currentItem.expiryDays!)).toString().split(" ")[0];
+                                                                      //                         setState(() {});
+                                                                      //                       },
+                                                                      //                       initialDateTime: DateTime.now(),
+                                                                      //                       minimumDate: DateTime.now().subtract(Duration(days: currentItem.expiryDays! - 3)),
+                                                                      //                       maximumDate: DateTime.now(),
+                                                                      //                     ),
+                                                                      //                   ),
+                                                                      //                 ],
+                                                                      //               ),
+                                                                      //             );
+                                                                      //           });
+                                                                      //     }
+                                                                      //   },
+                                                                      //   child:
+                                                                      //       Padding(
+                                                                      //     padding:
+                                                                      //         const EdgeInsets.all(4.0),
+                                                                      //     child:
+                                                                      //         TextFormField(
+                                                                      //       textInputAction:
+                                                                      //           TextInputAction.go,
+                                                                      //       enabled:
+                                                                      //           false,
+                                                                      //       controller:
+                                                                      //           issueDate,
+                                                                      //       decoration:
+                                                                      //           const InputDecoration(
+                                                                      //         labelText: 'New Issue Date',
+                                                                      //         border: OutlineInputBorder(
+                                                                      //           borderRadius: BorderRadius.all(
+                                                                      //             Radius.circular(10.0),
+                                                                      //           ),
+                                                                      //           borderSide: BorderSide(color: kPrimaryColor),
+                                                                      //         ),
+                                                                      //         enabledBorder: OutlineInputBorder(
+                                                                      //           borderRadius: BorderRadius.all(
+                                                                      //             Radius.circular(10.0),
+                                                                      //           ),
+                                                                      //           borderSide: BorderSide(color: kPrimaryColor),
+                                                                      //         ),
+                                                                      //         disabledBorder: OutlineInputBorder(
+                                                                      //           borderRadius: BorderRadius.all(
+                                                                      //             Radius.circular(10.0),
+                                                                      //           ),
+                                                                      //           borderSide: BorderSide(color: kPrimaryColor),
+                                                                      //         ),
+                                                                      //       ),
+                                                                      //     ),
+                                                                      //   ),
+                                                                      // ),
+                                                                      GestureDetector(
+                                                                        onTap:
+                                                                            () {
+                                                                          // expiryDate.text = DateTime.now()
+                                                                          //     .toString()
+                                                                          //     .split(" ")[0];
+                                                                          String
+                                                                              dateTimeIncident =
+                                                                              "";
+                                                                          showCupertinoModalPopup(
+                                                                              context: context,
+                                                                              builder: (BuildContext builder) {
+                                                                                return Container(
+                                                                                  color: Colors.white,
+                                                                                  height: MediaQuery.of(context).size.width,
+                                                                                  width: MediaQuery.of(context).size.width,
+                                                                                  child: Column(
+                                                                                    children: [
+                                                                                      SizedBox(
+                                                                                        height: 10,
+                                                                                      ),
+                                                                                      Container(
+                                                                                        height: 30,
+                                                                                        child: PElevatedButton(
+                                                                                          onPressed: () {
+                                                                                            expiryDate.text = dateTimeIncident == "" ? DateTime.now().toString().split(" ")[0] : dateTimeIncident;
+                                                                                            Navigator.pop(context);
+                                                                                            // okHandler.call();
+                                                                                          },
+                                                                                          text: "Done",
+                                                                                        ),
+                                                                                      ),
+                                                                                      Expanded(
+                                                                                        flex: 4,
+                                                                                        child: CupertinoDatePicker(
+                                                                                          mode: CupertinoDatePickerMode.date,
+                                                                                          onDateTimeChanged: (value) async {
+                                                                                            dateTimeIncident = value.toString().split(" ")[0];
+                                                                                            setState(() {});
+                                                                                          },
+                                                                                          initialDateTime: DateTime.now().add(Duration(hours: 1)),
+                                                                                          minimumDate: DateTime.now(),
+                                                                                          maximumDate: DateTime.now().add(Duration(days: (365 * 11))),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                );
+                                                                              });
+                                                                        },
+                                                                        child:
+                                                                            Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.all(4.0),
+                                                                          child:
+                                                                              TextFormField(
+                                                                            //                 textInputAction: TextInputAction.go,
+                                                                            enabled:
+                                                                                false,
+                                                                            controller:
+                                                                                expiryDate,
+                                                                            decoration:
+                                                                                const InputDecoration(
+                                                                              labelText: 'New Expiry Date',
+                                                                              border: OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.all(
+                                                                                  Radius.circular(10.0),
+                                                                                ),
+                                                                                borderSide: BorderSide(color: kPrimaryColor),
+                                                                              ),
+                                                                              enabledBorder: OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.all(
+                                                                                  Radius.circular(10.0),
+                                                                                ),
+                                                                                borderSide: BorderSide(color: kPrimaryColor),
+                                                                              ),
+                                                                              disabledBorder: OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.all(
+                                                                                  Radius.circular(10.0),
+                                                                                ),
+                                                                                borderSide: BorderSide(color: kPrimaryColor),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Center(
+                                                          child:
+                                                              PElevatedButton(
+                                                            onPressed:
+                                                                () async {
+                                                              await EasyLoading
+                                                                  .show(
+                                                                status:
+                                                                    'loading...',
+                                                                maskType:
+                                                                    EasyLoadingMaskType
+                                                                        .black,
+                                                              );
+                                                              var test = await WorkersService.updateExpiry(
+                                                                  worker:
+                                                                      currentItem!,
+                                                                  issueDate:
+                                                                      issueDate
+                                                                          .text,
+                                                                  expiryDate:
+                                                                      expiryDate
+                                                                          .text);
 
-                          await EasyLoading.show(
-                            status: 'Adding...',
-                            maskType: EasyLoadingMaskType.black,
-                          );
+                                                              await EasyLoading
+                                                                  .dismiss();
+                                                              Navigator.pop(
+                                                                  context);
+                                                              if (test!) {
+                                                                currentItem
+                                                                        .license_expiry =
+                                                                    expiryDate
+                                                                        .text;
+                                                                setState(() {});
+                                                              }
+                                                            },
+                                                            text: 'CONTINUE',
+                                                          ),
+                                                        )
+                                                      ])));
+                                        });
+                                  },
+                                  worker: currentItem,
+                                  initialSelected: currentItem.isSelected,
+                                  picUrl: currentItem.picture,
+                                  changedStatus: (bool newStatus) async {
+                                    String dateString =
+                                        widget.selectedShift!.startTime!;
 
-                          var response = await WorkersService.addWorkers(
-                              widget.execShiftId,
-                              [currentItem.id!.toString()],
-                              [dateString],
-                              [],
-                              [currentItem.efficiencyCalculation.toString()]);
+                                    ///previously
+                                    // DateFormat("yyyy-MM-dd HH:mm:ss")
+                                    //     .format(DateTime.now());
+                                    ///end
+                                    if (widget.isEditing && newStatus) {
+                                      if (mounted)
+                                        setState(() {
+                                          currentItem.isSelected = newStatus;
+                                        });
 
-                          await EasyLoading.dismiss();
+                                      await EasyLoading.show(
+                                        status: 'Adding...',
+                                        maskType: EasyLoadingMaskType.black,
+                                      );
 
-                          if (response) {
-                          } else {
-                            EasyLoading.showError('Error');
-                          }
-                        } else if (widget.isEditing && !newStatus) {
-                          await showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) {
-                                return ConfirmTimeEnd(
-                                  shiftItem: this.widget.selectedShift,
-                                  editing: widget.isEditing,
-                                );
-                              }).then((value) async {
-                            if (value != false) {
-                              // dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
-                              //     .format(DateTime.parse(value));
-                              dateString = value;
-                              setState(() {
-                                currentItem.isSelected = newStatus;
-                              });
+                                      var response =
+                                          await WorkersService.addWorkers(
+                                              widget.execShiftId, [
+                                        currentItem.id!.toString()
+                                      ], [
+                                        dateString
+                                      ], [], [
+                                        currentItem.efficiencyCalculation
+                                            .toString()
+                                      ]);
 
-                              /// end
-                              await EasyLoading.show(
-                                status: 'Removing...',
-                                maskType: EasyLoadingMaskType.black,
-                              );
+                                      await EasyLoading.dismiss();
 
-                              var response = await WorkersService.removeWorkers(
-                                  widget.execShiftId, [
-                                currentItem.id!.toString()
-                              ], [
-                                dateString
-                              ], [], [
-                                currentItem.efficiencyCalculation.toString()
-                              ]);
-                              await EasyLoading.dismiss();
+                                      if (response) {
+                                      } else {
+                                        EasyLoading.showError('Error');
+                                      }
+                                    } else if (widget.isEditing && !newStatus) {
+                                      if (mounted)
+                                        setState(() {
+                                          currentItem.isSelected =
+                                              currentItem.isSelected;
+                                        });
+                                      await showDialog(
+                                          context: context,
+                                          barrierDismissible: false,
+                                          builder: (BuildContext context) {
+                                            return ConfirmTimeEnd(
+                                              shiftItem:
+                                                  this.widget.selectedShift!,
+                                              editing: widget.isEditing,
+                                            );
+                                          }).then((value) async {
+                                        if (value != false) {
+                                          // dateString = DateFormat("yyyy-MM-dd HH:mm:ss")
+                                          //     .format(DateTime.parse(value));
+                                          dateString = value;
+                                          if (mounted)
+                                            setState(() {
+                                              currentItem.isSelected =
+                                                  newStatus;
+                                            });
 
-                              if (response) {
-                              } else {
-                                EasyLoading.showError('Error');
+                                          /// end
+                                          await EasyLoading.show(
+                                            status: 'Removing...',
+                                            maskType: EasyLoadingMaskType.black,
+                                          );
+
+                                          var response = await WorkersService
+                                              .removeWorkers(
+                                                  widget.execShiftId, [
+                                            currentItem.id!.toString()
+                                          ], [
+                                            dateString
+                                          ], [], [
+                                            currentItem.efficiencyCalculation
+                                                .toString()
+                                          ]);
+                                          widget.listLists[i]
+                                              .remove(currentItem);
+                                          if (mounted) setState(() {});
+                                          await EasyLoading.dismiss();
+
+                                          if (response) {
+                                          } else {
+                                            EasyLoading.showError('Error');
+                                          }
+                                        } else {
+                                          if (mounted)
+                                            setState(() {
+                                              currentItem.isSelected =
+                                                  currentItem.isSelected;
+                                            });
+                                        }
+                                      });
+                                    } else {
+                                      if (mounted)
+                                        setState(() {
+                                          currentItem.isSelected = newStatus;
+                                        });
+                                    }
+                                  },
+                                ),
+                              )
+                            : GestureDetector(
+                                onTap: () async {
+                                  if (widget.isEditing) {
+                                    this.widget.selectedShift!.executedShiftId =
+                                        widget.execShiftId;
+                                    if (currentItem.isSelected) {
+                                      await showDialog(
+                                          context: context,
+                                          barrierDismissible: false,
+                                          builder: (BuildContext context) {
+                                            return ConfirmTimeEnd(
+                                                shiftItem:
+                                                    this.widget.selectedShift!,
+                                                editing: widget.isEditing,
+                                                moveWorker: true,
+                                                workerId: currentItem.id,
+                                                processList:
+                                                    widget.processList);
+                                          }).then((value) {
+                                        if (value != null) {
+                                          if (value) {
+                                            widget.listLists[i]
+                                                .remove(currentItem);
+                                            if (mounted) setState(() {});
+                                          }
+                                        }
+                                      });
+                                    }
+                                  }
+                                },
+                                child: UserItem(
+                                  keyNo: currentItem.key != null
+                                      ? currentItem.key!
+                                      : '',
+                                  reloadTest: () {
+                                    TextEditingController issueDate =
+                                        new TextEditingController();
+                                    TextEditingController expiryDate =
+                                        new TextEditingController();
+
+                                    showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                              insetPadding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0, 0, 0, 0),
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              content: Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width /
+                                                      1.15,
+                                                  height: MediaQuery.of(context)
+                                                          .size
+                                                          .height /
+                                                      2.35,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16),
+                                                    border: Border.all(
+                                                        color: Colors.grey,
+                                                        width: 3),
+                                                  ),
+                                                  child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            const SizedBox(
+                                                              width: 8,
+                                                            ),
+                                                            Container(
+                                                              child: Image(
+                                                                image: const AssetImage(
+                                                                    'assets/images/warning.png'),
+                                                                width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width /
+                                                                    18,
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 8,
+                                                            ),
+                                                            const Text(
+                                                              'Expired License',
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700,
+                                                                color:
+                                                                    kPrimaryColor,
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              child:
+                                                                  Container(),
+                                                            ),
+                                                            GestureDetector(
+                                                              onTap: () {
+                                                                Navigator.pop(
+                                                                    context);
+                                                              },
+                                                              child:
+                                                                  const Padding(
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(
+                                                                            4.0),
+                                                                child: Icon(
+                                                                  Icons.close,
+                                                                  color:
+                                                                      kPrimaryColor,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 8,
+                                                        ),
+                                                        // Padding(
+                                                        //   padding:
+                                                        //   const EdgeInsets.all(4),
+                                                        //   child: Text(
+                                                        //     "Worker with expired license:",
+                                                        //     style: const TextStyle(
+                                                        //         color: kPrimaryColor,
+                                                        //         fontSize: 15),
+                                                        //   ),
+                                                        // ),
+                                                        // const SizedBox(
+                                                        //   height: 8,
+                                                        // ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(4),
+                                                          child: Text(
+                                                            "Enter new expiry date",
+                                                            style: const TextStyle(
+                                                                color:
+                                                                    kPrimaryColor,
+                                                                fontSize: 12),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Container(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    4),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8),
+                                                              border: Border.all(
+                                                                  color:
+                                                                      kPrimaryColor),
+                                                            ),
+                                                            child: Row(
+                                                              children: [
+                                                                currentItem.picture !=
+                                                                        null
+                                                                    ? Container(
+                                                                        padding:
+                                                                            EdgeInsets.all(4),
+                                                                        // Border width
+                                                                        decoration: BoxDecoration(
+                                                                            color:
+                                                                                Colors.white,
+                                                                            shape: BoxShape.circle),
+                                                                        child:
+                                                                            ClipOval(
+                                                                          child:
+                                                                              SizedBox.fromSize(
+                                                                            size:
+                                                                                const Size.fromRadius(24),
+                                                                            // Image radius
+                                                                            child:
+                                                                                Image.network(currentItem.picture, fit: BoxFit.cover),
+                                                                          ),
+                                                                        ),
+                                                                      )
+                                                                    : Container(),
+                                                                currentItem.picture !=
+                                                                        null
+                                                                    ? SizedBox(
+                                                                        width:
+                                                                            12,
+                                                                      )
+                                                                    : Container(),
+                                                                Expanded(
+                                                                  flex: 2,
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Text(
+                                                                        currentItem.firstName! +
+                                                                            ' ' +
+                                                                            currentItem.lastName!,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              15,
+                                                                          fontWeight:
+                                                                              FontWeight.w700,
+                                                                          color:
+                                                                              kPrimaryColor,
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            8,
+                                                                      ),
+                                                                      Text(
+                                                                        widget.listNames[
+                                                                            i],
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                kPrimaryColor,
+                                                                            fontSize:
+                                                                                15),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            8,
+                                                                      ),
+                                                                      Text(
+                                                                        currentItem
+                                                                            .licenseName!,
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                kPrimaryColor,
+                                                                            fontSize:
+                                                                                10),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            8,
+                                                                      ),
+                                                                      Text(
+                                                                        "Expiry: " +
+                                                                            currentItem.license_expiry.toString(),
+                                                                        // DateFormat("yyyy-MM-dd").parse(currentItem.license_expiry.toString()).toString().split(" ")[0],
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                kPrimaryColor,
+                                                                            fontSize:
+                                                                                10),
+                                                                      ),
+                                                                      const SizedBox(
+                                                                        height:
+                                                                            8,
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 4,
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 2,
+                                                                  child: Column(
+                                                                    children: [
+                                                                      // GestureDetector(
+                                                                      //   onTap:
+                                                                      //       () {
+                                                                      //     issueDate.text = DateTime.now()
+                                                                      //         .toString()
+                                                                      //         .split(" ")[0];
+                                                                      //     expiryDate.text = DateTime.now()
+                                                                      //         .add(Duration(days: currentItem.expiryDays!))
+                                                                      //         .toString()
+                                                                      //         .split(" ")[0];
+                                                                      //     showCupertinoModalPopup(
+                                                                      //         context: context,
+                                                                      //         builder: (BuildContext builder) {
+                                                                      //           return Container(
+                                                                      //             color: Colors.white,
+                                                                      //             height: MediaQuery.of(context).size.width,
+                                                                      //             width: MediaQuery.of(context).size.width,
+                                                                      //             child: Column(
+                                                                      //               children: [
+                                                                      //                 SizedBox(
+                                                                      //                   height: 10,
+                                                                      //                 ),
+                                                                      //                 Container(
+                                                                      //                   height: 30,
+                                                                      //                   child: PElevatedButton(
+                                                                      //                     onPressed: () {
+                                                                      //                       Navigator.pop(context);
+                                                                      //                       // okHandler.call();
+                                                                      //                     },
+                                                                      //                     text: "Done",
+                                                                      //                   ),
+                                                                      //                 ),
+                                                                      //                 Expanded(
+                                                                      //                   flex: 4,
+                                                                      //                   child: CupertinoDatePicker(
+                                                                      //                     mode: CupertinoDatePickerMode.date,
+                                                                      //                     onDateTimeChanged: (value) async {
+                                                                      //                       issueDate.text = value.toString().split(" ")[0];
+                                                                      //                       expiryDate.text = value.add(Duration(days: currentItem.expiryDays!)).toString().split(" ")[0];
+                                                                      //                       setState(() {});
+                                                                      //                     },
+                                                                      //                     initialDateTime: DateTime.now(),
+                                                                      //                     minimumDate: DateTime.now().subtract(Duration(days: currentItem.expiryDays! - 3)),
+                                                                      //                     maximumDate: DateTime.now(),
+                                                                      //                   ),
+                                                                      //                 ),
+                                                                      //               ],
+                                                                      //             ),
+                                                                      //           );
+                                                                      //         });
+                                                                      //   },
+                                                                      //   child:
+                                                                      //       Padding(
+                                                                      //     padding:
+                                                                      //         const EdgeInsets.all(4.0),
+                                                                      //     child:
+                                                                      //         TextFormField(
+                                                                      //       textInputAction:
+                                                                      //           TextInputAction.go,
+                                                                      //       enabled:
+                                                                      //           false,
+                                                                      //       controller:
+                                                                      //           issueDate,
+                                                                      //       decoration:
+                                                                      //           const InputDecoration(
+                                                                      //         labelText: 'New Issue Date',
+                                                                      //         border: OutlineInputBorder(
+                                                                      //           borderRadius: BorderRadius.all(
+                                                                      //             Radius.circular(10.0),
+                                                                      //           ),
+                                                                      //           borderSide: BorderSide(color: kPrimaryColor),
+                                                                      //         ),
+                                                                      //         enabledBorder: OutlineInputBorder(
+                                                                      //           borderRadius: BorderRadius.all(
+                                                                      //             Radius.circular(10.0),
+                                                                      //           ),
+                                                                      //           borderSide: BorderSide(color: kPrimaryColor),
+                                                                      //         ),
+                                                                      //         disabledBorder: OutlineInputBorder(
+                                                                      //           borderRadius: BorderRadius.all(
+                                                                      //             Radius.circular(10.0),
+                                                                      //           ),
+                                                                      //           borderSide: BorderSide(color: kPrimaryColor),
+                                                                      //         ),
+                                                                      //       ),
+                                                                      //     ),
+                                                                      //   ),
+                                                                      // ),
+                                                                      GestureDetector(
+                                                                        onTap:
+                                                                            () {
+                                                                          // expiryDate.text = DateTime.now()
+                                                                          //     .toString()
+                                                                          //     .split(" ")[0];
+
+                                                                          String
+                                                                              dateTimeIncident =
+                                                                              "";
+                                                                          showCupertinoModalPopup(
+                                                                              context: context,
+                                                                              builder: (BuildContext builder) {
+                                                                                return Container(
+                                                                                  color: Colors.white,
+                                                                                  height: MediaQuery.of(context).size.width,
+                                                                                  width: MediaQuery.of(context).size.width,
+                                                                                  child: Column(
+                                                                                    children: [
+                                                                                      SizedBox(
+                                                                                        height: 10,
+                                                                                      ),
+                                                                                      Container(
+                                                                                        height: 30,
+                                                                                        child: PElevatedButton(
+                                                                                          onPressed: () {
+                                                                                            expiryDate.text = dateTimeIncident == "" ? DateTime.now().toString().split(" ")[0] : dateTimeIncident;
+                                                                                            Navigator.pop(context);
+                                                                                            // okHandler.call();
+                                                                                          },
+                                                                                          text: "Done",
+                                                                                        ),
+                                                                                      ),
+                                                                                      Expanded(
+                                                                                        flex: 4,
+                                                                                        child: CupertinoDatePicker(
+                                                                                          mode: CupertinoDatePickerMode.date,
+                                                                                          onDateTimeChanged: (value) async {
+                                                                                            dateTimeIncident = value.toString().split(" ")[0];
+                                                                                            setState(() {});
+                                                                                          },
+                                                                                          initialDateTime: DateTime.now().add(Duration(hours: 1)),
+                                                                                          minimumDate: DateTime.now(),
+                                                                                          maximumDate: DateTime.now().add(Duration(days: (365 * 11))),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                );
+                                                                              });
+                                                                        },
+                                                                        child:
+                                                                            Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.all(4.0),
+                                                                          child:
+                                                                              TextFormField(
+                                                                            textInputAction:
+                                                                                TextInputAction.go,
+                                                                            enabled:
+                                                                                false,
+                                                                            controller:
+                                                                                expiryDate,
+                                                                            decoration:
+                                                                                const InputDecoration(
+                                                                              labelText: 'New Expiry Date',
+                                                                              border: OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.all(
+                                                                                  Radius.circular(10.0),
+                                                                                ),
+                                                                                borderSide: BorderSide(color: kPrimaryColor),
+                                                                              ),
+                                                                              enabledBorder: OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.all(
+                                                                                  Radius.circular(10.0),
+                                                                                ),
+                                                                                borderSide: BorderSide(color: kPrimaryColor),
+                                                                              ),
+                                                                              disabledBorder: OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.all(
+                                                                                  Radius.circular(10.0),
+                                                                                ),
+                                                                                borderSide: BorderSide(color: kPrimaryColor),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Center(
+                                                          child:
+                                                              PElevatedButton(
+                                                            onPressed:
+                                                                () async {
+                                                              await EasyLoading
+                                                                  .show(
+                                                                status:
+                                                                    'loading...',
+                                                                maskType:
+                                                                    EasyLoadingMaskType
+                                                                        .black,
+                                                              );
+                                                              var test = await WorkersService.updateExpiry(
+                                                                  worker:
+                                                                      currentItem!,
+                                                                  issueDate:
+                                                                      issueDate
+                                                                          .text,
+                                                                  expiryDate:
+                                                                      expiryDate
+                                                                          .text);
+
+                                                              await EasyLoading
+                                                                  .dismiss();
+                                                              Navigator.pop(
+                                                                  context);
+                                                              if (test!) {
+                                                                currentItem
+                                                                        .license_expiry =
+                                                                    expiryDate
+                                                                        .text;
+                                                                setState(() {});
+                                                              }
+                                                            },
+                                                            text: 'CONTINUE',
+                                                          ),
+                                                        )
+                                                      ])));
+                                        });
+                                  },
+                                  worker: currentItem,
+                                  personName: currentItem.firstName! +
+                                      ' ' +
+                                      currentItem.lastName!,
+                                  initialSelected: currentItem.isSelected,
+                                  picUrl: currentItem.picture,
+                                  changedStatus: (bool newStatus) async {
+                                    String dateString =
+                                        widget.selectedShift!.startTime!;
+
+                                    ///previously
+                                    // DateFormat("yyyy-MM-dd HH:mm:ss")
+                                    //     .format(DateTime.now());
+                                    ///end
+                                    if (widget.isEditing && newStatus) {
+                                      if (mounted)
+                                        setState(() {
+                                          currentItem.isSelected = newStatus;
+                                        });
+
+                                      await EasyLoading.show(
+                                        status: 'Adding...',
+                                        maskType: EasyLoadingMaskType.black,
+                                      );
+
+                                      var response =
+                                          await WorkersService.addWorkers(
+                                              widget.execShiftId, [
+                                        currentItem.id!.toString()
+                                      ], [
+                                        dateString
+                                      ], [], [
+                                        currentItem.efficiencyCalculation
+                                            .toString()
+                                      ]);
+
+                                      await EasyLoading.dismiss();
+
+                                      if (response) {
+                                      } else {
+                                        EasyLoading.showError('Error');
+                                      }
+                                    } else if (widget.isEditing && !newStatus) {
+                                      if (mounted)
+                                        setState(() {
+                                          currentItem.isSelected =
+                                              currentItem.isSelected;
+                                        });
+                                      await showDialog(
+                                          context: context,
+                                          barrierDismissible: false,
+                                          builder: (BuildContext context) {
+                                            return ConfirmTimeEnd(
+                                              shiftItem:
+                                                  this.widget.selectedShift!,
+                                              editing: widget.isEditing,
+                                            );
+                                          }).then((value) async {
+                                        if (value != false) {
+                                          // dateString = DateFormat("yyyy-MM-dd HH:mm:ss")
+                                          //     .format(DateTime.parse(value));
+                                          dateString = value;
+                                          if (mounted)
+                                            setState(() {
+                                              currentItem.isSelected =
+                                                  newStatus;
+                                            });
+
+                                          /// end
+                                          await EasyLoading.show(
+                                            status: 'Removing...',
+                                            maskType: EasyLoadingMaskType.black,
+                                          );
+
+                                          var response = await WorkersService
+                                              .removeWorkers(
+                                                  widget.execShiftId, [
+                                            currentItem.id!.toString()
+                                          ], [
+                                            dateString
+                                          ], [], [
+                                            currentItem.efficiencyCalculation
+                                                .toString()
+                                          ]);
+                                          widget.listLists[i]
+                                              .remove(currentItem);
+                                          if (mounted) setState(() {});
+                                          await EasyLoading.dismiss();
+
+                                          if (response) {
+                                          } else {
+                                            EasyLoading.showError('Error');
+                                          }
+                                        } else {
+                                          if (mounted)
+                                            setState(() {
+                                              currentItem.isSelected =
+                                                  currentItem.isSelected;
+                                            });
+                                        }
+                                      });
+                                    } else {
+                                      if (mounted)
+                                        setState(() {
+                                          currentItem.isSelected = newStatus;
+                                        });
+                                    }
+                                  },
+                                ),
+                              )
+                        : GestureDetector(
+                            onTap: () async {
+                              if (widget.isEditing) {
+                                this.widget.selectedShift!.executedShiftId =
+                                    widget.execShiftId;
+                                await showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (BuildContext context) {
+                                      return ConfirmTimeEnd(
+                                          shiftItem: this.widget.selectedShift!,
+                                          editing: widget.isEditing,
+                                          moveWorker: true,
+                                          workerId: currentItem.id,
+                                          processList: widget.processList);
+                                    }).then((value) {
+                                  if (value) {
+                                    widget.listLists[i].remove(currentItem);
+                                    if (mounted) setState(() {});
+                                  }
+                                });
                               }
-                            }
-                          });
-                        } else {
-                          setState(() {
-                            currentItem.isSelected = newStatus;
-                          });
-                        }
-                      },
-                    ),
-                    const SizedBox(
-                      height: 24,
-                    ),
+                            },
+                            child: UserItem(
+                              keyNo: currentItem.key != null
+                                  ? currentItem.key!
+                                  : '',
+                              personName: currentItem.firstName! +
+                                  ' ' +
+                                  currentItem.lastName!,
+                              reloadTest: () {
+                                TextEditingController issueDate =
+                                    new TextEditingController();
+                                TextEditingController expiryDate =
+                                    new TextEditingController();
+
+                                showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                          insetPadding:
+                                              const EdgeInsets.fromLTRB(
+                                                  0, 0, 0, 0),
+                                          backgroundColor: Colors.transparent,
+                                          content: Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width /
+                                                  1.15,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height /
+                                                  2.35,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(16),
+                                                border: Border.all(
+                                                    color: Colors.grey,
+                                                    width: 3),
+                                              ),
+                                              child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        const SizedBox(
+                                                          width: 8,
+                                                        ),
+                                                        Container(
+                                                          child: Image(
+                                                            image: const AssetImage(
+                                                                'assets/images/warning.png'),
+                                                            width: MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width /
+                                                                18,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 8,
+                                                        ),
+                                                        const Text(
+                                                          'Expired License',
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w700,
+                                                            color:
+                                                                kPrimaryColor,
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          child: Container(),
+                                                        ),
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: const Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    4.0),
+                                                            child: Icon(
+                                                              Icons.close,
+                                                              color:
+                                                                  kPrimaryColor,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(
+                                                      height: 8,
+                                                    ),
+                                                    // Padding(
+                                                    //   padding:
+                                                    //   const EdgeInsets.all(4),
+                                                    //   child: Text(
+                                                    //     "Worker with expired license:",
+                                                    //     style: const TextStyle(
+                                                    //         color: kPrimaryColor,
+                                                    //         fontSize: 15),
+                                                    //   ),
+                                                    // ),
+                                                    // const SizedBox(
+                                                    //   height: 8,
+                                                    // ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              4),
+                                                      child: Text(
+                                                        "Enter new expiry date",
+                                                        style: const TextStyle(
+                                                            color:
+                                                                kPrimaryColor,
+                                                            fontSize: 12),
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Container(
+                                                        padding:
+                                                            EdgeInsets.all(4),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                          border: Border.all(
+                                                              color:
+                                                                  kPrimaryColor),
+                                                        ),
+                                                        child: Row(
+                                                          children: [
+                                                            currentItem.picture !=
+                                                                    null
+                                                                ? Container(
+                                                                    padding:
+                                                                        EdgeInsets
+                                                                            .all(4),
+                                                                    // Border width
+                                                                    decoration: BoxDecoration(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        shape: BoxShape
+                                                                            .circle),
+                                                                    child:
+                                                                        ClipOval(
+                                                                      child: SizedBox
+                                                                          .fromSize(
+                                                                        size: const Size.fromRadius(
+                                                                            24),
+                                                                        // Image radius
+                                                                        child: Image.network(
+                                                                            currentItem
+                                                                                .picture,
+                                                                            fit:
+                                                                                BoxFit.cover),
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                : Container(),
+                                                            currentItem.picture !=
+                                                                    null
+                                                                ? SizedBox(
+                                                                    width: 12,
+                                                                  )
+                                                                : Container(),
+                                                            Expanded(
+                                                              flex: 2,
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                children: [
+                                                                  Text(
+                                                                    currentItem
+                                                                            .firstName! +
+                                                                        ' ' +
+                                                                        currentItem
+                                                                            .lastName!,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          15,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w700,
+                                                                      color:
+                                                                          kPrimaryColor,
+                                                                    ),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 8,
+                                                                  ),
+                                                                  Text(
+                                                                    widget.listNames[
+                                                                        i],
+                                                                    style: const TextStyle(
+                                                                        color:
+                                                                            kPrimaryColor,
+                                                                        fontSize:
+                                                                            15),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 8,
+                                                                  ),
+                                                                  Text(
+                                                                    currentItem
+                                                                        .licenseName!,
+                                                                    style: const TextStyle(
+                                                                        color:
+                                                                            kPrimaryColor,
+                                                                        fontSize:
+                                                                            10),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 8,
+                                                                  ),
+                                                                  Text(
+                                                                    "Expiry: " +
+                                                                        currentItem
+                                                                            .license_expiry
+                                                                            .toString(),
+                                                                    // DateFormat("yyyy-MM-dd")
+                                                                    //         .parse(currentItem.license_expiry.toString())
+                                                                    //         .toString()
+                                                                    //         .split(" ")[0],
+                                                                    style: const TextStyle(
+                                                                        color:
+                                                                            kPrimaryColor,
+                                                                        fontSize:
+                                                                            10),
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 8,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              width: 4,
+                                                            ),
+                                                            Expanded(
+                                                              flex: 2,
+                                                              child: Column(
+                                                                children: [
+                                                                  // GestureDetector(
+                                                                  //   onTap: () {
+                                                                  //     issueDate
+                                                                  //         .text = DateTime
+                                                                  //             .now()
+                                                                  //         .toString()
+                                                                  //         .split(
+                                                                  //             " ")[0];
+                                                                  //     expiryDate
+                                                                  //         .text = DateTime
+                                                                  //             .now()
+                                                                  //         .add(Duration(
+                                                                  //             days: currentItem.expiryDays!))
+                                                                  //         .toString();
+                                                                  //     showCupertinoModalPopup(
+                                                                  //         context:
+                                                                  //             context,
+                                                                  //         builder:
+                                                                  //             (BuildContext builder) {
+                                                                  //           return Container(
+                                                                  //             color: Colors.white,
+                                                                  //             height: MediaQuery.of(context).size.width,
+                                                                  //             width: MediaQuery.of(context).size.width,
+                                                                  //             child: Column(
+                                                                  //               children: [
+                                                                  //                 SizedBox(
+                                                                  //                   height: 10,
+                                                                  //                 ),
+                                                                  //                 Container(
+                                                                  //                   height: 30,
+                                                                  //                   child: PElevatedButton(
+                                                                  //                     onPressed: () {
+                                                                  //                       Navigator.pop(context);
+                                                                  //                       // okHandler.call();
+                                                                  //                     },
+                                                                  //                     text: "Done",
+                                                                  //                   ),
+                                                                  //                 ),
+                                                                  //                 Expanded(
+                                                                  //                   flex: 4,
+                                                                  //                   child: CupertinoDatePicker(
+                                                                  //                     mode: CupertinoDatePickerMode.date,
+                                                                  //                     onDateTimeChanged: (value) async {
+                                                                  //                       issueDate.text = value.toString().split(" ")[0];
+                                                                  //                       expiryDate.text = value.add(Duration(days: currentItem.expiryDays!)).toString().split(" ")[0];
+                                                                  //                       setState(() {});
+                                                                  //                     },
+                                                                  //                     initialDateTime: DateTime.now(),
+                                                                  //                     minimumDate: DateTime.now().subtract(Duration(days: currentItem.expiryDays! - 3)),
+                                                                  //                     maximumDate: DateTime.now(),
+                                                                  //                   ),
+                                                                  //                 ),
+                                                                  //               ],
+                                                                  //             ),
+                                                                  //           );
+                                                                  //         });
+                                                                  //   },
+                                                                  //   child:
+                                                                  //       Padding(
+                                                                  //     padding:
+                                                                  //         const EdgeInsets.all(
+                                                                  //             4.0),
+                                                                  //     child:
+                                                                  //         TextFormField(
+                                                                  //       textInputAction:
+                                                                  //           TextInputAction.go,
+                                                                  //       enabled:
+                                                                  //           false,
+                                                                  //       controller:
+                                                                  //           issueDate,
+                                                                  //       decoration:
+                                                                  //           const InputDecoration(
+                                                                  //         labelText:
+                                                                  //             'New Issue Date',
+                                                                  //         border:
+                                                                  //             OutlineInputBorder(
+                                                                  //           borderRadius:
+                                                                  //               BorderRadius.all(
+                                                                  //             Radius.circular(10.0),
+                                                                  //           ),
+                                                                  //           borderSide:
+                                                                  //               BorderSide(color: kPrimaryColor),
+                                                                  //         ),
+                                                                  //         enabledBorder:
+                                                                  //             OutlineInputBorder(
+                                                                  //           borderRadius:
+                                                                  //               BorderRadius.all(
+                                                                  //             Radius.circular(10.0),
+                                                                  //           ),
+                                                                  //           borderSide:
+                                                                  //               BorderSide(color: kPrimaryColor),
+                                                                  //         ),
+                                                                  //         disabledBorder:
+                                                                  //             OutlineInputBorder(
+                                                                  //           borderRadius:
+                                                                  //               BorderRadius.all(
+                                                                  //             Radius.circular(10.0),
+                                                                  //           ),
+                                                                  //           borderSide:
+                                                                  //               BorderSide(color: kPrimaryColor),
+                                                                  //         ),
+                                                                  //       ),
+                                                                  //     ),
+                                                                  //   ),
+                                                                  // ),
+                                                                  GestureDetector(
+                                                                    onTap: () {
+                                                                      // expiryDate
+                                                                      //     .text = DateTime
+                                                                      //         .now()
+                                                                      //     .toString()
+                                                                      //     .split(
+                                                                      //         " ")[0];
+
+                                                                      String
+                                                                          dateTimeIncident =
+                                                                          "";
+                                                                      showCupertinoModalPopup(
+                                                                          context:
+                                                                              context,
+                                                                          builder:
+                                                                              (BuildContext builder) {
+                                                                            return Container(
+                                                                              color: Colors.white,
+                                                                              height: MediaQuery.of(context).size.width,
+                                                                              width: MediaQuery.of(context).size.width,
+                                                                              child: Column(
+                                                                                children: [
+                                                                                  SizedBox(
+                                                                                    height: 10,
+                                                                                  ),
+                                                                                  Container(
+                                                                                    height: 30,
+                                                                                    child: PElevatedButton(
+                                                                                      onPressed: () {
+                                                                                        expiryDate.text = dateTimeIncident == "" ? DateTime.now().toString().split(" ")[0] : dateTimeIncident;
+                                                                                        Navigator.pop(context);
+                                                                                        // okHandler.call();
+                                                                                      },
+                                                                                      text: "Done",
+                                                                                    ),
+                                                                                  ),
+                                                                                  Expanded(
+                                                                                    flex: 4,
+                                                                                    child: CupertinoDatePicker(
+                                                                                      mode: CupertinoDatePickerMode.date,
+                                                                                      onDateTimeChanged: (value) async {
+                                                                                        dateTimeIncident = value.toString().split(" ")[0];
+                                                                                        setState(() {});
+                                                                                      },
+                                                                                      initialDateTime: DateTime.now().add(Duration(hours: 1)),
+                                                                                      minimumDate: DateTime.now(),
+                                                                                      maximumDate: DateTime.now().add(Duration(days: (365 * 11))),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            );
+                                                                          });
+                                                                    },
+                                                                    child:
+                                                                        Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              4.0),
+                                                                      child:
+                                                                          TextFormField(
+                                                                        textInputAction:
+                                                                            TextInputAction.go,
+                                                                        enabled:
+                                                                            false,
+                                                                        controller:
+                                                                            expiryDate,
+                                                                        decoration:
+                                                                            const InputDecoration(
+                                                                          labelText:
+                                                                              'New Expiry Date',
+                                                                          border:
+                                                                              OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.all(
+                                                                              Radius.circular(10.0),
+                                                                            ),
+                                                                            borderSide:
+                                                                                BorderSide(color: kPrimaryColor),
+                                                                          ),
+                                                                          enabledBorder:
+                                                                              OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.all(
+                                                                              Radius.circular(10.0),
+                                                                            ),
+                                                                            borderSide:
+                                                                                BorderSide(color: kPrimaryColor),
+                                                                          ),
+                                                                          disabledBorder:
+                                                                              OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.all(
+                                                                              Radius.circular(10.0),
+                                                                            ),
+                                                                            borderSide:
+                                                                                BorderSide(color: kPrimaryColor),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+
+                                                    Center(
+                                                      child: PElevatedButton(
+                                                        onPressed: () async {
+                                                          await EasyLoading
+                                                              .show(
+                                                            status:
+                                                                'loading...',
+                                                            maskType:
+                                                                EasyLoadingMaskType
+                                                                    .black,
+                                                          );
+                                                          var test = await WorkersService
+                                                              .updateExpiry(
+                                                                  worker:
+                                                                      currentItem!,
+                                                                  issueDate:
+                                                                      issueDate
+                                                                          .text,
+                                                                  expiryDate:
+                                                                      expiryDate
+                                                                          .text);
+
+                                                          await EasyLoading
+                                                              .dismiss();
+                                                          Navigator.pop(
+                                                              context);
+                                                          if (test!) {
+                                                            currentItem
+                                                                    .license_expiry =
+                                                                expiryDate.text;
+                                                            setState(() {});
+                                                          }
+                                                        },
+                                                        text: 'CONTINUE',
+                                                      ),
+                                                    )
+                                                  ])));
+                                    });
+                              },
+                              worker: currentItem,
+                              initialSelected: currentItem.isSelected,
+                              picUrl: currentItem.picture,
+                              changedStatus: (bool newStatus) async {
+                                String dateString =
+                                    widget.selectedShift!.startTime!;
+
+                                ///previously
+                                // DateFormat("yyyy-MM-dd HH:mm:ss")
+                                //     .format(DateTime.now());
+                                ///end
+                                if (widget.isEditing && newStatus) {
+                                  if (mounted)
+                                    setState(() {
+                                      currentItem.isSelected = newStatus;
+                                    });
+
+                                  await EasyLoading.show(
+                                    status: 'Adding...',
+                                    maskType: EasyLoadingMaskType.black,
+                                  );
+
+                                  var response =
+                                      await WorkersService.addWorkers(
+                                          widget.execShiftId, [
+                                    currentItem.id!.toString()
+                                  ], [
+                                    dateString
+                                  ], [], [
+                                    currentItem.efficiencyCalculation.toString()
+                                  ]);
+
+                                  await EasyLoading.dismiss();
+
+                                  if (response) {
+                                  } else {
+                                    EasyLoading.showError('Error');
+                                  }
+                                } else if (widget.isEditing && !newStatus) {
+                                  if (mounted)
+                                    setState(() {
+                                      currentItem.isSelected =
+                                          currentItem.isSelected;
+                                    });
+                                  await showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (BuildContext context) {
+                                        return ConfirmTimeEnd(
+                                          shiftItem: this.widget.selectedShift!,
+                                          editing: widget.isEditing,
+                                        );
+                                      }).then((value) async {
+                                    if (value != false) {
+                                      // dateString = DateFormat("yyyy-MM-dd HH:mm:ss")
+                                      //     .format(DateTime.parse(value));
+                                      dateString = value;
+                                      if (mounted)
+                                        setState(() {
+                                          currentItem.isSelected = newStatus;
+                                        });
+
+                                      /// end
+                                      await EasyLoading.show(
+                                        status: 'Removing...',
+                                        maskType: EasyLoadingMaskType.black,
+                                      );
+
+                                      var response =
+                                          await WorkersService.removeWorkers(
+                                              widget.execShiftId, [
+                                        currentItem.id!.toString()
+                                      ], [
+                                        dateString
+                                      ], [], [
+                                        currentItem.efficiencyCalculation
+                                            .toString()
+                                      ]);
+                                      widget.listLists[i].remove(currentItem);
+                                      if (mounted) setState(() {});
+                                      await EasyLoading.dismiss();
+
+                                      if (response) {
+                                      } else {
+                                        EasyLoading.showError('Error');
+                                      }
+                                    } else {
+                                      if (mounted)
+                                        setState(() {
+                                          currentItem.isSelected =
+                                              currentItem.isSelected;
+                                        });
+                                    }
+                                  });
+                                } else {
+                                  if (mounted)
+                                    setState(() {
+                                      currentItem.isSelected = newStatus;
+                                    });
+                                }
+                              },
+                            ),
+                          ),
+                    widget.isEditing
+                        ? currentItem.isSelected
+                            ? SizedBox(
+                                height: 24,
+                              )
+                            : SizedBox(
+                                height: 24,
+                              )
+                        : SizedBox(
+                            height: 24,
+                          ),
                   ],
                 ],
                 PElevatedButton(
@@ -271,47 +2061,63 @@ class _WorkItemViewState extends State<WorkItemView> {
                     List<String> startTime = [];
 
                     List<String> efficiencyCalculation = [];
-                    String dateString = DateFormat("yyyy-MM-dd hh:mm:ss")
-                        .format(DateTime.now().toUtc().add(Duration(hours: 2)));
+                    String dateString = DateFormat("yyyy-MM-dd HH:mm:ss")
+                        .format(DateTime.now());
 
-                    setState(() {
-                      for (var curentItem in widget.listLists) {
-                        for (var currentObject in curentItem) {
-                          if (currentObject.isSelected) {
-                            workerIds.add(currentObject.id!.toString());
-                            startTime.add(dateString);
-                            efficiencyCalculation.add(currentObject
-                                .efficiencyCalculation!
-                                .toString());
+                    if (mounted)
+                      setState(() {
+                        for (var curentItem in widget.listLists) {
+                          for (var currentObject in curentItem) {
+                            if (currentObject.isSelected) {
+                              workerIds.add(currentObject.id!.toString());
+                              startTime.add(dateString);
+                              efficiencyCalculation.add(currentObject
+                                  .efficiencyCalculation!
+                                  .toString());
+                            }
                           }
                         }
-                      }
-                    });
+                      });
 
                     int totalCountTemp = 0;
                     for (var currentItem in widget.listLists) {
                       totalCountTemp = totalCountTemp + currentItem.length;
                     }
 
+                    /// Shift without worker
                     if (workerIds.isEmpty) {
                       return;
                     }
-
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => StartShiftView(
-                          shiftId: widget.selectedShift.id!,
-                          endTime: widget.selectedShift.endTime!,
-                          processId: widget.processId,
-                          startTime: widget.selectedShift.startTime!,
-                          efficiencyCalculation: efficiencyCalculation,
-                          userId: workerIds,
-                          totalUsersCount: totalCountTemp,
-                          selectedShift: widget.selectedShift,
-                          process: this.widget.process,
-                        ),
+                        builder: (context) => PPESelection(
+                            shiftId: widget.selectedShift!.id!,
+                            endTime: widget.selectedShift!.endTime!,
+                            processId: widget.processId,
+                            startTime: widget.selectedShift!.startTime!,
+                            efficiencyCalculation: efficiencyCalculation,
+                            userId: workerIds,
+                            totalUsersCount: totalCountTemp,
+                            selectedShift: widget.selectedShift!,
+                            process: this.widget.process,
+                            listLists: widget.listLists),
                       ),
                     );
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (context) => StartShiftView(
+                    //       shiftId: widget.selectedShift!.id!,
+                    //       endTime: widget.selectedShift!.endTime!,
+                    //       processId: widget.processId,
+                    //       startTime: widget.selectedShift!.startTime!,
+                    //       efficiencyCalculation: efficiencyCalculation,
+                    //       userId: workerIds,
+                    //       totalUsersCount: totalCountTemp,
+                    //       selectedShift: widget.selectedShift!,
+                    //       process: this.widget.process,
+                    //     ),
+                    //   ),
+                    // );
                   },
                   text: this.widget.isEditing ? 'RETURN TO SHIFT' : 'NEXT',
                 ),
@@ -357,10 +2163,11 @@ class _WorkItemViewState extends State<WorkItemView> {
                 builder: (context) => SelectExistingWorkers(
                   workers: workers,
                   isEditing: widget.isEditing,
-                  shiftId: widget.selectedShift.id!,
+                  shiftId: widget.selectedShift!.id!,
                   workerTypeId: workerIdType,
+                  process: widget.process,
                   tempWorkerAdded: (AddTempResponse tmp) {
-                    this.widget.reloadData();
+                    this.widget.reloadData!();
 
                     var index =
                         this.widget.listNames.indexOf(tmp.data!.workerType!);
@@ -371,11 +2178,10 @@ class _WorkItemViewState extends State<WorkItemView> {
                         .contains(tmp.data!.workerType!)
                         .toString();
 
-                    setState(() {
-                      this.widget.listLists[index].add(tmp.data!);
-                    });
-
-                    print('object');
+                    if (mounted)
+                      setState(() {
+                        this.widget.listLists[index].add(tmp.data!);
+                      });
                   },
                   processId: widget.processId.toString(),
                   otherTypeTempWorkerAdded: (worker) {
@@ -392,9 +2198,10 @@ class _WorkItemViewState extends State<WorkItemView> {
                       } else {
                         if (currentList.first.workerTypeId ==
                             worker.workerTypeId) {
-                          setState(() {
-                            currentList.add(worker);
-                          });
+                          if (mounted)
+                            setState(() {
+                              currentList.add(worker);
+                            });
 
                           listExists = true;
                         }
@@ -404,13 +2211,12 @@ class _WorkItemViewState extends State<WorkItemView> {
                     }
 
                     if (!listExists) {
-                      setState(() {
-                        widget.listNames.add(worker.workerType!);
+                      if (mounted)
+                        setState(() {
+                          widget.listNames.add(worker.workerType!);
 
-                        widget.listLists.add([worker]);
-                      });
-
-                      print('');
+                          widget.listLists.add([worker]);
+                        });
                     }
                   },
                   listName: this.widget.listNames[index],
@@ -434,55 +2240,144 @@ class _WorkItemViewState extends State<WorkItemView> {
 
               List<String> efficiencyCalculation = [];
 
-              String dateString = DateFormat("yyyy-MM-dd hh:mm:ss").format(
-                DateTime.now().toUtc().add(Duration(hours: 2)),
-              );
+              // String dateString = DateFormat("yyyy-MM-dd HH:mm:ss").format(
+              //   DateTime.now(),
+              // );
+              if (workerIds.isNotEmpty) {
+                ///here
+                // DateTime? newTime=DateTime.now();
+                DateTime? newTime;
 
-              for (var currentObject in newlyAdded) {
-                if (currentObject.isSelected) {
-                  workerIds.add(currentObject.id!.toString());
-                  startTime.add(dateString);
-                  efficiencyCalculation
-                      .add(currentObject.efficiencyCalculation!.toString());
+                await showCupertinoModalPopup(
+                    context: context,
+                    builder: (BuildContext builder) {
+                      return Container(
+                        color: Colors.white,
+                        height: MediaQuery.of(context).size.width,
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          children: [
+                            Expanded(
+                                flex: 1,
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                          "Select time for when the worker are added",
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                            color: kPrimaryColor,
+                                          )),
+                                    ),
+                                    Expanded(
+                                      child: PElevatedButton(
+                                        onPressed: () {
+                                          if (newTime == null) {
+                                            newTime =
+                                                DateTime.now().roundDown();
+                                          }
+                                          // assign = true;
+                                          Navigator.pop(context);
+                                          // okHandler.call();
+                                        },
+                                        text: "Done",
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                            Expanded(
+                              flex: 4,
+                              child: CupertinoDatePicker(
+                                mode: CupertinoDatePickerMode.dateAndTime,
+                                onDateTimeChanged: (value) async {
+                                  newTime = value;
+                                },
+                                minuteInterval: 15,
+                                initialDateTime: DateTime.now().roundDown(),
+                                minimumDate:
+                                    widget.selectedShift!.startDateObject,
+                                maximumDate: DateTime.now().roundDown(),
+                              ),
+                            )
+                          ],
+                        ),
+                      );
+                    });
+                if (newTime != null) {
+                  String dateString =
+                      DateFormat("yyyy-MM-dd HH:mm:ss").format(newTime!);
+                  for (var currentObject in newlyAdded) {
+                    if (currentObject.isSelected) {
+                      workerIds.add(currentObject.id!.toString());
+                      startTime.add(dateString);
+                      efficiencyCalculation
+                          .add(currentObject.efficiencyCalculation!.toString());
+                    }
+                  }
+                  if (mounted)
+                    setState(() {
+                      widget.listLists[index] = workers;
+                    });
+
+                  if (mounted)
+                    setState(() {
+                      workersLabel = 'WORKERS';
+                    });
+
+                  await EasyLoading.show(
+                    status: 'Adding...',
+                    maskType: EasyLoadingMaskType.black,
+                  );
+
+                  if (workerIds.isEmpty) {
+                    await EasyLoading.dismiss();
+
+                    return;
+                  }
+                  var response = await WorkersService.addWorkers(
+                      widget.execShiftId,
+                      workerIds,
+                      [dateString],
+                      [],
+                      efficiencyCalculation);
+                  workers.forEach((e) => e.newAdded = false);
+                  await EasyLoading.dismiss();
+
+                  if (response) {
+                  } else {
+                    EasyLoading.showError('Error');
+                  }
                 }
               }
-
-              setState(() {
-                widget.listLists[index] = workers;
-              });
-
-              setState(() {
-                workersLabel = 'WORKERS';
-              });
-
-              await EasyLoading.show(
-                status: 'Adding...',
-                maskType: EasyLoadingMaskType.black,
-              );
-
-              if (workerIds.isEmpty) {
-                await EasyLoading.dismiss();
-
-                return;
-              }
-              var response = await WorkersService.addWorkers(widget.execShiftId,
-                  workerIds, startTime, [], efficiencyCalculation);
-
-              await EasyLoading.dismiss();
-
-              if (response) {
-              } else {
-                EasyLoading.showError('Error');
-              }
-              print('');
             } else {
-              setState(() {
-                widget.listLists[index] = workers;
-              });
+              for (int i = 0; i < widget.listLists.length; i++) {
+                if (i != index) {
+                  for (var worker in workers) {
+                    // if () {
+                    var ind = widget.listLists[i].indexWhere((element) {
+                      if (element.userId == worker.userId) {
+                        return true;
+                      } else {
+                        return false;
+                      }
+                    });
+                    if (ind >= 0) {
+                      widget.listLists[i].removeAt(ind);
+                    }
+                    // }
+                  }
+                }
+              }
+              if (mounted)
+                setState(() {
+                  widget.listLists[index] = workers;
+                });
 
-              setState(() {
-                workersLabel = 'WORKERS';
-              });
+              if (mounted)
+                setState(() {
+                  workersLabel = 'WORKERS';
+                });
             }
           },
           icon: const Icon(
@@ -505,18 +2400,24 @@ class UserItem extends StatefulWidget {
   Function(bool) changedStatus;
 
   bool initialSelected;
+  bool ppe;
 
   final Color? colorToShow;
-  final String picUrl;
+  final String? picUrl;
+  final ShiftWorker? worker;
+  VoidCallback? reloadTest;
 
   UserItem({
     Key? key,
     required this.personName,
     required this.keyNo,
     this.colorToShow,
+    this.ppe = false,
+    this.reloadTest,
     required this.initialSelected,
     required this.changedStatus,
     this.disableRatio = false,
+    this.worker,
     required this.picUrl,
   }) : super(key: key);
 
@@ -548,23 +2449,27 @@ class _UserItemState extends State<UserItem> {
         ],
       ),
       child: Padding(
-        padding: EdgeInsets.all(4.0),
+        padding: EdgeInsets.all(widget.picUrl != null ? 4.0 : 15),
         child: Row(
           children: [
-            Container(
-              padding: EdgeInsets.all(4), // Border width
-              decoration:
-                  BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-              child: ClipOval(
-                child: SizedBox.fromSize(
-                  size: const Size.fromRadius(24), // Image radius
-                  child: Image.network(widget.picUrl, fit: BoxFit.cover),
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 12,
-            ),
+            widget.picUrl != null
+                ? Container(
+                    padding: EdgeInsets.all(4), // Border width
+                    decoration: BoxDecoration(
+                        color: Colors.white, shape: BoxShape.circle),
+                    child: ClipOval(
+                      child: SizedBox.fromSize(
+                        size: const Size.fromRadius(24), // Image radius
+                        child: Image.network(widget.picUrl!, fit: BoxFit.cover),
+                      ),
+                    ),
+                  )
+                : Container(),
+            widget.picUrl != null
+                ? SizedBox(
+                    width: 12,
+                  )
+                : Container(),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -581,7 +2486,7 @@ class _UserItemState extends State<UserItem> {
                     height: 4,
                   ),
                   Text(
-                    'Key : ' + widget.keyNo,
+                    !widget.ppe ? 'Key : ' + widget.keyNo : "${widget.keyNo}",
                     style: const TextStyle(
                       color: Colors.black54,
                       fontSize: 16,
@@ -590,6 +2495,37 @@ class _UserItemState extends State<UserItem> {
                 ],
               ),
             ),
+            widget.worker != null
+                ? widget.worker!.licenseName != null
+                    ? widget.worker!.license_expiry != "Not yet licensed"
+                        ? DateTime.parse(widget.worker!.license_expiry!)
+
+                                ///before it was isBefore
+                                .isBefore(DateTime.now())
+                            ? GestureDetector(
+                                onTap: widget.reloadTest,
+                                child: Container(
+                                  child: Image(
+                                    image: const AssetImage(
+                                        'assets/images/warning.png'),
+                                    width:
+                                        MediaQuery.of(context).size.width / 18,
+                                  ),
+                                ),
+                              )
+                            : Container()
+                        : GestureDetector(
+                            onTap: widget.reloadTest,
+                            child: Container(
+                              child: Image(
+                                image: const AssetImage(
+                                    'assets/images/warning.png'),
+                                width: MediaQuery.of(context).size.width / 18,
+                              ),
+                            ),
+                          )
+                    : Container()
+                : Container(),
             const SizedBox(
               width: 8,
             ),
@@ -599,9 +2535,10 @@ class _UserItemState extends State<UserItem> {
                   if (widget.disableRatio) {
                     return;
                   }
-                  setState(() {
-                    widget.initialSelected = newValue;
-                  });
+                  if (mounted)
+                    setState(() {
+                      widget.initialSelected = newValue;
+                    });
                   widget.changedStatus(newValue);
                 }),
             const SizedBox(

@@ -1,28 +1,26 @@
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiftapp/model/login_model.dart';
 
 import '../config/constants.dart';
-import '../model/login_model.dart';
-import '../model/shifts_model.dart';
-import 'package:logger/logger.dart';
-
+import 'login_service.dart';
 
 class ShiftService {
-
-
-  static Future<ShiftStartModel?> cancelShift(
-      int shiftId , String endTime, ) async {
+  static Future<bool?> cancelShift(
+    int shiftId,
+    String endTime,
+  ) async {
     try {
-      var dio = Dio();
+      var dio = Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
-
 
       Response response = await dio.post(
         baseUrl + 'cancelShift',
-        data: {
-          'execute_shift_id': shiftId.toString(),
-          'end_time': endTime
-        },
+        data: {'execute_shift_id': shiftId.toString(), 'end_time': endTime},
         options: Options(
           headers: {
             authorization: 'Bearer ' + prefs.getString(tokenKey)!,
@@ -30,28 +28,45 @@ class ShiftService {
         ),
       );
 
-      print(response.data);
-
-      var responseObject = ShiftStartModel.fromJson(response.data);
-
-      if (responseObject.data == null) {
-        return null;
-      }
-
-      return responseObject;
-    } catch (e) {
-      return null;
+      //print(response.data);
+      return true;
+    } on DioException catch (e) {
+      return Errors.returnResponse(e.response!);
     }
   }
 
-  static Future<bool> endShift(
-      int shiftId,
-      int processId,
-      String unitsProduced,
-      String endTime) async {
+  static Future<List<ShiftStartDetails>?> startedShiftsList() async {
     try {
-
       var dio = Dio();
+      final prefs = await SharedPreferences.getInstance();
+
+      Response response = await dio.get(
+        baseUrl + 'startedShiftDetails',
+        options: Options(
+          headers: {
+            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+          },
+        ),
+      );
+
+      //print(response.data);
+      return List<ShiftStartDetails>.from(
+          response.data["data"].map((x) => ShiftStartDetails.fromJson(x)));
+    } on DioException catch (e) {
+      return Errors.returnResponse(e.response!);
+    } catch (e) {
+      //print(e);
+    }
+  }
+
+  static Future endShift(
+      int shiftId, int processId, String unitsProduced, String endTime) async {
+    try {
+      var dio = Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
+          ));
       final prefs = await SharedPreferences.getInstance();
 
       Response response = await dio.post(
@@ -61,7 +76,7 @@ class ShiftService {
           'process_id': processId.toString(),
           'end_time': endTime,
           'units_produced': unitsProduced,
-          'comments' : 'comment'
+          'comments': 'comment'
         },
         options: Options(
           headers: {
@@ -70,19 +85,97 @@ class ShiftService {
         ),
       );
 
+      //print(response.data);
 
-      print(response.data);
+      if (response.data['code'] == 200) {
+        return response.data["data"];
+      }
 
-      if(response.data['code'] == 200){
+      return false;
+    } on DioException catch (e) {
+      return Errors.returnResponse(e.response!);
+    }
+  }
+
+  static handOverShift({int? executionShiftId, int? userId}) async {
+    try {
+      var dio = Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
+          ));
+      final prefs = await SharedPreferences.getInstance();
+
+      Response response = await dio.post(
+        baseUrl + 'handOverShift',
+        data: {"user_id": userId, "execute_shift_id": executionShiftId},
+        options: Options(
+          headers: {
+            authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+          },
+        ),
+      );
+
+      //print(response.data);
+
+      if (response.data['code'] == 200) {
         return true;
       }
 
       return false;
-
-    } catch (e) {
-      return false;
+    } on DioException catch (e) {
+      return Errors.returnResponse(e.response!);
     }
   }
 
+  static getOnlineUsers() async {
+    try {
+      var dio = Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
+          ));
+      final prefs = await SharedPreferences.getInstance();
 
+      String url = baseUrl + "userLoginlist";
+
+      Response response = await dio.get(url,
+          options: Options(
+            headers: {
+              authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+            },
+          ));
+      return List<User>.from(
+          response.data["data"].map((x) => User.fromJson(x)));
+    } on DioException catch (e) {
+      return Errors.returnResponse(e.response!);
+    } catch (e) {
+      //print(e);
+    }
+  }
+
+  static getEffeciency(int? id, int? shiftId) async {
+    try {
+      var dio = Dio(BaseOptions(
+          receiveDataWhenStatusError: true,
+          connectTimeout: Duration(minutes: 2), // 120 seconds
+          receiveTimeout: Duration(minutes: 2) // 120 seconds
+          ));
+      final prefs = await SharedPreferences.getInstance();
+
+      String url = baseUrl + "efficiency/$id/$shiftId";
+
+      Response response = await dio.get(url,
+          options: Options(
+            headers: {
+              authorization: 'Bearer ' + prefs.getString(tokenKey)!,
+            },
+          ));
+      return response.data['data'];
+    } on DioException catch (e) {
+      return Errors.returnResponse(e.response!);
+    } catch (e) {
+      //print(e);
+    }
+  }
 }

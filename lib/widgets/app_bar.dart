@@ -1,15 +1,14 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'dart:math' as math; // import this
 
 class GetAppBar {
-
-  static AppBar appBarWithOnlyTitle(String title , String backText , VoidCallback onBackTapped) {
-
+  static AppBar appBarWithOnlyTitle(
+      String title, String backText, VoidCallback? onBackTapped) {
     return AppBar(
       toolbarHeight: 100,
       flexibleSpace: Container(
-//          color: Colors.redAccent,
         height: 100,
         child: Row(
           children: [
@@ -37,9 +36,13 @@ class GetAppBar {
             const SizedBox(
               width: 8,
             ),
-            Text("• " , style: TextStyle(
-                color: Colors.white , fontSize: 22 , fontWeight: FontWeight.w700
-            ),),
+            Text(
+              "• ",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.w700),
+            ),
             const SizedBox(
               width: 8,
             ),
@@ -54,7 +57,5 @@ class GetAppBar {
         ),
       ),
     );
-
   }
-
 }

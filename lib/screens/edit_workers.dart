@@ -1,6 +1,7 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:shiftapp/config/BaseConfig.dart';
 
 import '../../model/login_model.dart';
 import '../model/shifts_model.dart';
@@ -56,41 +57,32 @@ class _EditWorkersState extends State<EditWorkers> {
   bool showCategories = false;
 
   List<WorkerType> workerType = [];
-
+  dynamic processList;
   void loadWorkerTypes() async {
+    var result = await WorkersService.getWorkTypes(
+        widget.shiftId.toString(), widget.processId.toString());
 
-    //execute_shift_id
-
-    var result = await WorkersService.getWorkTypes(widget.shiftId.toString(),widget.processId.toString());
-
-
-    if(result != null) {
-      setState(() {
-        workerType = result.data!;
-      });
-      for(var currentItem in workerType){
-
-
+    if (result != null) {
+      if (mounted)
         setState(() {
-          listNames.add(currentItem.name!);
-          listLists.add([]);
+          workerType = result.data!;
         });
-
-
+      for (var currentItem in workerType) {
+        if (mounted)
+          setState(() {
+            listNames.add(currentItem.name!);
+            listLists.add([]);
+          });
       }
 
       await EasyLoading.dismiss();
-
-
     }
-   // workerType = result!.data!;
-    setState(() {
-     // workerType = result.data!;
-    });
+    if (mounted) setState(() {});
   }
 
   void loadWorkers() async {
     await EasyLoading.show(
+      dismissOnTap: false,
       status: 'Adding...',
       maskType: EasyLoadingMaskType.black,
     );
@@ -98,9 +90,10 @@ class _EditWorkersState extends State<EditWorkers> {
     var responseShift = await WorkersService.getShiftWorkers(
         widget.execShiftId, widget.processId);
 
+    ///process started by other users list
+    processList = await WorkersService.startedProcessList(widget.execShiftId);
+
     if (responseShift != null) {
-
-
       if (responseShift.data!.shiftWorker!.length == 0) {
         showCategories = true;
         loadWorkerTypes();
@@ -108,12 +101,7 @@ class _EditWorkersState extends State<EditWorkers> {
         return;
       }
       await EasyLoading.dismiss();
-
-
-
     } else {
-      await EasyLoading.dismiss();
-
       showAlertDialog(
         context: context,
         title: 'Error',
@@ -126,36 +114,44 @@ class _EditWorkersState extends State<EditWorkers> {
         ],
       );
     }
+    var result = await WorkersService.getWorkTypes(
+        widget.shiftId.toString(), widget.processId.toString());
+    if (result != null) {
+      workerType = result.data!;
+      for (var currentItem in workerType) {
+        listNames.add(currentItem.name!);
+      }
+    }
 
     List<ShiftWorker> shiftWorkers = [];
-
- //   responseShift!.data!.worker = responseShift.data!.shiftWorker!.where((e) => e.isAdded == false).toList();
-   // responseShift.data!.shiftWorker = responseShift.data!.shiftWorker!.where((e) => e.isAdded == true).toList();
-
 
     shiftWorkers.addAll(responseShift!.data!.worker!);
 
     workersSelected = responseShift.data!.shiftWorker!.length;
 
+    for (int i = 0; i < shiftWorkers.length; i++) {
+      for (var workingWorker in responseShift.data!.shiftWorker!) {
+        if (shiftWorkers[i].userId == workingWorker.userId) {
+          shiftWorkers.remove(shiftWorkers[i]);
+          break;
+        }
+      }
+    }
     for (var currentItem in responseShift.data!.shiftWorker!) {
       currentItem.isSelected = true;
 
       shiftWorkers.add(currentItem);
     }
-
-    var seen = <String>{};
-
-    shiftWorkers.where((student) => seen.add(student.workerType!)).toList();
-
-    listNames = seen.toList();
-
     for (var currentItem in listNames) {
-      var response =
-          shiftWorkers.where((e) => e.workerType == currentItem).toList();
-      setState(() {
-        listLists.add(response);
-      });
+      var response = shiftWorkers
+          .where((e) => e.workerType == currentItem && e.isSelected)
+          .toList();
+      if (mounted)
+        setState(() {
+          listLists.add(response);
+        });
     }
+    await EasyLoading.dismiss();
   }
 
   @override
@@ -166,7 +162,8 @@ class _EditWorkersState extends State<EditWorkers> {
         title: Column(
           children: [
             Image.asset(
-              'assets/images/toplogo.png',
+              Environment()
+                  .config.imageUrl,
               height: 20,
             ),
             SizedBox(
@@ -200,6 +197,7 @@ class _EditWorkersState extends State<EditWorkers> {
             totalItems: widget.totalUsersCount,
             isEditing: true,
             process: this.widget.process,
+            processList: processList,
             reloadData: () {
               loadWorkers();
             },

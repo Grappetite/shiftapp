@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-
-import 'dart:io' show Platform;
-
 import 'package:shiftapp/util/string.dart';
 
 class ValidatorsHelper {
@@ -10,7 +7,6 @@ class ValidatorsHelper {
 
   ValidatorsHelper({required this.requiredMessage, this.invalid = ''});
 
-  // NOTE: validations
   static bool? validateEmail(String input) {
     const String emailPattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -80,14 +76,13 @@ class ValidatorsHelper {
 
   String valideIdNumber(String idNum, String type, String fieldName,
       {bool checkEmpty = true}) {
-    if(fieldName == 'IC') {
+    if (fieldName == 'IC') {
       fieldName = 'New IC';
     }
     if (idNum.isEmpty) {
       return checkEmpty ? requiredMessage : '';
     }
     if (type == '') {
-
       return '$invalid ID Number';
     }
     String errorText = '';
@@ -100,7 +95,6 @@ class ValidatorsHelper {
             idNum.contains(new RegExp(r'[A-Z]')) ||
             idNum.contains(new RegExp(r'[!@#$%^&*()+,.?":{}|<> ]'));
         if (tmp) {
-
           return '$invalid $fieldName';
         }
 
@@ -181,7 +175,7 @@ class ValidatorsHelper {
       return checkEmpty ? this.requiredMessage : '';
     }
 
-    bool tmp = address.contains(RegExp(r'[<>^]')); //|:.
+    bool tmp = address.contains(RegExp(r'[<>^]'));
 
     if (tmp) {
       return '$invalid $fieldName';
@@ -202,7 +196,6 @@ class ValidatorsHelper {
     if (tmp) {
       return '$invalid $fieldName';
     }
-//    bool tmp2 = false;
     if (!allowSpace) {
       bool tmp2 = containerSpace(businessName);
       if (tmp2) {
@@ -225,7 +218,6 @@ class ValidatorsHelper {
     if (tmp) {
       return '$invalid $fieldName';
     }
-//    bool tmp2 = false;
     if (!allowSpace) {
       bool tmp2 = containerSpace(businessName);
       if (tmp2) {
@@ -263,9 +255,8 @@ class ValidatorsHelper {
     return '$invalid $fieldName';
   }
 
-
   String validateMobileNo(String mobileNo, String nameOfField,
-      {bool checkEmpty = true,bool checkStarting = true}) {
+      {bool checkEmpty = true, bool checkStarting = true}) {
     if (mobileNo.length == 0) {
       return checkEmpty ? requiredMessage : '';
     }
@@ -277,30 +268,22 @@ class ValidatorsHelper {
         return this.invalid + ' ' + nameOfField;
       }
     }*/
-    if(mobileNo.contains(RegExp(r'[A-Z]'))){
+    if (mobileNo.contains(RegExp(r'[A-Z]'))) {
+      return this.invalid + ' ' + nameOfField;
+    } else if (mobileNo.contains(RegExp(r'[a-z]'))) {
       return this.invalid + ' ' + nameOfField;
     }
-    else if(mobileNo.contains(RegExp(r'[a-z]'))){
-      return this.invalid + ' ' + nameOfField;
-    }
 
-
-    if(!checkStarting){
-
-
+    if (!checkStarting) {
       if (mobileNo.contains(RegExp(r'[!@#$%^/&*+(),?.":{}|<>]')) ||
-
           mobileNo.length < 8 ||
           (mobileNo.length > 11) ||
           (mobileNo.length > 12)) {
         return this.invalid + ' ' + nameOfField;
       }
-
-    }
-    else if (mobileNo.characters.first == '6') {
+    } else if (mobileNo.characters.first == '6') {
       if (mobileNo.length > 3) {
         if (mobileNo.substring(0, 3) == '601') {
-
           if (mobileNo.contains(RegExp(r'[!@#$%^/&*+(),?.":{}|<>]')) ||
               !(mobileNo.characters.first == '6' ||
                   mobileNo.characters.first == '0') ||
@@ -309,14 +292,13 @@ class ValidatorsHelper {
               (mobileNo.length > 12 && mobileNo.characters.first == '6')) {
             return this.invalid + ' ' + nameOfField;
           }
-
         } else {
           return this.invalid + ' ' + nameOfField;
         }
       } else {
         return this.invalid + ' ' + nameOfField;
       }
-    } else if (mobileNo.characters.first == '0' ) {
+    } else if (mobileNo.characters.first == '0') {
       if (mobileNo.length > 2) {
         if (mobileNo.substring(0, 2) == '01') {
           if (mobileNo.contains(RegExp(r'[!@#$%^/&*+(),?.":{}|<>]')) ||
@@ -357,8 +339,6 @@ class ValidatorsHelper {
   }
 
   static bool isValidDate(String input /*yyyyMMdd*/) {
-
-
     try {
       input = StringExtension.makeYearMonthDateStringFromDigits(input);
 
@@ -369,7 +349,6 @@ class ValidatorsHelper {
     } catch (e) {
       return false;
     }
-
   }
 
   static String toOriginalFormatString(DateTime dateTime) {

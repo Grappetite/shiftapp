@@ -16,11 +16,13 @@ class AddTempWorker extends StatefulWidget {
   final int exId;
 
   final String processId;
+  final String listname;
 
   const AddTempWorker(
       {Key? key,
       required this.shiftId,
       required this.processId,
+      required this.listname,
       required this.exId})
       : super(key: key);
 
@@ -41,14 +43,20 @@ class _AddTempWorkerState extends State<AddTempWorker> {
   String selectedWorkerTypeID = '';
 
   void loadWorkerTypes() async {
-    //execute_shift_id
-
     var result = await WorkersService.getWorkTypes(
         this.widget.shiftId, widget.processId);
     workerType = result!.data!;
-    setState(() {
-      workerType = result.data!;
-    });
+    if (mounted) {
+      for (var element in workerType) {
+        if (element.name == this.widget.listname) {
+          selectedWorkerTypeID = element.id.toString();
+          selectedWorkerType = element.name.toString();
+        }
+      }
+      setState(() {
+        workerType = result.data!;
+      });
+    }
   }
 
   @override
@@ -129,7 +137,7 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                           Expanded(
                             child: InputView(
                               showError: false,
-                              hintText: 'Personal Key',
+                              hintText: 'Employee nr',
                               onChange: (newValue) {},
                               controller: personalNoController,
                               text: '',
@@ -156,11 +164,13 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                                 currentList: workerType
                                     .map((e) => e.name!.trim())
                                     .toList(),
+                                enabled: false,
                                 showError: false,
                                 onChange: (newString) {
-                                  setState(() {
-                                    selectedWorkerType = newString;
-                                  });
+                                  if (mounted)
+                                    setState(() {
+                                      selectedWorkerType = newString;
+                                    });
 
                                   selectedWorkerTypeID = workerType
                                       .firstWhere((e) => e.name == newString)
@@ -180,15 +190,15 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                     ),
                     PElevatedButton(
                       onPressed: () async {
-                        //addTempWorkers
                         await EasyLoading.show(
+                          dismissOnTap: false,
                           status: 'loading...',
                           maskType: EasyLoadingMaskType.black,
                         );
 
                         String dateString =
-                            DateFormat("yyyy-MM-dd hh:mm:ss").format(
-                          DateTime.now().toUtc().add(Duration(hours: 2)),
+                            DateFormat("yyyy-MM-dd HH:mm:ss").format(
+                          DateTime.now(),
                         );
 
                         var response = await WorkersService.addTempWorkers(
@@ -196,9 +206,7 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                             surnameController.text,
                             personalNoController.text,
                             selectedWorkerTypeID,
-                            widget.exId != 0
-                                ? widget.exId.toString()
-                                : widget.shiftId,
+                            widget.exId.toString(),
                             dateString);
 
                         await EasyLoading.dismiss();

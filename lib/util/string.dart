@@ -1,6 +1,6 @@
-import 'package:intl/intl.dart';
 import 'dart:math';
 
+import 'package:intl/intl.dart';
 
 extension StringExtension on String {
   formatDateTime(String format) =>
@@ -15,19 +15,22 @@ extension StringExtension on String {
   }
 
   String get timeToShow {
-    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm:ss").parse(this);
+    DateTime tempDate = DateFormat("yyyy-MM-dd HH:mm:ss").parse(this);
     String date = DateFormat("hh:mm a").format(tempDate);
+    if (tempDate.hour == 00 && date.contains("AM")) {
+      if (DateTime.now().day == tempDate.day &&
+          DateTime.now().month == tempDate.month) {
+        date = date.replaceAll("AM", "PM");
+      }
+    }
     return date;
-
   }
-
 
   static String makeYearMonthDateStringFromDigits(String newValue) {
     String tmpString = newValue;
     var year = tmpString.substring(0, 2);
     var month = tmpString.substring(2, 4);
     var date = tmpString.substring(4, 6);
-    //20/10/1990
     if (int.parse(year) > 0 && int.parse(year) < 22) {
       year = '20' + year;
     } else {
@@ -37,11 +40,10 @@ extension StringExtension on String {
   }
 
   static String makeDDMMYYYYString(String input, {String gapString = '/'}) {
-    String tmpString= input;
+    String tmpString = input;
     var year = tmpString.substring(0, 2);
     var month = tmpString.substring(2, 4);
     var date = tmpString.substring(4, 6);
-    //20/10/1990
     if (int.parse(year) > 0 && int.parse(year) < 21) {
       year = '20' + year;
     } else {
@@ -56,7 +58,7 @@ extension StringExtension on String {
     var lastCharaater = '';
 
     if (this.length == 12) {
-       lastCharaater = substring(11, 12);
+      lastCharaater = substring(11, 12);
     } else {
       return '';
     }
@@ -74,33 +76,21 @@ extension StringExtension on String {
     }
 
     return '';
-
   }
 
   String stringBeforeCharacter({String sub = '|'}) {
-  String tmp = this.substring(0,this.indexOf(sub));
+    String tmp = this.substring(0, this.indexOf(sub));
 
-  return tmp;
-  }
-  String removeExtraFromCountry({String characted = '-'}){
-
-      String tmp = this.substring(this.indexOf(characted) + 1,this.length);
-
-      return tmp;
-
+    return tmp;
   }
 
+  String removeExtraFromCountry({String characted = '-'}) {
+    String tmp = this.substring(this.indexOf(characted) + 1, this.length);
 
+    return tmp;
+  }
 
   bool containsIgnoreCase(String keyword) {
     return this.toLowerCase().contains(keyword.toLowerCase());
   }
-
-
-
-
-
-
 }
-
-

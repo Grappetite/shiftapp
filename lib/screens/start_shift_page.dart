@@ -1,17 +1,23 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shiftapp/config/BaseConfig.dart';
 import 'package:shiftapp/config/constants.dart';
+import 'package:shiftapp/model/ppe_model.dart';
 import 'package:shiftapp/screens/shift_start.dart';
+import 'package:timezone/timezone.dart' as tz;
 
+import '../main.dart';
 import '../model/login_model.dart';
 import '../model/shifts_model.dart';
 import '../services/workers_service.dart';
 import 'end_shift.dart';
-import 'inner_widgets/coming_soon_container.dart';
 
 class StartShiftView extends StatefulWidget {
   final int shiftId;
@@ -22,6 +28,8 @@ class StartShiftView extends StatefulWidget {
   final String endTime;
   final List<String> efficiencyCalculation;
   final ShiftItem selectedShift;
+  final PpeModel? ppe;
+  final String? discrepancyComment;
   final Process process;
 
   const StartShiftView(
@@ -34,6 +42,8 @@ class StartShiftView extends StatefulWidget {
       required this.endTime,
       required this.efficiencyCalculation,
       required this.selectedShift,
+      required this.ppe,
+      required this.discrepancyComment,
       required this.process})
       : super(key: key);
 
@@ -46,6 +56,7 @@ class _StartShiftViewState extends State<StartShiftView> {
 
   String timeElasped = '00:00';
   late Timer _timer;
+  bool? willpop = true;
 
   void startTimer() {
     const oneSec = Duration(seconds: 1);
@@ -53,218 +64,279 @@ class _StartShiftViewState extends State<StartShiftView> {
     _timer = Timer.periodic(
       oneSec,
       (Timer timer) {
-        setState(() {
-          timeElasped = widget.selectedShift.timeElasped;
-        });
-
-        print('');
+        if (mounted)
+          setState(() {
+            timeElasped = widget.selectedShift.timeElasped;
+          });
       },
     );
   }
 
+  int count = 0;
   @override
   void initState() {
     super.initState();
-    //startTimer();
+    widget.ppe!.data!.forEach((element) {
+      if (element.selected!) {
+        count++;
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      //8171999927660000
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        centerTitle: true,
-        title: Column(
-          children: [
-            Image.asset(
-              'assets/images/toplogo.png',
-              height: 20,
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Text(
-              widget.process.name!,
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600),
-            ),
-            SizedBox(
-              height: 2,
-            ),
-          ],
+    return WillPopScope(
+      onWillPop: () {
+        return Future.value(willpop);
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          centerTitle: true,
+          title: Column(
+            children: [
+              Image.asset(
+                Environment()
+                    .config.imageUrl,
+                height: 20,
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              Text(
+                widget.process.name!,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600),
+              ),
+              SizedBox(
+                height: 2,
+              ),
+            ],
+          ),
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            TimerTopWidget(
-                selectedShift: widget.selectedShift, timeElasped: timeElasped),
-            const SizedBox(
-              height: 16,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: ExplainerWidget(
-                iconName: 'construct',
-                title: 'Workers',
-                text1: text1(),
-                text2: '',
-                showWarning: true,
-                showIcon: true,
-                backgroundColor: lightGreenColor,
-                postIcon: Icons.check,
-                postIconColor: Colors.green,
-              ),
-            ),
-            //
-            const SizedBox(
-              height: 16,
-            ),
-            ComingSoonContainer(
-              innerWidget: ExplainerWidget(
-                comingSoon: true,
-                iconName: 'construct',
-                title: 'PPE',
-                text1: '2/5 Planned PPE per Worker Type',
-                text2: '',
-                showWarning: true,
-                showIcon: true,
-                backgroundColor: lightRedColor,
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-            ),
-
-            SizedBox(
-              height: 8,
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
-              child: TextFormField(
-                decoration: const InputDecoration(
-                  hintText: 'Enter Comments',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20.0),
-                    ),
-                    borderSide: BorderSide(color: Colors.black38),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20.0),
-                    ),
-                    borderSide: BorderSide(color: Colors.black38),
+        body: SingleChildScrollView(
+          child: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+            child: Column(
+              children: [
+                TimerTopWidget(
+                    selectedShift: widget.selectedShift,
+                    timeElasped: timeElasped),
+                const SizedBox(
+                  height: 16,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: ExplainerWidget(
+                    iconName: 'construct',
+                    title: 'Workers',
+                    text1: text1(),
+                    text2: '',
+                    showWarning: true,
+                    showIcon: true,
+                    backgroundColor: lightGreenColor,
+                    postIcon: Icons.check,
+                    postIconColor: Colors.green,
                   ),
                 ),
-                minLines: 2,
-                maxLines: 3,
-                keyboardType: TextInputType.multiline,
-                controller: _controller,
-              ),
-            ),
-
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 1.7,
-              child: TextButton(
-                onPressed: () async {
-                  if (_controller.text.isEmpty && 1 == 2) {
-                    showAlertDialog(
-                      context: context,
-                      title: 'Error',
-                      message: 'Please add comment.',
-                      actions: [
-                        AlertDialogAction(
-                          label:
-                              MaterialLocalizations.of(context).okButtonLabel,
-                          key: OkCancelResult.ok,
-                        )
-                      ],
-                    );
-                    return;
-                  }
-                  await EasyLoading.show(
-                    status: 'loading...',
-                    maskType: EasyLoadingMaskType.black,
-                  );
-
-                  var result = await WorkersService.addShiftWorker(
-                      widget.shiftId,
-                      widget.processId,
-                      widget.startTime,
-                      widget.endTime,
-                      widget.userId,
-                      widget.efficiencyCalculation,
-                      _controller.text);
-
-                  await EasyLoading.dismiss();
-
-                  if (result != null) {
-                    if (result.status == 'error') {
-                      showAlertDialog(
-                        context: context,
-                        title: 'Error',
-                        message: result.message,
-                        actions: [
-                          AlertDialogAction(
-                            label:
-                                MaterialLocalizations.of(context).okButtonLabel,
-                            key: OkCancelResult.ok,
-                          )
-                        ],
-                      );
-
-                      return;
-                    }
-
-                    if (result.code! == 200) {
-                      final prefs = await SharedPreferences.getInstance();
-                      prefs.setInt('shiftId', widget.selectedShift.id!);
-                      prefs.setInt('processId', widget.processId);
-
-                      prefs.setString(
-                          'selectedShiftName', widget.selectedShift.name!);
-
-                      prefs.setString('selectedShiftStartTime',
-                          widget.selectedShift.startTime!);
-
-                      prefs.setString('selectedShiftEndTime',
-                          widget.selectedShift.endTime!);
-
-                      prefs.setInt('selectedDisplayScreen',
-                          widget.selectedShift.displayScreen!);
-
-                      prefs.setInt(
-                          'execute_shift_id', result.data!.executeShiftId!);
-
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => EndShiftView(
-                              userId: widget.userId,
-                              efficiencyCalculation:
-                                  widget.efficiencyCalculation,
-                              shiftId: widget.shiftId,
-                              processId: widget.processId,
-                              selectedShift: widget.selectedShift,
-                              process: widget.process,
-                              execShiftId: result.data!.executeShiftId!),
+                const SizedBox(
+                  height: 16,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: ExplainerWidget(
+                    iconName: 'construct',
+                    title: 'PPE',
+                    text1:
+                        '${count}/${widget.ppe!.data!.length} Planned PPE per Worker Type',
+                    text2: '',
+                    showWarning: true,
+                    showIcon: true,
+                    backgroundColor: count == widget.ppe!.data!.length
+                        ? lightGreenColor
+                        : lightRedColor,
+                    postIcon:
+                        count != widget.ppe!.data!.length ? null : Icons.check,
+                    postIconColor:
+                        count != widget.ppe!.data!.length ? null : Colors.green,
+                  ),
+                  // padding: const EdgeInsets.symmetric(horizontal: 8),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
+                  child: TextFormField(
+                    textInputAction: TextInputAction.go,
+                    decoration: const InputDecoration(
+                      hintText: 'Enter Comments',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20.0),
                         ),
+                        borderSide: BorderSide(color: Colors.black38),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20.0),
+                        ),
+                        borderSide: BorderSide(color: Colors.black38),
+                      ),
+                    ),
+                    minLines: 2,
+                    maxLines: 3,
+                    keyboardType: TextInputType.multiline,
+                    controller: _controller,
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 1.7,
+                  child: TextButton(
+                    onPressed: () async {
+                      // if (_controller.text.isEmpty && 1 == 2) {
+                      //   showAlertDialog(
+                      //     context: context,
+                      //     title: 'Error',
+                      //     message: 'Please add comment.',
+                      //     actions: [
+                      //       AlertDialogAction(
+                      //         label: MaterialLocalizations.of(context)
+                      //             .okButtonLabel,
+                      //         key: OkCancelResult.ok,
+                      //       )
+                      //     ],
+                      //   );
+                      //   return;
+                      // }
+                      if (mounted)
+                        setState(() {
+                          willpop = false;
+                        });
+                      await EasyLoading.show(
+                        status: 'loading...',
+                        maskType: EasyLoadingMaskType.black,
                       );
-                    }
-                  } else {
-                    EasyLoading.showError('Could not load data');
-                  }
-                },
-                child: Image.asset('assets/images/start_button.png'),
-              ),
+
+                      var result = await WorkersService.addShiftWorker(
+                          widget.shiftId,
+                          widget.processId,
+
+                          ///before at
+                          widget.startTime,
+
+                          ///after
+                          widget.endTime,
+                          widget.userId,
+                          widget.efficiencyCalculation,
+                          _controller.text,
+                          ppe: widget.ppe,
+                          discrepancyComment: widget.discrepancyComment);
+
+                      await EasyLoading.dismiss();
+
+                      if (result != null) {
+                        if (result.status == 'error') {
+                          showAlertDialog(
+                            context: context,
+                            title: 'Error',
+                            message: result.message!.capitalizeFirst,
+                            actions: [
+                              AlertDialogAction(
+                                label: MaterialLocalizations.of(context)
+                                    .okButtonLabel,
+                                key: OkCancelResult.ok,
+                              )
+                            ],
+                          );
+                          willpop = true;
+                          setState(() {});
+                          return;
+                        }
+
+                        if (result.code! == 200) {
+                          final prefs = await SharedPreferences.getInstance();
+                          prefs.setInt('shiftId', widget.selectedShift.id!);
+                          prefs.setInt('processId', widget.processId);
+
+                          prefs.setString(
+                              'selectedShiftName', widget.selectedShift.name!);
+
+                          prefs.setString('selectedShiftStartTime',
+                              widget.selectedShift.startTime!);
+
+                          prefs.setString('selectedShiftEndTime',
+                              widget.selectedShift.endTime!);
+
+                          prefs.setInt('selectedDisplayScreen',
+                              widget.selectedShift.displayScreen!);
+
+                          prefs.setInt(
+                              'execute_shift_id', result.data!.executeShiftId!);
+                          if (prefs.getStringList(
+                                  result.data!.executeShiftId!.toString()) ==
+                              null) {
+                            List<String> test = [];
+                            var rng = Random();
+                            for (var i = 1; i <= 25; i++) {
+                              test.add(rng.nextInt(100000).toString());
+                              await show(
+                                  widget.selectedShift.endDateObject
+                                      .add(Duration(hours: i)),
+                                  int.parse(
+                                      result.data!.executeShiftId!.toString() +
+                                          test[i - 1].toString()),
+                                  "Did you forget to end your shift?",
+                                  "Your scheduled shift ended.  If you've completed today's work please end your shift.");
+                            }
+                            prefs.setStringList(
+                                result.data!.executeShiftId!.toString(), test);
+                          }
+
+                          await show(
+                              widget.selectedShift.endDateObject
+                                  .subtract(Duration(minutes: 10)),
+                              result.data!.executeShiftId!,
+                              "Don't forget to end your shift!",
+                              "Your shift is about to end, don't forget to register today's work.");
+
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) => EndShiftView(
+                                  userId: widget.userId,
+                                  efficiencyCalculation:
+                                      widget.efficiencyCalculation,
+                                  shiftId: widget.shiftId,
+                                  processId: widget.processId,
+                                  selectedShift: widget.selectedShift,
+                                  process: widget.process,
+                                  execShiftId: result.data!.executeShiftId!),
+                            ),
+                          );
+                        }
+                      } else {
+                        EasyLoading.showError('Could not load data');
+                        if (mounted)
+                          setState(() {
+                            willpop = true;
+                          });
+                      }
+                    },
+                    child: Image.asset('assets/images/start_button.png'),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 16,
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -275,5 +347,47 @@ class _StartShiftViewState extends State<StartShiftView> {
       return '${widget.userId.length}/${widget.totalUsersCount} Workers';
     }
     return '${widget.userId.length}/${widget.process.headCount} Workers';
+  }
+
+  tz.TZDateTime _nextInstanceOfNotification(String test) {
+    tz.TZDateTime now =
+        tz.TZDateTime.parse(tz.getLocation("Africa/Johannesburg"), test);
+    tz.TZDateTime scheduledDate = tz.TZDateTime(
+        tz.getLocation("Africa/Johannesburg"),
+        now.year,
+        now.month,
+        now.day,
+        now.hour,
+        now.minute);
+    return scheduledDate;
+  }
+
+  show(
+    DateTime chosen,
+    id,
+    title,
+    body,
+  ) async {
+    await flutterLocalNotificationsPlugin.cancel(id);
+    flutterLocalNotificationsPlugin.zonedSchedule(
+        id,
+        title,
+        body,
+        _nextInstanceOfNotification(chosen.toString()),
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            'your other channel id',
+            'your other channel name',
+            channelDescription: 'your other channel description',
+            importance: Importance.max,
+            priority: Priority.high,
+          ),
+          iOS: DarwinNotificationDetails(),
+        ),
+        androidAllowWhileIdle: true,
+        payload: "End Shift",
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.dateAndTime);
   }
 }

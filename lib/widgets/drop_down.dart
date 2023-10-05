@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../config/constants.dart';
@@ -15,6 +16,7 @@ class DropDown extends StatefulWidget {
   final bool removeText;
 
   final bool enabled;
+  final bool search;
 
   final bool padding;
 
@@ -25,6 +27,7 @@ class DropDown extends StatefulWidget {
       required this.currentList,
       required this.onChange,
       required this.showError,
+      this.search = true,
       this.preSelected = '',
       this.padding = true,
       this.enabled = true,
@@ -38,6 +41,7 @@ class _DropDownState extends State<DropDown> {
   late String searchField = "";
 
   late String selectedString = "";
+  bool? test = false;
 
   @override
   void initState() {
@@ -84,14 +88,13 @@ class _DropDownState extends State<DropDown> {
                   listToShow = widget.currentList;
                 }
                 searchField = "";
-
+                var sc = ScrollController();
                 return StatefulBuilder(
                   builder: (context, setState) {
                     return SimpleDialog(
-                      insetPadding: const EdgeInsets.symmetric(
-                          horizontal: 40.0, vertical: 80.0),
+                      insetPadding: const EdgeInsets.symmetric(vertical: 80.0),
                       contentPadding:
-                          const EdgeInsets.fromLTRB(24.0, 12.0, 24.0, 12.0),
+                          const EdgeInsets.fromLTRB(24.0, 12.0, 5.0, 12.0),
                       title: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
@@ -103,35 +106,41 @@ class _DropDownState extends State<DropDown> {
                           const SizedBox(
                             height: 8,
                           ),
-                          TextFormField(
-                            controller: widget.controller,
-                            maxLines: 1,
-                            decoration: InputDecoration.collapsed(
-                              hintText: 'Search',
-                              hintStyle: TextStyle(
-                                color: Colors.grey[500],
-                                fontSize: 14,
-                              ),
-                            ),
-                            onChanged: (v) {
-                              setState(
-                                () {
-                                  searchField = v;
-                                  if (searchField.isNotEmpty) {
-                                    listToShow = widget.currentList
-                                        .where(
-                                          (e) => e.toLowerCase().contains(
-                                                searchField.toLowerCase(),
-                                              ),
-                                        )
-                                        .toList();
-                                  } else {
-                                    listToShow = widget.currentList;
-                                  }
-                                },
-                              );
-                            },
-                          ),
+                          widget.search
+                              ? TextFormField(
+                                  textInputAction: TextInputAction.go,
+                                  controller: widget.controller,
+                                  maxLines: 1,
+                                  decoration: InputDecoration.collapsed(
+                                    hintText: 'Search',
+                                    hintStyle: TextStyle(
+                                      color: Colors.grey[500],
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  onChanged: (v) {
+                                    if (mounted)
+                                      setState(
+                                        () {
+                                          searchField = v;
+                                          if (searchField.isNotEmpty) {
+                                            listToShow = widget.currentList
+                                                .where(
+                                                  (e) =>
+                                                      e.toLowerCase().contains(
+                                                            searchField
+                                                                .toLowerCase(),
+                                                          ),
+                                                )
+                                                .toList();
+                                          } else {
+                                            listToShow = widget.currentList;
+                                          }
+                                        },
+                                      );
+                                  },
+                                )
+                              : Container(),
                           const Divider(
                             height: 4,
                             thickness: 1,
@@ -146,48 +155,101 @@ class _DropDownState extends State<DropDown> {
                               )
                             : SizedBox(
                                 width: MediaQuery.of(context).size.width - 128,
-                                child: Scrollbar(
-                                  thumbVisibility: true,
-                                  trackVisibility: true,
-                                  controller: ScrollController(
-                                      initialScrollOffset: 0.0),
+                                height:
+                                    MediaQuery.of(context).size.height / 4.5,
+                                child: CupertinoScrollbar(
+                                  thumbVisibility: test,
+                                  controller: sc,
                                   child: ListView.builder(
-                                    // physics:
-                                    //     const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: listToShow.length,
-                                    itemBuilder:
-                                        (BuildContext ctxt, int index) {
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              Navigator.pop(context);
+                                    controller: sc,
+                                    itemBuilder: (context, index) {
+                                      Future.delayed(Duration(seconds: 2), () {
+                                        if (!test!) {
+                                          test = true;
+                                          if (context.mounted) setState(() {});
+                                        }
+                                      });
+                                      return
+                                          // for (int index = 0;
+                                          // index < listToShow.length;
+                                          // index++)
+                                          listToShow[index] != ""
+                                              ? Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment
+                                                          .stretch,
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.pop(context);
 
-                                              selectedString =
-                                                  listToShow[index];
+                                                        selectedString =
+                                                            listToShow[index];
 
-                                              widget.onChange(selectedString);
-                                            },
-                                            child: Text(
-                                              listToShow[index],
-                                              style:
-                                                  const TextStyle(fontSize: 16),
-                                            ),
-                                          ),
-                                          Divider(
-                                            height: 12,
-                                            thickness: 1,
-                                            color: Colors.grey[50],
-                                          ),
-                                        ],
-                                      );
+                                                        widget.onChange(
+                                                            selectedString);
+                                                      },
+                                                      child: Text(
+                                                        listToShow[index],
+                                                        style: const TextStyle(
+                                                            fontSize: 16),
+                                                      ),
+                                                    ),
+                                                    Divider(
+                                                      height: 12,
+                                                      thickness: 1,
+                                                      color: Colors.grey[50],
+                                                    ),
+                                                  ],
+                                                )
+                                              : Container();
                                     },
+                                    itemCount: listToShow.length,
                                   ),
+                                )
+                                // Scrollbar(
+                                //   thumbVisibility: true,
+                                //   trackVisibility: true,
+                                //   controller: ScrollController(
+                                //       initialScrollOffset: 0.0),
+                                //   child: ListView(
+                                //       primary:false,
+                                //       children: [
+                                //     for (int index = 0;
+                                //         index < listToShow.length;
+                                //         index++)
+                                //       listToShow[index] != ""
+                                //           ? Column(
+                                //               crossAxisAlignment:
+                                //                   CrossAxisAlignment.stretch,
+                                //               children: [
+                                //                 GestureDetector(
+                                //                   onTap: () {
+                                //                     Navigator.pop(context);
+                                //
+                                //                     selectedString =
+                                //                         listToShow[index];
+                                //
+                                //                     widget.onChange(
+                                //                         selectedString);
+                                //                   },
+                                //                   child: Text(
+                                //                     listToShow[index],
+                                //                     style: const TextStyle(
+                                //                         fontSize: 16),
+                                //                   ),
+                                //                 ),
+                                //                 Divider(
+                                //                   height: 12,
+                                //                   thickness: 1,
+                                //                   color: Colors.grey[50],
+                                //                 ),
+                                //               ],
+                                //             )
+                                //           : Container()
+                                //   ]),
+                                // ),
                                 ),
-                              ),
                       ],
                     );
                   },
@@ -202,6 +264,8 @@ class _DropDownState extends State<DropDown> {
                 child: (selectedString.isEmpty && widget.preSelected!.isEmpty)
                     ? Text(
                         widget.placeHolderText,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.grey[500],
@@ -211,6 +275,8 @@ class _DropDownState extends State<DropDown> {
                         selectedString.isEmpty
                             ? widget.preSelected!
                             : selectedString,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
                           fontSize: 16,
                         ),
