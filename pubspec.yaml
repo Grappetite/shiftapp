@@ -47,7 +47,7 @@ dependencies:
   app_popup_menu: ^1.0.0
   flutter_easyloading: ^3.0.5
   logger: ^1.1.0
-  restart_app: ^1.1.0+1
+
   adaptive_dialog: ^1.8.0
   get: ^4.6.5
   date_time_picker: ^2.1.0
