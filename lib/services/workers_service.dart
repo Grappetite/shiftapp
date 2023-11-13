@@ -430,7 +430,8 @@ class WorkersService {
       String key,
       String workerType,
       String shiftId,
-      String startTime) async {
+      String startTime,
+      {selectworker}) async {
     try {
       var dio = Dio(BaseOptions(
           receiveDataWhenStatusError: true,
@@ -457,7 +458,13 @@ class WorkersService {
       );
 
       //print(response.data);
-
+      List array = response.data["data"];
+      for (var element in array) {
+        if (element["workerTypeId"].toString() == selectworker) {
+          response.data["data"] = element;
+          break;
+        }
+      }
       var responseObject = AddTempResponse.fromJson(response.data);
 
       if (responseObject.data == null) {

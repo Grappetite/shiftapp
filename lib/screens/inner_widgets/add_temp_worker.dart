@@ -41,7 +41,7 @@ class _AddTempWorkerState extends State<AddTempWorker> {
 
   String selectedWorkerType = '';
   String selectedWorkerTypeID = '';
-
+  // bool? all = false;
   void loadWorkerTypes() async {
     var result = await WorkersService.getWorkTypes(
         this.widget.shiftId, widget.processId);
@@ -188,6 +188,19 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                     Expanded(
                       child: Container(),
                     ),
+                    // CheckboxListTile(
+                    //   title: Text(
+                    //     "Add to all worker type",
+                    //     style: TextStyle(color: kPrimaryColor),
+                    //   ),
+                    //   value: all,
+                    //   onChanged: (newValue) {
+                    //     all = !all!;
+                    //     setState(() {});
+                    //   },
+                    //   controlAffinity: ListTileControlAffinity
+                    //       .leading, //  <-- leading Checkbox
+                    // ),
                     PElevatedButton(
                       onPressed: () async {
                         await EasyLoading.show(
@@ -205,9 +218,11 @@ class _AddTempWorkerState extends State<AddTempWorker> {
                             firstNameController.text,
                             surnameController.text,
                             personalNoController.text,
-                            selectedWorkerTypeID,
+                            // all! ? 0.toString() : selectedWorkerTypeID,
+                            0.toString(),
                             widget.exId.toString(),
-                            dateString);
+                            dateString,
+                            selectworker: selectedWorkerTypeID);
 
                         await EasyLoading.dismiss();
 
