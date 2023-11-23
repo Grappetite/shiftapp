@@ -45,7 +45,7 @@ class LocalConfig implements BaseConfig {
   String get downloadLink => "https://dev-shift.grappetite.com/api/v1/";
 
   @override
-  String get version => "V.4";
+  String get version => "V.6";
 
   @override
   String get imageUrl => "assets/images/toplogo.png";
@@ -67,7 +67,7 @@ class ProductionConfig implements BaseConfig {
   String get downloadLink => "https://dev-shift.grappetite.com/api/v1/";
 
   @override
-  String get version => "V.5";
+  String get version => "V.6";
 
   @override
   String get imageUrl => "assets/images/toplogo.png";
@@ -90,7 +90,7 @@ class TakealotConfig implements BaseConfig {
       "install.appcenter.ms/users/mahboob-grappetite.com/apps/shift-android/distribution_groups/public";
 
   @override
-  String get version => "V.5";
+  String get version => "V.6";
 
   @override
   String get imageUrl => "assets/images/toplogo.png";
@@ -113,7 +113,7 @@ class TakealotDemoConfig implements BaseConfig {
   String get downloadLink => "https://takealotdemo.grappetite.com/api/v1/";
 
   @override
-  String get version => "V.5";
+  String get version => "V.6";
 
   @override
   String get imageUrl => "assets/images/toplogo.png";
