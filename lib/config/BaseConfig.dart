@@ -23,7 +23,7 @@ class DevConfig implements BaseConfig {
   String get downloadLink => "https://dev-shift.grappetite.com/api/v1/";
 
   @override
-  String get version => "V.4";
+  String get version => "V.6";
 
   @override
   String get imageUrl => "assets/images/toplogo.png";
@@ -129,6 +129,29 @@ class TakealotDemoConfig implements BaseConfig {
   bool get preset => false;
 }
 
+class newDemoConfig implements BaseConfig {
+  @override
+  String get baseUrl => "https://shiftnewdemo.grappetite.com/api/v1/";
+  @override
+  String get downloadLink => "https://shiftnewdemo.grappetite.com/api/v1/";
+
+  @override
+  String get version => "V.6";
+
+  @override
+  String get imageUrl => "assets/images/toplogo.png";
+
+  @override
+  String get staging =>
+      "Version:Shift-${version}-${DateFormat("yyyy-MM-dd HH:mm:ss").parse(DateTime.now().toString())}(Takealotdummy)";
+
+  @override
+  String get apiUrl => "https://shiftnewdemo.grappetite.com/api/v1/";
+
+  @override
+  bool get preset => false;
+}
+
 class StingrayConfig implements BaseConfig {
   @override
   String get baseUrl => "https://shiftdemo.grappetite.com/api/v1/";
@@ -168,6 +191,7 @@ class Environment {
   static const String newBuild = 'newBuild';
   static const String dummy = 'dummy';
   static const String takealotdemo = 'takealotdemo';
+  static const String newDemo = 'newDemo';
 
   late BaseConfig config;
 
@@ -187,6 +211,8 @@ class Environment {
         return LocalConfig();
       case Environment.takealotdemo:
         return TakealotDemoConfig();
+      case Environment.newDemo:
+        return newDemoConfig();
       default:
         return DevConfig();
     }

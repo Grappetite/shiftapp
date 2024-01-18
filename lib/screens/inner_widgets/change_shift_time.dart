@@ -14,8 +14,11 @@ class ChangeShiftTime extends StatefulWidget {
   final bool sop;
 
   const ChangeShiftTime(
-      {Key? key, this.startTime="", this.endTime="", this.hours="",
-       this.date="",
+      {Key? key,
+      this.startTime = "",
+      this.endTime = "",
+      this.hours = "",
+      this.date = "",
       this.sop = false})
       : super(key: key);
 
@@ -36,7 +39,7 @@ class _ChangeShiftTimeState extends State<ChangeShiftTime> {
       backgroundColor: Colors.transparent,
       content: Container(
         width: MediaQuery.of(context).size.width / 1.15,
-        height: MediaQuery.of(context).size.height / 2.25,
+        height: MediaQuery.of(context).size.height / 1.85,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -190,9 +193,10 @@ class _ChangeShiftTimeState extends State<ChangeShiftTime> {
                                 return;
                               }
 
-                              if (mounted)setState(() {
-                                timeSelected = true;
-                              });
+                              if (mounted)
+                                setState(() {
+                                  timeSelected = true;
+                                });
                             },
                             okButton: timeSelected ? 'CONTINUE' : 'SAVE',
                           ),
